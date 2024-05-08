@@ -16,6 +16,8 @@ public class StocksController : MonoBehaviour
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
+    public Vector2 purchaseRange = new Vector2(0.65f, 0.75f);
+
     [Range(0, 1)]
     public float maxPercentOfItemsToChange = 0.5f;
     [Range(0, 1)]
@@ -144,8 +146,8 @@ public class StocksController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Selling price of item is wrong. Giving 0");
-            return 0;
+            Debug.LogError("Selling price of item is wrong. Giving max value");
+            return int.MaxValue;
         }
     }
     #endregion

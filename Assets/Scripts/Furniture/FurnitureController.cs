@@ -110,13 +110,17 @@ public class FurnitureController : MonoBehaviour, IInteractable
 
         if (inventoryController.InsertItem(item))
         {
-            if (grid != null) grid.RemoveItem(this);
-
-            Destroy(gameObject);
+            Remove();
             Debug.Log("Picked Up" + gameObject.name);
         }
         else Debug.Log("Can't Pick up" + gameObject.name);
 
+    }
+
+    public void Remove()
+    {
+        if (grid != null) grid.RemoveItem(this);
+        Destroy(gameObject);
     }
 
     /// <summary>
