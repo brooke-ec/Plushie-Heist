@@ -595,9 +595,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f445c0d2bc1b5439bf6633f950be4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 0
+  maxSpeed: 5
   lookSensitivity: 0.15
   MaxPitch: 80
+  groundAcceleration: 2
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,6 +669,6 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1325690982}
   - {fileID: 1478343895}
   - {fileID: 1006744154}
+  - {fileID: 1325690982}

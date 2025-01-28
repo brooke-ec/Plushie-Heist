@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lookSensitivity;
     /// <summary>Maximum pitch of the camera</summary>
     [SerializeField] private float MaxPitch;
+    /// <summary> Acceleration when on the ground</summary>
+    [SerializeField] private float groundAcceleration;
 
     #endregion
 
@@ -49,6 +51,8 @@ public class PlayerController : MonoBehaviour
     public void Update()
     {
         LookandRotate();
+        groundMove();
+        cc.Move(velocity * Time.deltaTime);
     }
     #endregion
 
@@ -65,6 +69,42 @@ public class PlayerController : MonoBehaviour
 
         cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
         
+    }
+    /// <summary>
+    /// moves you when on ground currently brokey
+    /// </summary>
+    private void groundMove()
+    {
+        Debug.Log("wasd"+wasdInput);
+
+
+        Vector2 wishdir = transform.TransformDirection(wasdInput);
+        Debug.Log("wasdinput 1"+wishdir);
+        wishdir.Normalize();
+        Debug.Log("wishdir2"+wishdir);
+
+        float wishSpeed = wishdir.magnitude * maxSpeed;
+        accelerate(wishSpeed, wishdir, groundAcceleration);
+    }
+    /// <summary>
+    /// accelerates the player by a set value or the max acceleration speed which ever is smaller
+    /// </summary>
+    /// <param name="wishspeed"></param>
+    /// <param name="wishdir"></param>
+    /// <param name="accel"></param>
+    private void accelerate(float wishspeed, Vector2 wishdir, float accel)
+    {
+        float dotSpeed = Vector2.Dot(wishdir, velocity);
+        float addSpeed = wishspeed - dotSpeed;
+
+        if (addSpeed <= 0) return;
+
+        float accelSpeed = accel * Time.deltaTime * wishspeed;
+        if (accelSpeed > addSpeed)
+            accelSpeed = addSpeed;
+        Debug.Log("accelwishdir" + wishdir);
+        velocity.x += accelSpeed * wishdir.x;
+        velocity.z += accelSpeed * wishdir.y;
     }
     #endregion
     #region Input
