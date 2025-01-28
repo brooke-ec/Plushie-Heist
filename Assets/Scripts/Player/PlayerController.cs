@@ -71,14 +71,14 @@ public class PlayerController : MonoBehaviour
         
     }
     /// <summary>
-    /// moves you when on ground currently brokey
+    /// movement for being on the ground
     /// </summary>
     private void groundMove()
     {
         Debug.Log("wasd"+wasdInput);
 
-
-        Vector2 wishdir = transform.TransformDirection(wasdInput);
+        Vector3 wishdir = new Vector3(wasdInput.x,0,wasdInput.y);
+        wishdir = transform.TransformDirection(wishdir);
         Debug.Log("wasdinput 1"+wishdir);
         wishdir.Normalize();
         Debug.Log("wishdir2"+wishdir);
@@ -92,9 +92,9 @@ public class PlayerController : MonoBehaviour
     /// <param name="wishspeed"></param>
     /// <param name="wishdir"></param>
     /// <param name="accel"></param>
-    private void accelerate(float wishspeed, Vector2 wishdir, float accel)
+    private void accelerate(float wishspeed, Vector3 wishdir, float accel)
     {
-        float dotSpeed = Vector2.Dot(wishdir, velocity);
+        float dotSpeed = Vector3.Dot(wishdir, velocity);
         float addSpeed = wishspeed - dotSpeed;
 
         if (addSpeed <= 0) return;
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
             accelSpeed = addSpeed;
         Debug.Log("accelwishdir" + wishdir);
         velocity.x += accelSpeed * wishdir.x;
-        velocity.z += accelSpeed * wishdir.y;
+        velocity.z += accelSpeed * wishdir.z;
     }
     #endregion
     #region Input
