@@ -2744,9 +2744,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootCanvas: {fileID: 1517024371}
-  inventoryWidth: 3
+  inventoryWidth: 4
   inventoryHeight: 5
-  itemTestPrefab: {fileID: 1836291371830486811, guid: 734690544725cd24d9be039aac584a6a, type: 3}
+  itemsToTest:
+  - {fileID: 11400000, guid: f697729f7bd92d843b930fd24e844890, type: 2}
+  - {fileID: 11400000, guid: 2c400c28b11e01f41a25bded2e8965bc, type: 2}
+  itemPrefab: {fileID: 1836291371830486811, guid: 734690544725cd24d9be039aac584a6a, type: 3}
 --- !u!114 &838662856
 MonoBehaviour:
   m_ObjectHideFlags: 0
