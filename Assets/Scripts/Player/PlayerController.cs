@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MaxPitch;
     /// <summary> Acceleration when on the ground</summary>
     [SerializeField] private float groundAcceleration;
+    ///<summary>Acceleration when in the air</summary>
+    [SerializeField] private float airAcceleration;
     /// <summary> Friction of ground</summary>
     [SerializeField] private float groundFriction;
     ///<summary>Gravity Value</summary>
@@ -29,6 +31,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int noJumps;
     ///<summary>time allowed to press jump before landing for the input to still register in seconds</summary>
     [SerializeField] private float jumpWindow;
+    ///<summary>Coyote Time, the time after leaving a ledge you can still jump</summary>
+    [SerializeField] private float coyoteTime;
 
     #endregion
 
@@ -51,6 +55,8 @@ public class PlayerController : MonoBehaviour
     private bool wishJump;
     /// <summary>Time since last jump input</summary>
     private float jumpTimer;
+    /// <summary> CoyoteTimer time since leaving a ledge</summary>
+    private float coyoteTimer;
     #endregion
 
     #region core methods
@@ -79,6 +85,7 @@ public class PlayerController : MonoBehaviour
 
 
     #region Movement Methods
+
     /// <summary>
     /// Called every frame to update where the camera looks and to rotate the character
     /// </summary>
@@ -91,6 +98,7 @@ public class PlayerController : MonoBehaviour
         cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
         
     }
+
     /// <summary>
     /// Deals movement in the x and z axis
     /// </summary>
@@ -101,19 +109,27 @@ public class PlayerController : MonoBehaviour
         wishdir.Normalize();
 
         float wishSpeed = wishdir.magnitude * maxSpeed;
+        ///ground movement
         if (cc.isGrounded)
         {
             ApplyFriction();
             Accelerate(wishSpeed, wishdir, groundAcceleration);
         }
+        //air movement
+        else
+        {
+            if (wishSpeed > wishSpeed/5) wishSpeed = 2;
+            Accelerate(wishSpeed, wishdir,airAcceleration);
+        }
     }
+
     /// <summary>
     /// Applys friciton for being on the ground
     /// </summary>
     private void ApplyFriction()
     {
-  
-        float curSpeed = velocity.magnitude;
+
+        float curSpeed = new Vector2(velocity.x, velocity.z).magnitude;
 
         if (curSpeed <= 0) return;
         float newSpeed = curSpeed - Time.deltaTime * curSpeed * groundFriction;
@@ -142,30 +158,50 @@ public class PlayerController : MonoBehaviour
         float accelSpeed = accel  *Time.deltaTime * wishspeed;
         if (accelSpeed > addSpeed)
             accelSpeed = addSpeed;
-        Debug.Log("accelwishdir" + wishdir);
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
     }
 
+    /// <summary>
+    /// Applys gravity if not grounded
+    /// </summary>
     private void ApplyGravity()
     {
         if (cc.isGrounded) return;
         velocity.y += Time.deltaTime * -gravity;
     }
 
+    /// <summary>
+    /// Jump logic <br/>
+    /// <br/>
+    /// Increments coyote timer(this could be done anywhere its used every frame but as its related to jumps ive put it here) <br/>
+    /// Number of jumps to be used is reset when on the ground<br/>
+    /// If off the ground and didn't use a jump to get there lose a jump, ie falling off ledges uses a jump.
+    /// If a jump input has been entered and there is jumps available gives speed in the y direction<br/>
+    /// If wanting to jump while not on ground increments jump timer<br/>
+    /// If the jump timer is greater than the input window stop wanting to jump<br/>
+    /// </summary>
     private void ApplyJumps()
     {
+        if (coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
+
         if (cc.isGrounded) jumpsUsed = 0;
+
+        if (!cc.isGrounded && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
+
         if (wishJump && jumpsUsed < noJumps)
         {
             velocity.y = jumpSpeed;
             wishJump = false;
             jumpsUsed++;
         }
+
         if (wishJump && jumpTimer < jumpWindow) jumpTimer += Time.deltaTime;
+
         if (wishJump && jumpTimer > jumpWindow) wishJump = false;
     }
 
+    
     #endregion
     #region Input
 
@@ -182,7 +218,10 @@ public class PlayerController : MonoBehaviour
 
     public void getJump(InputAction.CallbackContext ctx)
     {
-        wishJump = true;
+        if (ctx.performed)
+        {
+            wishJump = true;
+        }
     }
 
     #endregion
