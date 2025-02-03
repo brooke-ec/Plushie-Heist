@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundAcceleration;
     /// <summary> Friction of ground</summary>
     [SerializeField] private float groundFriction;
+    ///<summary>Gravity Value</summary>
+    [SerializeField] private float gravity;
 
     #endregion
 
@@ -52,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        ApplyGravity();
         LookandRotate();
         groundMove();
         cc.Move(velocity * Time.deltaTime);
@@ -86,7 +90,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("wishdir2"+wishdir);
 
         float wishSpeed = wishdir.magnitude * maxSpeed;
-        accelerate(wishSpeed, wishdir, groundAcceleration);
+        Accelerate(wishSpeed, wishdir, groundAcceleration);
     }
     /// <summary>
     /// Applys friciton for being on the ground
@@ -113,20 +117,27 @@ public class PlayerController : MonoBehaviour
     /// <param name="wishspeed"></param>
     /// <param name="wishdir"></param>
     /// <param name="accel"></param>
-    private void accelerate(float wishspeed, Vector3 wishdir, float accel)
+    private void Accelerate(float wishspeed, Vector3 wishdir, float accel)
     {
         float dotSpeed = Vector3.Dot(wishdir, velocity);
         float addSpeed = wishspeed - dotSpeed;
 
         if (addSpeed <= 0) return;
 
-        float accelSpeed = accel * Time.deltaTime * wishspeed;
+        float accelSpeed = accel  *Time.deltaTime * wishspeed;
         if (accelSpeed > addSpeed)
             accelSpeed = addSpeed;
         Debug.Log("accelwishdir" + wishdir);
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
     }
+
+    private void ApplyGravity()
+    {
+        if (cc.isGrounded) return;
+        velocity.y += Time.deltaTime * -gravity;
+    }
+
     #endregion
     #region Input
 
@@ -139,6 +150,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 input = ctx.ReadValue<Vector2>();
         lookInput = input * lookSensitivity;
+    }
+
+    public void getJump()
+    {
+
     }
 
     #endregion
