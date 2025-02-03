@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MaxPitch;
     /// <summary> Acceleration when on the ground</summary>
     [SerializeField] private float groundAcceleration;
+    /// <summary> Friction of ground</summary>
+    [SerializeField] private float groundFriction;
 
     #endregion
 
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void groundMove()
     {
-        Debug.Log("wasd"+wasdInput);
+        ApplyFriction();
 
         Vector3 wishdir = new Vector3(wasdInput.x,0,wasdInput.y);
         wishdir = transform.TransformDirection(wishdir);
@@ -86,6 +88,25 @@ public class PlayerController : MonoBehaviour
         float wishSpeed = wishdir.magnitude * maxSpeed;
         accelerate(wishSpeed, wishdir, groundAcceleration);
     }
+    /// <summary>
+    /// Applys friciton for being on the ground
+    /// </summary>
+    private void ApplyFriction()
+    {
+  
+        float curSpeed = velocity.magnitude;
+
+        if (curSpeed <= 0) return;
+        float newSpeed = curSpeed - Time.deltaTime * curSpeed * groundFriction;
+
+        if (newSpeed < 0) newSpeed = 0;
+
+        newSpeed /= curSpeed;
+
+        velocity.x *= newSpeed;
+        velocity.z *= newSpeed;
+    }
+
     /// <summary>
     /// accelerates the player by a set value or the max acceleration speed which ever is smaller
     /// </summary>
