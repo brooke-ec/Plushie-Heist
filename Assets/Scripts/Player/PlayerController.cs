@@ -11,8 +11,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     #region Serialized fields
-    /// <summary> Maximum player Speed</summary>
-    [SerializeField] private float maxSpeed;
+    /// <summary>  player Speed</summary>
+    [SerializeField] private float walkSpeed;
+    ///<summary>Crouch speed</summary>
+    [SerializeField] private float crouchSpeed;
     /// <summary> Sensitivity of the mouse </summary>
     [SerializeField] private float lookSensitivity;
     /// <summary>Maximum pitch of the camera</summary>
@@ -33,12 +35,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpWindow;
     ///<summary>Coyote Time, the time after leaving a ledge you can still jump</summary>
     [SerializeField] private float coyoteTime;
+    ///<summary>Speed threshold for sliding </summary>
+    [SerializeField] private float slideThreshold;
+    ///<summary>Friction when sliding</summary>
+    [SerializeField] private float slideFriction;
 
     #endregion
 
     #region private fields
     /// <summary>Current Player Velocity (NOT the character controller velocity we dont like that one)</summary>
     private Vector3 velocity;
+    /// <summary>The current player max speed</summary>
+    private float maxSpeed;
     /// <summary> Character controller asset</summary>
     private CharacterController cc;
     /// <summary> WASD Input  value </summary>
@@ -57,6 +65,12 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     /// <summary> CoyoteTimer time since leaving a ledge</summary>
     private float coyoteTimer;
+    ///<summary>True if crouchPressed</summary>
+    private bool isCrouchPressed;
+    /// <summary>is true if has currently crouched</summary>
+    private bool hasCrouched;
+    /// <summary>current friction value</summary>
+    private float curFriction;
     #endregion
 
     #region core methods
@@ -71,6 +85,8 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         wishJump = false;
+        maxSpeed = walkSpeed;
+        curFriction = groundFriction;
     }
 
     public void Update()
@@ -112,6 +128,7 @@ public class PlayerController : MonoBehaviour
         ///ground movement
         if (cc.isGrounded)
         {
+            applyCrouchAndSlide();
             ApplyFriction();
             Accelerate(wishSpeed, wishdir, groundAcceleration);
         }
@@ -132,7 +149,7 @@ public class PlayerController : MonoBehaviour
         float curSpeed = new Vector2(velocity.x, velocity.z).magnitude;
 
         if (curSpeed <= 0) return;
-        float newSpeed = curSpeed - Time.deltaTime * curSpeed * groundFriction;
+        float newSpeed = curSpeed - Time.deltaTime * curSpeed * curFriction;
 
         if (newSpeed < 0) newSpeed = 0;
 
@@ -200,8 +217,28 @@ public class PlayerController : MonoBehaviour
 
         if (wishJump && jumpTimer > jumpWindow) wishJump = false;
     }
+    /// <summary>
+    /// Crouch and sliding logic <br/>
+    /// unfinshed
+    /// </summary>
+    private void applyCrouchAndSlide()
+    {
+       /* if(isCrouchPressed && velocity.magnitude > slideThreshold)
+        {
+            curFriction = slideFriction;
+        }*/
+        if(isCrouchPressed && velocity.magnitude < slideThreshold && !hasCrouched)
+        {
+            maxSpeed = crouchSpeed;
+            hasCrouched = true;
+        }
+        if(!isCrouchPressed && hasCrouched)
+        {
+            maxSpeed = walkSpeed;
+            hasCrouched = false;
+        }
+    }
 
-    
     #endregion
     #region Input
 
@@ -221,6 +258,24 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             wishJump = true;
+        }
+    }
+
+    public void getCrouch(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            isCrouchPressed = true;
+            cam.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
+            cc.height = 1;
+            cc.center = new Vector3(0,0.5f,0);
+        }
+        else if (ctx.canceled)
+        {
+            isCrouchPressed = false;
+            cam.transform.localPosition = new Vector3(0, 1f, 0.5f);
+            cc.height = 2;
+            cc.center = new Vector3(0, 1f, 0);
         }
     }
 
