@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +23,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundFriction;
     ///<summary>Gravity Value</summary>
     [SerializeField] private float gravity;
+    ///<summary>Velocity given for jumping</summary>
+    [SerializeField] private float jumpSpeed;
+    ///<summary>Number of Jumps</summary>
+    [SerializeField] private int noJumps;
+    ///<summary>time allowed to press jump before landing for the input to still register in seconds</summary>
+    [SerializeField] private float jumpWindow;
 
     #endregion
 
@@ -38,6 +45,12 @@ public class PlayerController : MonoBehaviour
     private Camera cam;
     /// <summary> current pitch of the camera </summary>
     private float camPitch;
+    /// <summary> No of jumps used</summary>
+    private int jumpsUsed;
+    /// <summary>user wants to jump</summary>
+    private bool wishJump;
+    /// <summary>Time since last jump input</summary>
+    private float jumpTimer;
     #endregion
 
     #region core methods
@@ -51,19 +64,21 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        wishJump = false;
     }
 
     public void Update()
     {
         ApplyGravity();
+        ApplyJumps();
         LookandRotate();
-        groundMove();
+        Move();
         cc.Move(velocity * Time.deltaTime);
     }
     #endregion
 
 
-    #region private Methods
+    #region Movement Methods
     /// <summary>
     /// Called every frame to update where the camera looks and to rotate the character
     /// </summary>
@@ -77,20 +92,20 @@ public class PlayerController : MonoBehaviour
         
     }
     /// <summary>
-    /// movement for being on the ground
+    /// Deals movement in the x and z axis
     /// </summary>
-    private void groundMove()
+    private void Move()
     {
-        ApplyFriction();
-
         Vector3 wishdir = new Vector3(wasdInput.x,0,wasdInput.y);
         wishdir = transform.TransformDirection(wishdir);
-        Debug.Log("wasdinput 1"+wishdir);
         wishdir.Normalize();
-        Debug.Log("wishdir2"+wishdir);
 
         float wishSpeed = wishdir.magnitude * maxSpeed;
-        Accelerate(wishSpeed, wishdir, groundAcceleration);
+        if (cc.isGrounded)
+        {
+            ApplyFriction();
+            Accelerate(wishSpeed, wishdir, groundAcceleration);
+        }
     }
     /// <summary>
     /// Applys friciton for being on the ground
@@ -138,6 +153,19 @@ public class PlayerController : MonoBehaviour
         velocity.y += Time.deltaTime * -gravity;
     }
 
+    private void ApplyJumps()
+    {
+        if (cc.isGrounded) jumpsUsed = 0;
+        if (wishJump && jumpsUsed < noJumps)
+        {
+            velocity.y = jumpSpeed;
+            wishJump = false;
+            jumpsUsed++;
+        }
+        if (wishJump && jumpTimer < jumpWindow) jumpTimer += Time.deltaTime;
+        if (wishJump && jumpTimer > jumpWindow) wishJump = false;
+    }
+
     #endregion
     #region Input
 
@@ -152,9 +180,9 @@ public class PlayerController : MonoBehaviour
         lookInput = input * lookSensitivity;
     }
 
-    public void getJump()
+    public void getJump(InputAction.CallbackContext ctx)
     {
-
+        wishJump = true;
     }
 
     #endregion
