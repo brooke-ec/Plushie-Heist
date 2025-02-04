@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpWindow;
     ///<summary>Coyote Time, the time after leaving a ledge you can still jump</summary>
     [SerializeField] private float coyoteTime;
-    ///<summary>Speed threshold for sliding </summary>
+    ///<summary>Speed threshold for sliding MUST BE BIGGER THAN 5.1</summary>
     [SerializeField] private float slideThreshold;
     ///<summary>Friction when sliding</summary>
     [SerializeField] private float slideFriction;
@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviour
     private bool hasCrouched;
     /// <summary>current friction value</summary>
     private float curFriction;
+    /// <summaryo>Is currently sliding has has slid</summary>
+    private bool hasSlide;
     #endregion
 
     #region core methods
@@ -96,6 +98,7 @@ public class PlayerController : MonoBehaviour
         LookandRotate();
         Move();
         cc.Move(velocity * Time.deltaTime);
+        Debug.Log(velocity.magnitude);
     }
     #endregion
 
@@ -128,7 +131,7 @@ public class PlayerController : MonoBehaviour
         ///ground movement
         if (cc.isGrounded)
         {
-            applyCrouchAndSlide();
+            ApplyCrouchAndSlide();
             ApplyFriction();
             Accelerate(wishSpeed, wishdir, groundAcceleration);
         }
@@ -184,7 +187,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyGravity()
     {
-        if (cc.isGrounded) return;
+        if (cc.isGrounded) 
+        {
+            return;
+        }
         velocity.y += Time.deltaTime * -gravity;
     }
 
@@ -219,23 +225,33 @@ public class PlayerController : MonoBehaviour
     }
     /// <summary>
     /// Crouch and sliding logic <br/>
-    /// unfinshed
+    /// checks if crouch button is pressed and has enough velocity if so slide
+    /// checks if crouch is pressed and not enough velocity then just crouch
+    /// checks if crouch is not pressed but was just sliding or crouched then go back to walking
     /// </summary>
-    private void applyCrouchAndSlide()
+    private void ApplyCrouchAndSlide()
     {
-       /* if(isCrouchPressed && velocity.magnitude > slideThreshold)
+        if(isCrouchPressed && velocity.magnitude > slideThreshold)
         {
             curFriction = slideFriction;
-        }*/
+            maxSpeed = 1.5f;
+            hasSlide = true;
+            Debug.Log("Sliding");
+            
+        }
         if(isCrouchPressed && velocity.magnitude < slideThreshold && !hasCrouched)
         {
             maxSpeed = crouchSpeed;
             hasCrouched = true;
+            curFriction = groundFriction;
+            Debug.Log(curFriction);
         }
-        if(!isCrouchPressed && hasCrouched)
+        if (!isCrouchPressed && (hasCrouched || hasSlide))
         {
             maxSpeed = walkSpeed;
             hasCrouched = false;
+            hasSlide = false;
+            curFriction = groundFriction;    
         }
     }
 
