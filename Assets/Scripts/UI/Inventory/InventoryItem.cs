@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,34 @@ public class InventoryItem : MonoBehaviour
 {
     public ItemClass itemClass;
 
+    public int Height
+    {
+        get
+        {
+            if(!rotated)
+            {
+                return itemClass.sizeHeight;
+            }
+            return itemClass.sizeWidth;
+        }
+    }
+
+    public int Width
+    {
+        get
+        {
+            if(!rotated)
+            {
+                return itemClass.sizeWidth;
+            }
+            return itemClass.sizeHeight;
+        }
+    }
+
     /// <summary> Mostly used to pick up an item </summary>
     public Vector2Int mainPositionOnGrid = new Vector2Int();
+
+    public bool rotated = false;
 
     public void Set(ItemClass itemClass)
     {
@@ -16,8 +43,18 @@ public class InventoryItem : MonoBehaviour
         GetComponent<Image>().sprite = itemClass.itemIcon;
 
         Vector2 size = new Vector2();
-        size.x = itemClass.sizeWidth * InventoryGrid.tileSize;
-        size.y = itemClass.sizeHeight * InventoryGrid.tileSize;
+        size.x = Width * InventoryGrid.tileSize;
+        size.y = Height * InventoryGrid.tileSize;
         GetComponent<RectTransform>().sizeDelta = size;
+    }
+
+    public void Rotate()
+    {
+        if (itemClass.sizeWidth == itemClass.sizeHeight) { return; }
+
+        rotated = !rotated;
+        RectTransform itemRectTransform = GetComponent<RectTransform>();
+        //if rotated is true, rotate it to 90 degrees, otherwise rotate it to 0
+        itemRectTransform.rotation = Quaternion.Euler(0, 0, rotated == true ? 90f : 0f);
     }
 }

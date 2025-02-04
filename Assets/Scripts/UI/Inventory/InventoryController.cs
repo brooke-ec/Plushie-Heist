@@ -1,19 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
 {
     [HideInInspector] public InventoryGrid selectedInventoryGrid;
-
     [HideInInspector] public InventoryItem selectedItem;
     private RectTransform selectedItemRectTransform;
+
+    private InventoryItem overlapItem;
 
     private void Update()
     {
         ItemIconDragEffect();
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            RotateItem();
+        }
 
         if (selectedInventoryGrid == null) { return; }
 
@@ -24,9 +32,35 @@ public class InventoryController : MonoBehaviour
         }
     }
 
+    #region Inventory controls
+    private void RotateItem()
+    {
+        if(selectedItem == null) { return; }
+
+        selectedItem.Rotate();
+    }
+
+    public void InsertItem(InventoryItem itemToInsert)
+    {
+        if(selectedInventoryGrid == null) { return; }
+
+        Vector2Int? posOnGrid = selectedInventoryGrid.FindSpaceForObject(itemToInsert);
+        if(posOnGrid != null) //space on grid, so place into position found
+        {
+            selectedInventoryGrid.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
+        }
+    }
+
     private void LeftMouseButtonPress()
     {
-        Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(Input.mousePosition); //tile grid position
+        Vector2 mousePos = Input.mousePosition;
+        if(selectedItem != null)
+        {
+            mousePos.x -= (selectedItem.Width - 1) * InventoryGrid.tileSize / 2;
+            mousePos.y += (selectedItem.Height - 1) * InventoryGrid.tileSize / 2;
+        }
+
+        Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(mousePos); //tile grid position
         if (selectedItem == null)
         {
             PickUpItem(posOnGrid);
@@ -36,13 +70,23 @@ public class InventoryController : MonoBehaviour
             PlaceItem(posOnGrid);
         }
     }
+    #endregion
 
+    #region Inventory inner workings
     private void PlaceItem(Vector2Int posOnGrid)
     {
-        bool itemPlaced = selectedInventoryGrid.PlaceItem(selectedItem, posOnGrid.x, posOnGrid.y);
+        bool itemPlaced = selectedInventoryGrid.PlaceItem(selectedItem, posOnGrid.x, posOnGrid.y, ref overlapItem);
         if (itemPlaced)
         {
             selectedItem = null;
+            if(overlapItem != null)
+            {
+                //this is so you now pick up the overlap item
+                selectedItem = overlapItem;
+                overlapItem = null;
+                selectedItemRectTransform = selectedItem.GetComponent<RectTransform>();
+                selectedItemRectTransform.SetAsLastSibling();
+            }
         }
     }
 
@@ -64,5 +108,6 @@ public class InventoryController : MonoBehaviour
         }
     }
 }
+#endregion
 
 //MISSING DRAGGING INSTEAD OF CLICK TO-DO
