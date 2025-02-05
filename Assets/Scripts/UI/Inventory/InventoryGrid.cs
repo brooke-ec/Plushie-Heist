@@ -3,15 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 /// <summary> Controls a single inventory grid functionality </summary>
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     #region References
     private InventoryController inventoryController;
-    [SerializeField] private Canvas rootCanvas;
     private RectTransform rectTransform;
     #endregion
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
@@ -21,18 +18,18 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public const int offsetFromShadow = 10;
     public const int offsetFromImage = 20;
 
-    [SerializeField] private int inventoryWidth; //gridSizeWidth
+    [SerializeField] private int inventoryWidth;
     [SerializeField] private int inventoryHeight;
-    float scaleFactor;
 
     InventoryItem[,] inventorySlots;
+    private float scaleFactor;
 
-    private void Start()
+    public void StartInventory()
     {
         inventoryController = FindAnyObjectByType<InventoryController>();
         rectTransform = GetComponent<RectTransform>();
 
-        scaleFactor = rootCanvas.scaleFactor;
+        scaleFactor = FindAnyObjectByType<UIManager>().scaleFactor;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight);
         PlaceTestItems();
@@ -49,8 +46,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <summary> Gets the grid position of the mouse position, where the grid is anchored top left </summary>
     public Vector2Int GetTileGridPosition(Vector2 mousePos)
     {
-        //NOT WORKING
-
         Vector2 mousePosOnGrid = new Vector2();
         Vector2Int tileGridPosition = new Vector2Int(0, 0);
 
@@ -239,17 +234,18 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     //
     public void PlaceTestItems()
     {
-        InventoryItem item = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        Transform rootCanvas = FindAnyObjectByType<UIManager>().rootCanvas.transform;
+        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item.Set(itemsToTest[0]);
-        PlaceItem(item, 1, 3);
+        PlaceItem(item, 0, 0);
 
-        InventoryItem item2 = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        InventoryItem item2 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item2.Set(itemsToTest[1]);
-        PlaceItem(item2, 0, 2);
+        PlaceItem(item2, 0, 1);
 
-        InventoryItem item3 = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        InventoryItem item3 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item3.Set(itemsToTest[0]);
-        PlaceItem(item3, 2, 3);
+        PlaceItem(item3, 2, 1);
     }
     #endregion
 }

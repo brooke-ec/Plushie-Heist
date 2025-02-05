@@ -3,10 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class InventoryItem : MonoBehaviour
 {
     public ItemClass itemClass;
+    private Image icon;
+    private RectTransform shadowRectTransform;
+    private RectTransform backgroundRectTransform;
+
+    private float scaleFactor;
+
+    private void Awake()
+    {
+        shadowRectTransform = transform.GetChild(0).GetComponent<RectTransform>();
+        backgroundRectTransform = transform.GetChild(1).GetComponent<RectTransform>();
+        icon = transform.GetChild(2).GetComponent<Image>();
+
+        scaleFactor = FindAnyObjectByType<UIManager>().scaleFactor;
+    }
 
     public int Height
     {
@@ -40,22 +55,36 @@ public class InventoryItem : MonoBehaviour
     public void Set(ItemClass itemClass)
     {
         this.itemClass = itemClass;
-        GetComponent<Image>().sprite = itemClass.itemIcon;
+        icon.sprite = itemClass.itemIcon;
 
         Vector2 size = new Vector2();
         size.x = Width * InventoryGrid.usableTileSize;
         size.y = Height * InventoryGrid.usableTileSize;
-        GetComponent<RectTransform>().sizeDelta = size;
+
+        icon.GetComponent<RectTransform>().sizeDelta = size;
+        SetBackground(size);
+    }
+
+    private void SetBackground(Vector2 size)
+    {
+        int horizontalOffsetNeeded = (InventoryGrid.offsetFromImage + InventoryGrid.offsetFromShadow) * (Width - 1); //this is so objects of size 1 have no extra-tile spacing offsets
+        int verticalOffsetNeeded = (InventoryGrid.offsetFromImage + InventoryGrid.offsetFromShadow) * (Height - 1);
+        size = new Vector2(size.x + horizontalOffsetNeeded, size.y + verticalOffsetNeeded);
+
+        shadowRectTransform.sizeDelta = size;
+        backgroundRectTransform.sizeDelta = size;
     }
 
     public void Rotate()
     {
-        //MISSING ADAPTATION HERE
         if (itemClass.sizeWidth == itemClass.sizeHeight) { return; }
 
         rotated = !rotated;
         RectTransform itemRectTransform = GetComponent<RectTransform>();
-        //if rotated is true, rotate it to 90 degrees, otherwise rotate it to 0
         itemRectTransform.rotation = Quaternion.Euler(0, 0, rotated == true ? 90f : 0f);
+
+        //Adjust shadow so it's below
+        Vector3 newBackgroundPos = new Vector3(backgroundRectTransform.position.x + InventoryGrid.offsetFromShadow, backgroundRectTransform.position.y - InventoryGrid.offsetFromShadow, 0);
+        shadowRectTransform.position = newBackgroundPos;
     }
 }
