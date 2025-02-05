@@ -11,6 +11,18 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     #region Serialized fields
+    /// <summary> Maximum player Speed</summary>
+    [SerializeField] private float maxSpeed;
+    /// <summary> Maximum player Sprint Speed</summary>
+    [SerializeField] private float sprintMaxSpeed;
+    /// <summary> The players Stamina</summary>
+    [SerializeField] private float stamina;
+    /// <summary. The players Max Stamina</summary>
+    [SerializeField] private float maxStamina;
+    /// <summary> The speed at which the players stamina is drained</summary>
+    [SerializeField] private float staminaDrain;
+    /// <summary> The speed at which the player stamina recovers</summary>
+    [SerializeField] private float staminaRecover;
     /// <summary>  player Speed</summary>
     [SerializeField] private float walkSpeed;
     ///<summary>Crouch speed</summary>
@@ -65,6 +77,8 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     /// <summary> CoyoteTimer time since leaving a ledge</summary>
     private float coyoteTimer;
+    /// <summary> user wants to sprint</summary>
+    private bool wishSprint;
     ///<summary>True if crouchPressed</summary>
     private bool isCrouchPressed;
     /// <summary>is true if has currently crouched</summary>
@@ -98,7 +112,7 @@ public class PlayerController : MonoBehaviour
         LookandRotate();
         Move();
         cc.Move(velocity * Time.deltaTime);
-        Debug.Log(velocity.magnitude);
+        StaminaRecovery();
     }
     #endregion
 
@@ -119,15 +133,29 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Deals movement in the x and z axis
+    /// Deals movement in the x and z axis <br/>
+    /// Checks wether the Player is trying to sprint <br/>
+    /// If so the sprintMaxSpeed is used in place of maxSpeed <br/>
     /// </summary>
     private void Move()
     {
         Vector3 wishdir = new Vector3(wasdInput.x,0,wasdInput.y);
         wishdir = transform.TransformDirection(wishdir);
         wishdir.Normalize();
+        float wishSpeed;
 
-        float wishSpeed = wishdir.magnitude * maxSpeed;
+        if (wishSprint && stamina > 0)
+        {
+            //Debug.Log("Sprinting");
+            wishSpeed = wishdir.magnitude * sprintMaxSpeed;
+            stamina -= (staminaDrain * Time.deltaTime);
+            //Debug.Log(stamina);
+        }
+        else
+        {
+            wishSpeed = wishdir.magnitude * maxSpeed;
+        }
+        
         ///ground movement
         if (cc.isGrounded)
         {
@@ -255,6 +283,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stamina Recorvery Logic <br/>
+    /// <br/>
+    /// If the Player has maxStamina or is trying to Sprint then the function returns <br/>
+    /// Otherwise the Player will gain back the stamina dependant on the value of staminaRecover. <br/>
+    /// If the Stamina exceeds the maxStamina value. Stamina becomes the max value<br/>
+    /// </summary>
+    private void StaminaRecovery()
+    {
+        //checks to see if sprinting then if it can add any more stamina
+        if (wishSprint)
+        {
+            return;
+        }
+        if (stamina == maxStamina)
+        {
+            return;
+        }
+
+        stamina += (staminaRecover * Time.deltaTime);
+        if (stamina > maxStamina)
+        {
+            stamina = maxStamina;
+        }
+    }
     #endregion
     #region Input
 
@@ -277,6 +330,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void getSprint(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            wishSprint = true;
+        }
+        //if (ctx.performed)
+        //{
+        //    wishSprint = true;
+        //}
+        if (ctx.canceled)
+        {
+            wishSprint = false;
+        }
+    }
     public void getCrouch(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
