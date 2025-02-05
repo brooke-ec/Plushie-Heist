@@ -676,6 +676,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f445c0d2bc1b5439bf6633f950be4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 0
+  sprintMaxSpeed: 20
+  stamina: 10
+  maxStamina: 10
+  staminaDrain: 1
+  staminaRecover: 1
   walkSpeed: 10
   crouchSpeed: 3
   lookSensitivity: 0.15
@@ -779,6 +785,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7a83a5ac-4ba1-4afe-86d8-fcb1cea61a9b
     m_ActionName: PlayerMovement/Crouch[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f60a5a0d-10cf-4b8d-a756-07d615c1a886
+    m_ActionName: PlayerMovement/Ability[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1478343896}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: getSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e3881b03-ea16-46f1-b7dd-d5f75ffd587f
+    m_ActionName: PlayerMovement/Sprint[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement

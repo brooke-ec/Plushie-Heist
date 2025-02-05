@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sprintMaxSpeed;
     /// <summary> The players Stamina</summary>
     [SerializeField] private float stamina;
-    /// <summary. The players Max Stamina</summary>
+    /// <summary> The players Max Stamina</summary>
     [SerializeField] private float maxStamina;
     /// <summary> The speed at which the players stamina is drained</summary>
     [SerializeField] private float staminaDrain;
@@ -57,8 +57,6 @@ public class PlayerController : MonoBehaviour
     #region private fields
     /// <summary>Current Player Velocity (NOT the character controller velocity we dont like that one)</summary>
     private Vector3 velocity;
-    /// <summary>The current player max speed</summary>
-    private float maxSpeed;
     /// <summary> Character controller asset</summary>
     private CharacterController cc;
     /// <summary> WASD Input  value </summary>
