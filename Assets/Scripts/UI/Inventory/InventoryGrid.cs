@@ -14,9 +14,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private Canvas rootCanvas;
     private RectTransform rectTransform;
     #endregion
+    /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
+    public const int tileSize = 130;
+    /// <summary> Used both for width and height of USABLE tile (white, not shadow) </summary>
+    public const int usableTileSize = 100;
+    public const int offsetFromShadow = 10;
+    public const int offsetFromImage = 20;
 
-    /// <summary> Used both for width and height of tile </summary>
-    public const int tileSize = 100;
     [SerializeField] private int inventoryWidth; //gridSizeWidth
     [SerializeField] private int inventoryHeight;
     float scaleFactor;
@@ -39,12 +43,14 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void CreateInventoryGrid(int width, int height)
     {
         inventorySlots = new InventoryItem[width, height];
-        rectTransform.sizeDelta = new Vector2(width * tileSize, height * tileSize); //actual size of inventory
+        rectTransform.sizeDelta = new Vector2((width * tileSize) - offsetFromImage, (height * tileSize) - offsetFromImage); //actual size of inventory
     }
 
     /// <summary> Gets the grid position of the mouse position, where the grid is anchored top left </summary>
     public Vector2Int GetTileGridPosition(Vector2 mousePos)
     {
+        //NOT WORKING
+
         Vector2 mousePosOnGrid = new Vector2();
         Vector2Int tileGridPosition = new Vector2Int(0, 0);
 
@@ -127,9 +133,14 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         item.mainPositionOnGrid.x = xPos;
         item.mainPositionOnGrid.y = yPos;
 
+        //PLACE CENTERED
         Vector2 itemPosition = new Vector2();
-        itemPosition.x = (xPos * tileSize) + (tileSize * item.Width) / 2; //+ is the offset so it's in the centre
-        itemPosition.y = -((yPos * tileSize) + (tileSize * item.Height) / 2);
+
+        int horizontalOffsetNeeded = (offsetFromImage + offsetFromShadow) * (item.Width - 1); //this is so objects of size 1 have no extra-tile spacing offsets
+        int verticalOffsetNeeded = (offsetFromImage + offsetFromShadow) * (item.Height - 1);
+
+        itemPosition.x = (xPos * tileSize) + ((usableTileSize * item.Width) + horizontalOffsetNeeded) / 2; //+ is the offset so it's in the centre
+        itemPosition.y = -((yPos * tileSize) + ((usableTileSize * item.Height) + verticalOffsetNeeded) / 2);
 
         itemRectTransform.localPosition = itemPosition;
     }
