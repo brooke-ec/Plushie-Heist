@@ -26,7 +26,15 @@
 		"svelte-check": "^4.0.0",
 		"svelte-fa": "^4.0.3",
 		"typescript": "^5.0.0",
-		"uuid": "^11.0.5",
 		"vite": "^6.0.0"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@sveltejs/adapter-node": "patches/@sveltejs__adapter-node.patch"
+		},
+		"onlyBuiltDependencies": [
+			"@parcel/watcher",
+			"esbuild"
+		]
 	}
 }

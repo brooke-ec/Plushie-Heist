@@ -1,9 +1,9 @@
-import { CREDENTIALS } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { error } from "@sveltejs/kit";
 
-const credentials: string[] = CREDENTIALS.split(",");
-
 export async function load({ request, setHeaders }) {
+	const credentials: string[] = env.CREDENTIALS.split(",");
+
 	function unauthorized(): never {
 		setHeaders({ "WWW-Authenticate": 'Basic realm="Protected"' });
 		error(401, "Unauthorized");
