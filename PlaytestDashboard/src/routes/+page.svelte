@@ -1,2 +1,7 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+	import { faGithub } from "@fortawesome/free-brands-svg-icons";
+	import Fa from "svelte-fa";
+</script>
+
+<h1>Plushie Heist</h1>
+<a href="https://github.com/brooke-ec/plushie-heist"><Fa icon={faGithub} /> GitHub Repository</a>

@@ -27,5 +27,5 @@ export async function PUT({ request }) {
 		error(500, "Failed to upload");
 	}
 
-	return new Response("File uploaded!", { status: 201 });
+	return new Response(filename, { status: 201 });
 }
