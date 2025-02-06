@@ -1,6 +1,6 @@
 import { UPLOADS_ROOT } from "$lib";
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 export async function load() {
 	const files = await fs.readdir(UPLOADS_ROOT);

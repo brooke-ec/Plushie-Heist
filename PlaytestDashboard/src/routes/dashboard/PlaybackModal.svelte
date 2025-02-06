@@ -13,7 +13,7 @@
 <div class="background"></div>
 <div class="container">
 	<div class="title" style="width: {clientWidth}px;">
-		<h1>{file}</h1>
+		<h2>{file}</h2>
 		<button onclick={onclose}><Fa icon={faXmark} /></button>
 	</div>
 	<!-- svelte-ignore a11y_media_has_caption -->
@@ -49,7 +49,7 @@
 		align-items: center;
 		display: flex;
 
-		h1 {
+		h2 {
 			margin-right: auto;
 			text-align: start;
 		}
