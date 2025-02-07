@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float slideThreshold;
     ///<summary>Friction when sliding</summary>
     [SerializeField] private float slideFriction;
+    /// <summary>The Ability that the Player currently has equiped</summary>
+    [SerializeField] private Ability currentAbility;
 
     #endregion
 
@@ -361,5 +364,46 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the player tries to use the current ability. Checks which ability is currently seected using Enum.
+    /// Branched off down whichever path is recuired for each ability
+    /// </summary>
+    public void getAbility(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            switch (currentAbility)
+            {
+                case Ability.Dash:
+                    Debug.Log("Dashing");
+                    break;
+                case Ability.Grapple:
+                    Debug.Log("Grappling");
+                    break;
+                case Ability.Boost:
+                    Debug.Log("Boosting");
+                    break;
+                case Ability.Glide:
+                    Debug.Log("Gliding");
+                    break;
+                default:
+                    Debug.Log("No Ability Selected");
+                    break;
+            }
+        }
+    }
+
     #endregion
+}
+
+/// <summary>
+/// The Enum for the ability that the player currently has selected
+/// </summary>
+enum Ability
+{
+    None,
+    Dash,
+    Grapple,
+    Boost,
+    Glide
 }
