@@ -18,5 +18,7 @@ export async function load() {
 		}),
 	);
 
+	uploads.sort((a, b) => b.date.getTime() - a.date.getTime());
+
 	return { uploads };
 }
