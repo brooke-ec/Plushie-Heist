@@ -21,6 +21,8 @@ public class RecordTest : MonoBehaviour
     {
         yield return Recorder.EndRecording();
         text.text = "Uploading...";
+        yield return Recorder.UploadRecording();
+        text.text = "Done!";
     }
 
     private void OnDestroy()

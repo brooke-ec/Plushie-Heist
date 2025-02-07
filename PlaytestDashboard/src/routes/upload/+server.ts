@@ -6,7 +6,7 @@ import { error } from "@sveltejs/kit";
 import { UPLOADS_ROOT } from "$lib";
 import path from "node:path";
 
-export async function PUT({ request }) {
+export async function POST({ request }) {
 	const filename = `${crypto.randomUUID().replaceAll("-", "")}.mp4`;
 	const filePath = path.normalize(path.join(UPLOADS_ROOT, filename));
 

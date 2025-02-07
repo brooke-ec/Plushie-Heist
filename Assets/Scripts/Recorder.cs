@@ -1,11 +1,15 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Recorder
 {
-    const string FILENAME = "recording.mp4";
+    public const string FILE_PATH = "recording.mp4";
+    public const string UPLOAD_URL = "https://plushie-heist.nimahost.net/upload";
+
     private static Process process = null;
 
     /// <summary>
@@ -68,7 +72,7 @@ public class Recorder
         if (process != null) throw new Exception("Recorder already active");
         process = new Process();
         process.StartInfo.FileName = Application.streamingAssetsPath + "\\ffmpeg.exe";
-        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {FILENAME}";
+        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {FILE_PATH}";
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         process.StartInfo.RedirectStandardInput = true;
@@ -120,5 +124,17 @@ public class Recorder
                 return IsActive();
             }
         }
+    }
+
+    /// <summary>
+    /// Upload the most recent recording to the playtest dashboard.
+    /// </summary>
+    public static IEnumerator UploadRecording()
+    {
+        using UnityWebRequest r = new UnityWebRequest(UPLOAD_URL, UnityWebRequest.kHttpVerbPOST);
+
+        r.uploadHandler = new UploadHandlerFile(FILE_PATH);
+        yield return r.SendWebRequest();
+        if (r.result != UnityWebRequest.Result.Success) throw new Exception(r.error);
     }
 }
