@@ -393,6 +393,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void getInteract(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            Debug.Log("Interact");
+        }
+    }
+
     #endregion
 }
 

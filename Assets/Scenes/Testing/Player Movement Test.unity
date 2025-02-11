@@ -696,6 +696,7 @@ MonoBehaviour:
   coyoteTime: 0.5
   slideThreshold: 6
   slideFriction: 0.75
+  currentAbility: 0
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -786,7 +787,19 @@ MonoBehaviour:
     m_ActionId: 7a83a5ac-4ba1-4afe-86d8-fcb1cea61a9b
     m_ActionName: PlayerMovement/Crouch[/Keyboard/leftCtrl]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1478343896}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: getAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f60a5a0d-10cf-4b8d-a756-07d615c1a886
     m_ActionName: PlayerMovement/Ability[/Keyboard/q]
   - m_PersistentCalls:
@@ -805,6 +818,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e3881b03-ea16-46f1-b7dd-d5f75ffd587f
     m_ActionName: PlayerMovement/Sprint[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1478343896}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: getInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
+    m_ActionName: PlayerMovement/Interact[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
