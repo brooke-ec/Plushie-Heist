@@ -677,7 +677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 0
-  sprintMaxSpeed: 20
+  sprintMaxSpeed: 10
   stamina: 10
   maxStamina: 10
   staminaDrain: 1
@@ -686,7 +686,6 @@ MonoBehaviour:
   crouchSpeed: 3
   lookSensitivity: 0.15
   MaxPitch: 80
-  groundAcceleration: 7
   airAcceleration: 7
   groundFriction: 10
   gravity: 10
@@ -696,7 +695,13 @@ MonoBehaviour:
   coyoteTime: 0.5
   slideThreshold: 6
   slideFriction: 0.75
-  currentAbility: 0
+  currentAbility: 3
+  boostSpeedCap: 20
+  baseGroundAcceleration: 7
+  boostGroundAcceleration: 20
+  maxBoostTime: 20
+  boostTime: 20
+  boostRecoverSpeed: 1
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0

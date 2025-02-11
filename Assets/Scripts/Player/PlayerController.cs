@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     #region Serialized fields
     /// <summary> Maximum player Speed</summary>
     [SerializeField] private float maxSpeed;
-    /// <summary> Maximum player Sprint Speed</summary>
+    /// <summary> Maximum player Sprint Speed rework to be an increase on top of the maxspeed</summary>
     [SerializeField] private float sprintMaxSpeed;
     /// <summary> The players Stamina</summary>
     [SerializeField] private float stamina;
@@ -32,8 +32,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float lookSensitivity;
     /// <summary>Maximum pitch of the camera</summary>
     [SerializeField] private float MaxPitch;
-    /// <summary> Acceleration when on the ground</summary>
-    [SerializeField] private float groundAcceleration;
     ///<summary>Acceleration when in the air</summary>
     [SerializeField] private float airAcceleration;
     /// <summary> Friction of ground</summary>
@@ -54,6 +52,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float slideFriction;
     /// <summary>The Ability that the Player currently has equiped</summary>
     [SerializeField] private Ability currentAbility;
+    ///<summary>The new acceleration speed when the palyer boosts</summary>
+    [SerializeField] private float boostSpeedCap;
+    ///<summary>The base Ground Acceleration</summary>
+    [SerializeField] private float baseGroundAcceleration;
+    ///<summary>The boosting Ground Acceleration</summary>
+    [SerializeField] private float boostGroundAcceleration;
+    ///<summary>The maximum boost time</summary>
+    [SerializeField] private float maxBoostTime;
+    ///<summary>The time the player will be boosting for</summary>
+    [SerializeField] private float boostTime;
+    ///<summary>The speed at which the Player regains the boost at</summary>
+    [SerializeField] private float boostRecoverSpeed;
 
     #endregion
 
@@ -88,6 +98,12 @@ public class PlayerController : MonoBehaviour
     private float curFriction;
     /// <summaryo>Is currently sliding has has slid</summary>
     private bool hasSlide;
+    /// <summary>Acceleration when on the ground</summary>
+    private float groundAcceleration;
+    /// <summary>Checks whether the player is boosting</summary>
+    private bool isBoosting;
+    /// <summary>Checks whether the boost has been used</summary>
+    private bool boostSpent;
     #endregion
 
     #region core methods
@@ -104,6 +120,7 @@ public class PlayerController : MonoBehaviour
         wishJump = false;
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
+        groundAcceleration = baseGroundAcceleration;
     }
 
     public void Update()
@@ -114,6 +131,7 @@ public class PlayerController : MonoBehaviour
         Move();
         cc.Move(velocity * Time.deltaTime);
         StaminaRecovery();
+        Boost();
     }
     #endregion
 
@@ -148,7 +166,7 @@ public class PlayerController : MonoBehaviour
         if (wishSprint && stamina > 0)
         {
             //Debug.Log("Sprinting");
-            wishSpeed = wishdir.magnitude * sprintMaxSpeed;
+            wishSpeed = wishdir.magnitude * (maxSpeed + sprintMaxSpeed);
             stamina -= (staminaDrain * Time.deltaTime);
             //Debug.Log(stamina);
         }
@@ -168,7 +186,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             if (wishSpeed > wishSpeed/5) wishSpeed = 2;
-            Accelerate(wishSpeed, wishdir,airAcceleration);
+            Accelerate(wishSpeed, wishdir, airAcceleration);
         }
     }
 
@@ -309,7 +327,37 @@ public class PlayerController : MonoBehaviour
             stamina = maxStamina;
         }
     }
+
+    /// <summary>
+    /// Increases Acceleration and Speed Cap
+    /// </summary>
+    private void Boost()
+    {
+        if (isBoosting && !boostSpent)
+        {
+            groundAcceleration = boostGroundAcceleration;
+            maxSpeed = boostSpeedCap;
+            boostTime -= Time.deltaTime;
+            if (boostTime <= 0)
+            {
+                isBoosting = false;
+                boostSpent = true;
+                groundAcceleration = baseGroundAcceleration;
+                maxSpeed = walkSpeed;
+            }
+        }
+        else if (boostSpent)
+        {
+            boostTime += boostRecoverSpeed * Time.deltaTime;
+            if (boostTime >= maxBoostTime)
+            {
+                boostTime = maxBoostTime;
+                boostSpent = false;
+            }
+        }
+    }
     #endregion
+
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
@@ -382,6 +430,10 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Boost:
                     Debug.Log("Boosting");
+                    if (!boostSpent)
+                    {
+                        isBoosting = true;
+                    }
                     break;
                 case Ability.Glide:
                     Debug.Log("Gliding");
