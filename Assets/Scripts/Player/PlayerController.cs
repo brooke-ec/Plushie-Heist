@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundFriction;
     ///<summary>Gravity Value</summary>
     [SerializeField] private float gravity;
+    ///<summary>Gliding Gravity</summary>
+    [SerializeField] private float glideGravity;
     ///<summary>Velocity given for jumping</summary>
     [SerializeField] private float jumpSpeed;
     ///<summary>Number of Jumps</summary>
@@ -104,6 +106,8 @@ public class PlayerController : MonoBehaviour
     private bool isBoosting;
     /// <summary>Checks whether the boost has been used</summary>
     private bool boostSpent;
+    /// <summary>Checks whetehr the player is Gliding<summary>
+    private bool isGliding;
     #endregion
 
     #region core methods
@@ -125,7 +129,14 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        ApplyGravity();
+        if (isGliding)
+        {
+            ApplyGravity(glideGravity);
+        }
+        else
+        {
+            ApplyGravity(gravity);
+        }
         ApplyJumps();
         LookandRotate();
         Move();
@@ -232,7 +243,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Applys gravity if not grounded
     /// </summary>
-    private void ApplyGravity()
+    private void ApplyGravity(float gravity)
     {
         if (cc.isGrounded) 
         {
@@ -437,6 +448,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Glide:
                     Debug.Log("Gliding");
+                    isGliding = true;
                     break;
                 default:
                     Debug.Log("No Ability Selected");
