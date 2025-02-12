@@ -73,6 +73,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashRechargeTime;
     /// <summary> Amount of time between dashes</summary>
     [SerializeField] private float dashCooldownTime;
+    /// <summary>Distance for detecting walls</summary>
+    [SerializeField] private float wallDetectionDistance;
 
     #endregion
 
@@ -142,7 +144,6 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        CheckForWall();
         ApplyGravity();
         ApplyJumps();
         LookandRotate();
@@ -151,7 +152,12 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        Debug.Log(velocity);
+        //Debug.Log(velocity);
+    }
+
+    public void FixedUpdate()
+    {
+        CheckForWall();
     }
     #endregion
 
@@ -424,8 +430,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// checks if there is a wall nearby, unfinished currently gives the nearest wall as an int should be called every fixed update
+    /// </summary>
     private void CheckForWall()
     {
+        LayerMask mask = LayerMask.GetMask("Env");
+
+        float shortesthitdist = wallDetectionDistance + 1;
+        int ray = -1;
+        for (int i = 0; i < 5; i++)
+        {
+            RaycastHit hitinfo;
+            Ray tempRay = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
+            Debug.DrawRay(transform.position+new Vector3(0,1,0), Quaternion.AngleAxis(45*i,transform.up)*(-transform.right));
+
+            if(Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance<shortesthitdist)
+            {
+                shortesthitdist = hitinfo.distance;
+                ray = i;
+            }
+        }
+        Debug.Log(ray);
 
     }
 

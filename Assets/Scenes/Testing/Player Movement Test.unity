@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 102921591}
   - component: {fileID: 102921590}
   - component: {fileID: 102921589}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ GameObject:
   - component: {fileID: 736109435}
   - component: {fileID: 736109434}
   - component: {fileID: 736109433}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1651,7 +1651,7 @@ GameObject:
   - component: {fileID: 1409966078}
   - component: {fileID: 1409966077}
   - component: {fileID: 1409966076}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Slope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2076,7 +2076,7 @@ MonoBehaviour:
   MaxPitch: 80
   airAcceleration: 7
   groundFriction: 10
-  gravity: 10
+  gravity: 15
   jumpSpeed: 5
   noJumps: 1
   jumpWindow: 0.5
@@ -2094,6 +2094,7 @@ MonoBehaviour:
   noDashes: 1
   dashRechargeTime: 20
   dashCooldownTime: 0.5
+  wallDetectionDistance: 0.7
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,7 +2416,7 @@ GameObject:
   - component: {fileID: 1808312595}
   - component: {fileID: 1808312594}
   - component: {fileID: 1808312593}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2933,7 +2934,7 @@ GameObject:
   - component: {fileID: 1999933121}
   - component: {fileID: 1999933120}
   - component: {fileID: 1999933119}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
