@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New item", menuName = "Assets/Items/New item")]
+[CreateAssetMenu(fileName = "New item", menuName = "Scriptable Objects/Items/New item")]
 public class ItemClass : ScriptableObject
 {
     /// <summary> how many tiles it occupies (width) </summary>
