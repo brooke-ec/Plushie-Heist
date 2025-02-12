@@ -142,6 +142,7 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        CheckForWall();
         ApplyGravity();
         ApplyJumps();
         LookandRotate();
@@ -150,6 +151,7 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
+        Debug.Log(velocity);
     }
     #endregion
 
@@ -420,6 +422,11 @@ public class PlayerController : MonoBehaviour
             dashRechargeTimer = 0;
             dashesUsed--;
         }
+    }
+
+    private void CheckForWall()
+    {
+
     }
 
     #endregion
