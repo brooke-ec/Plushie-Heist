@@ -695,13 +695,17 @@ MonoBehaviour:
   coyoteTime: 0.5
   slideThreshold: 6
   slideFriction: 0.75
-  currentAbility: 3
+  currentAbility: 1
   boostSpeedCap: 20
   baseGroundAcceleration: 7
   boostGroundAcceleration: 20
   maxBoostTime: 20
   boostTime: 20
   boostRecoverSpeed: 1
+  dashSpeed: 15
+  noDashes: 1
+  dashRechargeTime: 20
+  dashCooldownTime: 0.5
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0

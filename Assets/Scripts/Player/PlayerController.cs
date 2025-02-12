@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.ShaderKeywordFilter;
@@ -64,6 +65,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float boostTime;
     ///<summary>The speed at which the Player regains the boost at</summary>
     [SerializeField] private float boostRecoverSpeed;
+    /// <summary>the speed given when dashing</summary>
+    [SerializeField] private float dashSpeed;
+    /// <summary>The number of Dashes available</summary>
+    [SerializeField] private int noDashes;
+    /// <summary> Amount of time to regain a dash charge</summary>
+    [SerializeField] private float dashRechargeTime;
+    /// <summary> Amount of time between dashes</summary>
+    [SerializeField] private float dashCooldownTime;
 
     #endregion
 
@@ -104,6 +113,14 @@ public class PlayerController : MonoBehaviour
     private bool isBoosting;
     /// <summary>Checks whether the boost has been used</summary>
     private bool boostSpent;
+    /// <summary>Number of Dashes used</summary>
+    private int dashesUsed;
+    /// <summary>time to gain a dash back</summary>
+    private float dashRechargeTimer;
+    /// <summary>time till can next use a dash</summary>
+    private float dashCooldownTimer;
+    /// <summary>if Dash on cooldown</summary>
+    private bool hasDashed;
     #endregion
 
     #region core methods
@@ -129,9 +146,10 @@ public class PlayerController : MonoBehaviour
         ApplyJumps();
         LookandRotate();
         Move();
-        cc.Move(velocity * Time.deltaTime);
         StaminaRecovery();
         Boost();
+        DashCooldowns();
+        cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
     }
     #endregion
 
@@ -356,6 +374,54 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    
+    /// <summary>
+    /// Called when pressing ability key while dash is the ability
+    /// </br>
+    /// If dashes are available gives velocity in direction you are loooking
+    /// </summary>
+    private void Dash()
+    {
+        if (dashesUsed < noDashes && !hasDashed)
+        {
+            Vector3 wishDashDir = cam.transform.forward;
+            Vector3 wishDashVel = wishDashDir * dashSpeed;
+            velocity += wishDashVel;
+            dashesUsed++;
+            hasDashed = true;
+        }
+    }
+
+    /// <summary>
+    /// Called Every Frame</br>
+    /// Ticks up the dash cool down timer between dashes, then once cooldown timer met, allows dash again</br>
+    /// Ticks up dash recharge timer after dashes have been used, once timer met, gives one dash back
+    /// </summary>
+    private void DashCooldowns()
+    {
+        // dash cooldown timer( time between consecutive dashes)
+        if(hasDashed&& dashCooldownTimer < dashCooldownTime)
+        {
+            dashCooldownTimer += Time.deltaTime;
+        }
+        else if (hasDashed)
+        {
+            dashCooldownTimer = 0;
+            hasDashed = false;
+        }
+
+        // dash recharge timer
+        if (dashesUsed > 0 && dashRechargeTimer < dashRechargeTime)
+        {
+            dashRechargeTimer += Time.deltaTime;
+        }
+        else if(dashesUsed > 0)
+        {
+            dashRechargeTimer = 0;
+            dashesUsed--;
+        }
+    }
+
     #endregion
 
     #region Input
@@ -424,6 +490,7 @@ public class PlayerController : MonoBehaviour
             {
                 case Ability.Dash:
                     Debug.Log("Dashing");
+                    Dash();
                     break;
                 case Ability.Grapple:
                     Debug.Log("Grappling");
