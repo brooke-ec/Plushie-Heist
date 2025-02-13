@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallDetectionDistance;
     /// <summary> minimum speed in x and z axis required to wall run </summary>
     [SerializeField] private float wallSpeedThreshold;
+    ///<summary>Speed when wall running</summary>
+    [SerializeField] private float wallRunningSpeed;
 
     #endregion
 
@@ -129,6 +131,8 @@ public class PlayerController : MonoBehaviour
     private int rayNumber;
     /// <summary> if currently wall running</summary>
     private bool wallRunning;
+    /// <summary>Current normal of the wall we're running on</summary>
+    private Vector3 curNormal;
     #endregion
 
     #region core methods
@@ -151,10 +155,17 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        ApplyGravity();
+        if (wallRunning) 
+        { 
+            Wallrun();
+        }
+        else
+        {
+            ApplyGravity();
+            Move();
+        }
         ApplyJumps();
         LookandRotate();
-        Move();
         StaminaRecovery();
         Boost();
         DashCooldowns();
@@ -164,7 +175,15 @@ public class PlayerController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        CheckForWall();
+        if(!wallRunning)
+        {
+            CheckForWall();
+        }
+        else
+        {
+            CheckStillWall();
+        }
+        Debug.Log(wallRunning);
     }
     #endregion
 
@@ -460,6 +479,7 @@ public class PlayerController : MonoBehaviour
                 shortesthitdist = hitinfo.distance;
                 ray = hitinfo;
                 rayNo = i;
+                
             }
         }
         // if correct ray and is perpendicular to player and above the correct speed and we're in the air eneter wall running mode
@@ -467,15 +487,59 @@ public class PlayerController : MonoBehaviour
         {
             rayNumber = rayNo;
             wallRunning = true;
+            curNormal = ray.normal;
         }
         else
         {
             rayNumber = -1;
         }
-        Debug.Log(rayNumber);
-
     }
+    /// <summary>
+    /// Checks if still on the wall if on the wall 
+    /// </br>
+    /// called every fixed update 
+    /// </summary>
+    private void CheckStillWall()
+    {
+        LayerMask mask = LayerMask.GetMask("Env");
+        RaycastHit hit;
+        if (rayNumber == 1)
+        {
+            rayNumber = 0;
+        }
+        else if (rayNumber == 3) 
+        { 
+            rayNumber = 4;
+        }
+        Ray ray = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * rayNumber, transform.up) * (-transform.right));
+        if (Physics.Raycast(ray, out hit, wallDetectionDistance, mask) && new Vector2(velocity.x, velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
+        {
+            wallRunning = true;
+            curNormal = hit.normal;
+            Debug.DrawRay(transform.position, ray.direction);
+        }
+        else 
+        { 
+            wallRunning = false;
+            curFriction = groundFriction;
+            return;
+        }
+    }
+    /// <summary>
+    /// feels okay need to fiddle with the phsyics a bit more :(
+    /// </summary>
+    private void Wallrun()
+    {
+        Vector3 wallRunDirection = Vector3.Cross(curNormal, Vector3.up);
+        wallRunDirection = wallRunDirection.normalized;
+        if (Vector3.Dot(wallRunDirection, transform.forward) < 0) { wallRunDirection *= -1; }
+        wallRunDirection *= wasdInput.y;
+        Accelerate(wallRunningSpeed, wallRunDirection, groundAcceleration);
+        ApplyFriction();
 
+        velocity.y += Time.deltaTime * -5;
+        Debug.DrawRay(transform.position, wallRunDirection * 100);
+    }
     #endregion
 
     #region Input
