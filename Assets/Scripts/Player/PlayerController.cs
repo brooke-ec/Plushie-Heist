@@ -75,6 +75,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashCooldownTime;
     /// <summary>Distance for detecting walls</summary>
     [SerializeField] private float wallDetectionDistance;
+    /// <summary> minimum speed in x and z axis required to wall run </summary>
+    [SerializeField] private float wallSpeedThreshold;
 
     #endregion
 
@@ -123,6 +125,10 @@ public class PlayerController : MonoBehaviour
     private float dashCooldownTimer;
     /// <summary>if Dash on cooldown</summary>
     private bool hasDashed;
+    /// <summary>Current wall running ray, if not on wall is -1  </summary>
+    private int rayNumber;
+    /// <summary> if currently wall running</summary>
+    private bool wallRunning;
     #endregion
 
     #region core methods
@@ -140,6 +146,7 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+        rayNumber = -1;
     }
 
     public void Update()
@@ -152,7 +159,7 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(velocity);
+        //Debug.Log(new Vector2(velocity.x,velocity.z).magnitude);
     }
 
     public void FixedUpdate()
@@ -431,14 +438,17 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// checks if there is a wall nearby, unfinished currently gives the nearest wall as an int should be called every fixed update
+    /// checks if there is a wall nearby then sets the rayNumber to the current ray theat is on the wall and sets wallrunning to true
+    /// </br>
+    /// should be called every fixed update
     /// </summary>
     private void CheckForWall()
     {
         LayerMask mask = LayerMask.GetMask("Env");
-
+        // gets shortest ray closest to the wall
         float shortesthitdist = wallDetectionDistance + 1;
-        int ray = -1;
+        RaycastHit ray = new RaycastHit();
+        int rayNo = -1;
         for (int i = 0; i < 5; i++)
         {
             RaycastHit hitinfo;
@@ -448,10 +458,21 @@ public class PlayerController : MonoBehaviour
             if(Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance<shortesthitdist)
             {
                 shortesthitdist = hitinfo.distance;
-                ray = i;
+                ray = hitinfo;
+                rayNo = i;
             }
         }
-        Debug.Log(ray);
+        // if correct ray and is perpendicular to player and above the correct speed and we're in the air eneter wall running mode
+        if((rayNo is 0 or 1 or 3 or 4)&& Vector3.Dot(ray.normal,Vector3.up) == 0 && new Vector2(velocity.x,velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
+        {
+            rayNumber = rayNo;
+            wallRunning = true;
+        }
+        else
+        {
+            rayNumber = -1;
+        }
+        Debug.Log(rayNumber);
 
     }
 
@@ -498,14 +519,14 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             isCrouchPressed = true;
-            cam.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
+            cam.transform.localPosition = new Vector3(0, 0.5f, 0);
             cc.height = 1;
             cc.center = new Vector3(0,0.5f,0);
         }
         else if (ctx.canceled)
         {
             isCrouchPressed = false;
-            cam.transform.localPosition = new Vector3(0, 1f, 0.5f);
+            cam.transform.localPosition = new Vector3(0, 1f, 0);
             cc.height = 2;
             cc.center = new Vector3(0, 1f, 0);
         }
