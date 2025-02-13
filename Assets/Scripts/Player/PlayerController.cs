@@ -108,6 +108,8 @@ public class PlayerController : MonoBehaviour
     private bool boostSpent;
     /// <summary>Checks whetehr the player is Gliding<summary>
     private bool isGliding;
+    /// <summary>The current gravity force that affects the player</summary>
+    private float playerGravity;
     #endregion
 
     #region core methods
@@ -125,18 +127,12 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+        playerGravity = gravity;
     }
 
     public void Update()
     {
-        if (isGliding)
-        {
-            ApplyGravity(glideGravity);
-        }
-        else
-        {
-            ApplyGravity(gravity);
-        }
+        ApplyGravity(playerGravity);
         ApplyJumps();
         LookandRotate();
         Move();
@@ -367,6 +363,23 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// The function will handle gliding
+    /// </summary>
+    private void Glide()
+    {
+        if (isGliding)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
+        else
+        {
+            playerGravity = glideGravity;
+            isGliding = true;
+        }
+    }
     #endregion
 
     #region Input
@@ -448,7 +461,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Glide:
                     Debug.Log("Gliding");
-                    isGliding = true;
+                    Glide();
                     break;
                 default:
                     Debug.Log("No Ability Selected");
