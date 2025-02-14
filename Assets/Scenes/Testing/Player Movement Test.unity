@@ -677,18 +677,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 0
-  sprintMaxSpeed: 10
+  sprintMaxSpeed: 5
   stamina: 10
   maxStamina: 10
   staminaDrain: 1
   staminaRecover: 1
-  walkSpeed: 10
+  walkSpeed: 5
   crouchSpeed: 3
   lookSensitivity: 0.15
   MaxPitch: 80
   airAcceleration: 7
   groundFriction: 10
-  gravity: 10
+  gravity: 15
+  glideGravity: 1
   jumpSpeed: 5
   noJumps: 1
   jumpWindow: 0.5
@@ -706,6 +707,7 @@ MonoBehaviour:
   noDashes: 1
   dashRechargeTime: 20
   dashCooldownTime: 0.5
+  timeToReachZero: 0.3
 --- !u!114 &1478343897
 MonoBehaviour:
   m_ObjectHideFlags: 0

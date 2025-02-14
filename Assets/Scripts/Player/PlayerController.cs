@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundFriction;
     ///<summary>Gravity Value</summary>
     [SerializeField] private float gravity;
+    ///<summary>Gliding Gravity</summary>
+    [SerializeField] private float glideGravity;
     ///<summary>Velocity given for jumping</summary>
     [SerializeField] private float jumpSpeed;
     ///<summary>Number of Jumps</summary>
@@ -73,6 +75,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashRechargeTime;
     /// <summary> Amount of time between dashes</summary>
     [SerializeField] private float dashCooldownTime;
+    ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
+    [SerializeField] private float timeToReachZero;
 
     #endregion
 
@@ -121,6 +125,10 @@ public class PlayerController : MonoBehaviour
     private float dashCooldownTimer;
     /// <summary>if Dash on cooldown</summary>
     private bool hasDashed;
+    /// <summary>Checks whetehr the player is Gliding<summary>
+    private bool isGliding;
+    /// <summary>The current gravity force that affects the player</summary>
+    private float playerGravity;
     #endregion
 
     #region core methods
@@ -138,11 +146,17 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+        playerGravity = gravity;
     }
 
     public void Update()
     {
-        ApplyGravity();
+        if (cc.isGrounded)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
+        ApplyGravity(playerGravity);
         ApplyJumps();
         LookandRotate();
         Move();
@@ -250,7 +264,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Applys gravity if not grounded
     /// </summary>
-    private void ApplyGravity()
+    private void ApplyGravity(float gravity)
     {
         if (cc.isGrounded) 
         {
@@ -422,6 +436,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// The function will handle gliding
+    /// </summary>
+    private void Glide()
+    {
+        if (isGliding)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
+        else
+        {
+            playerGravity = glideGravity;
+            isGliding = true;
+            //velocity.y = 0;
+            velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
+        }
+    }
     #endregion
 
     #region Input
@@ -504,6 +537,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Glide:
                     Debug.Log("Gliding");
+                    Glide();
                     break;
                 default:
                     Debug.Log("No Ability Selected");
