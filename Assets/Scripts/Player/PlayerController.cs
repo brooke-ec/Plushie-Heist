@@ -66,6 +66,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float boostTime;
     ///<summary>The speed at which the Player regains the boost at</summary>
     [SerializeField] private float boostRecoverSpeed;
+    ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
+    [SerializeField] private float timeToReachZero;
 
     #endregion
 
@@ -132,6 +134,11 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+        if (cc.isGrounded)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
         ApplyGravity(playerGravity);
         ApplyJumps();
         LookandRotate();
@@ -378,6 +385,8 @@ public class PlayerController : MonoBehaviour
         {
             playerGravity = glideGravity;
             isGliding = true;
+            //velocity.y = 0;
+            velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
         }
     }
     #endregion
