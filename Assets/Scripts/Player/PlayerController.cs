@@ -156,6 +156,7 @@ public class PlayerController : MonoBehaviour
             playerGravity = gravity;
             isGliding = false;
         }
+        
         ApplyGravity(playerGravity);
         ApplyJumps();
         LookandRotate();
@@ -195,24 +196,25 @@ public class PlayerController : MonoBehaviour
         wishdir.Normalize();
         float wishSpeed;
 
+
         if (wishSprint && stamina > 0)
         {
-            //Debug.Log("Sprinting");
             wishSpeed = wishdir.magnitude * (maxSpeed + sprintMaxSpeed);
             stamina -= (staminaDrain * Time.deltaTime);
-            //Debug.Log(stamina);
         }
         else
         {
             wishSpeed = wishdir.magnitude * maxSpeed;
         }
-        
+
         ///ground movement
         if (cc.isGrounded)
         {
             ApplyCrouchAndSlide();
             ApplyFriction();
+            //Accelerate(wishSpeed, wishdir, groundAcceleration);
             Accelerate(wishSpeed, wishdir, groundAcceleration);
+
         }
         //air movement
         else
@@ -256,7 +258,10 @@ public class PlayerController : MonoBehaviour
 
         float accelSpeed = accel  *Time.deltaTime * wishspeed;
         if (accelSpeed > addSpeed)
+        {
             accelSpeed = addSpeed;
+        }
+
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
     }
@@ -302,6 +307,7 @@ public class PlayerController : MonoBehaviour
 
         if (wishJump && jumpTimer > jumpWindow) wishJump = false;
     }
+
     /// <summary>
     /// Crouch and sliding logic <br/>
     /// checks if crouch button is pressed and has enough velocity if so slide
@@ -451,8 +457,8 @@ public class PlayerController : MonoBehaviour
         {
             playerGravity = glideGravity;
             isGliding = true;
-            //velocity.y = 0;
-            velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
+            velocity.y = 0;
+            //velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
         }
     }
     #endregion
@@ -462,6 +468,10 @@ public class PlayerController : MonoBehaviour
     public void GetMoveInput(InputAction.CallbackContext ctx)
     {
         wasdInput = ctx.ReadValue<Vector2>();
+        if (wasdInput.y <= 0)
+        {
+            wishSprint = false;
+        }
     }
 
     public void GetLookInput(InputAction.CallbackContext ctx)
@@ -480,14 +490,10 @@ public class PlayerController : MonoBehaviour
 
     public void getSprint(InputAction.CallbackContext ctx)
     {
-        if (ctx.started)
+        if (ctx.started && wasdInput.y > 0)
         {
             wishSprint = true;
         }
-        //if (ctx.performed)
-        //{
-        //    wishSprint = true;
-        //}
         if (ctx.canceled)
         {
             wishSprint = false;
