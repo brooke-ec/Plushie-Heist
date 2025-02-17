@@ -336,7 +336,7 @@ public class PlayerController : MonoBehaviour
 
         if(wallRunning && wishJump && jumpsUsed < noJumps)
         {
-            Vector3 jumpVel= (new Vector3(0, 1, 0) + curNormal).normalized * jumpSpeed;
+            Vector3 jumpVel= (new Vector3(0, 1, 0) + curNormal) * jumpSpeed;
             velocity.y = jumpVel.y;
             velocity.x += jumpVel.x;
             velocity.z += jumpVel.z;
