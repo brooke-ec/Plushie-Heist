@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            ApplyGravity();
+            ApplyGravity(playerGravity);
             Move();
         }
 
@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour
             isGliding = false;
         }
         
-        ApplyGravity(playerGravity);
+        
 
         ApplyJumps();
         LookandRotate();
