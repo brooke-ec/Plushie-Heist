@@ -166,11 +166,13 @@ public class PlayerController : MonoBehaviour
         }
         ApplyJumps();
         LookandRotate();
+        WallRotate();
         StaminaRecovery();
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
         //Debug.Log(new Vector2(velocity.x,velocity.z).magnitude);
+        
     }
 
     public void FixedUpdate()
@@ -183,25 +185,13 @@ public class PlayerController : MonoBehaviour
         {
             CheckStillWall();
         }
-        Debug.Log(wallRunning);
     }
     #endregion
 
 
     #region Movement Methods
 
-    /// <summary>
-    /// Called every frame to update where the camera looks and to rotate the character
-    /// </summary>
-    private void LookandRotate()
-    {
-        transform.Rotate(new Vector3(0, lookInput.x, 0));
-
-        camPitch = Mathf.Clamp(camPitch+lookInput.y, -MaxPitch, MaxPitch);
-
-        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
-        
-    }
+    
 
     /// <summary>
     /// Deals movement in the x and z axis <br/>
@@ -297,7 +287,8 @@ public class PlayerController : MonoBehaviour
     /// Jump logic <br/>
     /// <br/>
     /// Increments coyote timer(this could be done anywhere its used every frame but as its related to jumps ive put it here) <br/>
-    /// Number of jumps to be used is reset when on the ground<br/>
+    /// Number of jumps to be used is reset when on the ground or on the wall<br/>
+    /// if your wall running and want tojump gives jump both up and away from the wall
     /// If off the ground and didn't use a jump to get there lose a jump, ie falling off ledges uses a jump.
     /// If a jump input has been entered and there is jumps available gives speed in the y direction<br/>
     /// If wanting to jump while not on ground increments jump timer<br/>
@@ -307,11 +298,21 @@ public class PlayerController : MonoBehaviour
     {
         if (coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
 
-        if (cc.isGrounded) jumpsUsed = 0;
+        if (cc.isGrounded || wallRunning) jumpsUsed = 0;
 
-        if (!cc.isGrounded && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
+        if ((!cc.isGrounded && !wallRunning) && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
 
-        if (wishJump && jumpsUsed < noJumps)
+        if(wallRunning && wishJump && jumpsUsed < noJumps)
+        {
+            Vector3 jumpVel= (new Vector3(0, 1, 0) + curNormal).normalized * jumpSpeed;
+            velocity.y = jumpVel.y;
+            velocity.x += jumpVel.x;
+            velocity.z += jumpVel.z;
+
+            wishJump = false;
+            jumpsUsed++;
+        }
+        else if (wishJump && jumpsUsed < noJumps)
         {
             velocity.y = jumpSpeed;
             wishJump = false;
@@ -479,15 +480,18 @@ public class PlayerController : MonoBehaviour
                 shortesthitdist = hitinfo.distance;
                 ray = hitinfo;
                 rayNo = i;
-                
             }
         }
+
+        
         // if correct ray and is perpendicular to player and above the correct speed and we're in the air eneter wall running mode
         if((rayNo is 0 or 1 or 3 or 4)&& Vector3.Dot(ray.normal,Vector3.up) == 0 && new Vector2(velocity.x,velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
         {
             rayNumber = rayNo;
             wallRunning = true;
             curNormal = ray.normal;
+            velocity.y = Mathf.Clamp(velocity.y,-100,1);
+
         }
         else
         {
@@ -516,32 +520,74 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning = true;
             curNormal = hit.normal;
-            Debug.DrawRay(transform.position, ray.direction);
+            //Debug.DrawRay(transform.position, ray.direction);
         }
         else 
         { 
             wallRunning = false;
             curFriction = groundFriction;
+            cam.transform.rotation = Quaternion.identity ;
             return;
         }
     }
     /// <summary>
-    /// feels okay need to fiddle with the phsyics a bit more :(
+    /// function that allows the player to wall run called every frame your wall running
     /// </summary>
     private void Wallrun()
     {
+        //gets wall direction to run along wall
         Vector3 wallRunDirection = Vector3.Cross(curNormal, Vector3.up);
         wallRunDirection = wallRunDirection.normalized;
         if (Vector3.Dot(wallRunDirection, transform.forward) < 0) { wallRunDirection *= -1; }
+
+        //moves player along the wall
         wallRunDirection *= wasdInput.y;
         Accelerate(wallRunningSpeed, wallRunDirection, groundAcceleration);
         ApplyFriction();
 
-        velocity.y += Time.deltaTime * -5;
+        //applys some gravity while on the wall 
+        velocity.y += Time.deltaTime * -3;
         Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
     #endregion
 
+    #region Camera methods
+
+    /// <summary>
+    /// rotates the camera when it conncts with the wall and rotates when it leaves
+    /// </summary>
+    private void WallRotate()
+    {
+        if(wallRunning && cam.transform.localEulerAngles.z ==0 && rayNumber is 1 or 0)
+        {
+            cam.transform.Rotate(0, 0, -20);
+            Debug.Log("rotating");
+        }
+        else if(wallRunning && cam.transform.localEulerAngles.z == 0)
+        {
+            cam.transform.Rotate(0, 0, 20);
+            Debug.Log("rotating");
+        }
+        else if(!wallRunning && cam.transform.localEulerAngles.z != 0)
+        {
+            float rot = 0 - cam.transform.localEulerAngles.z;
+            cam.transform.Rotate(0, 0, rot);
+        }
+    }
+
+    /// <summary>
+    /// Called every frame to update where the camera looks and to rotate the character
+    /// </summary>
+    private void LookandRotate()
+    {
+        transform.Rotate(new Vector3(0, lookInput.x, 0));
+
+        camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
+
+        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
+
+    }
+    #endregion 
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
