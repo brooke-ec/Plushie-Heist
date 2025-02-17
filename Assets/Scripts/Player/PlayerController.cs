@@ -75,8 +75,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashRechargeTime;
     /// <summary> Amount of time between dashes</summary>
     [SerializeField] private float dashCooldownTime;
+
+    /// <summary>Distance for detecting walls</summary>
+    [SerializeField] private float wallDetectionDistance;
+    /// <summary> minimum speed in x and z axis required to wall run </summary>
+    [SerializeField] private float wallSpeedThreshold;
+    ///<summary>Speed when wall running</summary>
+    [SerializeField] private float wallRunningSpeed;
+
     ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
     [SerializeField] private float timeToReachZero;
+
 
     #endregion
 
@@ -125,10 +134,19 @@ public class PlayerController : MonoBehaviour
     private float dashCooldownTimer;
     /// <summary>if Dash on cooldown</summary>
     private bool hasDashed;
+
+    /// <summary>Current wall running ray, if not on wall is -1  </summary>
+    private int rayNumber;
+    /// <summary> if currently wall running</summary>
+    private bool wallRunning;
+    /// <summary>Current normal of the wall we're running on</summary>
+    private Vector3 curNormal;
+
     /// <summary>Checks whetehr the player is Gliding<summary>
     private bool isGliding;
     /// <summary>The current gravity force that affects the player</summary>
     private float playerGravity;
+
     #endregion
 
     #region core methods
@@ -146,11 +164,26 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+
+        rayNumber = -1;
+
         playerGravity = gravity;
+
     }
 
     public void Update()
     {
+
+        if (wallRunning) 
+        { 
+            Wallrun();
+        }
+        else
+        {
+            ApplyGravity();
+            Move();
+        }
+
         if (cc.isGrounded)
         {
             playerGravity = gravity;
@@ -158,31 +191,35 @@ public class PlayerController : MonoBehaviour
         }
         
         ApplyGravity(playerGravity);
+
         ApplyJumps();
         LookandRotate();
-        Move();
+        WallRotate();
         StaminaRecovery();
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
+        //Debug.Log(new Vector2(velocity.x,velocity.z).magnitude);
+        
+    }
+
+    public void FixedUpdate()
+    {
+        if(!wallRunning)
+        {
+            CheckForWall();
+        }
+        else
+        {
+            CheckStillWall();
+        }
     }
     #endregion
 
 
     #region Movement Methods
 
-    /// <summary>
-    /// Called every frame to update where the camera looks and to rotate the character
-    /// </summary>
-    private void LookandRotate()
-    {
-        transform.Rotate(new Vector3(0, lookInput.x, 0));
-
-        camPitch = Mathf.Clamp(camPitch+lookInput.y, -MaxPitch, MaxPitch);
-
-        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
-        
-    }
+    
 
     /// <summary>
     /// Deals movement in the x and z axis <br/>
@@ -282,7 +319,8 @@ public class PlayerController : MonoBehaviour
     /// Jump logic <br/>
     /// <br/>
     /// Increments coyote timer(this could be done anywhere its used every frame but as its related to jumps ive put it here) <br/>
-    /// Number of jumps to be used is reset when on the ground<br/>
+    /// Number of jumps to be used is reset when on the ground or on the wall<br/>
+    /// if your wall running and want tojump gives jump both up and away from the wall
     /// If off the ground and didn't use a jump to get there lose a jump, ie falling off ledges uses a jump.
     /// If a jump input has been entered and there is jumps available gives speed in the y direction<br/>
     /// If wanting to jump while not on ground increments jump timer<br/>
@@ -292,11 +330,21 @@ public class PlayerController : MonoBehaviour
     {
         if (coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
 
-        if (cc.isGrounded) jumpsUsed = 0;
+        if (cc.isGrounded || wallRunning) jumpsUsed = 0;
 
-        if (!cc.isGrounded && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
+        if ((!cc.isGrounded && !wallRunning) && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
 
-        if (wishJump && jumpsUsed < noJumps)
+        if(wallRunning && wishJump && jumpsUsed < noJumps)
+        {
+            Vector3 jumpVel= (new Vector3(0, 1, 0) + curNormal).normalized * jumpSpeed;
+            velocity.y = jumpVel.y;
+            velocity.x += jumpVel.x;
+            velocity.z += jumpVel.z;
+
+            wishJump = false;
+            jumpsUsed++;
+        }
+        else if (wishJump && jumpsUsed < noJumps)
         {
             velocity.y = jumpSpeed;
             wishJump = false;
@@ -442,6 +490,99 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// checks if there is a wall nearby then sets the rayNumber to the current ray theat is on the wall and sets wallrunning to true
+    /// </br>
+    /// should be called every fixed update
+    /// </summary>
+    private void CheckForWall()
+    {
+        LayerMask mask = LayerMask.GetMask("Env");
+        // gets shortest ray closest to the wall
+        float shortesthitdist = wallDetectionDistance + 1;
+        RaycastHit ray = new RaycastHit();
+        int rayNo = -1;
+        for (int i = 0; i < 5; i++)
+        {
+            RaycastHit hitinfo;
+            Ray tempRay = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
+            Debug.DrawRay(transform.position+new Vector3(0,1,0), Quaternion.AngleAxis(45*i,transform.up)*(-transform.right));
+
+            if(Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance<shortesthitdist)
+            {
+                shortesthitdist = hitinfo.distance;
+                ray = hitinfo;
+                rayNo = i;
+            }
+        }
+
+        
+        // if correct ray and is perpendicular to player and above the correct speed and we're in the air eneter wall running mode
+        if((rayNo is 0 or 1 or 3 or 4)&& Vector3.Dot(ray.normal,Vector3.up) == 0 && new Vector2(velocity.x,velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
+        {
+            rayNumber = rayNo;
+            wallRunning = true;
+            curNormal = ray.normal;
+            velocity.y = Mathf.Clamp(velocity.y,-100,1);
+
+        }
+        else
+        {
+            rayNumber = -1;
+        }
+    }
+    /// <summary>
+    /// Checks if still on the wall if on the wall 
+    /// </br>
+    /// called every fixed update 
+    /// </summary>
+    private void CheckStillWall()
+    {
+        LayerMask mask = LayerMask.GetMask("Env");
+        RaycastHit hit;
+        if (rayNumber == 1)
+        {
+            rayNumber = 0;
+        }
+        else if (rayNumber == 3) 
+        { 
+            rayNumber = 4;
+        }
+        Ray ray = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * rayNumber, transform.up) * (-transform.right));
+        if (Physics.Raycast(ray, out hit, wallDetectionDistance, mask) && new Vector2(velocity.x, velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
+        {
+            wallRunning = true;
+            curNormal = hit.normal;
+            //Debug.DrawRay(transform.position, ray.direction);
+        }
+        else 
+        { 
+            wallRunning = false;
+            curFriction = groundFriction;
+            cam.transform.rotation = Quaternion.identity ;
+            return;
+        }
+    }
+    /// <summary>
+    /// function that allows the player to wall run called every frame your wall running
+    /// </summary>
+    private void Wallrun()
+    {
+        //gets wall direction to run along wall
+        Vector3 wallRunDirection = Vector3.Cross(curNormal, Vector3.up);
+        wallRunDirection = wallRunDirection.normalized;
+        if (Vector3.Dot(wallRunDirection, transform.forward) < 0) { wallRunDirection *= -1; }
+
+        //moves player along the wall
+        wallRunDirection *= wasdInput.y;
+        Accelerate(wallRunningSpeed, wallRunDirection, groundAcceleration);
+        ApplyFriction();
+
+        //applys some gravity while on the wall 
+        velocity.y += Time.deltaTime * -3;
+        Debug.DrawRay(transform.position, wallRunDirection * 100);
+    }
+
 
     /// <summary>
     /// The function will handle gliding
@@ -461,8 +602,46 @@ public class PlayerController : MonoBehaviour
             //velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
         }
     }
+
     #endregion
 
+    #region Camera methods
+
+    /// <summary>
+    /// rotates the camera when it conncts with the wall and rotates when it leaves
+    /// </summary>
+    private void WallRotate()
+    {
+        if(wallRunning && cam.transform.localEulerAngles.z ==0 && rayNumber is 1 or 0)
+        {
+            cam.transform.Rotate(0, 0, -20);
+            Debug.Log("rotating");
+        }
+        else if(wallRunning && cam.transform.localEulerAngles.z == 0)
+        {
+            cam.transform.Rotate(0, 0, 20);
+            Debug.Log("rotating");
+        }
+        else if(!wallRunning && cam.transform.localEulerAngles.z != 0)
+        {
+            float rot = 0 - cam.transform.localEulerAngles.z;
+            cam.transform.Rotate(0, 0, rot);
+        }
+    }
+
+    /// <summary>
+    /// Called every frame to update where the camera looks and to rotate the character
+    /// </summary>
+    private void LookandRotate()
+    {
+        transform.Rotate(new Vector3(0, lookInput.x, 0));
+
+        camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
+
+        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
+
+    }
+    #endregion 
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
@@ -504,14 +683,14 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             isCrouchPressed = true;
-            cam.transform.localPosition = new Vector3(0, 0.5f, 0.5f);
+            cam.transform.localPosition = new Vector3(0, 0.5f, 0);
             cc.height = 1;
             cc.center = new Vector3(0,0.5f,0);
         }
         else if (ctx.canceled)
         {
             isCrouchPressed = false;
-            cam.transform.localPosition = new Vector3(0, 1f, 0.5f);
+            cam.transform.localPosition = new Vector3(0, 1f, 0);
             cc.height = 2;
             cc.center = new Vector3(0, 1f, 0);
         }
