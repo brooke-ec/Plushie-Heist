@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundFriction;
     ///<summary>Gravity Value</summary>
     [SerializeField] private float gravity;
+    ///<summary>Gliding Gravity</summary>
+    [SerializeField] private float glideGravity;
     ///<summary>Velocity given for jumping</summary>
     [SerializeField] private float jumpSpeed;
     ///<summary>Number of Jumps</summary>
@@ -73,12 +75,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashRechargeTime;
     /// <summary> Amount of time between dashes</summary>
     [SerializeField] private float dashCooldownTime;
+
     /// <summary>Distance for detecting walls</summary>
     [SerializeField] private float wallDetectionDistance;
     /// <summary> minimum speed in x and z axis required to wall run </summary>
     [SerializeField] private float wallSpeedThreshold;
     ///<summary>Speed when wall running</summary>
     [SerializeField] private float wallRunningSpeed;
+
+    ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
+    [SerializeField] private float timeToReachZero;
+
 
     #endregion
 
@@ -127,12 +134,19 @@ public class PlayerController : MonoBehaviour
     private float dashCooldownTimer;
     /// <summary>if Dash on cooldown</summary>
     private bool hasDashed;
+
     /// <summary>Current wall running ray, if not on wall is -1  </summary>
     private int rayNumber;
     /// <summary> if currently wall running</summary>
     private bool wallRunning;
     /// <summary>Current normal of the wall we're running on</summary>
     private Vector3 curNormal;
+
+    /// <summary>Checks whetehr the player is Gliding<summary>
+    private bool isGliding;
+    /// <summary>The current gravity force that affects the player</summary>
+    private float playerGravity;
+
     #endregion
 
     #region core methods
@@ -150,11 +164,16 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+
         rayNumber = -1;
+
+        playerGravity = gravity;
+
     }
 
     public void Update()
     {
+
         if (wallRunning) 
         { 
             Wallrun();
@@ -164,6 +183,15 @@ public class PlayerController : MonoBehaviour
             ApplyGravity();
             Move();
         }
+
+        if (cc.isGrounded)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
+        
+        ApplyGravity(playerGravity);
+
         ApplyJumps();
         LookandRotate();
         WallRotate();
@@ -205,24 +233,25 @@ public class PlayerController : MonoBehaviour
         wishdir.Normalize();
         float wishSpeed;
 
+
         if (wishSprint && stamina > 0)
         {
-            //Debug.Log("Sprinting");
             wishSpeed = wishdir.magnitude * (maxSpeed + sprintMaxSpeed);
             stamina -= (staminaDrain * Time.deltaTime);
-            //Debug.Log(stamina);
         }
         else
         {
             wishSpeed = wishdir.magnitude * maxSpeed;
         }
-        
+
         ///ground movement
         if (cc.isGrounded)
         {
             ApplyCrouchAndSlide();
             ApplyFriction();
+            //Accelerate(wishSpeed, wishdir, groundAcceleration);
             Accelerate(wishSpeed, wishdir, groundAcceleration);
+
         }
         //air movement
         else
@@ -266,7 +295,10 @@ public class PlayerController : MonoBehaviour
 
         float accelSpeed = accel  *Time.deltaTime * wishspeed;
         if (accelSpeed > addSpeed)
+        {
             accelSpeed = addSpeed;
+        }
+
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
     }
@@ -274,7 +306,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Applys gravity if not grounded
     /// </summary>
-    private void ApplyGravity()
+    private void ApplyGravity(float gravity)
     {
         if (cc.isGrounded) 
         {
@@ -323,6 +355,7 @@ public class PlayerController : MonoBehaviour
 
         if (wishJump && jumpTimer > jumpWindow) wishJump = false;
     }
+
     /// <summary>
     /// Crouch and sliding logic <br/>
     /// checks if crouch button is pressed and has enough velocity if so slide
@@ -549,6 +582,27 @@ public class PlayerController : MonoBehaviour
         velocity.y += Time.deltaTime * -3;
         Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
+
+
+    /// <summary>
+    /// The function will handle gliding
+    /// </summary>
+    private void Glide()
+    {
+        if (isGliding)
+        {
+            playerGravity = gravity;
+            isGliding = false;
+        }
+        else
+        {
+            playerGravity = glideGravity;
+            isGliding = true;
+            velocity.y = 0;
+            //velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
+        }
+    }
+
     #endregion
 
     #region Camera methods
@@ -593,6 +647,10 @@ public class PlayerController : MonoBehaviour
     public void GetMoveInput(InputAction.CallbackContext ctx)
     {
         wasdInput = ctx.ReadValue<Vector2>();
+        if (wasdInput.y <= 0)
+        {
+            wishSprint = false;
+        }
     }
 
     public void GetLookInput(InputAction.CallbackContext ctx)
@@ -611,14 +669,10 @@ public class PlayerController : MonoBehaviour
 
     public void getSprint(InputAction.CallbackContext ctx)
     {
-        if (ctx.started)
+        if (ctx.started && wasdInput.y > 0)
         {
             wishSprint = true;
         }
-        //if (ctx.performed)
-        //{
-        //    wishSprint = true;
-        //}
         if (ctx.canceled)
         {
             wishSprint = false;
@@ -668,6 +722,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Glide:
                     Debug.Log("Gliding");
+                    Glide();
                     break;
                 default:
                     Debug.Log("No Ability Selected");

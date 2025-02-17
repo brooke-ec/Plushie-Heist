@@ -2453,6 +2453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca002da428252441b92f28d83c8a65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   m_Shape:
     rid: 8647968312241160196
   m_Size: {x: 1, y: 1, z: 1}
@@ -2470,6 +2471,41 @@ MonoBehaviour:
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
       data: 
 --- !u!114 &2027665855
+
+  maxSpeed: 0
+  sprintMaxSpeed: 5
+  stamina: 10
+  maxStamina: 10
+  staminaDrain: 1
+  staminaRecover: 1
+  walkSpeed: 5
+  crouchSpeed: 3
+  lookSensitivity: 0.15
+  MaxPitch: 80
+  airAcceleration: 7
+  groundFriction: 10
+  gravity: 15
+  glideGravity: 1
+  jumpSpeed: 5
+  noJumps: 1
+  jumpWindow: 0.5
+  coyoteTime: 0.5
+  slideThreshold: 6
+  slideFriction: 0.75
+  currentAbility: 1
+  boostSpeedCap: 20
+  baseGroundAcceleration: 7
+  boostGroundAcceleration: 20
+  maxBoostTime: 20
+  boostTime: 20
+  boostRecoverSpeed: 1
+  dashSpeed: 15
+  noDashes: 1
+  dashRechargeTime: 20
+  dashCooldownTime: 0.5
+  timeToReachZero: 0.3
+--- !u!114 &1478343897
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
