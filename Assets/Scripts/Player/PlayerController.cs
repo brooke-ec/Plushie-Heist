@@ -513,6 +513,9 @@ public class PlayerController : MonoBehaviour
                 shortesthitdist = hitinfo.distance;
                 ray = hitinfo;
                 rayNo = i;
+                //Debug.Log(rayNo);
+                //Debug.Log(Vector3.Dot(ray.normal, Vector3.up));
+                //Debug.Log(new Vector2(velocity.x, velocity.z).magnitude);
             }
         }
 
