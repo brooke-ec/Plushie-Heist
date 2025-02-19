@@ -10,6 +10,10 @@ public class UIManager : MonoBehaviour
     [Header("Testing")]
     [SerializeField] private InventoryGrid gridToStart;
 
+    //SHOULD NOT BE HERE, ONLY FOR NOW
+    public static int money = 30;
+    //
+
     private void Start()
     {
         scaleFactor = rootCanvas.scaleFactor;

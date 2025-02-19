@@ -7,4 +7,10 @@ public class Skill : ScriptableObject
 {
     public string skillName;
     public List<Skill> requirements;
+
+    public int cost;
+
+    //Won't be here in the future, just for testing purposes
+    public bool branchIsUnlocked = true;
+
 }

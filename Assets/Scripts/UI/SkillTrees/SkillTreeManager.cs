@@ -7,18 +7,31 @@ using UnityEngine;
 
 public class SkillTreeManager : MonoBehaviour
 {
-    private Dictionary<Skill, Vector2> nodePositions = new Dictionary<Skill, Vector2>();
-
     [Header("References")]
     public SkillTree skillTree;
-    public GameObject nodePrefab;
-    public Transform canvasTransform;
+    public List<Skill> unlockedSkills = new List<Skill>();
 
     void Start()
     {
         GenerateSkillTree();
         DisplaySkillTree();
     }
+
+    public bool IsSkillUnlocked(Skill skill)
+    {
+        return unlockedSkills.Contains(skill);
+    }
+
+    #region Building tree
+    [Header("Building tree references")]
+    private Dictionary<Skill, Vector2> nodePositions = new Dictionary<Skill, Vector2>();
+
+    public SkillButton nodePrefab;
+    public Transform canvasTransform;
+
+    [Header("Visual references")]
+    public SkillTreePalette palette;
+
 
     #region Logic representation
     private void GenerateSkillTree()
@@ -133,7 +146,7 @@ public class SkillTreeManager : MonoBehaviour
 
     private float PlaceNode(Skill node, ref float xOffset, int depth)
     {
-        Debug.Log("BEGINNING PLACE NODE node " + node.skillName + " with xOffset " + xOffset + " with depth " + depth);
+        //Debug.Log("BEGINNING PLACE NODE node " + node.skillName + " with xOffset " + xOffset + " with depth " + depth);
         float ySpacing = 150f; //even spacing between layers
         float xSpacing = 200f; //even spacing between nodes within the same layer
 
@@ -155,7 +168,7 @@ public class SkillTreeManager : MonoBehaviour
             //Place node here and move xOffset to next space
             nodePositions[node] = new Vector2(xOffset, height);
             xOffset += xSpacing;
-            Debug.Log("Position of " + node.skillName + "is " + nodePositions[node]);
+            //Debug.Log("Position of " + node.skillName + "is " + nodePositions[node]);
         }
         else
         {
@@ -163,7 +176,7 @@ public class SkillTreeManager : MonoBehaviour
 
             List<float> childXPositions = new List<float>();
 
-            Debug.Log("childStartX " + childStartX);
+            //Debug.Log("childStartX " + childStartX);
             foreach (Skill child in children)
             {
                 //Only place the child if all its parents have been placed
@@ -174,7 +187,7 @@ public class SkillTreeManager : MonoBehaviour
                     Debug.LogWarning("All parents placed of " + child.skillName);
                     pendingParents.Remove(child);
                 }
-                Debug.Log("CHILD child " + child.skillName + " with xOffset "+ xOffset +" with depth "+(depth+1));
+                //Debug.Log("CHILD child " + child.skillName + " with xOffset "+ xOffset +" with depth "+(depth+1));
                 childXPositions.Add(PlaceNode(child, ref xOffset, depth + 1));
             }
 
@@ -199,7 +212,7 @@ public class SkillTreeManager : MonoBehaviour
             //Used to just be be centreXPos = (childStartX + xOffset - xSpacing) / 2f; but this makes it centered to the whole tree, instead of to the children
 
             nodePositions[node] = new Vector2(centreXPos, height);
-            Debug.Log("Position of " + node.skillName + "is " + nodePositions[node]);
+            //Debug.Log("Position of " + node.skillName + "is " + nodePositions[node]);
         }
         return nodePositions[node].x;
     }
@@ -209,14 +222,92 @@ public class SkillTreeManager : MonoBehaviour
     #region Visual representation
     private void DisplaySkillTree()
     {
+        CentreSkillTree();
+
+        List<SkillButton> skillButtons = new List<SkillButton>();
+
         foreach(Skill skill in skillTree.skills)
         {
-            GameObject node = Instantiate(nodePrefab, canvasTransform);
+            SkillButton node = Instantiate(nodePrefab, canvasTransform);
             node.transform.localPosition = nodePositions[skill];
-            node.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = skill.skillName;
+            node.skill = skill;
+            skillButtons.Add(node);
         }
 
         //DrawEdges
+        DrawEdges();
+
+        //Done after edges are drawn so that colours can be updated
+        foreach(SkillButton skillButton in skillButtons)
+        {
+            skillButton.SetUI(this);
+        }
+    }
+
+    private void CentreSkillTree()
+    {
+        if (nodePositions.Count == 0) return;
+
+        //just to assign something for now
+        float minX = float.MaxValue, maxX = float.MinValue;
+        float minY = float.MaxValue, maxY = float.MinValue;
+
+        //get the actual mins and maxs of nodes right now
+        foreach(Vector3 position in nodePositions.Values)
+        {
+            if (position.x < minX) minX = position.x;
+            if (position.x > maxX) maxX = position.x;
+            if (position.y < minY) minY = position.y;
+            if (position.y > maxY) maxY = position.y;
+        }
+
+        float treeCentreX = (maxX + minX) / 2f;
+        float treeCentreY = (maxY + minY) / 2f;
+
+        RectTransform container = canvasTransform.GetComponent<RectTransform>();
+        Vector2 screenCentre = container.rect.center;
+        Vector2 offsetToApply = screenCentre - new Vector2(treeCentreX, treeCentreY);
+
+        //Apply to all nodes
+        List<Skill> skills = new List<Skill>(nodePositions.Keys);
+        foreach(Skill node in skills)
+        {
+            nodePositions[node] += offsetToApply;
+        }
+    }
+
+    public Transform edgeContainer;
+    private void DrawEdges()
+    {
+        // Clear previous edges
+        foreach (Transform child in edgeContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var node in nodePositions)
+        {
+            Skill parentSkill = node.Key;
+            Vector2 parentPos = node.Value;
+
+            IEnumerable<Skill> children = skillTree.skills.Where(s => s.requirements.Contains(parentSkill));
+
+            foreach (Skill childSkill in children)
+            {
+                if (nodePositions.TryGetValue(childSkill, out Vector2 childPos))
+                {
+                    GameObject edgeObject = new GameObject("Edge " + parentSkill.skillName + " to " + childSkill.skillName);
+                    edgeObject.transform.SetParent(edgeContainer, false);
+
+                    EdgeRenderer edgeRenderer = edgeObject.AddComponent<EdgeRenderer>();
+                    edgeObject.AddComponent<CanvasRenderer>();
+                    edgeRenderer.AddNewPoints(parentPos, childPos, Color.white);
+                }
+            }
+        }
     }
     #endregion
+
+    #endregion
+
 }

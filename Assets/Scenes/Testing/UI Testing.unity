@@ -745,8 +745,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillTree: {fileID: 11400000, guid: 7733cca253644844da70274f4a5f2230, type: 2}
-  nodePrefab: {fileID: 5002664498953450190, guid: b18e3b2db8921d445a1f078d71eefac2, type: 3}
+  unlockedSkills: []
+  nodePrefab: {fileID: -3772939458415374251, guid: b18e3b2db8921d445a1f078d71eefac2, type: 3}
   canvasTransform: {fileID: 61678739}
+  palette: {fileID: 11400000, guid: 10169e53996ca624c86783c5f3861272, type: 2}
+  edgeContainer: {fileID: 477272221}
 --- !u!4 &314151217
 Transform:
   m_ObjectHideFlags: 0
@@ -1045,6 +1048,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 403250174}
   m_CullTransparentMesh: 1
+--- !u!1 &477272220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 477272221}
+  m_Layer: 5
+  m_Name: EdgesContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &477272221
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477272220}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1517024372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &500850151
 GameObject:
   m_ObjectHideFlags: 0
@@ -3316,6 +3354,7 @@ RectTransform:
   - {fileID: 1657440096}
   - {fileID: 1553357520}
   - {fileID: 1534367432}
+  - {fileID: 477272221}
   - {fileID: 61678739}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
