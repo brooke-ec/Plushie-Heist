@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -86,6 +87,10 @@ public class PlayerController : MonoBehaviour
     ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
     [SerializeField] private float timeToReachZero;
 
+    ///<summary>The Lenght of the Grapple</summary>
+    [SerializeField] private float grappleLength;
+    
+
 
     #endregion
 
@@ -146,6 +151,8 @@ public class PlayerController : MonoBehaviour
     private bool isGliding;
     /// <summary>The current gravity force that affects the player</summary>
     private float playerGravity;
+    ///<summary>Boolean to see wether the player is currently Grappling</summary>
+    private bool isGrappling;
 
     #endregion
 
@@ -201,6 +208,7 @@ public class PlayerController : MonoBehaviour
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
         //Debug.Log(new Vector2(velocity.x,velocity.z).magnitude);
         
+
     }
 
     public void FixedUpdate()
@@ -606,6 +614,49 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///The Grapple Function <- make this nicer once closer to working
+    ///</summary>
+    private void GrappleShot()
+    {
+        if (isGrappling)
+        {
+            Debug.Log("How the fuck are you seeing this");
+            isGrappling = false;
+            return;
+        }
+        LayerMask mask = LayerMask.GetMask("Env");
+
+        //var lookAngle = new Vector3(transform.rotation.y, cam.transform.rotation.x, 0);
+        //var rot = Quaternion.Euler(lookAngle);
+        //var forward = Vector3.up;
+        //var lookDestin = rot * forward;
+
+        //var fuck = Quaternion.AngleAxis(90, transform.up) * (-transform.right);
+        //Debug.DrawRay(cam.transform.position, fuck, Color.blue, 10f);
+
+        //var shit = Quaternion.AngleAxis(90, cam.transform.forward) * (transform.right);
+        //Debug.DrawRay(cam.transform.position, shit, Color.magenta, 10f);
+
+        Ray RayOrigin = Camera.main.ViewportPointToRay(new Vector3(0, 0, 0));
+        RaycastHit HitInfo;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, 100f))
+        {
+            Debug.DrawRay(cam.transform.position, HitInfo.point, Color.yellow, 10f);
+        }
+
+        //Debug.DrawRay(cam.transform.position, lookAngle, Color.magenta, 10f);
+        //Debug.DrawRay(cam.transform.position, lookDestin, Color.magenta, 10f);
+
+
+        //if (Physics.Raycast(transform.position, transform.eulerAngles, grappleLength, mask))
+        //{
+        //    Debug.Log("You are looking at a wall");
+        //    return;
+        //}
+        //Debug.Log("Not Looking at Wall");
+    }
+
     #endregion
 
     #region Camera methods
@@ -645,6 +696,7 @@ public class PlayerController : MonoBehaviour
 
     }
     #endregion 
+
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
@@ -715,6 +767,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Grapple:
                     Debug.Log("Grappling");
+                    GrappleShot();
                     break;
                 case Ability.Boost:
                     Debug.Log("Boosting");
