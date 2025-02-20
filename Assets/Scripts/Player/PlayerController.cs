@@ -176,6 +176,7 @@ public class PlayerController : MonoBehaviour
 
         if (wallRunning) 
         { 
+            
             Wallrun();
         }
         else
@@ -184,7 +185,7 @@ public class PlayerController : MonoBehaviour
             Move();
         }
 
-        if (cc.isGrounded)
+        if (cc.isGrounded || wallRunning)
         {
             playerGravity = gravity;
             isGliding = false;
