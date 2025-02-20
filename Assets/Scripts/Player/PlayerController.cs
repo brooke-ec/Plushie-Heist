@@ -91,8 +91,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleLength;
     ///<summary>The Prefab for the grapple hook</summary>
     [SerializeField] private GameObject grappleHook;
-
-
+    ///<summary>The Speed of the Grapple Hook</summary>
+    [SerializeField] private float grappleSpeed;
+    ///<summary>The Acceleration of the Grapple Hook</summary>
+    [SerializeField] private float grappleAccel;
+    /// <summary>The distance at which the grapple will release</summary>
+    [SerializeField] private float grappleCancelLength;
     #endregion
 
     #region private fields
@@ -154,6 +158,8 @@ public class PlayerController : MonoBehaviour
     private float playerGravity;
     ///<summary>Boolean to see wether the player is currently Grappling</summary>
     private bool isGrappling;
+    /// <summary>The Hook when it exists</summary>
+    private GameObject Hook;
 
     #endregion
 
@@ -198,7 +204,10 @@ public class PlayerController : MonoBehaviour
             isGliding = false;
         }
         
-        
+        if(isGrappling)
+        {
+            ApplyGrappleForce();
+        }
 
         ApplyJumps();
         LookandRotate();
@@ -226,9 +235,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    #region Movement Methods
-
-    
+    #region Movement Methods 
 
     /// <summary>
     /// Deals movement in the x and z axis <br/>
@@ -622,8 +629,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrappling)
         {
-            //Debug.Log("How the fuck are you seeing this");
-            BroadcastMessage("KillHook");
+            Hook.SendMessage("KillHook");
+            Hook = null;
             isGrappling = false;
             return;
         }
@@ -633,11 +640,21 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
             Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
-            GameObject p = Instantiate(grappleHook, HitInfo.point, Quaternion.identity, this.transform);
+            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
             isGrappling = true;
         }
     }
 
+    private void ApplyGrappleForce()
+    {
+        Vector3 grappleForce = Hook.transform.position - this.transform.position;
+        if(grappleForce.magnitude <= grappleCancelLength)
+        {
+            GrappleShot();
+        }
+        grappleForce.Normalize();
+        Accelerate(grappleSpeed, grappleForce, grappleAccel);
+    }
     #endregion
 
     #region Camera methods
