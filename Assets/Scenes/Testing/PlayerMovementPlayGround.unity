@@ -157,6 +157,7 @@ Transform:
   - {fileID: 170347843}
   - {fileID: 596662034}
   - {fileID: 442754070}
+  - {fileID: 1822371814}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &170347842
@@ -1162,7 +1163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: boostTime
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: dashSpeed
@@ -1174,11 +1175,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: walkSpeed
-      value: 7
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: glideGravity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: maxBoostTime
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: staminaDrain
@@ -1195,6 +1200,10 @@ PrefabInstance:
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: sprintMaxSpeed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: dashRechargeTime
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8284632359089528514, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_Name
@@ -8102,7 +8111,7 @@ GameObject:
   - component: {fileID: 1822371811}
   - component: {fileID: 1822371810}
   - component: {fileID: 1822371809}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8434,12 +8443,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822371808}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -12.25, y: 2, z: 25.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 83825105}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &2058547563
 LightingSettings:
@@ -8697,4 +8706,3 @@ SceneRoots:
   - {fileID: 176860586}
   - {fileID: 434961383}
   - {fileID: 83825105}
-  - {fileID: 1822371814}
