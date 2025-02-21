@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        Debug.Log(velocity);
+        //Debug.Log(velocity);
         
     }
 
@@ -337,11 +337,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyJumps()
     {
-        if (coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
+        if (!cc.isGrounded&& !wallRunning && coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
 
         if (cc.isGrounded || wallRunning) jumpsUsed = 0;
 
-        if ((!cc.isGrounded && !wallRunning) && jumpsUsed < 1 && coyoteTime<coyoteTimer) jumpsUsed = 1;
+        if ((!cc.isGrounded && !wallRunning) && jumpsUsed < 1 && coyoteTime < coyoteTimer)
+        {
+            jumpsUsed = 1;
+            coyoteTimer = 0;
+        }
 
         if(wallRunning && wishJump && jumpsUsed < noJumps)
         {
@@ -363,6 +367,8 @@ public class PlayerController : MonoBehaviour
         if (wishJump && jumpTimer < jumpWindow) jumpTimer += Time.deltaTime;
 
         if (wishJump && jumpTimer > jumpWindow) wishJump = false;
+
+        //Debug.Log(coyoteTimer);
     }
 
     /// <summary>
@@ -538,6 +544,7 @@ public class PlayerController : MonoBehaviour
             velocity.y = Mathf.Clamp(velocity.y,-100,1);
             curFriction = groundFriction;
             Uncrouch();
+            
         }
         else
         {
@@ -566,6 +573,7 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning = true;
             curNormal = hit.normal;
+            maxSpeed = wallRunningSpeed;
             //Debug.DrawRay(transform.position, ray.direction);
         }
         else 
@@ -573,6 +581,7 @@ public class PlayerController : MonoBehaviour
             wallRunning = false;
             curFriction = groundFriction;
             cam.transform.rotation = Quaternion.identity ;
+            maxSpeed = walkSpeed;
             return;
         }
     }
@@ -588,7 +597,7 @@ public class PlayerController : MonoBehaviour
 
         //moves player along the wall
         wallRunDirection *= wasdInput.y;
-        Accelerate(wallRunningSpeed, wallRunDirection, groundAcceleration);
+        Accelerate(maxSpeed, wallRunDirection, groundAcceleration);
         ApplyFriction();
 
         //applys some gravity while on the wall 
@@ -693,6 +702,7 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             wishJump = true;
+            jumpTimer = 0;
         }
     }
 
