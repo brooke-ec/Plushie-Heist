@@ -50,12 +50,14 @@ public class PlayerController : MonoBehaviour
     ///<summary>Coyote Time, the time after leaving a ledge you can still jump</summary>
     [SerializeField] private float coyoteTime;
     ///<summary>Speed threshold for sliding MUST BE BIGGER THAN 5.1</summary>
+   
     [SerializeField] private float slideThreshold;
     ///<summary>Friction when sliding</summary>
     [SerializeField] private float slideFriction;
     /// <summary>The Ability that the Player currently has equiped</summary>
     [SerializeField] private Ability currentAbility;
     ///<summary>The new acceleration speed when the palyer boosts</summary>
+   
     [SerializeField] private float boostSpeedCap;
     ///<summary>The base Ground Acceleration</summary>
     [SerializeField] private float baseGroundAcceleration;
@@ -67,6 +69,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float boostTime;
     ///<summary>The speed at which the Player regains the boost at</summary>
     [SerializeField] private float boostRecoverSpeed;
+   
     /// <summary>the speed given when dashing</summary>
     [SerializeField] private float dashSpeed;
     /// <summary>The number of Dashes available</summary>
@@ -84,8 +87,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float wallRunningSpeed;
 
     ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
-    [SerializeField] private float timeToReachZero;
+    //[SerializeField] private float timeToReachZero;
 
+
+    ///<summary></summary>
+   
 
     #endregion
 
@@ -146,6 +152,9 @@ public class PlayerController : MonoBehaviour
     private bool isGliding;
     /// <summary>The current gravity force that affects the player</summary>
     private float playerGravity;
+
+    /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
+    private Vector3 rotAdjustVal;
 
     #endregion
 
@@ -208,7 +217,7 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(velocity);
+        //Debug.Log(transform.rotation.eulerAngles);
         
     }
 
@@ -599,7 +608,7 @@ public class PlayerController : MonoBehaviour
         wallRunDirection *= wasdInput.y;
         Accelerate(maxSpeed, wallRunDirection, groundAcceleration);
         ApplyFriction();
-
+        Debug.Log(Quaternion.LookRotation(Quaternion.Euler(rotAdjustVal) * wallRunDirection).eulerAngles.y);
         //applys some gravity while on the wall 
         velocity.y += Time.deltaTime * -3;
         Debug.DrawRay(transform.position, wallRunDirection * 100);
@@ -630,18 +639,20 @@ public class PlayerController : MonoBehaviour
     #region Camera methods
 
     /// <summary>
-    /// rotates the camera when it conncts with the wall and rotates when it leaves
+    /// rotates the camera when it conncts with the wall and rotates when it leaves; use tweening engine to animate it properly
     /// </summary>
     private void WallRotate()
     {
         if(wallRunning && cam.transform.localEulerAngles.z ==0 && rayNumber is 1 or 0)
         {
             cam.transform.Rotate(0, 0, -20);
+            rotAdjustVal = new Vector3(0, 5, 0);
             Debug.Log("rotating");
         }
         else if(wallRunning && cam.transform.localEulerAngles.z == 0)
         {
             cam.transform.Rotate(0, 0, 20);
+            rotAdjustVal = new Vector3(0, -5, 0);
             Debug.Log("rotating");
         }
         else if(!wallRunning && cam.transform.localEulerAngles.z != 0)
@@ -649,6 +660,7 @@ public class PlayerController : MonoBehaviour
             float rot = 0 - cam.transform.localEulerAngles.z;
             cam.transform.Rotate(0, 0, rot);
         }
+
     }
 
     /// <summary>
