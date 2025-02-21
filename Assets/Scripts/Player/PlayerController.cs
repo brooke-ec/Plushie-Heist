@@ -181,8 +181,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            ApplyGravity(playerGravity);
             Move();
+        }
+
+        if (!cc.isGrounded && !wallRunning)
+        {
+            ApplyGravity(playerGravity);
+        }
+        else if(cc.isGrounded && velocity.y!=0)
+        {
+            velocity.y = 0;
         }
 
         if (cc.isGrounded || wallRunning)
@@ -200,7 +208,7 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(new Vector2(velocity.x,velocity.z).magnitude);
+        Debug.Log(velocity);
         
     }
 
@@ -528,6 +536,7 @@ public class PlayerController : MonoBehaviour
             wallRunning = true;
             curNormal = ray.normal;
             velocity.y = Mathf.Clamp(velocity.y,-100,1);
+            curFriction = groundFriction;
 
         }
         else
