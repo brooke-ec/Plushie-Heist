@@ -537,7 +537,7 @@ public class PlayerController : MonoBehaviour
             curNormal = ray.normal;
             velocity.y = Mathf.Clamp(velocity.y,-100,1);
             curFriction = groundFriction;
-
+            Uncrouch();
         }
         else
         {
@@ -654,6 +654,22 @@ public class PlayerController : MonoBehaviour
         cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
 
     }
+
+    private void Crouch()
+    {
+        isCrouchPressed = true;
+        cam.transform.localPosition = new Vector3(0, 0.5f, 0);
+        cc.height = 1;
+        cc.center = new Vector3(0, 0.5f, 0);
+    }
+
+    private void Uncrouch()
+    {
+        isCrouchPressed = false;
+        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        cc.height = 2;
+        cc.center = new Vector3(0, 1f, 0);
+    }
     #endregion 
     #region Input
 
@@ -693,19 +709,13 @@ public class PlayerController : MonoBehaviour
     }
     public void getCrouch(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
+        if ((ctx.performed)&& !wallRunning)
         {
-            isCrouchPressed = true;
-            cam.transform.localPosition = new Vector3(0, 0.5f, 0);
-            cc.height = 1;
-            cc.center = new Vector3(0,0.5f,0);
+            Crouch();
         }
-        else if (ctx.canceled)
+        else if(ctx.canceled)
         {
-            isCrouchPressed = false;
-            cam.transform.localPosition = new Vector3(0, 1f, 0);
-            cc.height = 2;
-            cc.center = new Vector3(0, 1f, 0);
+            Uncrouch();
         }
     }
 
