@@ -98,8 +98,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleSpeed;
     ///<summary>The Acceleration of the Grapple Hook</summary>
     [SerializeField] private float grappleAccel;
-    /// <summary>The distance at which the grapple will release</summary>
+    ///<summary>The distance at which the grapple will release</summary>
     [SerializeField] private float grappleCancelLength;
+    ///<summary>The Cooldown for the grapple Ability</summary> 
+    [SerializeField] private float grappleCooldown;
+    ///<summary>The rate at which grapple recovers from cooldown</summary>
+    [SerializeField] private float grappleCooldownSpeed;
     #endregion
 
     #region private fields
@@ -161,8 +165,10 @@ public class PlayerController : MonoBehaviour
     private float playerGravity;
     ///<summary>Boolean to see wether the player is currently Grappling</summary>
     private bool isGrappling;
-    /// <summary>The Hook when it exists</summary>
+    ///<summary>The Hook when it exists</summary>
     private GameObject Hook;
+    ///<summary></summary>
+    private float grappleCooldownMax;
 
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
@@ -188,6 +194,8 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+
+        grappleCooldownMax = grappleCooldown;
 
         rayNumber = -1;
 
@@ -234,6 +242,7 @@ public class PlayerController : MonoBehaviour
         LookandRotate();
         WallRotate();
         StaminaRecovery();
+        GrappleCooldown();
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
@@ -672,6 +681,10 @@ public class PlayerController : MonoBehaviour
             isGrappling = false;
             return;
         }
+        if (grappleCooldown < grappleCooldownMax)
+        {
+            return;
+        }
         LayerMask mask = LayerMask.GetMask("Env");
 
         RaycastHit HitInfo;
@@ -693,6 +706,21 @@ public class PlayerController : MonoBehaviour
         grappleForce.Normalize();
         float wishGrappleSpeed = grappleForce.magnitude * grappleSpeed;
         Accelerate(wishGrappleSpeed, grappleForce, grappleAccel);
+    }
+
+    private void GrappleCooldown()
+    {
+        if (isGrappling)
+        {
+            grappleCooldown = 0;
+            return;
+        }
+        if (grappleCooldown >= grappleCooldownMax)
+        {
+            grappleCooldown = grappleCooldownMax;
+            return;
+        }
+        grappleCooldown += Time.deltaTime * grappleCooldownSpeed;
     }
     #endregion
 
