@@ -156,6 +156,9 @@ public class PlayerController : MonoBehaviour
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
 
+    /// <summary>ther animator component </summary>
+    private Animator animator;
+
     #endregion
 
     #region core methods
@@ -163,6 +166,7 @@ public class PlayerController : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
+        animator = GetComponentInChildren<Animator>();
         
     }
 
@@ -187,6 +191,7 @@ public class PlayerController : MonoBehaviour
         { 
             
             Wallrun();
+            animator.SetInteger("Falling", 0);
         }
         else
         {
@@ -200,6 +205,7 @@ public class PlayerController : MonoBehaviour
         else if(cc.isGrounded && velocity.y!=0)
         {
             velocity.y = 0;
+            animator.SetInteger("Falling", 0);
         }
 
         if (cc.isGrounded || wallRunning)
@@ -217,8 +223,9 @@ public class PlayerController : MonoBehaviour
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(transform.rotation.eulerAngles);
-        
+        Debug.Log(velocity);
+
+        Animate();
     }
 
     public void FixedUpdate()
@@ -394,6 +401,7 @@ public class PlayerController : MonoBehaviour
             maxSpeed = 1.5f;
             hasSlide = true;
             Debug.Log("Sliding");
+            animator.SetBool("Slide", true);
             
         }
         if(isCrouchPressed && velocity.magnitude < slideThreshold && !hasCrouched)
@@ -401,14 +409,16 @@ public class PlayerController : MonoBehaviour
             maxSpeed = crouchSpeed;
             hasCrouched = true;
             curFriction = groundFriction;
-            Debug.Log(curFriction);
+            animator.SetBool("Slide", false);
+
         }
         if (!isCrouchPressed && (hasCrouched || hasSlide))
         {
             maxSpeed = walkSpeed;
             hasCrouched = false;
             hasSlide = false;
-            curFriction = groundFriction;    
+            curFriction = groundFriction;
+            animator.SetBool("Slide", false);
         }
     }
 
@@ -691,7 +701,32 @@ public class PlayerController : MonoBehaviour
         cc.height = 2;
         cc.center = new Vector3(0, 1f, 0);
     }
-    #endregion 
+    #endregion
+    #region animations
+
+    private void Animate()
+    {
+        if(wishSprint && velocity.magnitude > 1 && stamina > 0)
+        {
+            Debug.Log("sprintin");
+            animator.SetInteger("Speed", 2);
+        }
+        else if (velocity.magnitude > 1)
+        {
+            Debug.Log("walkin");
+            animator.SetInteger("Speed", 1);
+        }
+        else
+        {
+            animator.SetInteger("Speed", 0);
+        }
+
+        if (velocity.y < -1&& !cc.isGrounded && !wallRunning)
+        {
+            animator.SetInteger("Falling",1);
+        }
+    }
+    #endregion
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
@@ -715,6 +750,7 @@ public class PlayerController : MonoBehaviour
         {
             wishJump = true;
             jumpTimer = 0;
+            animator.SetTrigger("Jump");
         }
     }
 

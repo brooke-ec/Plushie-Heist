@@ -1121,6 +1121,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 499776393120379558, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 499776393120379558, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 119
+      objectReference: {fileID: 0}
+    - target: {fileID: 808795950725320024, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1161,65 +1173,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: boostTime
-      value: 1
+    - target: {fileID: 1016657645739683377, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: dashSpeed
-      value: 15
+    - target: {fileID: 1097958852738357118, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: jumpSpeed
-      value: 6
+    - target: {fileID: 1919770744498982422, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: walkSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: jumpWindow
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: glideGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: maxBoostTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: staminaDrain
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: boostSpeedCap
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: currentAbility
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: sprintMaxSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: dashRechargeTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: wallRunningSpeed
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
-      propertyPath: wallSpeedThreshold
-      value: 8
+    - target: {fileID: 2464287545144845252, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: CameraRotationSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3117347439270198585, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4287403296912296660, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937040823715688104, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484871699874069655, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488770539649144765, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8284632359089528514, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_Name
