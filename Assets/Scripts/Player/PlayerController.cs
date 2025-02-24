@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -89,10 +90,20 @@ public class PlayerController : MonoBehaviour
     ///<summary>The Time it takes for the players y velocity to reach zero Must be between 0 and 1</summary>
     //[SerializeField] private float timeToReachZero;
 
-
-    ///<summary></summary>
-   
-
+    ///<summary>The Length of the Grapple</summary>
+    [SerializeField] private float grappleLength;
+    ///<summary>The Prefab for the grapple hook</summary>
+    [SerializeField] private GameObject grappleHook;
+    ///<summary>The Speed of the Grapple Hook</summary>
+    [SerializeField] private float grappleSpeed;
+    ///<summary>The Acceleration of the Grapple Hook</summary>
+    [SerializeField] private float grappleAccel;
+    ///<summary>The distance at which the grapple will release</summary>
+    [SerializeField] private float grappleCancelLength;
+    ///<summary>The Cooldown for the grapple Ability</summary> 
+    [SerializeField] private float grappleCooldown;
+    ///<summary>The rate at which grapple recovers from cooldown</summary>
+    [SerializeField] private float grappleCooldownSpeed;
     #endregion
 
     #region private fields
@@ -152,6 +163,12 @@ public class PlayerController : MonoBehaviour
     private bool isGliding;
     /// <summary>The current gravity force that affects the player</summary>
     private float playerGravity;
+    ///<summary>Boolean to see wether the player is currently Grappling</summary>
+    private bool isGrappling;
+    ///<summary>The Hook when it exists</summary>
+    private GameObject Hook;
+    ///<summary></summary>
+    private float grappleCooldownMax;
 
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
@@ -177,6 +194,8 @@ public class PlayerController : MonoBehaviour
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
         groundAcceleration = baseGroundAcceleration;
+
+        grappleCooldownMax = grappleCooldown;
 
         rayNumber = -1;
 
@@ -214,12 +233,16 @@ public class PlayerController : MonoBehaviour
             isGliding = false;
         }
         
-        
+        if(isGrappling)
+        {
+            ApplyGrappleForce();
+        }
 
         ApplyJumps();
         LookandRotate();
         WallRotate();
         StaminaRecovery();
+        GrappleCooldown();
         Boost();
         DashCooldowns();
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
@@ -242,9 +265,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-    #region Movement Methods
-
-    
+    #region Movement Methods 
 
     /// <summary>
     /// Deals movement in the x and z axis <br/>
@@ -326,6 +347,10 @@ public class PlayerController : MonoBehaviour
 
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
+        if (isGrappling)
+        {
+            velocity.y += accelSpeed * wishdir.y;
+        }
     }
 
     /// <summary>
@@ -646,6 +671,59 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///The Grapple Function <- make this nicer once closer to working
+    ///</summary>
+    private void GrappleShot()
+    {
+        if (isGrappling)
+        {
+            Hook.SendMessage("KillHook");
+            Hook = null;
+            isGrappling = false;
+            return;
+        }
+        if (grappleCooldown < grappleCooldownMax)
+        {
+            return;
+        }
+        LayerMask mask = LayerMask.GetMask("Env");
+
+        RaycastHit HitInfo;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
+        {
+            Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
+            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
+            isGrappling = true;
+        }
+    }
+
+    private void ApplyGrappleForce()
+    {
+        Vector3 grappleForce = Hook.transform.position - this.transform.position;
+        if(grappleForce.magnitude <= grappleCancelLength)
+        {
+            GrappleShot();
+        }
+        grappleForce.Normalize();
+        float wishGrappleSpeed = grappleForce.magnitude * grappleSpeed;
+        Accelerate(wishGrappleSpeed, grappleForce, grappleAccel);
+    }
+
+    private void GrappleCooldown()
+    {
+        if (isGrappling)
+        {
+            grappleCooldown = 0;
+            return;
+        }
+        if (grappleCooldown >= grappleCooldownMax)
+        {
+            grappleCooldown = grappleCooldownMax;
+            return;
+        }
+        grappleCooldown += Time.deltaTime * grappleCooldownSpeed;
+    }
     #endregion
 
     #region Camera methods
@@ -795,6 +873,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Ability.Grapple:
                     Debug.Log("Grappling");
+                    GrappleShot();
                     break;
                 case Ability.Boost:
                     Debug.Log("Boosting");
