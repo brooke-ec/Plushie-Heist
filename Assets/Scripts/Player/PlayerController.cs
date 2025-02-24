@@ -410,6 +410,7 @@ public class PlayerController : MonoBehaviour
             hasCrouched = true;
             curFriction = groundFriction;
             animator.SetBool("Slide", false);
+            animator.SetBool("Crouch", true);
 
         }
         if (!isCrouchPressed && (hasCrouched || hasSlide))
@@ -419,6 +420,7 @@ public class PlayerController : MonoBehaviour
             hasSlide = false;
             curFriction = groundFriction;
             animator.SetBool("Slide", false);
+            animator.SetBool("Crouch", false);
         }
     }
 
@@ -689,15 +691,15 @@ public class PlayerController : MonoBehaviour
     private void Crouch()
     {
         isCrouchPressed = true;
-        cam.transform.localPosition = new Vector3(0, 0.5f, 0);
-        cc.height = 1;
-        cc.center = new Vector3(0, 0.5f, 0);
+        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        cc.height = 1.5f;
+        cc.center = new Vector3(0, 0.75f, 0);
     }
 
     private void Uncrouch()
     {
         isCrouchPressed = false;
-        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        cam.transform.localPosition = new Vector3(0, 1.25f, 0);
         cc.height = 2;
         cc.center = new Vector3(0, 1f, 0);
     }
