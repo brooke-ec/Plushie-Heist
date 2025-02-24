@@ -317,6 +317,10 @@ public class PlayerController : MonoBehaviour
 
         velocity.x += accelSpeed * wishdir.x;
         velocity.z += accelSpeed * wishdir.z;
+        if (isGrappling)
+        {
+            velocity.y += accelSpeed * wishdir.y;
+        }
     }
 
     /// <summary>
@@ -653,7 +657,8 @@ public class PlayerController : MonoBehaviour
             GrappleShot();
         }
         grappleForce.Normalize();
-        Accelerate(grappleSpeed, grappleForce, grappleAccel);
+        float wishGrappleSpeed = grappleForce.magnitude * grappleSpeed;
+        Accelerate(wishGrappleSpeed, grappleForce, grappleAccel);
     }
     #endregion
 
