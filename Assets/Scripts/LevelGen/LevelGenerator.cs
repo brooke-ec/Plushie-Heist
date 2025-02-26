@@ -1,17 +1,18 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    private HashSet<Vector2Int> tiles;
+    private Dictionary<Vector2Int, LevelTile> tiles;
 
-    [SerializeField] private GameObject tile;
+    [SerializeField] private LevelTile StartTile;
     [SerializeField] private int min = 3;
     [SerializeField] private int max = 8;
 
     private void Start()
     {
-        tiles = new HashSet<Vector2Int>();
+        tiles = new();
 
         int hmax = max / 2;
         GenerateRooms(new Region(
@@ -26,7 +27,7 @@ public class LevelGenerator : MonoBehaviour
     {
         for (int x = r.sx; x <= r.ex; x++)
             for (int y = r.sy; y <= r.ey; y++)
-                tiles.Add(new Vector2Int(x, y));
+                tiles.Add(new Vector2Int(x, y), null);
 
         if (depth == 0) return;
 
@@ -46,20 +47,73 @@ public class LevelGenerator : MonoBehaviour
 
             Region nr = new Region(position.x, position.y, end.x, end.y);
 
-            for (int x = nr.sx; x <= nr.ex; x++)
-                for (int y = nr.sy; y <= nr.ey; y++)
-                    if (tiles.Contains(new Vector2Int(x, y))) continue;
+            if (!IsEmpty(nr)) continue;
 
-            tiles.Add(door);
+            tiles.Add(door, null);
             GenerateRooms(nr, depth - 1);
             break;
         }
     }
 
+    private bool IsEmpty(Region r)
+    {
+        for (int x = r.sx; x <= r.ex; x++)
+            for (int y = r.sy; y <= r.ey; y++)
+                if (tiles.ContainsKey(new Vector2Int(x, y))) return false;
+        return true;
+    }
+
     private void Display()
     {
-        foreach (Vector2Int pos in tiles)
-            Instantiate(tile, new Vector3(pos.x, 0, pos.y), Quaternion.identity, transform);
+        //Queue<Vector2Int> next = new Queue<Vector2Int>();
+        //Instantiate(StartTile, new Vector3(0, 0, 0), Quaternion.identity, transform);
+        //next.Enqueue(new Vector2Int(0, 0));
+
+        //foreach (Vector2Int pos in next)
+        //{
+        //    List<LevelTile> possible = new List<LevelTile>();
+        //    Vector2Int tpos;
+
+        //    tpos = new Vector2Int(pos.x, pos.y + 1);
+        //    if (tiles.TryGetValue(pos, out LevelTile positiveZ))
+        //    {
+        //        if (positiveZ != null) possible.AddRange(positiveZ.NegativeZ);
+        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
+        //    }
+
+        //    tpos = new Vector2Int(pos.x + 1, pos.y);
+        //    if (tiles.TryGetValue(pos, out LevelTile positiveX))
+        //    {
+        //        if (positiveZ != null) possible.AddRange(positiveX.NegativeX);
+        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
+        //    }
+
+        //    tpos = new Vector2Int(pos.x, pos.y - 1);
+        //    if (tiles.TryGetValue(pos, out LevelTile negativeZ))
+        //    {
+        //        if (positiveZ != null) possible.AddRange(negativeZ.PositiveZ);
+        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
+        //    }
+
+        //    tpos = new Vector2Int(pos.x - 1, pos.y);
+        //    if (tiles.TryGetValue(pos, out LevelTile negativeX))
+        //    {
+        //        if (positiveZ != null) possible.AddRange(negativeX.PositiveX);
+        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
+        //    }
+
+        //    possible = possible.Where((LevelTile t) =>
+        //        t.PositiveZ.Contains(positiveZ)
+        //        && t.PositiveX.Contains(positiveX)
+        //        && t.NegativeZ.Contains(negativeZ)
+        //        && t.PositiveX.Contains(positiveX)
+        //    ).ToList();
+
+        //    Instantiate(possible[Random.Range(0, possible.Count)], new Vector3(pos.x, 0, pos.y), Quaternion.identity, transform);
+        //}
+
+        foreach (Vector2Int pos in tiles.Keys)
+            Instantiate(StartTile, new Vector3(pos.x, 0, pos.y), Quaternion.identity, transform);
     }
 
     private struct Region
