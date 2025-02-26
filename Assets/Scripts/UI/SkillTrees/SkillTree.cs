@@ -7,4 +7,6 @@ public class SkillTree : ScriptableObject
 {
     public string skillTreeName;
     public List<Skill> skills;
+
+    public SkillTreePalette palette;
 }

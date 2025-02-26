@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public Canvas rootCanvas; //TO-DO should pass this to a UI manager eventually
+    public Canvas rootCanvas;
     [HideInInspector] public float scaleFactor;
 
     [Header("Testing")]

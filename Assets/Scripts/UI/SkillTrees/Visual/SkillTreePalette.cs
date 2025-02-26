@@ -13,4 +13,7 @@ public class SkillTreePalette : ScriptableObject
     public Sprite lockedSprite;
 
     public Color32 greyedOut = new Color32(88, 88, 88, 112);
+
+    public Color32 upgradedTextColour = Color.white;
+    public Color32 notUpgradedTextColour = Color.white;
 }

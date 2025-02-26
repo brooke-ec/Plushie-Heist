@@ -5,14 +5,16 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class SkillTreeManager : MonoBehaviour
+/// <summary> Used for ONE skill tree </summary>
+public class SkillTreeController : MonoBehaviour
 {
     [Header("References")]
     public SkillTree skillTree;
     public List<Skill> unlockedSkills = new List<Skill>();
 
-    void Start()
+    public void CreateSkillTree(SkillTree skillTree)
     {
+        this.skillTree = skillTree;
         GenerateSkillTree();
         DisplaySkillTree();
     }
@@ -28,10 +30,6 @@ public class SkillTreeManager : MonoBehaviour
 
     public SkillButton nodePrefab;
     public Transform canvasTransform;
-
-    [Header("Visual references")]
-    public SkillTreePalette palette;
-
 
     #region Logic representation
     private void GenerateSkillTree()
@@ -91,6 +89,61 @@ public class SkillTreeManager : MonoBehaviour
             }).ToList();
         }
     }
+
+    private void AssignPositions(List<List<Skill>> layers)
+    {
+        nodePositions.Clear();
+
+        // Find the root nodes (nodes without dependencies)
+        List<Skill> rootNodes = layers[0];
+
+        float xOffset = 0f; // Track X position dynamically
+
+        // Start recursive placement starting from the root
+        foreach (var root in rootNodes)
+        {
+            PlaceNode(root, ref xOffset, 0);
+        }
+    }
+
+    private float PlaceNode(Skill node, ref float xOffset, int depth)
+    {
+        float ySpacing = 150f;
+        float xSpacing = 200f;
+
+        // Get all child nodes (nodes that depend on this node)
+        List<Skill> children = skillTree.skills.Where(n => n.requirements.Contains(node)).ToList();
+
+        float startX = xOffset; // Store starting X position
+        float height = -depth * ySpacing;
+
+        if (children.Count == 0)
+        {
+            // If no children, just place the node here and move xOffset
+            nodePositions[node] = new Vector2(xOffset, height);
+            xOffset += xSpacing; // Move xOffset to avoid overlap
+        }
+        else
+        {
+            // Recursively place child nodes first
+            float childStartX = xOffset;
+
+            foreach (var child in children)
+            {
+                PlaceNode(child, ref xOffset, depth + 1);
+            }
+
+            // Center the parent node between its children
+            //float midX = (childStartX + xOffset - xSpacing) / 2f;
+            float midX = (nodePositions[children[0]].x + nodePositions[children[children.Count-1]].x)/2f;
+            nodePositions[node] = new Vector2(midX, height);
+        }
+
+        return nodePositions[node].x;
+    }
+
+    #region OLD CENTERING - MIGHT COME BACK
+
     /*
     /// <summary> Calculates x and y positions for each node based on its layer and index within that layer.
     /// The layer is centered horizontally based on the number of nodes in it
@@ -117,8 +170,9 @@ public class SkillTreeManager : MonoBehaviour
     }*/
 
     //because of children with multi-parents, as these are adjusted last to avoid null references to parents not adjusted yet
-    private Dictionary<Skill, int> pendingParents = new Dictionary<Skill, int>();
+    //private Dictionary<Skill, int> pendingParents = new Dictionary<Skill, int>();
 
+    /*
     /// <summary> Positions each child centered under its parents </summary>
     private void AssignPositions(List<List<Skill>> layers)
     {
@@ -192,11 +246,11 @@ public class SkillTreeManager : MonoBehaviour
             }
 
             //Recursively place child nodes first
-            /*
-            foreach(Skill child in children)
-            {
-                PlaceNode(child, ref xOffset, depth + 1);
-            }*/
+            
+            //foreach(Skill child in children)
+            //{
+                //PlaceNode(child, ref xOffset, depth + 1);
+            //}
 
             //Then, centre parent node between its children
             float centreXPos;
@@ -215,7 +269,8 @@ public class SkillTreeManager : MonoBehaviour
             //Debug.Log("Position of " + node.skillName + "is " + nodePositions[node]);
         }
         return nodePositions[node].x;
-    }
+    }*/
+    #endregion
 
     #endregion
 
