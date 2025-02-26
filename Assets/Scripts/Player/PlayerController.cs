@@ -782,6 +782,7 @@ public class PlayerController : MonoBehaviour
         cc.center = new Vector3(0, 1f, 0);
     }
     #endregion
+
     #region animations
 
     private void Animate()
@@ -807,6 +808,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
+
     #region Input
 
     public void GetMoveInput(InputAction.CallbackContext ctx)
@@ -901,6 +903,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Ability Swapping
+    private void ChooseNone()
+    {
+        currentAbility = Ability.None;
+    }
+
+    private void ChooseDash()
+    {
+        currentAbility = Ability.Dash;
+    }
+    private void ChooseBoost()
+    {
+        currentAbility = Ability.Boost;
+    }
+    private void ChooseGrapple()
+    {
+        currentAbility = Ability.Grapple;
+    }
+    private void ChooseGlide()
+    {
+        currentAbility = Ability.Glide;
+    }
     #endregion
 }
 
