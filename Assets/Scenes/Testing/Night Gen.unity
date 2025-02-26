@@ -309,9 +309,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6a0483b0c7c7e4c871d867a9a6b4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
-  min: 3
-  max: 8
+  startTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
+  minRoom: 4
+  maxRoom: 8
+  growAmount: 4
+  tileSize: 5
+  seedDistance: 2
+  size: {x: 24, y: 24}
 --- !u!4 &1291487895
 Transform:
   m_ObjectHideFlags: 0

@@ -4,131 +4,212 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    private Dictionary<Vector2Int, LevelTile> tiles;
+    [SerializeField] private LevelTile startTile;
+    [SerializeField] private int minRoom = 4;
+    [SerializeField] private int maxRoom = 9;
+    [SerializeField] private int growAmount = 4;
+    [SerializeField] private float tileSize = 5;
+    [SerializeField] private float seedDistance = 2;
+    [SerializeField] private Vector2Int size = new(24, 24);
 
-    [SerializeField] private LevelTile StartTile;
-    [SerializeField] private int min = 3;
-    [SerializeField] private int max = 8;
+    private List<Box> rooms = new();
 
     private void Start()
     {
-        tiles = new();
+        rooms.Add(Box.FromSize(0, 0, minRoom, minRoom));
+        rooms.Add(Box.FromSize(size.x - minRoom, size.y - minRoom, minRoom, minRoom));
 
-        int hmax = max / 2;
-        GenerateRooms(new Region(
-            Random.Range(-hmax, 0), 0,
-            Random.Range(0, hmax), Random.Range(min, max)
-        ), 4);
+        Seed();
+        
+        rooms.Reverse();
 
-        Display();
+        foreach (var box in rooms)
+        {
+            box.Grow(rooms, growAmount);
+            box.Clamp(size);
+        }
+
+        int length = rooms.Count;
+        for (int i = 0; i < length; i++) Split(rooms[i]);
+
+        rooms = rooms.Where((b) => b.size.x >= minRoom && b.size.y >= minRoom).ToList();
+        rooms.Reverse();
+
+        foreach (var box in rooms)
+        {
+            box.Grow(rooms, growAmount);
+            box.Clamp(size);
+        }
+
+        length = rooms.Count;
+        for (int i = 0; i < length; i++) Split(rooms[i]);
+
+        foreach (var box in rooms) box.Shrink();
+        Display(0);
     }
 
-    private void GenerateRooms(Region r, int depth)
+    private void Split(Box box)
     {
-        for (int x = r.sx; x <= r.ex; x++)
-            for (int y = r.sy; y <= r.ey; y++)
-                tiles.Add(new Vector2Int(x, y), null);
+        if (box.size.x > maxRoom)
+        {
+            int cut = Random.Range(box.left + minRoom, box.right + 1 - minRoom);
+            Box newbox = Box.FromBounds(cut, box.top, box.right, box.bottom);
+            rooms.Add(newbox);
+            Split(newbox);
 
-        if (depth == 0) return;
+            box.right = cut;
+            Split(box);
+        }
+        else if (box.size.y > maxRoom)
+        {
+            int cut = Random.Range(box.bottom + minRoom, box.top + 1 - minRoom);
+            Box newbox = Box.FromBounds(box.left, box.top, box.right, cut);
+            rooms.Add(newbox);
+            Split(newbox);
 
-        while (true) {
-            Vector2Int door;
-            Vector2Int direction;
-            int choice = Random.Range(0, 4);
-            if (choice == 0) { direction = new Vector2Int(0, 1); door = new Vector2Int(Random.Range(r.sx, r.ex + 1), r.ey + 1); }
-            else if (choice == 1) { direction = new Vector2Int(1, 0); door = new Vector2Int(r.ex + 1, Random.Range(r.sy, r.ey + 1)); }
-            else if (choice == 2) { direction = new Vector2Int(0, -1); door = new Vector2Int(Random.Range(r.sx, r.ex + 1), r.sy - 1); }
-            else if (choice == 3) { direction = new Vector2Int(-1, 0); door = new Vector2Int(r.sx - 1, Random.Range(r.sy, r.ey + 1)); }
-            else throw new System.Exception("Invalid choice while generating level");
-            Vector2Int transformation = new Vector2Int(direction.x == 0 ? 1 : direction.x, direction.y == 0 ? 1 : direction.y);
-            Vector2Int position = door + direction;
+            box.top = cut;
+            Split(box);
+        }
 
-            Vector2Int end = position + new Vector2Int(Random.Range(min, max), Random.Range(min, max)) * transformation;
+    }
 
-            Region nr = new Region(position.x, position.y, end.x, end.y);
+    private void Seed()
+    {
+        for (int i = 0; i < size.x * size.y; i++)
+        {
+            Box box = Box.FromPoint(Random.Range(0, size.x), Random.Range(0, size.y));
 
-            if (!IsEmpty(nr)) continue;
+            float separation = rooms.Select((b) => box.Intersects(b).separation).Min();
+            if (separation < seedDistance) continue;
 
-            tiles.Add(door, null);
-            GenerateRooms(nr, depth - 1);
-            break;
+            rooms.Add(box);
         }
     }
 
-    private bool IsEmpty(Region r)
+    private void Display(float y)
     {
-        for (int x = r.sx; x <= r.ex; x++)
-            for (int y = r.sy; y <= r.ey; y++)
-                if (tiles.ContainsKey(new Vector2Int(x, y))) return false;
-        return true;
+        foreach (Box box in rooms)
+            for (int x = box.left; x < box.right; x++)
+                for (int z = box.bottom; z < box.top; z++)
+                    Instantiate(startTile, new Vector3(x, y, z) * tileSize, Quaternion.identity, transform);
     }
 
-    private void Display()
+    private class Box
     {
-        //Queue<Vector2Int> next = new Queue<Vector2Int>();
-        //Instantiate(StartTile, new Vector3(0, 0, 0), Quaternion.identity, transform);
-        //next.Enqueue(new Vector2Int(0, 0));
+        public int top, right, bottom, left;
 
-        //foreach (Vector2Int pos in next)
-        //{
-        //    List<LevelTile> possible = new List<LevelTile>();
-        //    Vector2Int tpos;
+        public Vector2 center => new Vector2(right + left, top + bottom) * 0.5f;
+        public Vector2Int size => new Vector2Int(right - left, top - bottom);
+        public Vector2 half => new Vector2(size.x, size.y) * 0.5f;
 
-        //    tpos = new Vector2Int(pos.x, pos.y + 1);
-        //    if (tiles.TryGetValue(pos, out LevelTile positiveZ))
-        //    {
-        //        if (positiveZ != null) possible.AddRange(positiveZ.NegativeZ);
-        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
-        //    }
-
-        //    tpos = new Vector2Int(pos.x + 1, pos.y);
-        //    if (tiles.TryGetValue(pos, out LevelTile positiveX))
-        //    {
-        //        if (positiveZ != null) possible.AddRange(positiveX.NegativeX);
-        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
-        //    }
-
-        //    tpos = new Vector2Int(pos.x, pos.y - 1);
-        //    if (tiles.TryGetValue(pos, out LevelTile negativeZ))
-        //    {
-        //        if (positiveZ != null) possible.AddRange(negativeZ.PositiveZ);
-        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
-        //    }
-
-        //    tpos = new Vector2Int(pos.x - 1, pos.y);
-        //    if (tiles.TryGetValue(pos, out LevelTile negativeX))
-        //    {
-        //        if (positiveZ != null) possible.AddRange(negativeX.PositiveX);
-        //        if (!next.Contains(tpos)) next.Enqueue(tpos);
-        //    }
-
-        //    possible = possible.Where((LevelTile t) =>
-        //        t.PositiveZ.Contains(positiveZ)
-        //        && t.PositiveX.Contains(positiveX)
-        //        && t.NegativeZ.Contains(negativeZ)
-        //        && t.PositiveX.Contains(positiveX)
-        //    ).ToList();
-
-        //    Instantiate(possible[Random.Range(0, possible.Count)], new Vector3(pos.x, 0, pos.y), Quaternion.identity, transform);
-        //}
-
-        foreach (Vector2Int pos in tiles.Keys)
-            Instantiate(StartTile, new Vector3(pos.x, 0, pos.y), Quaternion.identity, transform);
-    }
-
-    private struct Region
-    {
-        public int sx;
-        public int sy;
-        public int ex;
-        public int ey;
-
-        public Region(int sx, int sy, int ex, int ey)
+        private Box(int x1, int y1, int x2, int y2)
         {
-            this.sx = Mathf.Min(sx, ex);
-            this.sy = Mathf.Min(sy, ey);
-            this.ex = Mathf.Max(sx, ex);
-            this.ey = Mathf.Max(sy, ey);
+            this.top = Mathf.Max(y1, y2);
+            this.right = Mathf.Max(x1, x2);
+            this.bottom = Mathf.Min(y1, y2);
+            this.left = Mathf.Min(x1, x2);
+        }
+
+        public static Box FromBounds(int x1, int y1, int x2, int y2)
+        {
+            return new Box(x1, y1, x2, y2);
+        }
+
+        public static Box FromSize(int x, int y, int width, int height)
+        {
+            return new Box(x, y, x + width, y + height);
+        }
+
+        public static Box FromPoint(int x, int y)
+        {
+            return Box.FromSize(x, y, 1, 1);
+        }
+
+        public IntersectHit Intersects(Box other)
+        {
+            float dx = other.center.x - this.center.x;
+            float px = (other.half.x + this.half.x) - Mathf.Abs(dx);
+
+            float dy = other.center.y - this.center.y;
+            float py = (other.half.y + this.half.y) - Mathf.Abs(dy);
+
+            IntersectHit hit = new IntersectHit(px > 0 && py > 0);
+
+            if (px < py)
+            {
+                hit.dirX = (int) Mathf.Sign(dx);
+                hit.deltaX = (int) px * hit.dirX;
+                hit.separation = (int) -px;
+            } else
+            {
+                hit.dirY = (int) Mathf.Sign(dy);
+                hit.deltaY = (int) py * hit.dirY;
+                hit.separation = (int) -py;
+            }
+
+            return hit;
+        }
+
+        public void Grow(List<Box> boxes, int maxGrow)
+        {
+            int up = maxGrow;
+            int right = maxGrow;
+            int down = -maxGrow;
+            int left = -maxGrow;
+
+            foreach (Box box in boxes)
+            {
+                if (box == this) continue;
+
+                IntersectHit hit = this.Intersects(box);
+
+                if (hit.hit) Debug.LogError("Overlapping boxes! D:");
+
+                if (hit.dirX > 0) right = Mathf.Min(right, -hit.deltaX);
+                else if (hit.dirX < 0) left = Mathf.Max(left, -hit.deltaX);
+                
+                if (hit.dirY > 0) up = Mathf.Min(up, -hit.deltaY);
+                else if (hit.dirY < 0) down = Mathf.Max(down, -hit.deltaY);
+            }
+
+            this.top += up;
+            this.right += right;
+            this.bottom += down;
+            this.left += left;
+        }
+
+        public void Clamp(Vector2Int size)
+        {
+            top = Mathf.Min(top, size.y);
+            right = Mathf.Min(right, size.x);
+            bottom = Mathf.Max(bottom, 0);
+            left = Mathf.Max(left, 0);
+        }
+
+        public void Shrink()
+        {
+            left += 1;
+            bottom += 1;
+        }
+    }
+
+    private struct IntersectHit
+    {
+        public int deltaX, deltaY;
+        public int dirX, dirY;
+        public int separation;
+        public bool hit;
+
+        public readonly Vector2Int delta => new Vector2Int(deltaX, deltaY);
+
+        public IntersectHit(bool hit)
+        {
+            this.separation = 0;
+            this.hit = hit;
+            deltaX = 0;
+            deltaY = 0;
+            dirX = 0;
+            dirY = 0;
         }
     }
 }
