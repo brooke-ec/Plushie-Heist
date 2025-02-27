@@ -5,19 +5,23 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private LevelTile startTile;
+    [SerializeField] private LevelTile startTile2;
     [SerializeField] private int minRoom = 4;
     [SerializeField] private int maxRoom = 9;
     [SerializeField] private int growAmount = 4;
     [SerializeField] private float tileSize = 5;
     [SerializeField] private float seedDistance = 2;
     [SerializeField] private Vector2Int size = new(24, 24);
+    [SerializeField] private float sideRoomChance = 0.5f;
+    [SerializeField] private int corridorWidth = 1;
 
-    private List<Box> rooms = new();
+    private List<Room> rooms = new();
+    private List<Edge> edges = new();
 
     private void Start()
     {
-        rooms.Add(Box.FromSize(0, 0, minRoom, minRoom));
-        rooms.Add(Box.FromSize(size.x - minRoom, size.y - minRoom, minRoom, minRoom));
+        rooms.Add(Room.FromSize(0, 0, minRoom, minRoom));
+        rooms.Add(Room.FromSize(size.x - minRoom, size.y - minRoom, minRoom, minRoom));
 
         Seed();
         
@@ -44,16 +48,125 @@ public class LevelGenerator : MonoBehaviour
         length = rooms.Count;
         for (int i = 0; i < length; i++) Split(rooms[i]);
 
+        FindEdges();
+        //Display(edges, 1);
+
+        CalculateDistances(rooms.First((r) => r.bottom == 0 && r.left == 0));
+        ConnectPath(rooms.First((r) => r.top == size.y && r.right == size.x));
+
+
         foreach (var box in rooms) box.Shrink();
-        Display(0);
+
+        foreach (var edge in edges) edge.Collapse(corridorWidth);
+        Display(edges.Where((e) => e.connected).ToList(), 0, startTile);
+
+        //Display(rooms, 0, startTile2);
+        Display(rooms.Where((e) => e.pathDistance != -1).ToList(), 0, startTile2);
     }
 
-    private void Split(Box box)
+    private void ConnectPath(Room destination)
+    {
+        Room current = destination;
+        if (current.distance == -1) throw new System.Exception("No path from start to finish");
+        current.pathDistance = 0;
+
+        Edge previous = null;
+        while (current.distance > 0)
+        {
+            current.backtrack.connected = true;
+            current = current.backtrack.GetOther(current);
+            
+            current.pathDistance = 0;
+            foreach (Edge edge in current.edges)
+            {
+                if (edge == current.backtrack || edge == previous) continue;
+                if (Random.Range(0f, 1f) > sideRoomChance) continue;
+                edge.connected = true;
+                Room room = edge.GetOther(current);
+                room.pathDistance = 1;
+
+                foreach (Edge e in room.edges)
+                {
+                    Room other = e.GetOther(room);
+                    if (other.pathDistance == 1 || other.pathDistance == 0) e.connected = true;
+                }
+            }
+
+            previous = current.backtrack;
+        }
+    }
+
+    private void CalculateDistances(Room start)
+    {
+        Queue<FindPathParameters> queue = new();
+        queue.Enqueue(new FindPathParameters(start, 0, null));
+
+        while (queue.Count > 0)
+        {
+            FindPathParameters p = queue.Dequeue();
+            if (p.room.distance != -1) continue;
+            
+            p.room.distance = p.distance;
+            p.room.backtrack = p.backtrack;
+
+            foreach (Edge r in p.room.edges) 
+                queue.Enqueue(new FindPathParameters(r.GetOther(p.room), p.distance + 1, r));
+        }
+    }
+
+    private void FindEdges()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+            for (int j = i + 1;  j < rooms.Count; j++)
+            {
+                IntersectHit hit = rooms[i].Intersects(rooms[j]);
+                if (hit.separation != 0) continue;
+
+                Edge edge = new Edge();
+                edge.roomA = rooms[i];
+                edge.roomB = rooms[j];
+
+                if (hit.dirX == 1)
+                {
+                    edge.left = rooms[i].right;
+                    edge.right = rooms[j].left + 1;
+                    edge.bottom = Mathf.Max(rooms[i].bottom, rooms[j].bottom) + 1;
+                    edge.top = Mathf.Min(rooms[i].top, rooms[j].top);
+                } else if (hit.dirX == -1)
+                {
+                    edge.left = rooms[j].right;
+                    edge.right = rooms[i].left + 1;
+                    edge.bottom = Mathf.Max(rooms[i].bottom, rooms[j].bottom) + 1;
+                    edge.top = Mathf.Min(rooms[i].top, rooms[j].top);
+                } else if (hit.dirY == 1)
+                {
+                    edge.bottom = rooms[i].top;
+                    edge.top = rooms[j].bottom + 1;
+                    edge.left = Mathf.Max(rooms[i].left, rooms[j].left) + 1;
+                    edge.right = Mathf.Min(rooms[i].right, rooms[j].right);
+                } else if (hit.dirY == -1)
+                {
+                    edge.bottom = rooms[j].top;
+                    edge.top = rooms[i].bottom + 1;
+                    edge.left = Mathf.Max(rooms[i].left, rooms[j].left) + 1;
+                    edge.right = Mathf.Min(rooms[i].right, rooms[j].right);
+                }
+
+                if (edge.left >= edge.right || edge.bottom >= edge.top) continue;
+
+                edge.connected = false;
+                rooms[i].edges.Add(edge);
+                rooms[j].edges.Add(edge);
+                edges.Add(edge);
+            }
+    }
+
+    private void Split(Room box)
     {
         if (box.size.x > maxRoom)
         {
             int cut = Random.Range(box.left + minRoom, box.right + 1 - minRoom);
-            Box newbox = Box.FromBounds(cut, box.top, box.right, box.bottom);
+            Room newbox = Room.FromBounds(cut, box.top, box.right, box.bottom);
             rooms.Add(newbox);
             Split(newbox);
 
@@ -63,21 +176,20 @@ public class LevelGenerator : MonoBehaviour
         else if (box.size.y > maxRoom)
         {
             int cut = Random.Range(box.bottom + minRoom, box.top + 1 - minRoom);
-            Box newbox = Box.FromBounds(box.left, box.top, box.right, cut);
+            Room newbox = Room.FromBounds(box.left, box.top, box.right, cut);
             rooms.Add(newbox);
             Split(newbox);
 
             box.top = cut;
             Split(box);
         }
-
     }
 
     private void Seed()
     {
         for (int i = 0; i < size.x * size.y; i++)
         {
-            Box box = Box.FromPoint(Random.Range(0, size.x), Random.Range(0, size.y));
+            Room box = Room.FromPoint(Random.Range(0, size.x), Random.Range(0, size.y));
 
             float separation = rooms.Select((b) => box.Intersects(b).separation).Min();
             if (separation < seedDistance) continue;
@@ -86,23 +198,74 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void Display(float y)
+    private void Display<T>(List<T> regions, float y, LevelTile prefab) where T : Region
     {
-        foreach (Box box in rooms)
+        foreach (Region box in regions)
             for (int x = box.left; x < box.right; x++)
                 for (int z = box.bottom; z < box.top; z++)
-                    Instantiate(startTile, new Vector3(x, y, z) * tileSize, Quaternion.identity, transform);
+                    Instantiate(prefab, new Vector3(x, y, z) * tileSize, Quaternion.identity, transform);
     }
 
-    private class Box
+    private record FindPathParameters
+    {
+        public Room room;
+        public int distance;
+        public Edge backtrack;
+
+        public FindPathParameters(Room room, int distance, Edge backtrack)
+        {
+            this.room = room;
+            this.distance = distance;
+            this.backtrack = backtrack;
+        }
+    }
+
+    private abstract class Region
     {
         public int top, right, bottom, left;
+    }
+
+    private class Edge : Region
+    {
+        public bool connected;
+        public Room roomA;
+        public Room roomB;
+
+        public Room GetOther(Room self)
+        {
+            if (self == roomA) return roomB;
+            if (self == roomB) return roomA;
+            else throw new System.Exception("Room not in Edge");
+        }
+
+        public void Collapse(int width)
+        {
+            if (right - left >= width)
+            {
+                left = Random.Range(left, right - width + 1);
+                right = left + width;
+            }
+
+            if (top - bottom >= width)
+            {
+                bottom = Random.Range(bottom, top - width + 1);
+                top = bottom + width;
+            }
+        }
+    }
+
+    private class Room : Region
+    {
+        public List<Edge> edges = new List<Edge>();
+        public int pathDistance = -1;
+        public int distance = -1;
+        public Edge backtrack;
 
         public Vector2 center => new Vector2(right + left, top + bottom) * 0.5f;
         public Vector2Int size => new Vector2Int(right - left, top - bottom);
         public Vector2 half => new Vector2(size.x, size.y) * 0.5f;
 
-        private Box(int x1, int y1, int x2, int y2)
+        private Room(int x1, int y1, int x2, int y2)
         {
             this.top = Mathf.Max(y1, y2);
             this.right = Mathf.Max(x1, x2);
@@ -110,22 +273,22 @@ public class LevelGenerator : MonoBehaviour
             this.left = Mathf.Min(x1, x2);
         }
 
-        public static Box FromBounds(int x1, int y1, int x2, int y2)
+        public static Room FromBounds(int x1, int y1, int x2, int y2)
         {
-            return new Box(x1, y1, x2, y2);
+            return new Room(x1, y1, x2, y2);
         }
 
-        public static Box FromSize(int x, int y, int width, int height)
+        public static Room FromSize(int x, int y, int width, int height)
         {
-            return new Box(x, y, x + width, y + height);
+            return new Room(x, y, x + width, y + height);
         }
 
-        public static Box FromPoint(int x, int y)
+        public static Room FromPoint(int x, int y)
         {
-            return Box.FromSize(x, y, 1, 1);
+            return Room.FromSize(x, y, 1, 1);
         }
 
-        public IntersectHit Intersects(Box other)
+        public IntersectHit Intersects(Room other)
         {
             float dx = other.center.x - this.center.x;
             float px = (other.half.x + this.half.x) - Mathf.Abs(dx);
@@ -150,14 +313,14 @@ public class LevelGenerator : MonoBehaviour
             return hit;
         }
 
-        public void Grow(List<Box> boxes, int maxGrow)
+        public void Grow(List<Room> boxes, int maxGrow)
         {
             int up = maxGrow;
             int right = maxGrow;
             int down = -maxGrow;
             int left = -maxGrow;
 
-            foreach (Box box in boxes)
+            foreach (Room box in boxes)
             {
                 if (box == this) continue;
 

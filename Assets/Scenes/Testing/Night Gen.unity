@@ -310,12 +310,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
+  startTile2: {fileID: 2300827449402454805, guid: f89735edd0204ed4e8e954b5dc4feea6, type: 3}
   minRoom: 4
   maxRoom: 8
   growAmount: 4
   tileSize: 5
   seedDistance: 2
-  size: {x: 24, y: 24}
+  size: {x: 24, y: 32}
+  sideRoomChance: 0.25
+  corridorWidth: 1
 --- !u!4 &1291487895
 Transform:
   m_ObjectHideFlags: 0
