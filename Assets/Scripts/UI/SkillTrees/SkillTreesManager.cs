@@ -8,7 +8,7 @@ public class SkillTreesManager : MonoBehaviour
     [SerializeField] private GameObject skillTreePrefab;
     [SerializeField] private GameObject skillTreeViewPrefab;
 
-    [HideInInspector] public Transform canvasTransform;
+    [SerializeField] private Transform canvasTransform;
 
     [SerializeField] private List<SkillTreeController> skillTrees = new List<SkillTreeController>();
     [SerializeField] private List<SkillTree> skillTreesReferences = new List<SkillTree>();
@@ -22,7 +22,7 @@ public class SkillTreesManager : MonoBehaviour
             skillTrees.Add(Instantiate(skillTreePrefab, skillTreeViewTransform).GetComponent<SkillTreeController>());
             skillTrees[i].CreateSkillTree(skillTreesReferences[i]);
         }
-        skillTreeViewTransform.gameObject.SetActive(false);
+        //skillTreeViewTransform.gameObject.SetActive(false);
     }
 
     private Transform skillTreeViewTransform;

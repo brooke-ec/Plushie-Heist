@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EdgeRenderer : Graphic
+public class EdgeRenderer : MaskableGraphic
 {
     public List<Vector2> points;
     public float thickness = 10f;
