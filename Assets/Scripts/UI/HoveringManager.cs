@@ -16,6 +16,7 @@ public class HoveringManager : MonoBehaviour
 
     [SerializeField] private Sprite blueTooltipBackground;
     [SerializeField] private Sprite greyTooltipBackground;
+    [SerializeField] private Sprite pinkTooltipBackground;
 
     /// <summary> So that some things can cost stars, money, etc, depending on what we want </summary>
     public enum TooltipCost
@@ -28,7 +29,8 @@ public class HoveringManager : MonoBehaviour
     {
         noChanges,
         blue,
-        grey
+        grey,
+        pink
     }
 
     private void Start()
@@ -78,6 +80,9 @@ public class HoveringManager : MonoBehaviour
                 break;
             case TooltipBackgroundColor.grey:
                 currentTooltipOpen.transform.GetComponent<Image>().sprite = greyTooltipBackground;
+                break;
+            case TooltipBackgroundColor.pink:
+                currentTooltipOpen.transform.GetComponent<Image>().sprite = pinkTooltipBackground;
                 break;
             default:
                 break;

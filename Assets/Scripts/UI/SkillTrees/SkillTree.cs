@@ -9,4 +9,6 @@ public class SkillTree : ScriptableObject
     public List<Skill> skills;
 
     public SkillTreePalette palette;
+    public Sprite skillTreeIcon;
+
 }

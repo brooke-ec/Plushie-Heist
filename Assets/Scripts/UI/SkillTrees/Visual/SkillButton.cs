@@ -20,9 +20,10 @@ public class SkillButton : MonoBehaviour
     {
         HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
         Color32 textColour;
-        if (CanBeUnlocked())
+        if (CanBeUnlocked() && IsBranchVisible())
         {
-            tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.blue;
+
+            tooltipBackgroundColor = skillTreeController.skillTree.palette.tooltipBackgroundColor;
             textColour = skillTreeController.skillTree.palette.upgradedTextColour;
         }
         else
@@ -51,7 +52,7 @@ public class SkillButton : MonoBehaviour
         if (IsBranchVisible() && CanBeUnlocked())
         {
             //Then unlock
-            UIManager.money -= skill.cost;
+            FindAnyObjectByType<UIManager>().ModifyMoney(-skill.cost);
             skillTreeController.unlockedSkills.Add(skill);
             UpdateUI();
 
@@ -77,7 +78,7 @@ public class SkillButton : MonoBehaviour
     private bool CanBeUnlocked()
     {
         //TO-DO properly
-        if (UIManager.money < skill.cost)
+        if (FindAnyObjectByType<UIManager>().GetMoney() < skill.cost)
         {
             return false;
         }

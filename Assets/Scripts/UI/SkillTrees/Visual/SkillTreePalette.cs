@@ -16,4 +16,6 @@ public class SkillTreePalette : ScriptableObject
 
     public Color32 upgradedTextColour = Color.white;
     public Color32 notUpgradedTextColour = Color.white;
+
+    public HoveringManager.TooltipBackgroundColor tooltipBackgroundColor;
 }

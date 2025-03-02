@@ -319,6 +319,8 @@ public class SkillTreeController : MonoBehaviour
         float treeCentreX = (maxX + minX) / 2f;
         float treeCentreY = (maxY + minY) / 2f;
 
+        SetSkillTreeContainerSize(minX, maxX, minY, maxY);
+
         RectTransform container = canvasTransform.GetComponent<RectTransform>();
         Vector2 screenCentre = container.rect.center;
         Vector2 offsetToApply = screenCentre - new Vector2(treeCentreX, treeCentreY);
@@ -329,6 +331,16 @@ public class SkillTreeController : MonoBehaviour
         {
             nodePositions[node] += offsetToApply;
         }
+    }
+
+    private void SetSkillTreeContainerSize(float minX, float maxX, float minY, float maxY)
+    {
+        //Set width and weight of canvas rect transform to the biggest 
+        RectTransform container = canvasTransform.parent.GetComponent<RectTransform>();
+        float xSize = (maxX - minX) + 100;
+        float ySize = (maxY - minY) + 100;
+        container.sizeDelta = new Vector2(xSize, ySize);
+
     }
 
     public Transform edgeContainer;
