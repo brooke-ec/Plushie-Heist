@@ -484,7 +484,7 @@ public class PlayerController : MonoBehaviour
             curFriction = slideFriction;
             maxSpeed = 1.5f;
             hasSlide = true;
-            Debug.Log("Sliding");
+            //Debug.Log("Sliding");
             animator.SetBool("Slide", true);
 
         }
@@ -704,10 +704,10 @@ public class PlayerController : MonoBehaviour
         wallRunDirection *= wasdInput.y;
         Accelerate(maxSpeed, wallRunDirection, groundAcceleration);
         ApplyFriction();
-        Debug.Log(Quaternion.LookRotation(Quaternion.Euler(rotAdjustVal) * wallRunDirection).eulerAngles.y);
+        //Debug.Log(Quaternion.LookRotation(Quaternion.Euler(rotAdjustVal) * wallRunDirection).eulerAngles.y);
         //applys some gravity while on the wall 
         velocity.y += Time.deltaTime * -3;
-        Debug.DrawRay(transform.position, wallRunDirection * 100);
+        //Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
 
 
@@ -803,13 +803,13 @@ public class PlayerController : MonoBehaviour
         {
             cam.transform.Rotate(0, 0, -20);
             rotAdjustVal = new Vector3(0, 5, 0);
-            Debug.Log("rotating");
+            //Debug.Log("rotating");
         }
         else if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0)
         {
             cam.transform.Rotate(0, 0, 20);
             rotAdjustVal = new Vector3(0, -5, 0);
-            Debug.Log("rotating");
+            //Debug.Log("rotating");
         }
         else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
@@ -864,12 +864,12 @@ public class PlayerController : MonoBehaviour
     {
         if (wishSprint && velocity.magnitude > 1 && stamina > 0)
         {
-            Debug.Log("sprintin");
+            //Debug.Log("sprintin");
             animator.SetInteger("Speed", 2);
         }
         else if (velocity.magnitude > 1)
         {
-            Debug.Log("walkin");
+            //Debug.Log("walkin");
             animator.SetInteger("Speed", 1);
         }
         else
