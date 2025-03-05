@@ -273,6 +273,41 @@ public class PlayerController : MonoBehaviour
 
         //animates the player
         Animate();
+
+        UpdateAbilitiesCooldowns();
+    }
+
+    /// <summary> Update UI of ability with cooldown </summary>
+    private void UpdateAbilitiesCooldowns()
+    {
+        //In future, if we have a list of active abilities, then pass those instead of all
+
+        for (int i = 0; i < 4; i++)
+        {
+            float cooldown = 0f, cooldownMax = 0f;
+            switch ((Ability)i)
+            {
+                case Ability.Dash:
+                    cooldown = dashRechargeTimer;
+                    cooldownMax = dashRechargeTime;
+                    print(dashRechargeTimer + " " +dashRechargeTime);
+                    break;
+                case Ability.Grapple:
+                    cooldown = grappleCooldown;
+                    cooldownMax = grappleCooldownMax;
+                    break;
+                case Ability.Glide:
+                    //None?
+                    break;
+                case Ability.Boost:
+                    //None?
+                    break;
+                default:
+                    break;
+            }
+
+            MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
+        }
     }
 
     public void FixedUpdate()
@@ -947,26 +982,54 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Ability Swapping
+    private void ChangeMovementUI()
+    {
+        switch(currentAbility)
+        {
+            case Ability.None:
+                MovementUIManager.instance.SetCrosshairActivation(false);
+                break;
+            case Ability.Dash:
+                MovementUIManager.instance.SetCrosshairActivation(false);
+                break;
+            case Ability.Boost:
+                MovementUIManager.instance.SetCrosshairActivation(false);
+                break;
+            case Ability.Grapple:
+                MovementUIManager.instance.SetCrosshairActivation(true);
+                break;
+            case Ability.Glide:
+                MovementUIManager.instance.SetCrosshairActivation(false);
+                break;
+            default:
+                break;
+        }
+    }
     private void ChooseNone()
     {
         currentAbility = Ability.None;
+        ChangeMovementUI();
     }
 
     private void ChooseDash()
     {
         currentAbility = Ability.Dash;
+        ChangeMovementUI();
     }
     private void ChooseBoost()
     {
         currentAbility = Ability.Boost;
+        ChangeMovementUI();
     }
     private void ChooseGrapple()
     {
         currentAbility = Ability.Grapple;
+        ChangeMovementUI();
     }
     private void ChooseGlide()
     {
         currentAbility = Ability.Glide;
+        ChangeMovementUI();
     }
     #endregion
 }
