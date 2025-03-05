@@ -92,4 +92,20 @@ public class SkillTreesManager : MonoBehaviour
     }
 
     #endregion
+
+    #region User control
+    /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>
+    /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
+    public void EnableBranch(int plushieNumber, int skillTreeNumber)
+    {
+        if(skillTreeNumber < 0 || skillTreeNumber >= skillTrees.Count)
+        {
+            Debug.Log("Error enabling branch. Skill tree number too high");
+        }
+        else
+        {
+            skillTrees[skillTreeNumber].EnableBranch(plushieNumber);
+        }
+    }
+    #endregion
 }

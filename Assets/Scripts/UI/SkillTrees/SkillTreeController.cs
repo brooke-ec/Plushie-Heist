@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary> Used for ONE skill tree </summary>
@@ -22,6 +23,28 @@ public class SkillTreeController : MonoBehaviour
     public bool IsSkillUnlocked(Skill skill)
     {
         return unlockedSkills.Contains(skill);
+    }
+    /// <summary> Does not check if previous branches are unlocked </summary>
+    public void EnableBranch(int plushieNumber)
+    {
+        if (plushieNumber >= skillTree.unlockables.Count) { Debug.Log("Error in number of plushie number given"); }
+        else
+        {
+            List<Skill> skillsToEnable = skillTree.unlockables[plushieNumber].skillsToEnable;
+            List<SkillButton> allSkillsInTree = canvasTransform.GetComponentsInChildren<SkillButton>().ToList();
+
+            foreach(SkillButton skillInTree in allSkillsInTree)
+            {
+                //If you find the same skill in the tree
+                Skill skillToEnable = skillsToEnable.Find(s => s.Equals(skillInTree.skill));
+                if (skillToEnable != null)
+                {
+                    //Update it so it's enabled
+                    skillInTree.branchIsEnabled = true;
+                    skillInTree.SetUI(this);
+                }
+            }
+        }
     }
 
     #region Building tree
@@ -278,7 +301,7 @@ public class SkillTreeController : MonoBehaviour
     private void DisplaySkillTree()
     {
         CentreSkillTree();
-
+        List<Skill> skillsToBeDisabled = GetAllSkillsToBeDisabled();
         List<SkillButton> skillButtons = new List<SkillButton>();
 
         foreach(Skill skill in skillTree.skills)
@@ -287,6 +310,12 @@ public class SkillTreeController : MonoBehaviour
             node.transform.localPosition = nodePositions[skill];
             node.skill = skill;
             skillButtons.Add(node);
+
+            if(skillsToBeDisabled.Contains(node.skill))
+            {
+                node.branchIsEnabled = false;
+                skillsToBeDisabled.Remove(node.skill);
+            }
         }
 
         //DrawEdges
@@ -297,6 +326,15 @@ public class SkillTreeController : MonoBehaviour
         {
             skillButton.SetUI(this);
         }
+    }
+    private List<Skill> GetAllSkillsToBeDisabled()
+    {
+        List<Skill> skillsToBeDisabled = new List<Skill>();
+        foreach(SkillTreeUnlockable unlockableList in skillTree.unlockables)
+        {
+            skillsToBeDisabled.AddRange(unlockableList.skillsToEnable);
+        }
+        return skillsToBeDisabled;
     }
 
     private void CentreSkillTree()

@@ -9,10 +9,8 @@ public class Skill : ScriptableObject
     public List<Skill> requirements;
 
     public int cost;
+    public Sprite icon;
     public string description;
-
-    //Won't be here in the future, just for testing purposes
-    public bool branchIsUnlocked = true;
 
     public virtual void Unlock()
     {

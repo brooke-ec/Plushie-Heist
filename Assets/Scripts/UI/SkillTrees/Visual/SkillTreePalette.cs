@@ -18,4 +18,10 @@ public class SkillTreePalette : ScriptableObject
     public Color32 notUpgradedTextColour = Color.white;
 
     public HoveringManager.TooltipBackgroundColor tooltipBackgroundColor;
+
+    [Header("Icons")]
+    public Color32 unlockedIconColour = Color.white;
+    public Color32 canBeUpgradedIconColour = Color.white;
+    public Color32 lockedIconColour = Color.white;
+
 }

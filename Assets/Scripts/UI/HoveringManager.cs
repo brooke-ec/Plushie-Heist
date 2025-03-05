@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class HoveringManager : MonoBehaviour
 {
     public GameObject tooltipPrefab;
+
     public static GameObject currentTooltipOpen;
     private Transform canvasTransform;
     public Vector3 offset = Vector3.one;

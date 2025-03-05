@@ -11,4 +11,7 @@ public class SkillTree : ScriptableObject
     public SkillTreePalette palette;
     public Sprite skillTreeIcon;
 
+    [Header("Unlockables")]
+    public List<SkillTreeUnlockable> unlockables = new List<SkillTreeUnlockable>();
+
 }

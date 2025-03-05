@@ -10,7 +10,10 @@ public class SkillButton : MonoBehaviour
 {
     [HideInInspector] public Skill skill;
     public Image background;
+    public Image icon;
     private SkillTreeController skillTreeController;
+
+    public bool branchIsEnabled = true;
 
     private void Start()
     {
@@ -20,9 +23,8 @@ public class SkillButton : MonoBehaviour
     {
         HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
         Color32 textColour;
-        if (CanBeUnlocked() && IsBranchVisible())
+        if ((CanBeUnlocked() && IsBranchVisible()) | IsUnlocked())
         {
-
             tooltipBackgroundColor = skillTreeController.skillTree.palette.tooltipBackgroundColor;
             textColour = skillTreeController.skillTree.palette.upgradedTextColour;
         }
@@ -37,7 +39,7 @@ public class SkillButton : MonoBehaviour
     public void SetUI(SkillTreeController skillTreeController)
     {
         this.skillTreeController = skillTreeController;
-        transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = skill.skillName;
+        icon.sprite = skill.icon;
         UpdateUI();
     }
 
@@ -75,8 +77,15 @@ public class SkillButton : MonoBehaviour
         }
     }
 
+    private bool IsUnlocked()
+    {
+        return skillTreeController.IsSkillUnlocked(skill);
+    }
+
     private bool CanBeUnlocked()
     {
+        if(IsUnlocked()) { return false;}
+
         //TO-DO properly
         if (FindAnyObjectByType<UIManager>().GetMoney() < skill.cost)
         {
@@ -96,8 +105,7 @@ public class SkillButton : MonoBehaviour
     private bool IsBranchVisible()
     {
         //TO-DO
-        return skill.branchIsUnlocked;
-        //return true;
+        return branchIsEnabled;
     }
     private void UpdateColours()
     {
@@ -105,6 +113,8 @@ public class SkillButton : MonoBehaviour
         {
             background.sprite = skillTreeController.skillTree.palette.unlockedSprite;
             background.color = skillTreeController.skillTree.palette.unlockedColour;
+            icon.color = skillTreeController.skillTree.palette.unlockedIconColour;
+
         }
         else
         {
@@ -112,16 +122,19 @@ public class SkillButton : MonoBehaviour
             {
                 background.sprite = skillTreeController.skillTree.palette.lockedSprite;
                 background.color = skillTreeController.skillTree.palette.greyedOut;
+                icon.color = skillTreeController.skillTree.palette.greyedOut;
             }
             else if (CanBeUnlocked())
             {
                 background.sprite = skillTreeController.skillTree.palette.canBeUpgradedSprite;
                 background.color = Color.white;
+                icon.color = skillTreeController.skillTree.palette.canBeUpgradedIconColour;
             }
             else
             {
                 background.sprite = skillTreeController.skillTree.palette.lockedSprite;
                 background.color = Color.white;
+                icon.color = skillTreeController.skillTree.palette.lockedIconColour;
             }
         }
     }
