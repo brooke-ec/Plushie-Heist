@@ -28,7 +28,7 @@ public class InventoryController : MonoBehaviour
         //to start dragging
         if (Input.GetMouseButtonDown(0))
         {
-            LeftMouseButtonPress();
+            PickUpOrPlaceItem();
         }
     }
 
@@ -51,7 +51,8 @@ public class InventoryController : MonoBehaviour
         }
     }
 
-    private void LeftMouseButtonPress()
+    /// <summary> Left click </summary>
+    private void PickUpOrPlaceItem()
     {
         Vector2 mousePos = Input.mousePosition;
         if(selectedItem != null)
