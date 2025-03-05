@@ -41,6 +41,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
             //if enough time has passed and there isn't already another tooltip open
             if((framesPassedSinceOver / 40f) >= 2 && HoveringManager.currentTooltipOpen == null)
             {
+                //you could check here for type of tooltip to create another tooltip type
                 FindAnyObjectByType<HoveringManager>().CreateBaseTooltip(title, titleColour, description, transform.position, tooltipCostType, tooltipCostText, tooltipBackgroundColor);
             }
             else
