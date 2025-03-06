@@ -189,6 +189,9 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Public Fields
+    [HideInInspector]public bool arrested = false;
+    #endregion
     #region core methods
     public void Awake()
     {
@@ -216,6 +219,11 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+
+        if (arrested)
+        {
+            Arrest();
+        }
         //Wall movement or regular movement 
         if (wallRunning && !isGrappling)
         {
@@ -570,7 +578,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Dash()
     {
-        if (dashesUsed < noDashes && !hasDashed)
+        if (dashesUsed < noDashes && !hasDashed && !arrested)
         {
             Vector3 wishDashDir = cam.transform.forward;
             Vector3 wishDashVel = wishDashDir * dashSpeed;
@@ -789,6 +797,15 @@ public class PlayerController : MonoBehaviour
             return;
         }
         grappleCooldown += Time.deltaTime * grappleCooldownSpeed;
+    }
+
+    private void Arrest()
+    {
+        wasdInput = Vector2.zero;
+        wallRunning = false;
+        isGrappling = false;
+        isGliding = false;
+        isBoosting = false;
     }
     #endregion
 
