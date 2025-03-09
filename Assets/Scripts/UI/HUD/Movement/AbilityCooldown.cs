@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AbilityCooldown : MonoBehaviour
 {
     //Missing setting the icon
-    [SerializeField] private Image icon;
+    public Image icon;
     [SerializeField] private Image imageCooldown;
     [SerializeField] private TextMeshProUGUI keyText;
 

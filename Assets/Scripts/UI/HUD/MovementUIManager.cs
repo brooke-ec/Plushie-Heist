@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovementUIManager : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class MovementUIManager : MonoBehaviour
 
     [Header("Internal references")]
     [SerializeField] private GameObject crosshairTransform;
+
+    [Header("Icons")]
+    [SerializeField] private Sprite boostIcon;
+    [SerializeField] private Sprite grappleIcon;
+    [SerializeField] private Sprite dashIcon;
 
     private void Awake()
     {
@@ -40,8 +46,16 @@ public class MovementUIManager : MonoBehaviour
 
     private void SetupAllAbilities()
     {
-        abilities.Add(Ability.Grapple, Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>());
-        abilities.Add(Ability.Dash, Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>());
+        AbilityCooldown grapple = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
+        AbilityCooldown dash = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
+        AbilityCooldown boost = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
+
+        abilities.Add(Ability.Grapple, grapple);
+        grapple.icon.sprite = grappleIcon;
+        abilities.Add(Ability.Dash, dash);
+        dash.icon.sprite = dashIcon;
+        abilities.Add(Ability.Boost, boost);
+        boost.icon.sprite = boostIcon;
     }
 
     /// <summary> Activate (if passed true) or deactivate (if passed false) the crosshair</summary>

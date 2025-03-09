@@ -290,7 +290,6 @@ public class PlayerController : MonoBehaviour
                 case Ability.Dash:
                     cooldown = dashRechargeTimer;
                     cooldownMax = dashRechargeTime;
-                    print(dashRechargeTimer + " " +dashRechargeTime);
                     break;
                 case Ability.Grapple:
                     cooldown = grappleCooldown;
@@ -300,6 +299,8 @@ public class PlayerController : MonoBehaviour
                     //None?
                     break;
                 case Ability.Boost:
+                    cooldown = boostTime;
+                    cooldownMax = maxBoostTime;
                     //None?
                     break;
                 default:
