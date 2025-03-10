@@ -14,32 +14,38 @@ public class GaurdAI : MonoBehaviour
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
+    /// <summary>The animator component</summary>
+    protected Animator anim;
     /// <summary>NavMeshAgent component </summary>
-    private GameObject chasee;
+    protected GameObject chasee;
     /// <summary>Time since last detected</summary>
     private float detectionTimer;
     /// <summary>The current destination to patrol to</summary>
     private int curPatrolIndex;
     #endregion
     #region core methods
-    void Start()
+    public virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.destination = patrolPoints[0].position;
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
         if (chasee != null && detectionTimer<=DetectionTime)
         {
             agent.destination = chasee.transform.position;
             detectionTimer += Time.deltaTime;
             agent.autoBraking = true;
-            if(agent.remainingDistance <= 1.2)
+            anim.SetBool("Caught", false);
+            if (agent.remainingDistance <= 1.2)
             {
                 Arrest();
+                anim.SetBool("Arrest", true);
+                anim.SetBool("Caught", true);
             }
         }
         else
@@ -58,6 +64,8 @@ public class GaurdAI : MonoBehaviour
             chasee = detectee;
             Debug.Log("hit");
             detectionTimer = 0;
+            agent.speed = 5;
+            anim.SetBool("Chasing", true);
         }
     }
 
@@ -68,6 +76,8 @@ public class GaurdAI : MonoBehaviour
         {
             curPatrolIndex = (curPatrolIndex + 1) % patrolPoints.Length;
             agent.destination = patrolPoints[curPatrolIndex].position;
+            agent.speed = 3.5f;
+            anim.SetBool("Chasing", false);
         }
     }
 
@@ -75,5 +85,4 @@ public class GaurdAI : MonoBehaviour
     {
         chasee.GetComponent<PlayerController>().arrested = true;
     }
-   
 }
