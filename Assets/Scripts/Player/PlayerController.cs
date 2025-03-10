@@ -961,6 +961,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Proj")
+        {
+            Debug.Log("Projectile");
+        }
+    }
+
     #endregion
 
     #region Ability Swapping
