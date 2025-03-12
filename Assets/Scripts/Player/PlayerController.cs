@@ -308,6 +308,7 @@ public class PlayerController : MonoBehaviour
             }
 
             MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
+            MovementUIManager.instance.UpdateStaminaBar(stamina, maxStamina);
         }
     }
 
@@ -983,54 +984,32 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Ability Swapping
-    private void ChangeMovementUI()
+
+    private void SwapActiveAbility(Ability newAbility)
     {
-        switch(currentAbility)
-        {
-            case Ability.None:
-                MovementUIManager.instance.SetCrosshairActivation(false);
-                break;
-            case Ability.Dash:
-                MovementUIManager.instance.SetCrosshairActivation(false);
-                break;
-            case Ability.Boost:
-                MovementUIManager.instance.SetCrosshairActivation(false);
-                break;
-            case Ability.Grapple:
-                MovementUIManager.instance.SetCrosshairActivation(true);
-                break;
-            case Ability.Glide:
-                MovementUIManager.instance.SetCrosshairActivation(false);
-                break;
-            default:
-                break;
-        }
+        currentAbility = newAbility;
+        MovementUIManager.instance.ChangeMovementUI(newAbility);
     }
     private void ChooseNone()
     {
-        currentAbility = Ability.None;
-        ChangeMovementUI();
+        SwapActiveAbility(Ability.None);
     }
 
     private void ChooseDash()
     {
-        currentAbility = Ability.Dash;
-        ChangeMovementUI();
+        SwapActiveAbility(Ability.Dash);
     }
     private void ChooseBoost()
     {
-        currentAbility = Ability.Boost;
-        ChangeMovementUI();
+        SwapActiveAbility(Ability.Boost);
     }
     private void ChooseGrapple()
     {
-        currentAbility = Ability.Grapple;
-        ChangeMovementUI();
+        SwapActiveAbility(Ability.Grapple);
     }
     private void ChooseGlide()
     {
-        currentAbility = Ability.Glide;
-        ChangeMovementUI();
+        SwapActiveAbility(Ability.Glide);
     }
     #endregion
 }
