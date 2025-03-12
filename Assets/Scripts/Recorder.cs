@@ -7,8 +7,8 @@ using UnityEngine.Networking;
 
 public class Recorder
 {
+    public const string UPLOAD_URL = "https://plushie-heist.nimahost.net/upload/{0}";
     public const string FILE_PATH = "recording.mp4";
-    public const string UPLOAD_URL = "https://plushie-heist.nimahost.net/upload";
 
     private static Process process = null;
 
@@ -127,14 +127,46 @@ public class Recorder
     }
 
     /// <summary>
+    /// Generates a valid Id for the playtest dashboard
+    /// </summary>
+    /// <returns></returns>
+    public static string GenerateId()
+    {
+        return Guid.NewGuid().ToString().Replace("-", "");
+    }
+
+    /// <summary>
     /// Upload the most recent recording to the playtest dashboard.
     /// </summary>
+    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
     public static IEnumerator UploadRecording()
     {
-        using UnityWebRequest r = new UnityWebRequest(UPLOAD_URL, UnityWebRequest.kHttpVerbPOST);
+        return UploadRecordingTo(String.Format(UPLOAD_URL, ""));
+    }
 
+    /// <summary>
+    /// Upload the most recent recording to the playtest dashboard.
+    /// </summary>
+    /// <param name="id">An Id used to identify this recording.</param>
+    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
+    public static IEnumerator UploadRecording(string id)
+    {
+        return UploadRecordingTo(String.Format(UPLOAD_URL, id));
+    }
+
+    /// <summary>
+    /// Upload the most recent recording to the specified <paramref name="URL"/>.
+    /// </summary>
+    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
+    private static IEnumerator UploadRecordingTo(string URL)
+    {
+        if (IsActive()) throw new Exception("Recorder is currently active");
+
+        using UnityWebRequest r = new UnityWebRequest(URL.TrimEnd('/'), UnityWebRequest.kHttpVerbPUT);
         r.uploadHandler = new UploadHandlerFile(FILE_PATH);
+        r.downloadHandler = new DownloadHandlerBuffer();
+
         yield return r.SendWebRequest();
-        if (r.result != UnityWebRequest.Result.Success) throw new Exception(r.error);
+        if (r.result != UnityWebRequest.Result.Success) throw new Exception(r.downloadHandler.text);
     }
 }
