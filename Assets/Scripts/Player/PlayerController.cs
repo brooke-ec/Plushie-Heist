@@ -307,8 +307,11 @@ public class PlayerController : MonoBehaviour
                     break;
             }
 
-            MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
-            MovementUIManager.instance.UpdateStaminaBar(stamina, maxStamina);
+            if (MovementUIManager.instance != null)
+            {
+                MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
+                MovementUIManager.instance.UpdateStaminaBar(stamina, maxStamina);
+            }
         }
     }
 
