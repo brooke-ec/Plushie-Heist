@@ -13,9 +13,9 @@ public class Recorder
     private static UploadHandler uploader = null;
 
     /// <summary> The id of the recording </summary>
-    public static readonly string filename = $"{GenerateId()}.mp4";
+    public static readonly string id = GenerateId();
     /// <summary>  Returns the proportion of data uploaded to the remote server compared to the total amount of data to upload. </summary>
-    public static float UploadProgress { get { return uploader == null ? 0 : uploader.progress; } }
+    public static float progress { get { return uploader == null ? 0 : uploader.progress; } }
 
     /// <summary>
     /// The callback used with <see cref="EnumThreadWindows"/>.
@@ -78,7 +78,7 @@ public class Recorder
         if (process != null) throw new Exception("Recorder already active");
         process = new Process();
         process.StartInfo.FileName = Application.streamingAssetsPath + "\\ffmpeg.exe";
-        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {filename}";
+        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {id}.mp4";
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         process.StartInfo.RedirectStandardInput = true;
@@ -150,8 +150,8 @@ public class Recorder
     {
         if (IsActive()) throw new Exception("Recorder is currently active");
 
-        using UnityWebRequest r = new UnityWebRequest(String.Format(UPLOAD_URL, filename), UnityWebRequest.kHttpVerbPUT);
-        r.uploadHandler = uploader = new UploadHandlerFile(filename);
+        using UnityWebRequest r = new UnityWebRequest(String.Format(UPLOAD_URL, id), UnityWebRequest.kHttpVerbPUT);
+        r.uploadHandler = uploader = new UploadHandlerFile($"{id}.mp4");
         r.downloadHandler = new DownloadHandlerBuffer();
 
         yield return r.SendWebRequest();
