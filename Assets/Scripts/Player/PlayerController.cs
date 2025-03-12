@@ -273,6 +273,43 @@ public class PlayerController : MonoBehaviour
 
         //animates the player
         Animate();
+
+        UpdateAbilitiesCooldowns();
+    }
+
+    /// <summary> Update UI of ability with cooldown </summary>
+    private void UpdateAbilitiesCooldowns()
+    {
+        //In future, if we have a list of active abilities, then pass those instead of all
+
+        for (int i = 0; i < 4; i++)
+        {
+            float cooldown = 0f, cooldownMax = 0f;
+            switch ((Ability)i)
+            {
+                case Ability.Dash:
+                    cooldown = dashRechargeTimer;
+                    cooldownMax = dashRechargeTime;
+                    break;
+                case Ability.Grapple:
+                    cooldown = grappleCooldown;
+                    cooldownMax = grappleCooldownMax;
+                    break;
+                case Ability.Glide:
+                    //None?
+                    break;
+                case Ability.Boost:
+                    cooldown = boostTime;
+                    cooldownMax = maxBoostTime;
+                    //None?
+                    break;
+                default:
+                    break;
+            }
+
+            MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
+            MovementUIManager.instance.UpdateStaminaBar(stamina, maxStamina);
+        }
     }
 
     public void FixedUpdate()
@@ -947,26 +984,32 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Ability Swapping
+
+    private void SwapActiveAbility(Ability newAbility)
+    {
+        currentAbility = newAbility;
+        MovementUIManager.instance.ChangeMovementUI(newAbility);
+    }
     private void ChooseNone()
     {
-        currentAbility = Ability.None;
+        SwapActiveAbility(Ability.None);
     }
 
     private void ChooseDash()
     {
-        currentAbility = Ability.Dash;
+        SwapActiveAbility(Ability.Dash);
     }
     private void ChooseBoost()
     {
-        currentAbility = Ability.Boost;
+        SwapActiveAbility(Ability.Boost);
     }
     private void ChooseGrapple()
     {
-        currentAbility = Ability.Grapple;
+        SwapActiveAbility(Ability.Grapple);
     }
     private void ChooseGlide()
     {
-        currentAbility = Ability.Glide;
+        SwapActiveAbility(Ability.Glide);
     }
     #endregion
 }
