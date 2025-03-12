@@ -21,13 +21,25 @@ public class BrowserManager : MonoBehaviour
     [SerializeField] private GameObject listPagePrefab;
     #endregion
 
-    #region Button functionality
-
     private void Start()
     {
         GoToPage(0);
         SetUpPageList();
     }
+
+    public int GetPageIndex(BrowserPageType pageType)
+    {
+        for(int i=0; i<pages.Count; i++)
+        {
+            if (pages[i].pageType.Equals(pageType))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    #region Button functionality
     public void CloseBrowser()
     {
         transform.gameObject.SetActive(false);

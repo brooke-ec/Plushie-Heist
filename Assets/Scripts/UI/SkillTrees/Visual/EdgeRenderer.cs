@@ -6,14 +6,20 @@ using UnityEngine.UI;
 
 public class EdgeRenderer : MaskableGraphic
 {
-    public List<Vector2> points;
+    public List<Vector2> points = new List<Vector2>();
     public float thickness = 10f;
 
+    public void AddNewPoint(Vector2 pos)
+    {
+        points.Add(pos);
+        SetVerticesDirty(); //Makes sure proper rendering
+    }
     public void AddNewPoints(Vector2 parentPos, Vector2 childPos, Color32 lineColour)
     {
-        points = new List<Vector2> { parentPos, childPos };
-        color = lineColour; // Set to desired color
-        SetVerticesDirty(); // Ensures proper rendering
+        points.Add(parentPos);
+        points.Add(childPos);
+        color = lineColour; //Set to color
+        SetVerticesDirty(); //Makes sure proper rendering
     }
 
     public void ChangeColourOfEdgeRenderer(Color32 colour)
