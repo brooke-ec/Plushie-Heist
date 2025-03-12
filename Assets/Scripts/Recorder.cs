@@ -8,9 +8,14 @@ using UnityEngine.Networking;
 public class Recorder
 {
     public const string UPLOAD_URL = "https://plushie-heist.nimahost.net/upload/{0}";
-    public const string FILE_PATH = "recording.mp4";
 
     private static Process process = null;
+    private static UploadHandler uploader = null;
+
+    /// <summary> The id of the recording </summary>
+    public static readonly string filename = $"{GenerateId()}.mp4";
+    /// <summary>  Returns the proportion of data uploaded to the remote server compared to the total amount of data to upload. </summary>
+    public static float UploadProgress { get { return uploader == null ? 0 : uploader.progress; } }
 
     /// <summary>
     /// The callback used with <see cref="EnumThreadWindows"/>.
@@ -56,7 +61,8 @@ public class Recorder
         IntPtr returnHwnd = IntPtr.Zero;
         var threadId = GetCurrentThreadId();
         EnumThreadWindows(threadId,
-            (hWnd, lParam) => {
+            (hWnd, lParam) =>
+            {
                 if (returnHwnd == IntPtr.Zero)
                     returnHwnd = hWnd;
                 return false;
@@ -72,7 +78,7 @@ public class Recorder
         if (process != null) throw new Exception("Recorder already active");
         process = new Process();
         process.StartInfo.FileName = Application.streamingAssetsPath + "\\ffmpeg.exe";
-        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {FILE_PATH}";
+        process.StartInfo.Arguments = $"-y -f gdigrab -framerate 30 -i hwnd={GetWindowHandle()} {filename}";
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         process.StartInfo.RedirectStandardInput = true;
@@ -81,7 +87,8 @@ public class Recorder
 
         // Attach event handler to cleanup
         process.EnableRaisingEvents = true;
-        process.Exited += new EventHandler((object sender, EventArgs e) => {
+        process.Exited += new EventHandler((object sender, EventArgs e) =>
+        {
             process.Close();
             process = null;
         });
@@ -138,32 +145,13 @@ public class Recorder
     /// <summary>
     /// Upload the most recent recording to the playtest dashboard.
     /// </summary>
-    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
-    public static IEnumerator UploadRecording()
-    {
-        return UploadRecordingTo(String.Format(UPLOAD_URL, ""));
-    }
-
-    /// <summary>
-    /// Upload the most recent recording to the playtest dashboard.
-    /// </summary>
     /// <param name="id">An Id used to identify this recording.</param>
-    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
-    public static IEnumerator UploadRecording(string id)
-    {
-        return UploadRecordingTo(String.Format(UPLOAD_URL, id));
-    }
-
-    /// <summary>
-    /// Upload the most recent recording to the specified <paramref name="URL"/>.
-    /// </summary>
-    /// <exception cref="Exception">Thrown if the server does not reply with successful status code.</exception>
-    private static IEnumerator UploadRecordingTo(string URL)
+    public static IEnumerator UploadRecording()
     {
         if (IsActive()) throw new Exception("Recorder is currently active");
 
-        using UnityWebRequest r = new UnityWebRequest(URL.TrimEnd('/'), UnityWebRequest.kHttpVerbPUT);
-        r.uploadHandler = new UploadHandlerFile(FILE_PATH);
+        using UnityWebRequest r = new UnityWebRequest(String.Format(UPLOAD_URL, filename), UnityWebRequest.kHttpVerbPUT);
+        r.uploadHandler = uploader = new UploadHandlerFile(filename);
         r.downloadHandler = new DownloadHandlerBuffer();
 
         yield return r.SendWebRequest();
