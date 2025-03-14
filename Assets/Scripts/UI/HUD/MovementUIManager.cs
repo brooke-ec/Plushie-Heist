@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MovementUIManager : MonoBehaviour
 {
@@ -28,7 +25,7 @@ public class MovementUIManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Debug.LogWarning("Movement UI instance already exists");
         }
@@ -89,9 +86,9 @@ public class MovementUIManager : MonoBehaviour
                 break;
         }
 
-        foreach(KeyValuePair<Ability, AbilityCooldown> ability in abilities)
+        foreach (KeyValuePair<Ability, AbilityCooldown> ability in abilities)
         {
-            if(ability.Key.Equals(currentAbility))
+            if (ability.Key.Equals(currentAbility))
             {
                 ability.Value.gameObject.SetActive(true);
             }

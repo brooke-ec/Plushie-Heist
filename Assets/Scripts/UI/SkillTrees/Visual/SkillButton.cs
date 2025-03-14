@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,10 +57,10 @@ public class SkillButton : MonoBehaviour
             //Then update UI of any children
             Transform skillsContainer = skillTreeController.canvasTransform;
 
-            foreach(SkillButton childNode in skillTreeController.canvasTransform.GetComponentsInChildren<SkillButton>())
+            foreach (SkillButton childNode in skillTreeController.canvasTransform.GetComponentsInChildren<SkillButton>())
             {
                 //a child
-                if(childNode.skill.requirements.Contains(skill))
+                if (childNode.skill.requirements.Contains(skill))
                 {
                     childNode.UpdateUI();
                 }
@@ -84,7 +80,7 @@ public class SkillButton : MonoBehaviour
 
     private bool CanBeUnlocked()
     {
-        if(IsUnlocked()) { return false;}
+        if (IsUnlocked()) { return false; }
 
         //TO-DO properly
         if (FindAnyObjectByType<UIManager>().GetMoney() < skill.cost)
@@ -94,7 +90,7 @@ public class SkillButton : MonoBehaviour
 
         foreach (Skill requirement in skill.requirements)
         {
-            if(!skillTreeController.IsSkillUnlocked(requirement))
+            if (!skillTreeController.IsSkillUnlocked(requirement))
             {
                 return false;
             }
@@ -142,11 +138,11 @@ public class SkillButton : MonoBehaviour
     private void UpdateParentEdges()
     {
         Color32 colour = Color.white;
-        if(skillTreeController.IsSkillUnlocked(skill))
+        if (skillTreeController.IsSkillUnlocked(skill))
         {
             colour = skillTreeController.skillTree.palette.unlockedLineColour;
         }
-        else if(!IsBranchVisible())
+        else if (!IsBranchVisible())
         {
             colour = skillTreeController.skillTree.palette.greyedOut;
         }
@@ -158,7 +154,7 @@ public class SkillButton : MonoBehaviour
         foreach (Skill requirement in skill.requirements)
         {
             Transform edge = edgesContainer.Find("Edge " + requirement.skillName + " to " + skill.skillName);
-            if(edge != null)
+            if (edge != null)
             {
                 edge.GetComponent<EdgeRenderer>().ChangeColourOfEdgeRenderer(colour);
             }

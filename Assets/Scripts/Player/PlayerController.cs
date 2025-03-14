@@ -1,11 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,8 +21,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float baseGroundAcceleration;
     /// <summary>The Ability that the Player currently has equiped</summary>
     [SerializeField] private Ability currentAbility;
-    
-    
+
+
 
     [Header("Sprinting Values")]
     /// <summary> Maximum player Sprint Speed rework to be an increase on top of the maxspeed</summary>
@@ -41,8 +33,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float staminaDrain;
     /// <summary> The speed at which the player stamina recovers</summary>
     [SerializeField] private float staminaRecover;
-    
-    
+
+
     [Header("Camera Settings")]
     /// <summary> Sensitivity of the mouse </summary>
     [SerializeField] private float lookSensitivity;
@@ -73,7 +65,7 @@ public class PlayerController : MonoBehaviour
     [Header("Boost Values")]
     ///<summary>The new acceleration speed when the palyer boosts</summary>
     [SerializeField] private float boostSpeedCap;
-    
+
     ///<summary>The boosting Ground Acceleration</summary>
     [SerializeField] private float boostGroundAcceleration;
     ///<summary>The maximum boost time</summary>
@@ -203,7 +195,7 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-        
+
     }
 
     public void Start()
@@ -225,9 +217,9 @@ public class PlayerController : MonoBehaviour
     public void Update()
     {
         //Wall movement or regular movement 
-        if (wallRunning && !isGrappling) 
-        { 
-            
+        if (wallRunning && !isGrappling)
+        {
+
             Wallrun();
             animator.SetInteger("Falling", 0);
         }
@@ -251,9 +243,9 @@ public class PlayerController : MonoBehaviour
             playerGravity = gravity;
             isGliding = false;
         }
-        
+
         //grapple logic
-        if(isGrappling)
+        if (isGrappling)
         {
             ApplyGrappleForce();
         }
@@ -318,7 +310,7 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if(!wallRunning)
+        if (!wallRunning)
         {
             CheckForWall();
         }
@@ -339,7 +331,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        Vector3 wishdir = new Vector3(wasdInput.x,0,wasdInput.y);
+        Vector3 wishdir = new Vector3(wasdInput.x, 0, wasdInput.y);
         wishdir = transform.TransformDirection(wishdir);
         wishdir.Normalize();
         float wishSpeed;
@@ -367,7 +359,7 @@ public class PlayerController : MonoBehaviour
         //air movement
         else
         {
-            if (wishSpeed > wishSpeed/5) wishSpeed = 2;
+            if (wishSpeed > wishSpeed / 5) wishSpeed = 2;
             Accelerate(wishSpeed, wishdir, airAcceleration);
         }
     }
@@ -404,7 +396,7 @@ public class PlayerController : MonoBehaviour
 
         if (addSpeed <= 0) return;
 
-        float accelSpeed = accel  *Time.deltaTime * wishspeed;
+        float accelSpeed = accel * Time.deltaTime * wishspeed;
         if (accelSpeed > addSpeed)
         {
             accelSpeed = addSpeed;
@@ -423,7 +415,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyGravity(float gravity)
     {
-        if (cc.isGrounded) 
+        if (cc.isGrounded)
         {
             return;
         }
@@ -443,7 +435,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyJumps()
     {
-        if (!cc.isGrounded&& !wallRunning && coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
+        if (!cc.isGrounded && !wallRunning && coyoteTimer < coyoteTime) coyoteTimer += Time.deltaTime;
 
         if (cc.isGrounded || wallRunning) jumpsUsed = 0;
 
@@ -453,9 +445,9 @@ public class PlayerController : MonoBehaviour
             coyoteTimer = 0;
         }
 
-        if(wallRunning && wishJump && jumpsUsed < noJumps)
+        if (wallRunning && wishJump && jumpsUsed < noJumps)
         {
-            Vector3 jumpVel= (new Vector3(0, 1, 0) + curNormal) * jumpSpeed;
+            Vector3 jumpVel = (new Vector3(0, 1, 0) + curNormal) * jumpSpeed;
             velocity.y = jumpVel.y;
             velocity.x += jumpVel.x;
             velocity.z += jumpVel.z;
@@ -485,16 +477,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void ApplyCrouchAndSlide()
     {
-        if(isCrouchPressed && velocity.magnitude > slideThreshold)
+        if (isCrouchPressed && velocity.magnitude > slideThreshold)
         {
             curFriction = slideFriction;
             maxSpeed = 1.5f;
             hasSlide = true;
             Debug.Log("Sliding");
             animator.SetBool("Slide", true);
-            
+
         }
-        if(isCrouchPressed && velocity.magnitude < slideThreshold && !hasCrouched)
+        if (isCrouchPressed && velocity.magnitude < slideThreshold && !hasCrouched)
         {
             maxSpeed = crouchSpeed;
             hasCrouched = true;
@@ -568,7 +560,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Called when pressing ability key while dash is the ability
     /// </br>
@@ -594,7 +586,7 @@ public class PlayerController : MonoBehaviour
     private void DashCooldowns()
     {
         // dash cooldown timer( time between consecutive dashes)
-        if(hasDashed&& dashCooldownTimer < dashCooldownTime)
+        if (hasDashed && dashCooldownTimer < dashCooldownTime)
         {
             dashCooldownTimer += Time.deltaTime;
         }
@@ -609,7 +601,7 @@ public class PlayerController : MonoBehaviour
         {
             dashRechargeTimer += Time.deltaTime;
         }
-        else if(dashesUsed > 0)
+        else if (dashesUsed > 0)
         {
             dashRechargeTimer = 0;
             dashesUsed--;
@@ -632,9 +624,9 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit hitinfo;
             Ray tempRay = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
-            Debug.DrawRay(transform.position+new Vector3(0,1,0), Quaternion.AngleAxis(45*i,transform.up)*(-transform.right));
+            Debug.DrawRay(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
 
-            if(Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance<shortesthitdist)
+            if (Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance < shortesthitdist)
             {
                 shortesthitdist = hitinfo.distance;
                 ray = hitinfo;
@@ -645,17 +637,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
+
         // if correct ray and is perpendicular to player and above the correct speed and we're in the air eneter wall running mode
-        if((rayNo is 0 or 1 or 3 or 4)&& Vector3.Dot(ray.normal,Vector3.up) == 0 && new Vector2(velocity.x,velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
+        if ((rayNo is 0 or 1 or 3 or 4) && Vector3.Dot(ray.normal, Vector3.up) == 0 && new Vector2(velocity.x, velocity.z).magnitude >= wallSpeedThreshold && !cc.isGrounded)
         {
             rayNumber = rayNo;
             wallRunning = true;
             curNormal = ray.normal;
-            velocity.y = Mathf.Clamp(velocity.y,-100,1);
+            velocity.y = Mathf.Clamp(velocity.y, -100, 1);
             curFriction = groundFriction;
             Uncrouch();
-            
+
         }
         else
         {
@@ -675,8 +667,8 @@ public class PlayerController : MonoBehaviour
         {
             rayNumber = 0;
         }
-        else if (rayNumber == 3) 
-        { 
+        else if (rayNumber == 3)
+        {
             rayNumber = 4;
         }
         Ray ray = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * rayNumber, transform.up) * (-transform.right));
@@ -687,11 +679,11 @@ public class PlayerController : MonoBehaviour
             maxSpeed = wallRunningSpeed;
             //Debug.DrawRay(transform.position, ray.direction);
         }
-        else 
-        { 
+        else
+        {
             wallRunning = false;
             curFriction = groundFriction;
-            cam.transform.rotation = Quaternion.identity ;
+            cam.transform.rotation = Quaternion.identity;
             maxSpeed = walkSpeed;
             return;
         }
@@ -757,8 +749,8 @@ public class PlayerController : MonoBehaviour
         RaycastHit HitInfo;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
-            Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
-            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
+            Debug.DrawRay(cam.transform.position, cam.transform.forward * 100, Color.yellow, 10f);
+            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);
             isGrappling = true;
         }
     }
@@ -770,7 +762,7 @@ public class PlayerController : MonoBehaviour
     private void ApplyGrappleForce()
     {
         Vector3 grappleForce = Hook.transform.position - this.transform.position;
-        if(grappleForce.magnitude <= grappleCancelLength)
+        if (grappleForce.magnitude <= grappleCancelLength)
         {
             GrappleShot();
         }
@@ -805,19 +797,19 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void WallRotate()
     {
-        if(!isGrappling && wallRunning && cam.transform.localEulerAngles.z ==0 && rayNumber is 1 or 0)
+        if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0 && rayNumber is 1 or 0)
         {
             cam.transform.Rotate(0, 0, -20);
             rotAdjustVal = new Vector3(0, 5, 0);
             Debug.Log("rotating");
         }
-        else if(!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0)
+        else if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0)
         {
             cam.transform.Rotate(0, 0, 20);
             rotAdjustVal = new Vector3(0, -5, 0);
             Debug.Log("rotating");
         }
-        else if(!wallRunning && cam.transform.localEulerAngles.z != 0)
+        else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
             float rot = 0 - cam.transform.localEulerAngles.z;
             cam.transform.Rotate(0, 0, rot);
@@ -868,7 +860,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Animate()
     {
-        if(wishSprint && velocity.magnitude > 1 && stamina > 0)
+        if (wishSprint && velocity.magnitude > 1 && stamina > 0)
         {
             Debug.Log("sprintin");
             animator.SetInteger("Speed", 2);
@@ -883,9 +875,9 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Speed", 0);
         }
 
-        if (velocity.y < -1&& !cc.isGrounded && !wallRunning)
+        if (velocity.y < -1 && !cc.isGrounded && !wallRunning)
         {
-            animator.SetInteger("Falling",1);
+            animator.SetInteger("Falling", 1);
         }
     }
     #endregion
@@ -930,11 +922,11 @@ public class PlayerController : MonoBehaviour
     }
     public void getCrouch(InputAction.CallbackContext ctx)
     {
-        if ((ctx.performed)&& !wallRunning)
+        if ((ctx.performed) && !wallRunning)
         {
             Crouch();
         }
-        else if(ctx.canceled)
+        else if (ctx.canceled)
         {
             Uncrouch();
         }

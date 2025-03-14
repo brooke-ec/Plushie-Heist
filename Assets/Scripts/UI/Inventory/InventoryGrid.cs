@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -83,7 +81,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             for (int y = 0; y < height; y++)
             {
-                if(IsSpaceAvailable(x, y, new Vector2Int(itemToInsert.Width, itemToInsert.Height)))
+                if (IsSpaceAvailable(x, y, new Vector2Int(itemToInsert.Width, itemToInsert.Height)))
                 {
                     return new Vector2Int(x, y);
                 }
@@ -190,9 +188,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private bool IsNotOverlapping(int xPos, int yPos, Vector2Int itemSize, ref InventoryItem overlapItem)
     {
-        for(int x = 0; x<itemSize.x; x++)
+        for (int x = 0; x < itemSize.x; x++)
         {
-            for(int y=0; y<itemSize.y; y++)
+            for (int y = 0; y < itemSize.y; y++)
             {
                 if (inventorySlots[xPos + x, yPos + y] != null) //if there is an item in the checked position
                 {
