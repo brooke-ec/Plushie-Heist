@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class RecordTest : MonoBehaviour
@@ -35,7 +36,11 @@ public class RecordTest : MonoBehaviour
 
         yield return Recorder.EndRecording();
         yield return Recorder.UploadRecording();
+#if UNITY_EDITOR
+        if (close) EditorApplication.ExitPlaymode();
+#else
         if (close) Application.Quit();
+#endif
         else close = true;
     }
 
@@ -43,7 +48,11 @@ public class RecordTest : MonoBehaviour
     {
         yield return new WaitForSeconds(8);
         Application.OpenURL($"https://docs.google.com/forms/d/e/1FAIpQLSfmXc1aChPw2Bv-Jd704ak2xHITVK54Mgwz8AD2Sot2nAB58A/viewform?usp=pp_url&entry.1477077091={Recorder.id}");
+#if UNITY_EDITOR
+        if (close) EditorApplication.ExitPlaymode();
+#else
         if (close) Application.Quit();
+#endif
         else close = true;
     }
 

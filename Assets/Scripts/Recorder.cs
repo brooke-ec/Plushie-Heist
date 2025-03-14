@@ -150,11 +150,17 @@ public class Recorder
     {
         if (IsActive()) throw new Exception("Recorder is currently active");
 
-        using UnityWebRequest r = new UnityWebRequest(String.Format(UPLOAD_URL, id), UnityWebRequest.kHttpVerbPUT);
-        r.uploadHandler = uploader = new UploadHandlerFile($"{id}.mp4");
-        r.downloadHandler = new DownloadHandlerBuffer();
+        while (true)
+        {
+            using UnityWebRequest r = new UnityWebRequest(String.Format(UPLOAD_URL, id), UnityWebRequest.kHttpVerbPUT);
+            r.uploadHandler = uploader = new UploadHandlerFile($"{id}.mp4");
+            r.downloadHandler = new DownloadHandlerBuffer();
 
-        yield return r.SendWebRequest();
-        if (r.result != UnityWebRequest.Result.Success) throw new Exception(r.downloadHandler.text);
+            yield return r.SendWebRequest();
+            uploader = null;
+
+            if (r.result == UnityWebRequest.Result.Success) break;
+            yield return new WaitForSeconds(1);
+        }
     }
 }
