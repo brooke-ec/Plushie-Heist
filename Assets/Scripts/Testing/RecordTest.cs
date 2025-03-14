@@ -17,7 +17,7 @@ public class RecordTest : MonoBehaviour
 
     private void Update()
     {
-        if (browser.activeSelf) percentage.text = $"Recording Uploading ({System.Math.Round(Recorder.UploadProgress * 100, 2)}%)";
+        if (browser.activeSelf) percentage.text = $"Recording Uploading ({System.Math.Round(Recorder.progress * 100, 2)}%)";
     }
 
     public void OnPause()
@@ -41,7 +41,7 @@ public class RecordTest : MonoBehaviour
 
     IEnumerator OpenForm()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         Application.OpenURL($"https://docs.google.com/forms/d/e/1FAIpQLSfmXc1aChPw2Bv-Jd704ak2xHITVK54Mgwz8AD2Sot2nAB58A/viewform?usp=pp_url&entry.1477077091={Recorder.id}");
         if (close) Application.Quit();
         else close = true;
