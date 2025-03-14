@@ -288,6 +288,8 @@ public class PlayerController : MonoBehaviour
                     cooldownMax = grappleCooldownMax;
                     break;
                 case Ability.Glide:
+                    cooldown = 0;
+                    cooldownMax = 0;
                     //None?
                     break;
                 case Ability.Boost:

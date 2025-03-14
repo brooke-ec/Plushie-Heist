@@ -22,6 +22,7 @@ public class MovementUIManager : MonoBehaviour
     [SerializeField] private Sprite boostIcon;
     [SerializeField] private Sprite grappleIcon;
     [SerializeField] private Sprite dashIcon;
+    [SerializeField] private Sprite glideIcon;
 
     private void Awake()
     {
@@ -44,6 +45,7 @@ public class MovementUIManager : MonoBehaviour
         AbilityCooldown grapple = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
         AbilityCooldown dash = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
         AbilityCooldown boost = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
+        AbilityCooldown glide = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
 
         abilities.Add(Ability.Grapple, grapple);
         grapple.ability = Ability.Grapple;
@@ -56,6 +58,10 @@ public class MovementUIManager : MonoBehaviour
         abilities.Add(Ability.Boost, boost);
         boost.ability = Ability.Boost;
         boost.icon.sprite = boostIcon;
+
+        abilities.Add(Ability.Glide, glide);
+        glide.ability = Ability.Glide;
+        glide.icon.sprite = glideIcon;
     }
 
     public void UpdateStaminaBar(float stamina, float maxStamina)
