@@ -22,16 +22,16 @@ public class TillQueue : MonoBehaviour
         
     }
 
-    private void AddToQueue(GameObject newPlayer)
+    public void AddToQueue(GameObject newPlayer)
     {
         customerQueue.Enqueue(newPlayer);
         UpdateTillQueue();
     }
 
-    private void TillActivation()
+    public void TillActivation()
     {
         //Causes the Customer to leave the Till
-        customerQueue.Dequeue().SendMessage("LeftQueue");
+        customerQueue.Dequeue();
         
         //Next need to update positions of the customers in the queue
         UpdateTillQueue();
@@ -44,8 +44,7 @@ public class TillQueue : MonoBehaviour
         foreach(GameObject customer in customerQueue)
         {
             Vector3 queuePos = QueueFront + Vector3.forward * position * gapForQueue;
-            customer.SendMessage("UpdateDestination", queuePos);
-
+            customer.GetComponent<CustomerAI>().UpdateDestination(queuePos);
             position++;
         }
     }

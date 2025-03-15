@@ -5,49 +5,113 @@ using UnityEngine.AI;
 
 public class CustomerAI : MonoBehaviour
 {
-    private NavMeshAgent navAgent;
-    private GameObject shopTill;
+    #region Private fields
+    /// <summary>The NavMesh Agent</summary>
+    private NavMeshAgent _navAgent;
 
-    //[SerializeField] private GameObject travelPoint1;
-    [SerializeField] private bool Shopped = false;
+    /// <summary>A reference to the Till GameObject</summary>
+    private GameObject _shopTill;
 
-    private bool leavingShop = false;
+    /// <summary>A refernece to the customer controller script</summary>
+    private CustomerController _custController;
 
-    private GameObject currentDestination;
-    private bool finishedShopping = false;
+    /// <summary>The Position that the customer goes to be Destroyed at</summary>
+    private Vector3 _deathPosition;
+
+    /// <summary>The List that is the Customers Shopping List</summary>
+    private List<string> _shoppingList;
+
+    /// <summary>The List that refers to how many items the Customer has picked up</summary>
+    private List<string> _shoppingListBought;
+
+    /// <summary>A refernece to the Till object<summary>
+    private TillQueue _tillQueue;
+
+    /// <summary>Checks wether the Customer is ready to die</summary>
+    private bool _readyToDie;
+    #endregion
+
+    #region Serialized fields
+    /// <summary>A bool that determines wether the Csutomer has been served at the Till</summary>
+    [SerializeField] private bool _hasPayed= false;
+    
+
+    #endregion
+    
     // Start is called before the first frame update
     void Start()
     {
-        shopTill = GameObject.Find("Till");
-        navAgent = GetComponent<NavMeshAgent>();
-        //UpdateDestination(travelPoint1.transform.position);
+        _shopTill = GameObject.Find("Till");
+        _navAgent = GetComponent<NavMeshAgent>();
+        _custController = GameObject.Find("Customer Controller").GetComponent<CustomerController>();
+        _deathPosition = _custController.GetDeathPoint();
+        _shoppingList = new List<string>();
+        _shoppingListBought = _shoppingList;
+        _tillQueue = GameObject.Find("Till").GetComponent<TillQueue>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(navAgent.remainingDistance == 0 && !finishedShopping)
+        /***
+        if(_navAgent.remainingDistance == 0 && !_finishedFindingItems)
         {
-            shopTill.SendMessage("AddToQueue", this.gameObject);
-            finishedShopping = true;
+            _shopTill.SendMessage("AddToQueue", this.gameObject);
+            _finishedFindingItems = true;
         }
-        if(Shopped && !leavingShop)
+        if(_hasPayed&& !_leavingShop)
         {
-            shopTill.SendMessage("TillActivation");
-            leavingShop = true;
+            _shopTill.SendMessage("TillActivation");
+            _leavingShop = true;
+        }
+        ***/
+
+        // if the shopping list is empty
+        if(_shoppingListBought.Count == 0)
+        {
+            _shoppingListBought.Add("PlaceHolder");
+            AddToTill();
+        }
+        if(_hasPayed)
+        {
+            _hasPayed = false;
+            LeftQueue();
+        }
+        if(_readyToDie && _navAgent.remainingDistance == 0)
+        {   
+            Debug.Log(_navAgent.destination);
+            GameObject.Destroy(this.gameObject);
         }
     }
 
-    private void UpdateDestination(Vector3 NewDestin)
+    /// <summary>
+    /// Updates the current Destination of the Navmesh Agent
+    /// </summary>
+    /// <param name="NewDestin">The location that the customer need to go to</param>
+    public void UpdateDestination(Vector3 NewDestin)
     {
-        navAgent.destination = NewDestin;
+        _navAgent.destination = NewDestin;
     }
 
+    /// <summary>
+    /// Puts the Customer into the Queue for the Till
+    /// </summary>
+    private void AddToTill()
+    {
+        //_shopTill.SendMessage("AddToQueue", this.gameObject);
+        _shopTill.GetComponent<TillQueue>().AddToQueue(this.gameObject);
+    }
+
+    /// <summary>
+    /// The Customer has been served and will leave the shop
+    /// </summary>
     public void LeftQueue()
     {
-        //navAgent.destination = travelPoint1.transform.position;
-        GameObject.Find("Customer Controller").SendMessage("CustomerLeft");
-        GameObject.Destroy(this.gameObject);
+        _custController.CustomerLeft();
+        _shopTill.GetComponent<TillQueue>().TillActivation();
+        _navAgent.destination = _deathPosition;
+        _hasPayed = false;
+        _readyToDie = true;
     }
 }
 

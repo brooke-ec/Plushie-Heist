@@ -27,7 +27,7 @@ public class CustomerController : MonoBehaviour
         _Cust_POI1 = GameObject.Find("Customer Controller/Cust POI 1");
         _Cust_Spawn1 = GameObject.Find("Customer Controller/Cust Spawn 1");
         _Cust_Death1 = GameObject.Find("Customer Controller/Cust Death 1");
-        _respawnTimer = Random.RandomRange(_minSpawnTime, _maxSpawnTime);
+        _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
     }
 
     // Update is called once per frame
@@ -38,7 +38,7 @@ public class CustomerController : MonoBehaviour
             GameObject customer = Instantiate(_customerPrefab, _Cust_Spawn1.transform.position, this.transform.rotation);
             _numCustomers++;
 
-            _respawnTimer = Random.RandomRange(_minSpawnTime, _maxSpawnTime);
+            _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
         }
         
 
@@ -46,9 +46,21 @@ public class CustomerController : MonoBehaviour
         _respawnTimer -= Time.deltaTime;
     }
 
+    /// <summary>
+    /// Lets the customer Controller know that a customer has left the shop
+    /// </summary>
     public void CustomerLeft()
     {
         _numCustomers--;
-        _respawnTimer = Random.RandomRange(_minSpawnTime, _maxSpawnTime);
+        _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
+    }
+
+    /// <summary>
+    /// returns the Position for the Customer to be Destroyed at
+    /// </summary>
+    /// <returns>a Vector3 position that the player customer gets destroyed at</returns>
+    public Vector3 GetDeathPoint()
+    {
+        return _Cust_Death1.transform.position;
     }
 }
