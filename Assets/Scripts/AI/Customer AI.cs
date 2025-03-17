@@ -29,6 +29,8 @@ public class CustomerAI : MonoBehaviour
 
     /// <summary>Checks wether the Customer is ready to die</summary>
     private bool _readyToDie;
+
+    private float _timeBeforeDeath = 1;
     #endregion
 
     #region Serialized fields
@@ -48,24 +50,12 @@ public class CustomerAI : MonoBehaviour
         _shoppingList = new List<string>();
         _shoppingListBought = _shoppingList;
         _tillQueue = GameObject.Find("Till").GetComponent<TillQueue>();
+        _navAgent.avoidancePriority = Random.Range(0, 50);
     }
 
     // Update is called once per frame
     void Update()
     {
-        /***
-        if(_navAgent.remainingDistance == 0 && !_finishedFindingItems)
-        {
-            _shopTill.SendMessage("AddToQueue", this.gameObject);
-            _finishedFindingItems = true;
-        }
-        if(_hasPayed&& !_leavingShop)
-        {
-            _shopTill.SendMessage("TillActivation");
-            _leavingShop = true;
-        }
-        ***/
-
         // if the shopping list is empty
         if(_shoppingListBought.Count == 0)
         {
@@ -77,10 +67,13 @@ public class CustomerAI : MonoBehaviour
             _hasPayed = false;
             LeftQueue();
         }
-        if(_readyToDie && _navAgent.remainingDistance == 0)
+        if(_readyToDie)
         {   
-            Debug.Log(_navAgent.destination);
-            GameObject.Destroy(this.gameObject);
+            if(_navAgent.remainingDistance == 0 && _timeBeforeDeath <= 0)
+            {
+                GameObject.Destroy(this.gameObject);
+            }
+            _timeBeforeDeath = _timeBeforeDeath - Time.deltaTime;
         }
     }
 
@@ -98,7 +91,6 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void AddToTill()
     {
-        //_shopTill.SendMessage("AddToQueue", this.gameObject);
         _shopTill.GetComponent<TillQueue>().AddToQueue(this.gameObject);
     }
 
@@ -110,7 +102,6 @@ public class CustomerAI : MonoBehaviour
         _custController.CustomerLeft();
         _shopTill.GetComponent<TillQueue>().TillActivation();
         _navAgent.destination = _deathPosition;
-        _hasPayed = false;
         _readyToDie = true;
     }
 }
