@@ -30,12 +30,13 @@ public class CustomerAI : MonoBehaviour
     /// <summary>Checks wether the Customer is ready to die</summary>
     private bool _readyToDie;
 
+    /// <summary>A  timer to allow the customer to move away from there current position.</summary>
     private float _timeBeforeDeath = 1;
 
+    /// <summary>The time that the customer is Searching for</summary>
     private float _maxSearchTime;
 
-    private bool _arrivedAtShelf;
-
+    /// <summary>A timer to allow the customer to move away from there current position. Handled Seperately as this one doesm't need to be reset.</summary>
     private float _distanceBuffer = 1;
     #endregion
 

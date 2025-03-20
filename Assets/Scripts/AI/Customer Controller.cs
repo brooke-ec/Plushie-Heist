@@ -4,31 +4,38 @@ using UnityEngine;
 
 public class CustomerController : MonoBehaviour
 {
-    private GameObject _Cust_POI1;
-
+    /// <summary>The First Customer Spawn position</summary>
     private GameObject _Cust_Spawn1;
+    /// <summary>The Second Customer Spawn position</summary>
     private GameObject _Cust_Spawn2;
 
+    /// <summary>The First Customer Death position</summary>
     private GameObject _Cust_Death1;
+    /// <summary>The Second Customer Death position</summary>
     private GameObject _Cust_Death2;
 
+    /// <summary>The Current number of Customers allowed in a shop</summary>
     private int _numCustomers;
-    
+
+    /// <summary>THe Timer before the Next Customer is allowed to spawn in</summary>
     private float _respawnTimer;
 
+    /// <summary>The Contents of the Shop</summary>
     [SerializeField]private List<GameObject> _shopContents;
 
+    /// <summary>The Max number of Customers allowed to be spawned</summary>
     [SerializeField] private int _maxCustomers;
+    /// <summary>The Min Spawn Time for the Customers</summary>
     [SerializeField] private float _minSpawnTime;
+    /// <summary>The Max spawn Time for the Customers</summary>
     [SerializeField] private float _maxSpawnTime;
     
-
+    /// <summary>The Prefab that makes the Customer</summary>
     [SerializeField] private GameObject _customerPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
-        _Cust_POI1 = GameObject.Find("Customer Controller/Cust POI 1");
         _Cust_Spawn1 = GameObject.Find("Customer Controller/Cust Spawn 1");
         _Cust_Spawn2 = GameObject.Find("Customer Controller/Cust Spawn 2");
         _Cust_Death1 = GameObject.Find("Customer Controller/Cust Death 1");
