@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Region
@@ -29,6 +30,14 @@ public class Region
     public static Region FromPoint(int x, int y)
     {
         return Region.FromSize(x, y, 1, 1);
+    }
+
+    public bool Within(Vector2Int size)
+    {
+        return bottom >= 0
+            && left >= 0
+            && top <= size.y
+            && right <= size.x;
     }
 
     public IntersectResult Intersect(Region other)

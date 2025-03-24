@@ -9,9 +9,10 @@ public class FurnitureGrid : MonoBehaviour
     [SerializeField] private float cellSize = 2;
     [SerializeField] private float spacing = 0.25f;
 
-    private Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
+    [HideInInspector] public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
     private float height => collider.center.y + collider.size.y * .5f;
 
+    private List<FurnitureItem> items = new List<FurnitureItem>();
     new private BoxCollider collider;
 
 #if UNITY_EDITOR
@@ -66,6 +67,16 @@ public class FurnitureGrid : MonoBehaviour
     {
         Vector3 local = ToLocalspace(coordinates);
         return transform.TransformPoint(local);
+    }
+
+    public void AddItem(FurnitureItem item)
+    {
+        items.Add(item);
+    }
+
+    public bool Intersects(Region region)
+    {
+        return items.Any(r => r.region.Intersect(region).hit);
     }
 
     private Mesh BuildMarker()
