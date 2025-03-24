@@ -186,6 +186,11 @@ LightingSettings:
   m_PVRTiledBaking: 0
   m_NumRaysToShootPerTexel: -1
   m_RespectSceneVisibilityWhenBakingGI: 0
+--- !u!143 &22561542 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 2651383046741006912, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+  m_PrefabInstance: {fileID: 1311252110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &608857282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,6 +1868,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8461329353988155359, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
   m_PrefabInstance: {fileID: 1311252110}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &1378344630 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 499776393120379558, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+  m_PrefabInstance: {fileID: 1311252110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1378344631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1876,6 +1886,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 10
+  camera: {fileID: 1378344630}
+  controller: {fileID: 22561542}
   test:
   - {fileID: 6780374097032370668, guid: 51f6989b187924040ab4e19c37861cc5, type: 3}
   - {fileID: 6780374097032370668, guid: 252f51414d68b36469e00e99b12c0e38, type: 3}

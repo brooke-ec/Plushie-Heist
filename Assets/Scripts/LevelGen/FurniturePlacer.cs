@@ -4,10 +4,12 @@ using UnityEngine.InputSystem;
 public class FurniturePlacer : MonoBehaviour
 {
     [SerializeField] private float maxDistance = 10;
+    [SerializeField] new private Camera camera;
+    [SerializeField] CharacterController controller;
     
     private FurnitureItem item;
-    private new Camera camera;
-    private int mask;
+    private int gridLayer;
+    private int itemLayer;
 
     [Header("Testing")]
     [SerializeField] FurnitureItem[] test;
@@ -15,25 +17,31 @@ public class FurniturePlacer : MonoBehaviour
 
     private void Start()
     {
-        mask = LayerMask.GetMask("Furniture Grid");
-        camera = GetComponent<Camera>();
+        gridLayer = LayerMask.GetMask("Furniture Grid");
+        itemLayer = LayerMask.GetMask("Furniture Item");
+        controller.excludeLayers |= gridLayer;
     }
 
     private void Update()
     {
         if (item != null)
         {
-            camera.cullingMask = camera.cullingMask | mask;
+            camera.cullingMask |= gridLayer;
+            controller.excludeLayers |= itemLayer;
 
             Ray ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, mask))
+            if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, gridLayer))
             {
                 FurnitureGrid grid = hit.transform.GetComponent<FurnitureGrid>();
                 Vector2 coordinates = grid.FromWorldspace(hit.point);
                 item.Place(grid, coordinates);
             }
         }
-        else camera.cullingMask = camera.cullingMask & ~mask;
+        else
+        {
+            camera.cullingMask &= ~gridLayer;
+            controller.excludeLayers &= ~itemLayer;
+        }
     }
 
     public void OnPlace(InputAction.CallbackContext ctx)
