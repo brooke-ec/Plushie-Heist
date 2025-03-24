@@ -450,7 +450,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 404474083}
   m_HandleRect: {fileID: 404474082}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1500,7 +1500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -8.499878, y: 311.24792}
+  m_AnchoredPosition: {x: -8.5, y: 311.24792}
   m_SizeDelta: {x: -91.8862, y: 103.5062}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &203766514
@@ -2557,7 +2557,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 85.99438, y: 391.94904}
+  m_AnchoredPosition: {x: -0.000061035156, y: 354.50092}
   m_SizeDelta: {x: 1628.1138, y: 709}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &470956718
@@ -3031,7 +3031,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0009765625, y: 279.50098}
+  m_AnchoredPosition: {x: 0.0009765625, y: 279.50095}
   m_SizeDelta: {x: 1663, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &555386604
@@ -3684,27 +3684,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7408b909b6de1814ba9fe4450e655bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rowPrefab: {fileID: 8461199046897236237, guid: 6971ba0217f4ea747ab52936874e97f7, type: 3}
+  rowPrefab: {fileID: 2906787603548784822, guid: 6971ba0217f4ea747ab52936874e97f7, type: 3}
   contentTransform: {fileID: 398848132}
   products:
   - icon: {fileID: 0}
-    productName: 
-    marketPrice: 0
+    productName: Soup
+    marketPrice: 20
+    lastDayChanged: 0
+    price: 30
+    profit: 50
+  - icon: {fileID: 0}
+    productName: Alfajor
+    marketPrice: 30
     lastDayChanged: 0
     price: 0
     profit: 0
   - icon: {fileID: 0}
-    productName: 
-    marketPrice: 0
+    productName: Muac
+    marketPrice: 200
     lastDayChanged: 0
     price: 0
     profit: 0
-  - icon: {fileID: 0}
-    productName: 
-    marketPrice: 0
-    lastDayChanged: 0
-    price: 0
-    profit: 0
+  productRows: []
 --- !u!1 &619294189
 GameObject:
   m_ObjectHideFlags: 0
@@ -4214,8 +4215,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1901688937}
   m_HandleRect: {fileID: 1901688936}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.63753396
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4344,6 +4345,7 @@ GameObject:
   - component: {fileID: 837518414}
   - component: {fileID: 837518416}
   - component: {fileID: 837518415}
+  - component: {fileID: 837518417}
   m_Layer: 5
   m_Name: Product
   m_TagString: Untagged
@@ -4467,6 +4469,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837518413}
   m_CullTransparentMesh: 1
+--- !u!114 &837518417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837518413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 837518415}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 617459438}
+        m_TargetAssemblyTypeName: PricingTableManager, Assembly-CSharp
+        m_MethodName: SortByProductName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &861135722
 GameObject:
   m_ObjectHideFlags: 0
@@ -7120,7 +7178,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 131385243}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.62976915
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
