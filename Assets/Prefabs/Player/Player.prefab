@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8525110476067233454}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GrappleAttachPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2651383046741006912}
   - component: {fileID: 2593150926430451965}
   - component: {fileID: 3655126576856739276}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -281,6 +281,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
     m_ActionName: PlayerMovement/Interact[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 12203050-eb8b-4a98-94a4-da98603cddb3
+    m_ActionName: PlayerMovement/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
@@ -297,7 +301,7 @@ GameObject:
   - component: {fileID: 5249751877190587910}
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -358,7 +362,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -458,6 +462,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -1924330416772942832, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
+      propertyPath: m_CastShadows
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Name
       value: Model
@@ -467,6 +475,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3250163066507786643, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4361710834771507933, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}

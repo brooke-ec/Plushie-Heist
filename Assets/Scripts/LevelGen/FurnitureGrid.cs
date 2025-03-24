@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(BoxCollider))]
@@ -10,7 +11,7 @@ public class FurnitureGrid : MonoBehaviour
     [SerializeField] private float spacing = 0.25f;
 
     private Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
-    private float height => collider.center.y + collider.size.y / 2;
+    private float height => collider.center.y + collider.size.y * .5f;
 
     new private BoxCollider collider;
 
@@ -39,6 +40,35 @@ public class FurnitureGrid : MonoBehaviour
         GetComponent<MeshFilter>().mesh = BuildMarker();
     }
 
+    public Vector2 FromWorldspace(Vector3 point)
+    {
+        Vector3 local = transform.InverseTransformPoint(point);
+        return FromLocalspace(local);
+    }
+
+    public Vector2 FromLocalspace(Vector3 point)
+    {
+        return new Vector2(
+            point.x / cellSize + size.x * .5f,
+            point.z / cellSize + size.y * .5f
+        );
+    }
+
+    public Vector3 ToLocalspace(Vector2 coordinates)
+    {
+        return new Vector3(
+            (coordinates.x - size.x * .5f) * cellSize,
+            height,
+            (coordinates.y - size.y * .5f) * cellSize
+        );
+    }
+
+    public Vector3 ToWorldspace(Vector2 coordinates)
+    {
+        Vector3 local = ToLocalspace(coordinates);
+        return transform.TransformPoint(local);
+    }
+
     private Mesh BuildMarker()
     {
         List<Vector3> verticies = new List<Vector3>();
@@ -49,18 +79,17 @@ public class FurnitureGrid : MonoBehaviour
         for (int x = 0; x < size.x; x++)
             for (int y = 0; y < size.y; y++)
             {
-                float xc = (x - size.x / 2f) * cellSize;
-                float yc = (y - size.y / 2f) * cellSize;
+                Vector3 l = ToLocalspace(new Vector2(x, y));
 
                 indicies.AddRange(new int[] {
                     0, 1, 2,
                     1, 3, 2
                 }.Select(i => i + verticies.Count));
 
-                verticies.Add(new Vector3(xc + spacing, height, yc + spacing));
-                verticies.Add(new Vector3(xc + spacing, height, yc + far));
-                verticies.Add(new Vector3(xc + far, height, yc + spacing));
-                verticies.Add(new Vector3(xc + far, height, yc + far));
+                verticies.Add(new Vector3(l.x + spacing, height, l.z + spacing));
+                verticies.Add(new Vector3(l.x + spacing, height, l.z + far));
+                verticies.Add(new Vector3(l.x + far, height, l.z + spacing));
+                verticies.Add(new Vector3(l.x + far, height, l.z + far));
             }
 
         Mesh mesh = new Mesh();
