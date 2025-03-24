@@ -8,6 +8,8 @@ public class Region
     public Vector2 center => new Vector2(right + left, top + bottom) * 0.5f;
     public Vector2Int size => new Vector2Int(right - left, top - bottom);
     public Vector2 half => new Vector2(size.x, size.y) * 0.5f;
+    public Vector2 start => new Vector2(left, bottom);
+    public Vector2 end => new Vector2(right, top);
 
     private Region(int x1, int y1, int x2, int y2)
     {

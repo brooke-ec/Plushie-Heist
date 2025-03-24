@@ -15,18 +15,17 @@ public class FurnitureItem : MonoBehaviour
     public void Rotate()
     {
         size = new Vector2Int(size.y, size.x);
-        region = Region.FromSize(region.left, region.bottom, size.x, size.y);
-        
         transform.Rotate(0, 90, 0);
-        SetMaterial(IsValid() ? null : invalidMaterial);
+
+        Place(grid, region.center);
     }
 
     public void Place(FurnitureGrid grid, Vector2 coordinates)
     {
         this.grid = grid;
         region = Region.FromSize(
-            Mathf.FloorToInt(coordinates.x),
-            Mathf.FloorToInt(coordinates.y),
+            Mathf.RoundToInt(coordinates.x - size.x / 2),
+            Mathf.RoundToInt(coordinates.y - size.y / 2),
             size.x, size.y
         );
 
