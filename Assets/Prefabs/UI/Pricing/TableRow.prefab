@@ -870,6 +870,7 @@ GameObject:
   - component: {fileID: 3255175923475369968}
   - component: {fileID: 1381287006458332907}
   - component: {fileID: 532227013960497}
+  - component: {fileID: 2906787603548784822}
   m_Layer: 5
   m_Name: TableRow
   m_TagString: Untagged
@@ -900,7 +901,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 604.96484, y: -41.321}
-  m_SizeDelta: {x: 1209.9297, y: 82.642}
+  m_SizeDelta: {x: 0, y: 82.642}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6437427498759957122
 CanvasRenderer:
@@ -980,3 +981,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &2906787603548784822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461199046897236237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed90b518f629724491e4ae30d6007e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 6172918060327901218}
+  productName: {fileID: 161415259543528203}
+  marketPrice: {fileID: 2422216357193836525}
+  lastDayChanged: {fileID: 2605784687297044834}
+  price: {fileID: 3145792454251246956}
+  profit: {fileID: 1503863927801320162}
