@@ -9,4 +9,6 @@ public class ItemClass : ScriptableObject
     public int sizeHeight = 1;
 
     public Sprite itemIcon;
+    public int marketPrice;
+    public string itemName;
 }
