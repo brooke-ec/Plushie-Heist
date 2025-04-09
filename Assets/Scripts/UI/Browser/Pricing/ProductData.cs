@@ -10,7 +10,15 @@ public class ProductData
     public float marketPrice;
     public int lastDayChanged;
     public float price;
-    public float profit;
+
+    public ProductData(Sprite icon, string productName, float marketPrice, int todaysDay)
+    {
+        this.icon = icon;
+        this.productName = productName;
+        this.marketPrice = marketPrice;
+        this.lastDayChanged = todaysDay;
+        this.price = marketPrice;
+    }
 
     public string GetLastDayChangedText(int todaysDay)
     {
@@ -24,7 +32,21 @@ public class ProductData
         }
         else
         {
-            return (todaysDay - lastDayChanged).ToString() + " days ago";
+            return Mathf.Abs(todaysDay - lastDayChanged).ToString() + " days ago";
         }
+    }
+
+    public float GetProfit()
+    {
+        return price - marketPrice;
+    }
+
+    /// <summary>
+    /// Gets profit as a 2 decimal number as a string
+    /// </summary>
+    /// <returns>Profit as a 2 decimal number as a string</returns>
+    public string GetProfitAsString()
+    {
+        return GetProfit().ToString("n2");
     }
 }
