@@ -192,6 +192,9 @@ public class PlayerController : MonoBehaviour
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     #endregion
+    #region Public Fields
+    [HideInInspector]public bool arrested = false;
+    #endregion
     #region core methods
     public void Awake()
     {
@@ -634,7 +637,7 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit hitinfo;
             Ray tempRay = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
-            Debug.DrawRay(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
+            //Debug.DrawRay(transform.position+new Vector3(0,1,0), Quaternion.AngleAxis(45*i,transform.up)*(-transform.right));
 
             if (Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance < shortesthitdist)
             {
@@ -759,8 +762,8 @@ public class PlayerController : MonoBehaviour
         RaycastHit HitInfo;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
-            Debug.DrawRay(cam.transform.position, cam.transform.forward * 100, Color.yellow, 10f);
-            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);
+            //Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
+            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
             isGrappling = true;
         }
     }
