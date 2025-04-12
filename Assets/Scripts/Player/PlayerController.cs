@@ -192,9 +192,7 @@ public class PlayerController : MonoBehaviour
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     #endregion
-    #region Public Fields
-    [HideInInspector]public bool arrested = false;
-    #endregion
+
     #region core methods
     public void Awake()
     {
@@ -272,7 +270,7 @@ public class PlayerController : MonoBehaviour
 
         //actuall move the player
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(velocity);
+        //Debug.Log(velocity.magnitude);
 
         //animates the player
         Animate();
@@ -802,14 +800,6 @@ public class PlayerController : MonoBehaviour
         grappleCooldown += Time.deltaTime * grappleCooldownSpeed;
     }
 
-    private void Arrest()
-    {
-        wasdInput = Vector2.zero;
-        wallRunning = false;
-        isGrappling = false;
-        isGliding = false;
-        isBoosting = false;
-    }
     #endregion
 
     #region Camera methods
@@ -902,6 +892,24 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Falling", 1);
         }
     }
+    #endregion
+
+    #region gaurdInteraction
+    private void Arrest()
+    {
+        wasdInput = Vector2.zero;
+        wallRunning = false;
+        isGrappling = false;
+        isGliding = false;
+        isBoosting = false;
+    }
+
+    private void applySlow(float slowAmt)
+    {
+        Vector3 direction = velocity.normalized;
+        velocity -= direction * slowAmt;
+    }
+
     #endregion
 
     #region Input
@@ -1000,9 +1008,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //If a projectile hits the player
         if(other.tag == "Proj")
         {
-            Debug.Log("Projectile");
+            Debug.Log("Proj Hit");
+            applySlow(other.GetComponent<Projectilescript>().SlowAmount/100*velocity.magnitude);
+            Destroy(other.gameObject);
         }
     }
 

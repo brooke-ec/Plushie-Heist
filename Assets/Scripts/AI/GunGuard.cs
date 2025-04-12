@@ -19,7 +19,10 @@ public class GunGuard : GaurdAI
     public override void Update()
     {
         base.Update();
-        Shoot();
+        if (chasee!=null &&!chasee.GetComponent<PlayerController>().arrested)
+        {
+            Shoot();
+        }
         fireTimer += Time.deltaTime;
     }
 
@@ -28,8 +31,8 @@ public class GunGuard : GaurdAI
     {
         if(chasee!=null && fireTimer>firerate)
         {
-            Vector3 direction = chasee.transform.position - transform.position;
-            Instantiate(proj, transform.position, Quaternion.LookRotation(direction));
+            Vector3 direction = chasee.transform.position+chasee.GetComponentInChildren<CharacterController>().center - (transform.position+new Vector3(0.5f, 0, 0.5f));
+            Instantiate(proj, transform.position+new Vector3(0.5f,0,0.5f), Quaternion.LookRotation(direction));
             fireTimer = 0;
         }
     }

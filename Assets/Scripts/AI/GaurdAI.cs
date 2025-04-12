@@ -41,7 +41,11 @@ public class GaurdAI : MonoBehaviour
             detectionTimer += Time.deltaTime;
             agent.autoBraking = true;
             anim.SetBool("Caught", false);
-            if (agent.remainingDistance <= 1.2)
+            if (chasee != null && chasee.GetComponent<PlayerController>().arrested) 
+            {
+                agent.speed = 0;
+            }
+            else if (agent.remainingDistance <= 1.2)
             {
                 Arrest();
                 anim.SetBool("Arrest", true);
@@ -50,6 +54,10 @@ public class GaurdAI : MonoBehaviour
         }
         else
         {
+            if (chasee != null)
+            {
+                chasee = null;
+            }
             Patrol();
         }
     }
@@ -62,7 +70,7 @@ public class GaurdAI : MonoBehaviour
         RaycastHit hitinfo = new RaycastHit();
         if (Physics.Raycast(LOSRay, out hitinfo) && hitinfo.collider.gameObject.tag == "Player"){
             chasee = detectee;
-            Debug.Log("hit");
+            //Debug.Log("hit");
             detectionTimer = 0;
             agent.speed = 5;
             anim.SetBool("Chasing", true);
