@@ -1,11 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGenerator : MonoBehaviour
 {
-    [SerializeField] private LevelTile startTile;
-    [SerializeField] private LevelTile startTile2;
+    [SerializeField] private LevelTile entranceTile;
+    [SerializeField] private LevelTile exitTile;
     [SerializeField] private int minRoom = 4;
     [SerializeField] private int maxRoom = 9;
     [SerializeField] private int growAmount = 4;
@@ -17,6 +20,8 @@ public class LevelGenerator : MonoBehaviour
 
     private List<Room> rooms = new();
     private List<Edge> edges = new();
+    private Dictionary<Vector2Int, LevelTile> grid = new();
+    private Queue<Vector2Int> toPlace = new();
 
     private void Start()
     {
@@ -58,10 +63,44 @@ public class LevelGenerator : MonoBehaviour
         foreach (var box in rooms) box.Shrink();
 
         foreach (var edge in edges) edge.Collapse(corridorWidth);
-        Display(edges.Where((e) => e.connected).ToList(), 0, startTile);
+        //Display(edges.Where((e) => e.connected).ToList(), 0, startTile);
 
         //Display(rooms, 0, startTile2);
-        Display(rooms.Where((e) => e.pathDistance != -1).ToList(), 0, startTile2);
+        //Display(rooms.Where((e) => e.pathDistance != -1).ToList(), 0, startTile2);
+
+        rooms.ForEach(r => r.ForEach(v => grid[v] = null));
+        PlaceTiles();
+    }
+
+    private void PlaceTiles()
+    {
+        PlaceTile(entranceTile, Vector2Int.zero);
+        PlaceTile(exitTile, new Vector2Int(size.x, size.y));
+
+        foreach (Vector2Int position in toPlace)
+        {
+            List<LevelTile> possible = new();
+
+            Vector2Int v;
+            if (grid.ContainsKey(v = position + new Vector2Int(+1, 0))) possible.AddRange(grid[v].negativeX);
+            if (grid.ContainsKey(v = position + new Vector2Int(-1, 0))) possible.AddRange(grid[v].positiveX);
+            if (grid.ContainsKey(v = position + new Vector2Int(0, +1))) possible.AddRange(grid[v].negativeZ);
+            if (grid.ContainsKey(v = position + new Vector2Int(0, -1))) possible.AddRange(grid[v].positiveZ);
+
+            PlaceTile(possible[Random.Range(0, possible.Count)], position);
+        }
+    }
+
+    private void PlaceTile(LevelTile tile, Vector2Int position)
+    {
+        grid[position] = tile;
+        Instantiate(tile, new Vector3(position.x, 0, position.y) * tileSize, Quaternion.identity, transform);
+
+        Vector2Int v;
+        if (grid.ContainsKey(v = position + new Vector2Int(-1, 0))) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(+1, 0))) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(0, -1))) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(0, +1))) toPlace.Enqueue(v);
     }
 
     private void ConnectPath(Room destination)
@@ -254,7 +293,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private class Room : Region
+    private class Room : Region, IEnumerable<Vector2Int>
     {
         public List<Edge> edges = new List<Edge>();
         public int pathDistance = -1;
@@ -353,6 +392,24 @@ public class LevelGenerator : MonoBehaviour
         {
             left += 1;
             bottom += 1;
+        }
+
+        public IEnumerator<Vector2Int> GetEnumerator()
+        {
+            for (int x = left; x < right; x++)
+                for (int y = bottom; y < top; y++)
+                    yield return new Vector2Int(x, y);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void ForEach(System.Action<Vector2Int> action)
+        {
+            foreach (Vector2Int position in this)
+                action(position);
         }
     }
 
