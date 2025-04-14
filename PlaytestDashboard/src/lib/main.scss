@@ -1,0 +1,16 @@
+:root {
+	background-color: #141414;
+	color: white;
+}
+
+button,
+a[href] {
+	transition: color 250ms;
+	background: none;
+	color: white;
+	border: none;
+
+	&:hover {
+		color: #7caedf;
+	}
+}

@@ -1,0 +1,12 @@
+diff --git a/files/handler.js b/files/handler.js
+index 1abfdee8c8ba98732980d1cff7adb7ef8817998a..b26c90d5baf4a4c8dd35d9bc897ecb64af1761de 100644
+--- a/files/handler.js
++++ b/files/handler.js	
+@@ -1221,6 +1221,7 @@ function serve(path, client = false) {
+ 			etag: true,
+ 			gzip: true,
+ 			brotli: true,
++			dev: client,
+ 			setHeaders:
+ 				client &&
+ 				((res, pathname) => {
