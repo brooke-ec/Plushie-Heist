@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New skill tree palette", menuName = "Scriptable Objects/Skill tree/New skill tree palette")]

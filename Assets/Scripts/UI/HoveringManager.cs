@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +50,7 @@ public class HoveringManager : MonoBehaviour
         currentTooltipOpen.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = titleColour;
         currentTooltipOpen.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = description;
 
-        if(tooltipCost.Equals(TooltipCost.none) || tooltipCostText == null)
+        if (tooltipCost.Equals(TooltipCost.none) || tooltipCostText == null)
         {
             currentTooltipOpen.transform.GetChild(2).gameObject.SetActive(false);
         }
@@ -61,7 +59,7 @@ public class HoveringManager : MonoBehaviour
             currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltipCostText;
 
             //do colours and icons
-            switch(tooltipCost)
+            switch (tooltipCost)
             {
                 case TooltipCost.coins:
                     currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().color = coinTextColour;
@@ -74,7 +72,7 @@ public class HoveringManager : MonoBehaviour
 
         currentTooltipOpen.transform.position = screenPosition - offset;
 
-        switch(tooltipColour)
+        switch (tooltipColour)
         {
             case TooltipBackgroundColor.blue:
                 currentTooltipOpen.transform.GetComponent<Image>().sprite = blueTooltipBackground;

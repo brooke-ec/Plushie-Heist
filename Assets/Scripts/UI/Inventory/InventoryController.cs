@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
@@ -18,7 +13,7 @@ public class InventoryController : MonoBehaviour
     {
         ItemIconDragEffect();
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             RotateItem();
         }
@@ -35,19 +30,19 @@ public class InventoryController : MonoBehaviour
     #region Inventory controls
     private void RotateItem()
     {
-        if(selectedItem == null) { return; }
+        if (selectedItem == null) { return; }
 
         selectedItem.Rotate();
     }
 
     public void InsertItem(InventoryItem itemToInsert)
     {
-        if(selectedInventoryGrid == null) { return; }
+        if (selectedInventoryGrid == null) { return; }
 
         //InventoryItem item = Instantiate the item
 
         Vector2Int? posOnGrid = selectedInventoryGrid.FindSpaceForObject(itemToInsert);
-        if(posOnGrid != null) //space on grid, so place into position found
+        if (posOnGrid != null) //space on grid, so place into position found
         {
             selectedInventoryGrid.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
         }
@@ -57,7 +52,7 @@ public class InventoryController : MonoBehaviour
     private void PickUpOrPlaceItem()
     {
         Vector2 mousePos = Input.mousePosition;
-        if(selectedItem != null)
+        if (selectedItem != null)
         {
             mousePos.x -= (selectedItem.Width - 1) * InventoryGrid.tileSize / 2;
             mousePos.y += (selectedItem.Height - 1) * InventoryGrid.tileSize / 2;
@@ -82,7 +77,7 @@ public class InventoryController : MonoBehaviour
         if (itemPlaced)
         {
             selectedItem = null;
-            if(overlapItem != null)
+            if (overlapItem != null)
             {
                 //this is so you now pick up the overlap item
                 selectedItem = overlapItem;

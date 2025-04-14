@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,7 +27,7 @@ public class SkillTreesManager : MonoBehaviour
 
     public void CreateAllSkillTrees()
     {
-        for(int i=0; i<skillTreesReferences.Count; i++)
+        for (int i = 0; i < skillTreesReferences.Count; i++)
         {
             skillTrees.Add(Instantiate(skillTreePrefab, skillTreeViewTransform).GetComponent<SkillTreeController>());
             skillTrees[i].CreateSkillTree(skillTreesReferences[i]);
@@ -98,7 +97,7 @@ public class SkillTreesManager : MonoBehaviour
     /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
     public void EnableBranch(int plushieNumber, int skillTreeNumber)
     {
-        if(skillTreeNumber < 0 || skillTreeNumber >= skillTrees.Count)
+        if (skillTreeNumber < 0 || skillTreeNumber >= skillTrees.Count)
         {
             Debug.Log("Error enabling branch. Skill tree number too high");
         }

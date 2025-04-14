@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MovementUIManager : MonoBehaviour
 {
@@ -25,10 +22,11 @@ public class MovementUIManager : MonoBehaviour
     [SerializeField] private Sprite boostIcon;
     [SerializeField] private Sprite grappleIcon;
     [SerializeField] private Sprite dashIcon;
+    [SerializeField] private Sprite glideIcon;
 
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Debug.LogWarning("Movement UI instance already exists");
         }
@@ -47,6 +45,7 @@ public class MovementUIManager : MonoBehaviour
         AbilityCooldown grapple = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
         AbilityCooldown dash = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
         AbilityCooldown boost = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
+        AbilityCooldown glide = Instantiate(abilityCooldownTimerPrefab, abilitiesTransform).GetComponent<AbilityCooldown>();
 
         abilities.Add(Ability.Grapple, grapple);
         grapple.ability = Ability.Grapple;
@@ -59,6 +58,10 @@ public class MovementUIManager : MonoBehaviour
         abilities.Add(Ability.Boost, boost);
         boost.ability = Ability.Boost;
         boost.icon.sprite = boostIcon;
+
+        abilities.Add(Ability.Glide, glide);
+        glide.ability = Ability.Glide;
+        glide.icon.sprite = glideIcon;
     }
 
     public void UpdateStaminaBar(float stamina, float maxStamina)
@@ -89,9 +92,9 @@ public class MovementUIManager : MonoBehaviour
                 break;
         }
 
-        foreach(KeyValuePair<Ability, AbilityCooldown> ability in abilities)
+        foreach (KeyValuePair<Ability, AbilityCooldown> ability in abilities)
         {
-            if(ability.Key.Equals(currentAbility))
+            if (ability.Key.Equals(currentAbility))
             {
                 ability.Value.gameObject.SetActive(true);
             }

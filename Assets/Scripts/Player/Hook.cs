@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hook : MonoBehaviour
@@ -12,7 +9,7 @@ public class Hook : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
         player = GameObject.Find("Player/GrappleAttachPoint");
     }
 
@@ -21,7 +18,7 @@ public class Hook : MonoBehaviour
     {
         Vector3 line = this.transform.position - player.transform.position;
         Rope.transform.localScale = new Vector3(0.2f, line.magnitude * 2.5f, 0.2f);
-        Rope.transform.position = this.transform.position - line/2;
+        Rope.transform.position = this.transform.position - line / 2;
         Rope.transform.LookAt(player.transform);
         Rope.transform.Rotate(new Vector3(90, 0, 0));
     }

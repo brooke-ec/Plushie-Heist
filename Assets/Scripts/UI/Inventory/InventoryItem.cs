@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
@@ -28,7 +24,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
     {
         get
         {
-            if(!rotated)
+            if (!rotated)
             {
                 return itemClass.sizeHeight;
             }
@@ -40,7 +36,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
     {
         get
         {
-            if(!rotated)
+            if (!rotated)
             {
                 return itemClass.sizeWidth;
             }
@@ -92,7 +88,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //If right click
-        if(eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
             print("use");
             //TO-DO

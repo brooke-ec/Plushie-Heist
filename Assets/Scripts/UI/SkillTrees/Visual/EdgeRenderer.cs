@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +31,7 @@ public class EdgeRenderer : MaskableGraphic
     {
         vh.Clear();
 
-        if(points.Count<2)
+        if (points.Count < 2)
         {
             return;
         }
@@ -41,11 +39,11 @@ public class EdgeRenderer : MaskableGraphic
         float angle = 0;
 
         //plot two vertices at each point
-        for(int i=0; i<points.Count -1; i++)
+        for (int i = 0; i < points.Count - 1; i++)
         {
-            if (i<points.Count - 1)
+            if (i < points.Count - 1)
             {
-                angle = GetAngle(points[i], points[i + 1]) +90f;
+                angle = GetAngle(points[i], points[i + 1]) + 90f;
             }
 
             DrawVerticesForPoint(points[i], points[i + 1], vh, angle, color);
@@ -53,7 +51,7 @@ public class EdgeRenderer : MaskableGraphic
 
         //draw triangles of all vertices
         //plotting only two at a time so we ignore the last vertex
-        for(int i=0; i<points.Count-1; i++)
+        for (int i = 0; i < points.Count - 1; i++)
         {
             int index = i * 4;
             vh.AddTriangle(index + 0, index + 1, index + 2);

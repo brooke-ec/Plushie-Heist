@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -53,7 +52,7 @@ public class BrowserManager : MonoBehaviour
     {
         int previousCurrentPage = currentPageIndex;
 
-        foreach(BrowserPage page in pages)
+        foreach (BrowserPage page in pages)
         {
             page.gameObject.SetActive(false);
         }
@@ -64,9 +63,9 @@ public class BrowserManager : MonoBehaviour
         tabIcon.sprite = pages[currentPageIndex].icon;
 
         //Navigation buttons
-        if(!fromHistory && index != previousCurrentPage)
+        if (!fromHistory && index != previousCurrentPage)
         {
-            if(historyStackIndex < historyStack.Count)
+            if (historyStackIndex < historyStack.Count)
             {
                 historyStack.RemoveRange(historyStackIndex, historyStack.Count - historyStackIndex);
             }
@@ -80,10 +79,10 @@ public class BrowserManager : MonoBehaviour
     /// <summary> Go to the current tab index + modifier tab </summary>
     public void GoToPageFromThisOne(int modifier)
     {
-        if (currentPageIndex + modifier < 0) currentPageIndex = pages.Count-1;
-        else if(currentPageIndex + modifier >= pages.Count) { currentPageIndex = 0; }
+        if (currentPageIndex + modifier < 0) currentPageIndex = pages.Count - 1;
+        else if (currentPageIndex + modifier >= pages.Count) { currentPageIndex = 0; }
 
-            GoToPage(currentPageIndex + modifier);
+        GoToPage(currentPageIndex + modifier);
     }
 
     #region Going back and forth
@@ -93,7 +92,7 @@ public class BrowserManager : MonoBehaviour
 
     public void BackButtonClick()
     {
-        if(historyStackIndex > 1)
+        if (historyStackIndex > 1)
         {
             historyStackIndex--;
             fromHistory = true;
@@ -104,7 +103,7 @@ public class BrowserManager : MonoBehaviour
 
     public void ForwardButtonClick()
     {
-        if(historyStackIndex < historyStack.Count)
+        if (historyStackIndex < historyStack.Count)
         {
             historyStackIndex++;
             fromHistory = true;
@@ -124,7 +123,7 @@ public class BrowserManager : MonoBehaviour
     #region Page list button
     private void SetUpPageList()
     {
-        for(int i=0; i<pages.Count; i++)
+        for (int i = 0; i < pages.Count; i++)
         {
             Transform page = Instantiate(listPagePrefab, listButtonTransform).transform;
             int index = i;

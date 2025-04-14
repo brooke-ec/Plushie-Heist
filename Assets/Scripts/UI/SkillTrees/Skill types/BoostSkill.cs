@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New boost skill", menuName = "Scriptable Objects/Skill tree/Skills/New boost skill")]
@@ -17,7 +15,7 @@ public class BoostSkill : Skill
 
     public override void Unlock()
     {
-        switch(skillType)
+        switch (skillType)
         {
             case SkillType.PlayerMovespeed:
                 break;

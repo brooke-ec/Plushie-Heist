@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary> Used for ONE skill tree </summary>
@@ -33,7 +29,7 @@ public class SkillTreeController : MonoBehaviour
             List<Skill> skillsToEnable = skillTree.unlockables[plushieNumber].skillsToEnable;
             List<SkillButton> allSkillsInTree = canvasTransform.GetComponentsInChildren<SkillButton>().ToList();
 
-            foreach(SkillButton skillInTree in allSkillsInTree)
+            foreach (SkillButton skillInTree in allSkillsInTree)
             {
                 //If you find the same skill in the tree
                 Skill skillToEnable = skillsToEnable.Find(s => s.Equals(skillInTree.skill));
@@ -70,7 +66,7 @@ public class SkillTreeController : MonoBehaviour
     private Dictionary<Skill, int> GetLayersOfSkills(List<Skill> skills)
     {
         Dictionary<Skill, int> layers = new Dictionary<Skill, int>();
-        foreach(Skill skill in skills)
+        foreach (Skill skill in skills)
         {
             layers[skill] = GetDepth(skill);
         }
@@ -80,7 +76,7 @@ public class SkillTreeController : MonoBehaviour
     /// <summary> Recursively calls each parent and gets the max depth of any of the parents, +1 </summary>
     private int GetDepth(Skill node)
     {
-        if(node.requirements.Count == 0) { return 0; } //none
+        if (node.requirements.Count == 0) { return 0; } //none
         return node.requirements.Max(requirement => GetDepth(requirement) + 1);
     }
 
@@ -90,7 +86,7 @@ public class SkillTreeController : MonoBehaviour
         List<List<Skill>> layeredNodes = new List<List<Skill>>();
         int maxLayer = layers.Values.Max();
 
-        for(int i=0; i<=maxLayer; i++)
+        for (int i = 0; i <= maxLayer; i++)
         {
             List<Skill> layer = skillTree.skills.Where(skill => layers[skill] == i).ToList();
             layeredNodes.Add(layer);
@@ -102,7 +98,7 @@ public class SkillTreeController : MonoBehaviour
     private void MinimiseEdgeCrossings(List<List<Skill>> layers)
     {
         //Don't need to order first layer because it has no requirements above
-        for(int i=1; i<layers.Count; i++)
+        for (int i = 1; i < layers.Count; i++)
         {
             //Sort nodes in current layer based on where their requirements appear (in the previous layer)
             layers[i] = layers[i].OrderBy(node =>
@@ -158,7 +154,7 @@ public class SkillTreeController : MonoBehaviour
 
             // Center the parent node between its children
             //float midX = (childStartX + xOffset - xSpacing) / 2f;
-            float midX = (nodePositions[children[0]].x + nodePositions[children[children.Count-1]].x)/2f;
+            float midX = (nodePositions[children[0]].x + nodePositions[children[children.Count - 1]].x) / 2f;
             nodePositions[node] = new Vector2(midX, height);
         }
 
@@ -304,14 +300,14 @@ public class SkillTreeController : MonoBehaviour
         List<Skill> skillsToBeDisabled = GetAllSkillsToBeDisabled();
         List<SkillButton> skillButtons = new List<SkillButton>();
 
-        foreach(Skill skill in skillTree.skills)
+        foreach (Skill skill in skillTree.skills)
         {
             SkillButton node = Instantiate(nodePrefab, canvasTransform);
             node.transform.localPosition = nodePositions[skill];
             node.skill = skill;
             skillButtons.Add(node);
 
-            if(skillsToBeDisabled.Contains(node.skill))
+            if (skillsToBeDisabled.Contains(node.skill))
             {
                 node.branchIsEnabled = false;
                 skillsToBeDisabled.Remove(node.skill);
@@ -322,7 +318,7 @@ public class SkillTreeController : MonoBehaviour
         DrawEdges();
 
         //Done after edges are drawn so that colours can be updated
-        foreach(SkillButton skillButton in skillButtons)
+        foreach (SkillButton skillButton in skillButtons)
         {
             skillButton.SetUI(this);
         }
@@ -330,7 +326,7 @@ public class SkillTreeController : MonoBehaviour
     private List<Skill> GetAllSkillsToBeDisabled()
     {
         List<Skill> skillsToBeDisabled = new List<Skill>();
-        foreach(SkillTreeUnlockable unlockableList in skillTree.unlockables)
+        foreach (SkillTreeUnlockable unlockableList in skillTree.unlockables)
         {
             skillsToBeDisabled.AddRange(unlockableList.skillsToEnable);
         }
@@ -346,7 +342,7 @@ public class SkillTreeController : MonoBehaviour
         float minY = float.MaxValue, maxY = float.MinValue;
 
         //get the actual mins and maxs of nodes right now
-        foreach(Vector3 position in nodePositions.Values)
+        foreach (Vector3 position in nodePositions.Values)
         {
             if (position.x < minX) minX = position.x;
             if (position.x > maxX) maxX = position.x;
@@ -365,7 +361,7 @@ public class SkillTreeController : MonoBehaviour
 
         //Apply to all nodes
         List<Skill> skills = new List<Skill>(nodePositions.Keys);
-        foreach(Skill node in skills)
+        foreach (Skill node in skills)
         {
             nodePositions[node] += offsetToApply;
         }

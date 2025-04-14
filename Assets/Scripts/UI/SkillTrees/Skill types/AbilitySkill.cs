@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New ability skill", menuName = "Scriptable Objects/Skill tree/Skills/New ability skill")]
@@ -20,7 +18,7 @@ public class AbilitySkill : Skill
 
     public override void Unlock()
     {
-        switch(abilityToUnlock)
+        switch (abilityToUnlock)
         {
             case AbilityToUnlock.PlayerWallRunning:
                 UnlockWallRunning();
