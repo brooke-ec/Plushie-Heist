@@ -5,7 +5,12 @@ using UnityEngine.InputSystem;
 
 public class Interactor : MonoBehaviour
 {
+    /// <summary>
+    ///The place the interactor is placed on the Player</br>
+    /// Should be a empty child of the player
+    /// </summary>
     [SerializeField] private Transform interactorPoint;
+    /// <summary>The radius of the interactor from the point</summary>
     [SerializeField] private float interactorRadius;
     [SerializeField] private LayerMask interactorLayerMask;
 
