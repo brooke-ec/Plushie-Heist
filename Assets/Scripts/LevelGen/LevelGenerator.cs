@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.Assertions;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -61,31 +60,46 @@ public class LevelGenerator : MonoBehaviour
 
 
         foreach (var box in rooms) box.Shrink();
-
         foreach (var edge in edges) edge.Collapse(corridorWidth);
         //Display(edges.Where((e) => e.connected).ToList(), 0, startTile);
 
         //Display(rooms, 0, startTile2);
         //Display(rooms.Where((e) => e.pathDistance != -1).ToList(), 0, startTile2);
 
-        rooms.ForEach(r => r.ForEach(v => grid[v] = null));
+
+        rooms.Where((e) => e.pathDistance != -1).ForEach(r => r.ForEach(v => grid[v] = null));
+        edges.Where((e) => e.connected).ForEach(r => r.ForEach(v => grid[v] = null));
         PlaceTiles();
     }
 
     private void PlaceTiles()
     {
-        PlaceTile(entranceTile, Vector2Int.zero);
-        PlaceTile(exitTile, new Vector2Int(size.x, size.y));
+        PlaceTile(entranceTile, Vector2Int.one);
+        PlaceTile(exitTile, new Vector2Int(size.x - 1, size.y - 1));
 
-        foreach (Vector2Int position in toPlace)
+        while (toPlace.Count > 0)
         {
-            List<LevelTile> possible = new();
+            Vector2Int position = toPlace.Dequeue();
+            if (grid[position] != null) continue;
 
-            Vector2Int v;
-            if (grid.ContainsKey(v = position + new Vector2Int(+1, 0))) possible.AddRange(grid[v].negativeX);
-            if (grid.ContainsKey(v = position + new Vector2Int(-1, 0))) possible.AddRange(grid[v].positiveX);
-            if (grid.ContainsKey(v = position + new Vector2Int(0, +1))) possible.AddRange(grid[v].negativeZ);
-            if (grid.ContainsKey(v = position + new Vector2Int(0, -1))) possible.AddRange(grid[v].positiveZ);
+            LevelTile positiveX = grid.GetValueOrDefault(position + new Vector2Int(+1, 0));
+            LevelTile negativeX = grid.GetValueOrDefault(position + new Vector2Int(-1, 0));
+            LevelTile positiveZ = grid.GetValueOrDefault(position + new Vector2Int(0, +1));
+            LevelTile negativeZ = grid.GetValueOrDefault(position + new Vector2Int(0, -1));
+
+            List<LevelTile> possible = new();
+            if (positiveX != null) possible.AddRange(positiveX.negativeX);
+            if (negativeX != null) possible.AddRange(negativeX.positiveX);
+            if (positiveZ != null) possible.AddRange(positiveZ.negativeZ);
+            if (negativeZ != null) possible.AddRange(negativeZ.positiveZ);
+
+            possible = possible.Where(t => {
+                return t != null
+                && t.positiveX.Contains(positiveX)
+                && t.negativeX.Contains(negativeX)
+                && t.positiveZ.Contains(positiveZ)
+                && t.negativeZ.Contains(negativeZ);
+            }).ToList();
 
             PlaceTile(possible[Random.Range(0, possible.Count)], position);
         }
@@ -97,10 +111,10 @@ public class LevelGenerator : MonoBehaviour
         Instantiate(tile, new Vector3(position.x, 0, position.y) * tileSize, Quaternion.identity, transform);
 
         Vector2Int v;
-        if (grid.ContainsKey(v = position + new Vector2Int(-1, 0))) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(+1, 0))) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(0, -1))) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(0, +1))) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(-1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(+1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(0, -1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = position + new Vector2Int(0, +1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
     }
 
     private void ConnectPath(Room destination)
@@ -237,14 +251,6 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void Display<T>(List<T> regions, float y, LevelTile prefab) where T : Region
-    {
-        foreach (Region box in regions)
-            for (int x = box.left; x < box.right; x++)
-                for (int z = box.bottom; z < box.top; z++)
-                    Instantiate(prefab, new Vector3(x, y, z) * tileSize, Quaternion.identity, transform);
-    }
-
     private record FindPathParameters
     {
         public Room room;
@@ -259,9 +265,21 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private abstract class Region
+    private abstract class Region : IEnumerable<Vector2Int>
     {
         public int top, right, bottom, left;
+
+        public IEnumerator<Vector2Int> GetEnumerator()
+        {
+            for (int x = left; x < right; x++)
+                for (int y = bottom; y < top; y++)
+                    yield return new Vector2Int(x, y);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     private class Edge : Region
@@ -293,7 +311,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private class Room : Region, IEnumerable<Vector2Int>
+    private class Room : Region
     {
         public List<Edge> edges = new List<Edge>();
         public int pathDistance = -1;
@@ -392,24 +410,6 @@ public class LevelGenerator : MonoBehaviour
         {
             left += 1;
             bottom += 1;
-        }
-
-        public IEnumerator<Vector2Int> GetEnumerator()
-        {
-            for (int x = left; x < right; x++)
-                for (int y = bottom; y < top; y++)
-                    yield return new Vector2Int(x, y);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void ForEach(System.Action<Vector2Int> action)
-        {
-            foreach (Vector2Int position in this)
-                action(position);
         }
     }
 
