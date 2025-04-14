@@ -585,7 +585,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 404474082}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999774
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3109,7 +3109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0009765625, y: 354.50137}
+  m_AnchoredPosition: {x: 1.5079346, y: 355.15765}
   m_SizeDelta: {x: 1628.1138, y: 709}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &470956718
@@ -3658,7 +3658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0009765625, y: 279.5006}
+  m_AnchoredPosition: {x: 0.0009765625, y: 279.50098}
   m_SizeDelta: {x: 1663, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &555386604
@@ -3732,6 +3732,7 @@ GameObject:
   - component: {fileID: 564771191}
   - component: {fileID: 564771190}
   - component: {fileID: 564771192}
+  - component: {fileID: 564771193}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -3790,6 +3791,20 @@ MonoBehaviour:
   blueTooltipBackground: {fileID: 21300000, guid: 00ea01c5091863a4498ef3b7ad37bfdc, type: 3}
   greyTooltipBackground: {fileID: 21300000, guid: ce4fa02357f31134ea93b29f409f2ab3, type: 3}
   pinkTooltipBackground: {fileID: 21300000, guid: fc06ef63e49931b4282b0128e936a3fb, type: 3}
+--- !u!114 &564771193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564771189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b6cbbefc45bcc419bf947db776018c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedInventoryGrid: {fileID: 0}
+  selectedItem: {fileID: 0}
 --- !u!1 &567826451
 GameObject:
   m_ObjectHideFlags: 0
@@ -4320,37 +4335,31 @@ MonoBehaviour:
     marketPrice: 20
     lastDayChanged: 0
     price: 30
-    profit: 50
   - icon: {fileID: 0}
     productName: Alfajor
     marketPrice: 30
     lastDayChanged: 0
     price: 10
-    profit: 0
   - icon: {fileID: 0}
     productName: Muac
     marketPrice: 200
     lastDayChanged: 0
     price: 0
-    profit: 0
   - icon: {fileID: 0}
     productName: ad2
     marketPrice: 100
     lastDayChanged: 2
     price: 60
-    profit: 60
   - icon: {fileID: 0}
     productName: dwdwdw
     marketPrice: 200
     lastDayChanged: 1
     price: 35
-    profit: 20
   - icon: {fileID: 0}
     productName: dwdwdw
     marketPrice: 200
     lastDayChanged: 1
     price: 35
-    profit: 20
   pricingHeaderUIsTransform: {fileID: 1209494984}
 --- !u!1 &619294189
 GameObject:
@@ -4641,52 +4650,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686680311}
   m_CullTransparentMesh: 1
---- !u!1 &707079835
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 707079837}
-  - component: {fileID: 707079836}
-  m_Layer: 0
-  m_Name: InventoryController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &707079836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707079835}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6cbbefc45bcc419bf947db776018c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedInventoryGrid: {fileID: 0}
-  selectedItem: {fileID: 0}
---- !u!4 &707079837
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707079835}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &732924008
 GameObject:
   m_ObjectHideFlags: 0
@@ -4862,7 +4825,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1901688936}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999779
+  m_Size: 0.9972015
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5312,8 +5275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f3a943145e247b468018222b0acedce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryWidth: 8
-  inventoryHeight: 3
+  inventoryWidth: 12
+  inventoryHeight: 4
   itemsToTest:
   - {fileID: 11400000, guid: f697729f7bd92d843b930fd24e844890, type: 2}
   - {fileID: 11400000, guid: 2c400c28b11e01f41a25bded2e8965bc, type: 2}
@@ -6541,7 +6504,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 0
+  m_Spacing: 50
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -8004,7 +7967,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 131385243}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99997747
+  m_Size: 0.99714154
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13734,6 +13697,5 @@ SceneRoots:
   - {fileID: 358825656}
   - {fileID: 1517024372}
   - {fileID: 980802181}
-  - {fileID: 707079837}
   - {fileID: 564771191}
   - {fileID: 314151217}
