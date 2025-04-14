@@ -144,6 +144,7 @@ MonoBehaviour:
   grappleCancelLength: 1
   grappleCooldown: 10
   grappleCooldownSpeed: 1
+  arrested: 0
 --- !u!114 &3655126576856739276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +268,22 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Sprint[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
+        m_MethodName: pressInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
+    m_ActionName: PlayerMovement/Interact[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 2593150926430451965}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: getInteract
@@ -279,8 +296,56 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
-    m_ActionName: PlayerMovement/Interact[/Keyboard/f]
+    m_ActionId: 12203050-eb8b-4a98-94a4-da98603cddb3
+    m_ActionName: PlayerMovement/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: rotateItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
+    m_ActionName: InventoryActions/Rotate[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: startDrag
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
+    m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: getMousePos
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
+    m_ActionName: InventoryActions/Mouse[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement

@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 [SelectionBase]
@@ -109,6 +111,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
+
+    [Header("UI")]
+    [SerializeField] private GameObject inventoryUI;
     #endregion
 
     #region private fields
@@ -186,6 +191,8 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>ther animator component </summary>
     private Animator animator;
+
+    private bool inventoryOpen;
 
     #endregion
 
@@ -1003,6 +1010,34 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             Debug.Log("Interact");
+        }
+    }
+
+    public void openInventory(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            if (!inventoryOpen)
+            {
+                foreach (Image i in inventoryUI.GetComponentsInChildren<Image>())
+                {
+                    i.enabled = true;
+                }
+                inventoryOpen = true;
+                GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else
+            {
+               
+                foreach(Image i in inventoryUI.GetComponentsInChildren<Image>())
+                {
+                    i.enabled = false;
+                }
+                inventoryOpen = false;
+                GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
 
