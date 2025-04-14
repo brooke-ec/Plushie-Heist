@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class LevelGenerator : MonoBehaviour
 
     private List<Room> rooms = new();
     private List<Edge> edges = new();
-    private Dictionary<Vector2Int, LevelTile> grid = new();
+    private Dictionary<Vector2Int, TilePlacement> grid = new();
     private Queue<Vector2Int> toPlace = new();
 
 #if UNITY_EDITOR
@@ -82,49 +82,145 @@ public class LevelGenerator : MonoBehaviour
         PlaceTiles();
     }
 
+
+
     private void PlaceTiles()
     {
         PlaceTile(entranceTile, Vector2Int.one);
-        PlaceTile(exitTile, size - Vector2Int.one);
+        PlaceTile(entranceTile, size - Vector2Int.one);
 
         while (toPlace.Count > 0)
         {
             Vector2Int position = toPlace.Dequeue();
             if (grid[position] != null) continue;
 
-            LevelTile positiveX = grid.GetValueOrDefault(position + new Vector2Int(+1, 0));
-            LevelTile negativeX = grid.GetValueOrDefault(position + new Vector2Int(-1, 0));
-            LevelTile positiveZ = grid.GetValueOrDefault(position + new Vector2Int(0, +1));
-            LevelTile negativeZ = grid.GetValueOrDefault(position + new Vector2Int(0, -1));
+            Vector2Int v;
+            TileNeighbors neighbors = new TileNeighbors(
+                position,
+                new TileNeighbour(grid.GetValueOrDefault(v = position + new Vector2Int(+1, 0)), !grid.ContainsKey(v)),
+                new TileNeighbour(grid.GetValueOrDefault(v = position + new Vector2Int(0, +1)), !grid.ContainsKey(v)),
+                new TileNeighbour(grid.GetValueOrDefault(v = position + new Vector2Int(-1, 0)), !grid.ContainsKey(v)),
+                new TileNeighbour(grid.GetValueOrDefault(v = position + new Vector2Int(0, -1)), !grid.ContainsKey(v))
+            );
 
-            List<LevelTile> possible = new();
-            if (positiveX != null) possible.AddRange(positiveX.negativeX);
-            if (negativeX != null) possible.AddRange(negativeX.positiveX);
-            if (positiveZ != null) possible.AddRange(positiveZ.negativeZ);
-            if (negativeZ != null) possible.AddRange(negativeZ.positiveZ);
-
-            possible = possible.Where(t => {
-                return t != null
-                && t.positiveX.Contains(positiveX)
-                && t.negativeX.Contains(negativeX)
-                && t.positiveZ.Contains(positiveZ)
-                && t.negativeZ.Contains(negativeZ);
-            }).ToList();
-
-            PlaceTile(possible[Random.Range(0, possible.Count)], position);
+            TilePlacement[] possible = neighbors.Possible();
+            if (possible.Length > 0) PlaceTile(possible[Random.Range(0, possible.Length)]);
+            else throw new System.IndexOutOfRangeException($"Found no options for placing tile");
         }
+    }
+
+    private record TileNeighbors (
+        Vector2Int position,
+        TileNeighbour positiveX,
+        TileNeighbour positiveZ,
+        TileNeighbour negativeX,
+        TileNeighbour negativeZ
+    ) {
+        private LevelTile[] Union()
+        {
+            List<LevelTile> union = new();
+            union.AddRange(positiveX.negativeX);
+            union.AddRange(positiveZ.negativeZ);
+            union.AddRange(negativeX.positiveX);
+            union.AddRange(negativeZ.positiveZ);
+            return union.Where(t => t != null).ToArray();
+        }
+
+        public bool IsValid(TilePlacement tile)
+        {
+            return positiveX.IsApplicable(tile.positiveX)
+                && positiveZ.IsApplicable(tile.positiveZ)
+                && negativeX.IsApplicable(tile.negativeX)
+                && negativeZ.IsApplicable(tile.negativeZ);
+        }
+
+        public TilePlacement[] Possible()
+        {
+            LevelTile[] union = Union();
+            List<TilePlacement> possible = new List<TilePlacement>();
+
+            for (int rotation = 0; rotation < 360; rotation += 90)
+                foreach (LevelTile tile in union)
+                {
+                    TilePlacement placement = new TilePlacement(tile, position, rotation);
+                    if (IsValid(placement)) possible.Add(placement);
+                }
+
+            return possible.ToArray();
+        }
+    }
+
+    private record TileNeighbour(TilePlacement placement, bool isWall)
+    {
+        public LevelTile[] positiveX => placement == null ? new LevelTile[0] : placement.positiveX;
+        public LevelTile[] positiveZ => placement == null ? new LevelTile[0] : placement.positiveZ;
+        public LevelTile[] negativeX => placement == null ? new LevelTile[0] : placement.negativeX;
+        public LevelTile[] negativeZ => placement == null ? new LevelTile[0] : placement.negativeZ;
+
+        public bool IsApplicable(LevelTile[] tiles)
+        {
+            if (tiles.Length == 0) return isWall;
+            if (isWall) return tiles.Length == 0;
+            return placement == null || tiles.Contains(placement.tile);
+        }
+    }
+
+    private record TilePlacement(LevelTile tile, Vector2Int position, int rotation)
+    {
+        public Quaternion quaternion => Quaternion.Euler(0, rotation, 0);
+
+        public LevelTile[] positiveX => rotation switch
+        {
+            0 => tile.positiveX,
+            90 => tile.positiveZ,
+            180 => tile.negativeX,
+            270 => tile.negativeZ,
+            _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
+        };
+
+        public LevelTile[] positiveZ => rotation switch
+        {
+            0 => tile.positiveZ,
+            90 => tile.negativeX,
+            180 => tile.negativeZ,
+            270 => tile.positiveX,
+            _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
+        };
+
+        public LevelTile[] negativeX => rotation switch
+        {
+            0 => tile.negativeX,
+            90 => tile.negativeZ,
+            180 => tile.positiveX,
+            270 => tile.positiveZ,
+            _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
+        };
+
+        public LevelTile[] negativeZ => rotation switch
+        {
+            0 => tile.negativeZ,
+            90 => tile.positiveX,
+            180 => tile.positiveZ,
+            270 => tile.negativeX,
+            _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
+        };
     }
 
     private void PlaceTile(LevelTile tile, Vector2Int position)
     {
-        grid[position] = tile;
-        Instantiate(tile, new Vector3(position.x - 1, 0, position.y - 1) * tileSize - physicalSize / 2, Quaternion.identity, transform);
+        PlaceTile(new TilePlacement(tile, position, 0));
+    }
+
+    private void PlaceTile(TilePlacement placement)
+    {
+        grid[placement.position] = placement;
+        Instantiate(placement.tile, new Vector3(placement.position.x - .5f, 0, placement.position.y - .5f) * tileSize - physicalSize / 2, placement.quaternion, transform);
 
         Vector2Int v;
-        if (grid.ContainsKey(v = position + new Vector2Int(-1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(+1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(0, -1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
-        if (grid.ContainsKey(v = position + new Vector2Int(0, +1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = placement.position + new Vector2Int(+1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = placement.position + new Vector2Int(0, +1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = placement.position + new Vector2Int(-1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
+        if (grid.ContainsKey(v = placement.position + new Vector2Int(0, -1)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
     }
 
     private void ConnectPath(Room destination)
