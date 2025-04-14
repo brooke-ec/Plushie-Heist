@@ -44,6 +44,8 @@ public class InventoryController : MonoBehaviour
     {
         if(selectedInventoryGrid == null) { return; }
 
+        //InventoryItem item = Instantiate the item
+
         Vector2Int? posOnGrid = selectedInventoryGrid.FindSpaceForObject(itemToInsert);
         if(posOnGrid != null) //space on grid, so place into position found
         {
