@@ -17,10 +17,20 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private float sideRoomChance = 0.5f;
     [SerializeField] private int corridorWidth = 1;
 
+    private Vector3 physicalSize => new Vector3(size.x - 1, 0, size.y - 1) * tileSize;
+
     private List<Room> rooms = new();
     private List<Edge> edges = new();
     private Dictionary<Vector2Int, LevelTile> grid = new();
     private Queue<Vector2Int> toPlace = new();
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(transform.position, physicalSize);
+    }
+#endif
 
     private void Start()
     {
@@ -75,7 +85,7 @@ public class LevelGenerator : MonoBehaviour
     private void PlaceTiles()
     {
         PlaceTile(entranceTile, Vector2Int.one);
-        PlaceTile(exitTile, new Vector2Int(size.x - 1, size.y - 1));
+        PlaceTile(exitTile, size - Vector2Int.one);
 
         while (toPlace.Count > 0)
         {
@@ -108,7 +118,7 @@ public class LevelGenerator : MonoBehaviour
     private void PlaceTile(LevelTile tile, Vector2Int position)
     {
         grid[position] = tile;
-        Instantiate(tile, new Vector3(position.x, 0, position.y) * tileSize, Quaternion.identity, transform);
+        Instantiate(tile, new Vector3(position.x - 1, 0, position.y - 1) * tileSize - physicalSize / 2, Quaternion.identity, transform);
 
         Vector2Int v;
         if (grid.ContainsKey(v = position + new Vector2Int(-1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
