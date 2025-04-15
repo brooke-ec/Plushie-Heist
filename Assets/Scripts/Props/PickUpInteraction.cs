@@ -11,7 +11,8 @@ public class PickUpInteraction : MonoBehaviour, IInteractable
     {
         Debug.Log("Picked Up"+gameObject.name);
         InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
-        inventoryController.InsertItem(Item);
+        inventoryController.TryInsertItem(Item);
+        Destroy(gameObject);
         return true;
     }
 

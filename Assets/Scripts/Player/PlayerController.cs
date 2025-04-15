@@ -1019,21 +1019,15 @@ public class PlayerController : MonoBehaviour
         {
             if (!inventoryOpen)
             {
-                foreach (Image i in inventoryUI.GetComponentsInChildren<Image>())
-                {
-                    i.enabled = true;
-                }
+                inventoryUI.SetActive(true);
                 inventoryOpen = true;
                 GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
                 Cursor.lockState = CursorLockMode.Confined;
             }
             else
             {
-               
-                foreach(Image i in inventoryUI.GetComponentsInChildren<Image>())
-                {
-                    i.enabled = false;
-                }
+
+                inventoryUI.SetActive(false);
                 inventoryOpen = false;
                 GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
                 Cursor.lockState = CursorLockMode.Locked;
