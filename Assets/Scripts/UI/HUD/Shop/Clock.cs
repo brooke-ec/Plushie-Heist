@@ -7,26 +7,53 @@ using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
-    /// <summary>
-    /// Secs from dayStartHour
-    /// </summary>
-    private float totalDayTimeSeconds; // in seconds
-    private float timeMultiplier;
-    private float dayStartHour;
-    private float dayEndHour;
-
+    /// <summary> Secs from dayStartHour </summary>
     [SerializeField] private Image coloredTop;
     [SerializeField] private Image timerFill;
     [SerializeField] private TextMeshProUGUI timerText;
     public Gradient gradient;
 
+    [Header("Settings")]
+    /// <summary> The duration of the "activity" day (dayEndHour - dayStartHour), in real-life minutes
+    /// If dayStartHour is 9, and dayEndHour is 17, and this value is 2, then it will take 2 real minutes to go from 9am until 5pm
+    /// </summary>
+    [SerializeField] private float lengthOfDayInRealMins;
+    /// <summary> at what time to start the day, 9 means 9am </summary>
+    private int dayStartHour;
+    /// <summary> at what time to end the day (close the shop), 17 means 5pm </summary>
+    int dayEndHour;
+    /// <summary> If true, behaves as the shop clock, calling the equivalent end function. Otherwise, behaves as the night clock </summary>
+    [SerializeField] bool isShopClock = true;
 
-    public void SetupClock(float timeMultiplier, float lengthOfDayInRealMins, int dayStartHour, int dayEndHour)
+    private float totalDayTimeSeconds; // in seconds
+    private float timeMultiplier;
+
+    private float GetTimeMultiplier()
     {
-        this.timeMultiplier = timeMultiplier;
-        this.dayStartHour = dayStartHour;
-        this.dayEndHour = dayEndHour;
+        //essentially, for every real second, how many in-game minutes should pass
+        float realDayDurationSecs = lengthOfDayInRealMins * 60f;
 
+        float totalInGameMinutes = GetTimeDifference() * 60f;
+        float timeMultiplier = totalInGameMinutes / realDayDurationSecs;
+
+        return timeMultiplier;
+    }
+
+    public void SetupClock()
+    {
+        if (isShopClock)
+        {
+            GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
+            dayStartHour = 9;
+            dayEndHour = 17;
+        }
+        else
+        {
+            dayStartHour = 21;
+            dayEndHour = 5;
+        }
+
+        timeMultiplier = GetTimeMultiplier();
         totalDayTimeSeconds = lengthOfDayInRealMins * 60f;
 
         SetClockUI(dayStartHour);
@@ -56,12 +83,19 @@ public class Clock : MonoBehaviour
 
         SetClockUI(elapsedTime * timeMultiplier);
 
-        Debug.LogWarning("End of day");
+        if(isShopClock)
+        {
+            Debug.LogWarning("End of day");
+        }
+        else
+        {
+            Debug.LogWarning("End of night");
+        }
     }
 
     private void SetClockUI(float inGameMinutes)
     {
-        float totalInGameMinutes = (dayEndHour - dayStartHour) * 60f;
+        float totalInGameMinutes = GetTimeDifference() * 60f;
         float val = 1 - (inGameMinutes / totalInGameMinutes);
 
         Color colour = gradient.Evaluate(val);
@@ -72,8 +106,10 @@ public class Clock : MonoBehaviour
 
         //Display time
         (int hour, int minute) = GetCurrentInGameTime();
-
-        timerText.text = string.Format("{0:00}:{1:00}", hour, minute);
+        if(minute%5==0)
+        {
+            timerText.text = string.Format("{0:00}:{1:00}", hour, minute);
+        }
     }
 
     public (int hour, int minute) GetCurrentInGameTime()
@@ -81,8 +117,24 @@ public class Clock : MonoBehaviour
         float inGameMinutes = elapsedTime * timeMultiplier;
         int totalMinutes = Mathf.FloorToInt(inGameMinutes);
         int hour = (int)(dayStartHour + (totalMinutes / 60));
+
+        if(hour>=24)
+        {
+            hour = hour - 24;
+        }
+
         int minute = totalMinutes % 60;
         return (hour, minute);
+    }
+
+    private int GetTimeDifference()
+    {
+        //it means it goes from like 22 until like 3
+        if(dayEndHour - dayStartHour < 0)
+        {
+            return dayEndHour - dayStartHour + 24;
+        }
+        return dayEndHour - dayStartHour;
     }
 
     /// <summary>
