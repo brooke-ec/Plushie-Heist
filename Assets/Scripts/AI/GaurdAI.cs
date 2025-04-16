@@ -62,7 +62,8 @@ public class GaurdAI : MonoBehaviour
         }
     }
     #endregion
-    
+
+    #region Player Interaction
     public void detect(GameObject detectee)
     {
         Ray LOSRay = new Ray(transform.position, detectee.transform.position - (transform.position+new Vector3(0,-1,0)));
@@ -93,4 +94,5 @@ public class GaurdAI : MonoBehaviour
     {
         chasee.GetComponent<PlayerController>().arrested = true;
     }
+    #endregion
 }
