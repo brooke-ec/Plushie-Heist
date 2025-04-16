@@ -47,7 +47,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
     /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
-    private bool InsertItem(ItemClass itemClassToInsert)
+    public bool InsertItem(ItemClass itemClassToInsert)
     {
         if (inventoryGridToAddItems == null) { return false; }
 
