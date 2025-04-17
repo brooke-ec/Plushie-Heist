@@ -85,6 +85,7 @@ public class Clock : MonoBehaviour
 
         if(isShopClock)
         {
+            ShopManager.instance.EndShoppingDay();
             Debug.LogWarning("End of day");
         }
         else

@@ -11,19 +11,22 @@ public class ProductRowUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI productName;
-    [SerializeField] private TextMeshProUGUI marketPrice;
+    [SerializeField] private TextMeshProUGUI lastMarketPrice;
     [SerializeField] private TextMeshProUGUI lastDayChanged;
+    [SerializeField] private TextMeshProUGUI marketPrice;
     [SerializeField] private TMP_InputField price;
     [SerializeField] private TextMeshProUGUI profit;
 
     public void Set(ProductData productData)
     {
         productDataRef = productData;
-        productName.text = productDataRef.productName;
-        marketPrice.text = productDataRef.marketPrice.ToString();
-        lastDayChanged.text = productDataRef.GetLastDayChangedText(0); //need to change eventually to pass the actual day
-        price.text = productDataRef.price.ToString();
-        profit.text = productDataRef.GetProfitAsString();
+        productName.text = productDataRef.itemRef.itemName;
+        marketPrice.text = "£"+productDataRef.marketPrice.ToString("F2");
+        lastMarketPrice.text = "£" +productDataRef.lastMarketPrice.ToString("F2");
+        lastDayChanged.text = productDataRef.GetLastDayChangedText(); //need to change eventually to pass the actual day
+        price.text = productDataRef.price.ToString("F2");
+        profit.text = "£"+productDataRef.GetMarginAsString();
+        icon.sprite = productData.itemRef.itemIcon;
     }
 
     /// <summary>
@@ -35,6 +38,6 @@ public class ProductRowUI : MonoBehaviour
         float.TryParse(price.text, out newPrice);
         productDataRef.price = newPrice;
 
-        profit.text = productDataRef.GetProfitAsString();
+        profit.text = productDataRef.GetMarginAsString();
     }
 }

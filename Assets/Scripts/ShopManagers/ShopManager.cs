@@ -11,6 +11,7 @@ using UnityEngine;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
+    public int day;
     public static ShopManager instance { get; private set; }
 
     private void Awake()
@@ -32,14 +33,18 @@ public class ShopManager : MonoBehaviour
 
     private void StartNewDay()
     {
+        day++;
+
+        Clock shopTimer = Instantiate(shopTimerPrefab, UIManager.instance.rootCanvas.transform);
         shopTimer.SetupClock();
         shopTimer.StartCoroutine(shopTimer.StartClock());
+
+        StocksController.instance.NewDay(day);
     }
 
     #region Time
 
-    [SerializeField] private Clock shopTimer;
-    public int day;
+    [SerializeField] private Clock shopTimerPrefab;
 
     /// <summary>
     /// Called by clock when the time reaches the dayEndHour, will mean that clients stop coming
@@ -47,6 +52,10 @@ public class ShopManager : MonoBehaviour
     public void EndShoppingDay()
     {
         //TO-DO MAKE CLIENTS STOP COMING
+
+        //Won't be here, as this will actually be triggered once the LAST customer is done
+        //AND THEN the night is over, that's when it will be called
+        StartNewDay();
     }
     #endregion
 }

@@ -2,64 +2,62 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class PricingTableManager : MonoBehaviour
 {
     public ProductRowUI rowPrefab;
     public Transform contentTransform;
     /// <summary> Logical storage of the product data. Data might be sorted </summary>
-    private List<ProductData> products;
+    private List<ProductData> products = new List<ProductData>();
+    /// <summary> ORIGINAL Logical storage of the product data </summary>
+    [HideInInspector] public List<ProductData> originalProducts = new List<ProductData>();
 
     /// <summary> UI storage of data </summary>
     [HideInInspector] public List<ProductRowUI> productRows;
 
-    /// <summary> ORIGINAL Logical storage of the product data </summary>
-    public List<ProductData> originalProducts;
-
-    private void Start()
-    {
-        products = new List<ProductData>(originalProducts.Count);
-        //Assign reference to each product data in originalProducts to products. This is so that if a ProductData is changed, like price, then it's still updated on the originalProducts
-        //but they keep their own ordering
-        for(int i=0;i<originalProducts.Count; i++)
-        {
-            products.Add(originalProducts[i]);
-        }
-        PopulateTable();
-    }
-
+    #region Adding products
     /// <summary>
-    /// Call to add a new product to the table
+    /// Call to try add a new product to the table.
+    /// Adds it if not already present, otherwise nothing happens.
     /// </summary>
-    /// <param name="item">Item to add</param>
+    /// <param name="product">Item to add</param>
     /// <param name="populateTableImmediately">If true, PopulateTable() will be called immediately, otherwise it won't be done. Useful not to for performance if done in larger numbers</param>
-    public void AddNewProduct(ItemClass item, bool populateTableImmediately=true)
+    public void TryAddNewProduct(ProductData product, bool populateTableImmediately = true)
     {
-        //TO-DO MISSING GETTING TODAY'S ACTUAL DAY
-        int todaysDay = 0;
-        ProductData newProduct = new ProductData(item.itemIcon, item.itemName, item.marketPrice, todaysDay);
-        originalProducts.Add(newProduct);
-        products.Add(newProduct);
+        int todaysDay = ShopManager.instance.day;
 
-        if (populateTableImmediately)
+        //if not already present in table
+        if (originalProducts.Find(p => p.itemRef.Equals(product.itemRef)) == null)
         {
-            PopulateTable();
+            product.lastDayChanged = todaysDay;
+            originalProducts.Add(product);
+            products.Add(product);
+
+            if (populateTableImmediately)
+            {
+                PopulateTable();
+            }
+            print("Item " + product.itemRef.itemName + " added to pricing table");
+        }
+        else
+        {
+            print("item " + product.itemRef.itemName + " already exists in pricing table. Not added");
         }
     }
 
     /// <summary>
-    /// Call to add a list of new products to the table
+    /// Call to try to add a list of new products to the table.
+    /// Adds a given product if not already present, otherwise nothing happens.
     /// </summary>
     /// <param name="items">Items to add</param>
-    public void AddNewProducts(List<ItemClass> items)
+    public void TryAddNewProducts(List<ProductData> items)
     {
-        foreach(ItemClass item in items)
+        foreach (ProductData product in items)
         {
-            AddNewProduct(item, false);
+            TryAddNewProduct(product, false);
         }
     }
-
+    #endregion
 
     private void PopulateTable()
     {
@@ -78,7 +76,6 @@ public class PricingTableManager : MonoBehaviour
     }
 
 
-
     #region Area for sorting with buttons
     [SerializeField] private Transform pricingHeaderUIsTransform;
     public enum PricingHeaders
@@ -87,7 +84,8 @@ public class PricingTableManager : MonoBehaviour
         marketPrice,
         lastChange,
         price,
-        profit
+        margin,
+        lastMarketPrice
     }
 
     public void SortByHeader(PricingHeaders header)
