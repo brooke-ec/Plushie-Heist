@@ -114,7 +114,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -346,61 +346,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
-    m_ActionName: InventoryActions/Rotate[/Keyboard/r]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: startDrag
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
-    m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: getMousePos
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
-    m_ActionName: InventoryActions/Mouse[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: openInventory
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_ActionId: f65804dd-459c-4099-adf5-d259327de607
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
+    m_ActionName: InventoryActions/Rotate[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
+    m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
+    m_ActionName: InventoryActions/Mouse[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
+    m_ActionName: InventoryActions/CloseInventory[/Keyboard/e]
+  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: openInventory
+      - m_Target: {fileID: 594284680598497189}
+        m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
+        m_MethodName: OnPlace
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -410,8 +378,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
-    m_ActionName: InventoryActions/CloseInventory[/Keyboard/e]
+    m_ActionId: 1f65624e-dcec-4a9a-b322-4c22406d9109
+    m_ActionName: PlayerMovement/Place[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 594284680598497189}
+        m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
+        m_MethodName: OnRotate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
+    m_ActionName: PlayerMovement/Rotate[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
@@ -446,6 +430,7 @@ GameObject:
   - component: {fileID: 5249751877190587910}
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
+  - component: {fileID: 594284680598497189}
   m_Layer: 7
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -507,7 +492,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 375
+    m_Bits: 1527
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -527,6 +512,25 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8461329353988155359}
   m_Enabled: 1
+--- !u!114 &594284680598497189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461329353988155359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b90c5da8185ac4fa31860aaf7bfe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 10
+  camera: {fileID: 499776393120379558}
+  controller: {fileID: 2651383046741006912}
+  test:
+  - {fileID: 6780374097032370668, guid: 51f6989b187924040ab4e19c37861cc5, type: 3}
+  - {fileID: 6780374097032370668, guid: 252f51414d68b36469e00e99b12c0e38, type: 3}
+  - {fileID: 6780374097032370668, guid: 0923b4e5de3ea2a4288da2acac22b43d, type: 3}
 --- !u!1001 &4016792249454491525
 PrefabInstance:
   m_ObjectHideFlags: 0
