@@ -44,9 +44,9 @@ public class LevelRoom : Region
         left = Mathf.Max(left, 0);
     }
 
-    public void Shrink()
+    public void Shrink(int amount)
     {
-        left += 1;
-        bottom += 1;
+        left += amount;
+        bottom += amount;
     }
 }
