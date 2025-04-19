@@ -50,7 +50,7 @@ public class SkillButton : MonoBehaviour
         if (IsBranchVisible() && CanBeUnlocked())
         {
             //Then unlock
-            FindAnyObjectByType<UIManager>().ModifyMoney(-skill.cost);
+            ShopManager.instance.ModifyMoney(-skill.cost);
             skillTreeController.unlockedSkills.Add(skill);
             UpdateUI();
 
@@ -83,7 +83,7 @@ public class SkillButton : MonoBehaviour
         if (IsUnlocked()) { return false; }
 
         //TO-DO properly
-        if (FindAnyObjectByType<UIManager>().GetMoney() < skill.cost)
+        if (ShopManager.instance.GetMoney() < skill.cost)
         {
             return false;
         }

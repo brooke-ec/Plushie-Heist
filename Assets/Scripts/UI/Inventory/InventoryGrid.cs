@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,10 +29,10 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         inventoryController = FindAnyObjectByType<InventoryController>();
         rectTransform = GetComponent<RectTransform>();
 
-        scaleFactor = FindAnyObjectByType<UIManager>().scaleFactor;
+        scaleFactor = SharedUIManager.instance.scaleFactor;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight);
-        PlaceTestItems();
+        //PlaceTestItems();
     }
 
     #region Setup
@@ -139,8 +140,24 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
+    public bool IsThisItemTypeInTheInventory(ItemClass itemClass)
+    {
+        for(int x=0;x<inventoryWidth; x++)
+        {
+            for(int y=0;y<inventoryHeight; y++)
+            {
+                if (inventorySlots[x, y] != null && itemClass.Equals(inventorySlots[x, y].itemClass))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     /// <summary> cleans grid area of where the item used to be </summary>
-    private void CleanGridReference(InventoryItem item)
+    public void CleanGridReference(InventoryItem item)
     {
         for (int x = 0; x < item.Width; x++)
         {
@@ -244,7 +261,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     //
     public void PlaceTestItems()
     {
-        Transform rootCanvas = FindAnyObjectByType<UIManager>().rootCanvas.transform;
+        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
         InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item.Set(itemsToTest[0]);
         PlaceItem(item, 0, 0);

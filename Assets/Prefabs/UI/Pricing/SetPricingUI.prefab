@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 136635906320228058}
+  - component: {fileID: 2970004202803248526}
   m_Layer: 5
   m_Name: SetPricingUI
   m_TagString: Untagged
@@ -25,7 +26,7 @@ RectTransform:
   m_GameObject: {fileID: 764140857412326423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4438234724113837713}
@@ -39,6 +40,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 301.7739, y: 234}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2970004202803248526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764140857412326423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a861b36d914fce54db33dc0ba47a0fed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  green:
+    serializedVersion: 2
+    rgba: 4288792199
+  pink:
+    serializedVersion: 2
+    rgba: 4287594473
+  itemIcon: {fileID: 6977718051125526344}
+  itemName: {fileID: 5159589841079286990}
+  itemMarketPrice: {fileID: 845754075195596823}
+  priceInputField: {fileID: 1214193754149842376}
+  margin: {fileID: 7307734733441373482}
+  marginPoundText: {fileID: 7455258293894346873}
 --- !u!1 &810549389064698925
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,6 +75,7 @@ GameObject:
   - component: {fileID: 4479550583551979021}
   - component: {fileID: 5798711954782542586}
   - component: {fileID: 2423836734818374292}
+  - component: {fileID: 7846959219051967991}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -115,6 +141,62 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
+--- !u!114 &7846959219051967991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810549389064698925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2423836734818374292}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2970004202803248526}
+        m_TargetAssemblyTypeName: SetPricingUIFunctionality, Assembly-CSharp
+        m_MethodName: OnSetPricing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &865217969375690863
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,7 +1347,7 @@ GameObject:
   - component: {fileID: 6552803699875579083}
   - component: {fileID: 7307734733441373482}
   m_Layer: 5
-  m_Name: Price
+  m_Name: Margin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1950,8 +2032,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ProductRowUI, Assembly-CSharp
+      - m_Target: {fileID: 2970004202803248526}
+        m_TargetAssemblyTypeName: SetPricingUIFunctionality, Assembly-CSharp
         m_MethodName: OnChangePrice
         m_Mode: 1
         m_Arguments:
@@ -2539,7 +2621,7 @@ MonoBehaviour:
   m_fontSizeMin: 10
   m_fontSizeMax: 17
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: -3
@@ -2875,7 +2957,7 @@ GameObject:
   - component: {fileID: 8602541702327848800}
   - component: {fileID: 3079504989328107943}
   m_Layer: 5
-  m_Name: ProfitText
+  m_Name: MarginText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

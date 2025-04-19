@@ -9,25 +9,15 @@ using UnityEngine;
 /// </summary>
 public class StocksController : MonoBehaviour
 {
-    public static StocksController instance { get; private set; }
     private PricingTableManager pricingTableManager;
 
     [SerializeField] private List<ItemClass> allItemsInGame = new List<ItemClass>();
     [HideInInspector] public List<ProductData> allStocksInGame;
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            instance = this;
-        }
-    }
+    public SetPricingUIFunctionality setPricingUIPrefab;
 
-    private void Start()
+    #region Setup
+    private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
         CreateAllProductData();
@@ -45,6 +35,9 @@ public class StocksController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Actions
     /// <summary>
     /// TO-DO Call when furniture is placed OR new item added to inventory
     /// Essentially, we check if the passed furniture is already part
@@ -55,8 +48,16 @@ public class StocksController : MonoBehaviour
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
-            //TO-DO THIS pricingTableManager.TryAddNewProduct(product);
             pricingTableManager.TryAddNewProduct(product);
+        }
+    }
+
+    public void TryRemoveFurnitureFromPricingTable(ItemClass item)
+    {
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            pricingTableManager.TryRemoveProduct(product);
         }
     }
 
@@ -73,7 +74,7 @@ public class StocksController : MonoBehaviour
         int maxNumOfChanges = 3;*/
 
         int minNumOfChanges = allStocksInGame.Count / 10;
-        int maxNumOfChanges = allStocksInGame.Count / 4;
+        int maxNumOfChanges = allStocksInGame.Count / 1;
         int numOfChanges = UnityEngine.Random.Range(minNumOfChanges, maxNumOfChanges + 1);
 
         //shuffle list of items
@@ -99,13 +100,29 @@ public class StocksController : MonoBehaviour
                 product.lastDayChanged = day;
             }
         }
-        
-        if(productsToChange.Count>=1)
+
+        //Essentially to update ALL of them, because even those not modified need to say like "yesterday"
+        pricingTableManager.ResetTableToOriginalOrder();
+    }
+
+    public void CreateSetPricingUI(ItemClass item)
+    {
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
         {
-            pricingTableManager.ResetTableToOriginalOrder();
+            SetPricingUIFunctionality pricingUI = Instantiate(setPricingUIPrefab, ShopManager.instance.mainCanvas.transform);
+            pricingUI.SetUI(product);
         }
     }
 
+    public void UpdateProduct(ProductData product)
+    {
+        pricingTableManager.UpdateThisProductInfo(product);
+    }
+
+    #endregion
+
+    #region Extras
     private float RoundToRetailPrice(float price)
     {
         float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
@@ -117,4 +134,5 @@ public class StocksController : MonoBehaviour
 
         return basePart + closestEnding;
     }
+    #endregion
 }

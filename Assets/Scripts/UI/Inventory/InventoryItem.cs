@@ -17,7 +17,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         backgroundRectTransform = transform.GetChild(1).GetComponent<RectTransform>();
         icon = transform.GetChild(2).GetComponent<Image>();
 
-        scaleFactor = FindAnyObjectByType<UIManager>().scaleFactor;
+        scaleFactor = FindAnyObjectByType<SharedUIManager>().scaleFactor;
     }
 
     public int Height
