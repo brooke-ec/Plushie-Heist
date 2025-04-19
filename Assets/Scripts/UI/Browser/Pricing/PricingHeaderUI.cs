@@ -46,8 +46,11 @@ public class PricingHeaderUI : MonoBehaviour
             case PricingTableManager.PricingHeaders.price:
                 products = SortByPrice(products);
                 break;
-            case PricingTableManager.PricingHeaders.profit:
-                products = SortByProfit(products);
+            case PricingTableManager.PricingHeaders.margin:
+                products = SortByMargin(products);
+                break;
+            case PricingTableManager.PricingHeaders.lastMarketPrice:
+                products = SortByLastMarketPrice(products);
                 break;
             default:
                 Debug.LogWarning("Problem with header being none");
@@ -85,11 +88,11 @@ public class PricingHeaderUI : MonoBehaviour
 
         if (ascending)
         {
-            products.Sort((p, p2) => p.productName.CompareTo(p2.productName));
+            products.Sort((p, p2) => p.itemRef.itemName.CompareTo(p2.itemRef.itemName));
         }
         else
         {
-            products.Sort((p, p2) => p2.productName.CompareTo(p.productName));
+            products.Sort((p, p2) => p2.itemRef.itemName.CompareTo(p.itemRef.itemName));
         }
         return products;
     }
@@ -109,6 +112,20 @@ public class PricingHeaderUI : MonoBehaviour
         return products;
     }
 
+    private List<ProductData> SortByLastMarketPrice(List<ProductData> products)
+    {
+        ascending = !ascending;
+
+        if (ascending)
+        {
+            products.Sort((p, p2) => p.lastMarketPrice.CompareTo(p2.marketPrice));
+        }
+        else
+        {
+            products.Sort((p, p2) => p2.lastMarketPrice.CompareTo(p.marketPrice));
+        }
+        return products;
+    }
     private List<ProductData> SortByLastChange(List<ProductData> products)
     {
         ascending = !ascending;
@@ -139,17 +156,17 @@ public class PricingHeaderUI : MonoBehaviour
         return products;
     }
 
-    private List<ProductData> SortByProfit(List<ProductData> products)
+    private List<ProductData> SortByMargin(List<ProductData> products)
     {
         ascending = !ascending;
 
         if (ascending)
         {
-            products.Sort((p, p2) => p.GetProfit().CompareTo(p2.GetProfit()));
+            products.Sort((p, p2) => p.GetMargin().CompareTo(p2.GetMargin()));
         }
         else
         {
-            products.Sort((p, p2) => p2.GetProfit().CompareTo(p.GetProfit()));
+            products.Sort((p, p2) => p2.GetMargin().CompareTo(p.GetMargin()));
         }
         return products;
     }

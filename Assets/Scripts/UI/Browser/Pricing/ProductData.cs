@@ -5,23 +5,25 @@ using UnityEngine;
 [System.Serializable]
 public class ProductData
 {
-    public Sprite icon;
-    public string productName;
-    public float marketPrice;
+    public ItemClass itemRef;
     public int lastDayChanged;
+    [HideInInspector] public float marketPrice;
+    [HideInInspector] public float lastMarketPrice;
     public float price;
 
-    public ProductData(Sprite icon, string productName, float marketPrice, int todaysDay)
+    public ProductData(ItemClass item, int todaysDay)
     {
-        this.icon = icon;
-        this.productName = productName;
-        this.marketPrice = marketPrice;
-        this.lastDayChanged = todaysDay;
-        this.price = marketPrice;
+        itemRef = item;
+        lastMarketPrice = item.marketPrice;
+        marketPrice = item.marketPrice;
+        lastDayChanged = todaysDay;
+        price = marketPrice;
     }
 
-    public string GetLastDayChangedText(int todaysDay)
+    public string GetLastDayChangedText()
     {
+        int todaysDay = ShopManager.instance.day;
+
         if (lastDayChanged == todaysDay)
         {
             return "Today";
@@ -36,17 +38,17 @@ public class ProductData
         }
     }
 
-    public float GetProfit()
+    public float GetMargin()
     {
         return price - marketPrice;
     }
 
     /// <summary>
-    /// Gets profit as a 2 decimal number as a string
+    /// Gets margin as a 2 decimal number as a string
     /// </summary>
     /// <returns>Profit as a 2 decimal number as a string</returns>
-    public string GetProfitAsString()
+    public string GetMarginAsString()
     {
-        return GetProfit().ToString("n2");
+        return GetMargin().ToString("n2");
     }
 }
