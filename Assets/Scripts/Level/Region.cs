@@ -1,7 +1,8 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Region
+public class Region : IEnumerable<Vector2Int>
 {
     public int top, right, bottom, left;
 
@@ -10,29 +11,6 @@ public class Region
     public Vector2 half => new Vector2(size.x, size.y) * 0.5f;
     public Vector2 start => new Vector2(left, bottom);
     public Vector2 end => new Vector2(right, top);
-
-    private Region(int x1, int y1, int x2, int y2)
-    {
-        this.top = Mathf.Max(y1, y2);
-        this.right = Mathf.Max(x1, x2);
-        this.bottom = Mathf.Min(y1, y2);
-        this.left = Mathf.Min(x1, x2);
-    }
-
-    public static Region FromBounds(int x1, int y1, int x2, int y2)
-    {
-        return new Region(x1, y1, x2, y2);
-    }
-
-    public static Region FromSize(int x, int y, int width, int height)
-    {
-        return new Region(x, y, x + width, y + height);
-    }
-
-    public static Region FromPoint(int x, int y)
-    {
-        return Region.FromSize(x, y, 1, 1);
-    }
 
     public bool Within(Vector2Int size)
     {
@@ -68,23 +46,37 @@ public class Region
         return hit;
     }
 
-    public class IntersectResult
+    public IEnumerator<Vector2Int> GetEnumerator()
     {
-        public int deltaX, deltaY;
-        public int dirX, dirY;
-        public int separation;
-        public bool hit;
+        for (int x = left; x < right; x++)
+            for (int y = bottom; y < top; y++)
+                yield return new Vector2Int(x, y);
+    }
 
-        public Vector2Int delta => new Vector2Int(deltaX, deltaY);
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
 
-        public IntersectResult(bool hit)
-        {
-            this.separation = 0;
-            this.hit = hit;
-            deltaX = 0;
-            deltaY = 0;
-            dirX = 0;
-            dirY = 0;
-        }
+public static class RegionFactory
+{
+    public static T FromBounds<T>(this T region, int x1, int y1, int x2, int y2) where T : Region
+    {
+        region.top = Mathf.Max(y1, y2);
+        region.right = Mathf.Max(x1, x2);
+        region.bottom = Mathf.Min(y1, y2);
+        region.left = Mathf.Min(x1, x2);
+        return region;
+    }
+
+    public static T FromSize<T>(this T region, int x, int y, int width, int height) where T : Region
+    {
+        return FromBounds(region, x, y, x + width, y + height);
+    }
+
+    public static T FromPoint<T>(this T region, int x, int y) where T : Region
+    {
+        return FromSize(region, x, y, 1, 1);
     }
 }
