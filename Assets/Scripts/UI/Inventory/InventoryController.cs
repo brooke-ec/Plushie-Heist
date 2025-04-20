@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -57,7 +58,7 @@ public class InventoryController : MonoBehaviour
         bool gridWasOriginallyOff = !inventoryGridToAddItems.gameObject.activeSelf;
 
         //Instantiate the item
-        Transform rootCanvas = FindAnyObjectByType<UIManager>().rootCanvas.transform;
+        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
         InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item.Set(itemClassToInsert);
 
@@ -82,7 +83,35 @@ public class InventoryController : MonoBehaviour
             inventoryGridToAddItems.gameObject.SetActive(false);
         }
 
+        if (addedItemSuccessfully)
+        {
+            //if we're not in the night
+            if (ShopManager.instance != null)
+            {
+                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(itemClassToInsert);
+            }
+        }
+
         return addedItemSuccessfully;
+    }
+
+    /// <summary>
+    /// Call when you want to remove a given InventoryItem from the inventory.
+    /// For example, when you want to place it, calls this so the grid space is cleared (and potentially removed from the pricing table)
+    /// </summary>
+    /// <param name=""></param>
+    public void RemoveItemFromInventory(InventoryItem item)
+    {
+        inventoryGridToAddItems.CleanGridReference(item);
+        print("item removed from inventory");
+
+        //see if there is another of this in the inventory, if there isn't then call try remove
+        if(!inventoryGridToAddItems.IsThisItemTypeInTheInventory(item.itemClass) && ShopManager.instance!=null)
+        {
+            ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.itemClass);
+        }
+
+        Destroy(item.gameObject);
     }
 
     /// <summary> Left click </summary>
@@ -143,6 +172,22 @@ public class InventoryController : MonoBehaviour
         }
     }
     #endregion
+
+    #region Test
+    public List<ItemClass> itemsToTest = new List<ItemClass>();
+    //
+    public void PlaceTestItems()
+    {
+        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
+        InsertItem(itemsToTest[0]);
+
+        InsertItem(itemsToTest[1]);
+
+        InsertItem(itemsToTest[0]);
+    }
+    #endregion
+
+    //MISSING DRAGGING INSTEAD OF CLICK TO-DO
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)
     {
