@@ -46,6 +46,21 @@ public class PricingTableManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Call to remove product if it exists
+    /// </summary>
+    /// <param name="product"></param>
+    public void TryRemoveProduct(ProductData product)
+    {
+        if (originalProducts.Find(p => p.itemRef.Equals(product.itemRef)) != null)
+        {
+            originalProducts.Remove(product);
+            products.Remove(product);
+
+            PopulateTable();
+        }
+    }
+
+    /// <summary>
     /// Call to try to add a list of new products to the table.
     /// Adds a given product if not already present, otherwise nothing happens.
     /// </summary>
@@ -59,6 +74,13 @@ public class PricingTableManager : MonoBehaviour
     }
     #endregion
 
+    public void UpdateThisProductInfo(ProductData product)
+    {
+        ProductRowUI productRow = productRows.Find(p => p.productDataRef.Equals(product));
+        if(productRow==null) { return; }
+
+        productRow.Set(product);
+    }
     private void PopulateTable()
     {
         //Clear previous rows

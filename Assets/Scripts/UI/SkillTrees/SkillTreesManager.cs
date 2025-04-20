@@ -20,7 +20,7 @@ public class SkillTreesManager : MonoBehaviour
         CreateAllSkillTrees();
         skillTrees[currentlyActiveSkillTree].gameObject.SetActive(true);
         ChangeSkillButtonLook();
-        UIManager.OnMoneyChanged += UpdateCoins;
+        ShopManager.OnMoneyChanged += UpdateCoins;
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
     }
@@ -87,7 +87,7 @@ public class SkillTreesManager : MonoBehaviour
         Sprite newButtonBackground = skillTrees[currentlyActiveSkillTree].skillTree.palette.canBeUpgradedSprite;
         coinsContainer.GetChild(1).GetComponent<Image>().sprite = newButtonBackground;
 
-        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = FindAnyObjectByType<UIManager>().GetMoney().ToString();
+        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString();
     }
 
     #endregion

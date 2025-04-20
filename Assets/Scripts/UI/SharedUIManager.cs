@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+/// <summary>
+/// Used ONLY for shared UI between shop and night (inventory)
+/// </summary>
+public class SharedUIManager : MonoBehaviour
 {
     public Canvas rootCanvas;
     [HideInInspector] public float scaleFactor;
@@ -9,12 +12,7 @@ public class UIManager : MonoBehaviour
     [Header("Testing")]
     [SerializeField] private InventoryGrid gridToStart;
 
-    public static UIManager instance { get; private set; }
-
-    //SHOULD NOT BE HERE, ONLY FOR NOW
-    private int money = 30;
-    public static event Action OnMoneyChanged;
-    //
+    public static SharedUIManager instance { get; private set; }
 
     private void Awake()
     {
@@ -32,16 +30,7 @@ public class UIManager : MonoBehaviour
     {
         scaleFactor = rootCanvas.scaleFactor;
         gridToStart.StartInventory();
-    }
 
-    public int GetMoney()
-    {
-        return money;
-    }
-
-    public void ModifyMoney(int modification)
-    {
-        money += modification;
-        OnMoneyChanged?.Invoke();
+        GetComponent<InventoryController>().PlaceTestItems();
     }
 }

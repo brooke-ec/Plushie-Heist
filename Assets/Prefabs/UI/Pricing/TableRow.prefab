@@ -786,7 +786,7 @@ GameObject:
   - component: {fileID: 20295530407443386}
   - component: {fileID: 1503863927801320162}
   m_Layer: 5
-  m_Name: Profit
+  m_Name: Margin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1581,10 +1581,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed90b518f629724491e4ae30d6007e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  productDataRef:
+    itemRef: {fileID: 0}
+    lastDayChanged: 0
+    marketPrice: 0
+    lastMarketPrice: 0
+    price: 0
   icon: {fileID: 6172918060327901218}
   productName: {fileID: 161415259543528203}
   lastMarketPrice: {fileID: 8813249125247565020}
   lastDayChanged: {fileID: 2605784687297044834}
   marketPrice: {fileID: 2422216357193836525}
   price: {fileID: 3926299613942130632}
-  profit: {fileID: 1503863927801320162}
+  margin: {fileID: 1503863927801320162}
+  greenColour:
+    serializedVersion: 2
+    rgba: 4286160734
+  pinkColour:
+    serializedVersion: 2
+    rgba: 4287594473
