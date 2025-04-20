@@ -6,7 +6,7 @@ using UnityEngine;
 public class PathGenerator
 {
     [SerializeField] private float sideRoomChance = 0.5f;
-    [SerializeField] private int collapseChance = 1;
+    [SerializeField] private float collapseChance = 0.5f;
     [SerializeField] private int corridorWidth = 1;
 
     private LevelRoom start => rooms.First((r) => r.bottom == 0 && r.left == 0);
