@@ -3,9 +3,14 @@ using System.Collections.Generic;
 
 public static class Util
 {
-    public static void ForEach<T>(this IEnumerable<T> enumerator, Action<T> action)
+    public static void ForEach<T>(this IEnumerator<T> enumerator, Action<T> action)
     {
-        foreach (T position in enumerator) action(position);
+        using (enumerator) while (enumerator.MoveNext()) action(enumerator.Current);
+    }
+
+    public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+    {
+        ForEach(enumerable.GetEnumerator(), action);
     }
 }
 

@@ -309,16 +309,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6a0483b0c7c7e4c871d867a9a6b4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entranceTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
-  exitTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
-  minRoom: 4
-  maxRoom: 8
-  growAmount: 4
-  tileSize: 10
-  seedDistance: 2
   size: {x: 24, y: 32}
-  sideRoomChance: 0.25
-  corridorWidth: 1
+  roomGenerator:
+    seedDistance: 2
+    growAmount: 4
+    minRoom: 4
+    maxRoom: 9
+  pathGenerator:
+    sideRoomChance: 0.5
+    collapseChance: 1
+    corridorWidth: 1
+  tileGenerator:
+    <tileSize>k__BackingField: 10
+    startTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
+    endTile: {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
 --- !u!4 &1291487895
 Transform:
   m_ObjectHideFlags: 0
