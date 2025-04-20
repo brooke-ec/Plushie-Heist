@@ -188,7 +188,6 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     //MISSING DRAGGING INSTEAD OF CLICK TO-DO
-}
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)
     {
