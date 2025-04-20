@@ -34,7 +34,7 @@ public class HoveringManager : MonoBehaviour
 
     private void Start()
     {
-        canvasTransform = FindAnyObjectByType<UIManager>().rootCanvas.transform;
+        canvasTransform = SharedUIManager.instance.rootCanvas.transform;
         CalculateOffset();
     }
 

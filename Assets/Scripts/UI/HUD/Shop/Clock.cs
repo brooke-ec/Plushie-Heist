@@ -63,6 +63,7 @@ public class Clock : MonoBehaviour
 
     public IEnumerator StartClock()
     {
+        elapsedTime = 0;
         while(elapsedTime < totalDayTimeSeconds)
         {
             elapsedTime += Time.deltaTime;
@@ -80,6 +81,7 @@ public class Clock : MonoBehaviour
     {
         //TO-DO play a sound
         elapsedTime = totalDayTimeSeconds;
+        StopCoroutine(StartClock());
 
         SetClockUI(elapsedTime * timeMultiplier);
 
