@@ -1,11 +1,14 @@
+using TNRD;
 using UnityEngine;
 
-public class LevelTile : MonoBehaviour
+public class LevelTile : MonoBehaviour, ITileList
 {
-    public LevelTile[] positiveX;
-    public LevelTile[] negativeX;
-    public LevelTile[] positiveZ;
-    public LevelTile[] negativeZ;
+    [SerializeField] public SerializableInterface<ITileList>[] positiveX;
+    [SerializeField] public SerializableInterface<ITileList>[] negativeX;
+    [SerializeField] public SerializableInterface<ITileList>[] positiveZ;
+    [SerializeField] public SerializableInterface<ITileList>[] negativeZ;
+
+    public LevelTile[] identity => new LevelTile[] { this };
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

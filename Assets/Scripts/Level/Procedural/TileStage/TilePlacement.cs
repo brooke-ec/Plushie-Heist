@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public record TilePlacement(LevelTile tile, Vector2Int position, int rotation)
@@ -6,37 +7,37 @@ public record TilePlacement(LevelTile tile, Vector2Int position, int rotation)
 
     public LevelTile[] positiveX => rotation switch
     {
-        0 => tile.positiveX,
-        90 => tile.positiveZ,
-        180 => tile.negativeX,
-        270 => tile.negativeZ,
+        0 => tile.positiveX.SelectMany(l => l.Value.identity).ToArray(),
+        90 => tile.positiveZ.SelectMany(l => l.Value.identity).ToArray(),
+        180 => tile.negativeX.SelectMany(l => l.Value.identity).ToArray(),
+        270 => tile.negativeZ.SelectMany(l => l.Value.identity).ToArray(),
         _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
     };
 
     public LevelTile[] positiveZ => rotation switch
     {
-        0 => tile.positiveZ,
-        90 => tile.negativeX,
-        180 => tile.negativeZ,
-        270 => tile.positiveX,
+        0 => tile.positiveZ.SelectMany(l => l.Value.identity).ToArray(),
+        90 => tile.negativeX.SelectMany(l => l.Value.identity).ToArray(),
+        180 => tile.negativeZ.SelectMany(l => l.Value.identity).ToArray(),
+        270 => tile.positiveX.SelectMany(l => l.Value.identity).ToArray(),
         _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
     };
 
     public LevelTile[] negativeX => rotation switch
     {
-        0 => tile.negativeX,
-        90 => tile.negativeZ,
-        180 => tile.positiveX,
-        270 => tile.positiveZ,
+        0 => tile.negativeX.SelectMany(l => l.Value.identity).ToArray(),
+        90 => tile.negativeZ.SelectMany(l => l.Value.identity).ToArray(),
+        180 => tile.positiveX.SelectMany(l => l.Value.identity).ToArray(),
+        270 => tile.positiveZ.SelectMany(l => l.Value.identity).ToArray(),
         _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
     };
 
     public LevelTile[] negativeZ => rotation switch
     {
-        0 => tile.negativeZ,
-        90 => tile.positiveX,
-        180 => tile.positiveZ,
-        270 => tile.negativeX,
+        0 => tile.negativeZ.SelectMany(l => l.Value.identity).ToArray(),
+        90 => tile.positiveX.SelectMany(l => l.Value.identity).ToArray(),
+        180 => tile.positiveZ.SelectMany(l => l.Value.identity).ToArray(),
+        270 => tile.negativeX.SelectMany(l => l.Value.identity).ToArray(),
         _ => throw new System.IndexOutOfRangeException("Not an axis direction"),
     };
 }
