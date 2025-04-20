@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 [SelectionBase]
@@ -109,6 +111,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
+
+    [Header("UI")]
+    [SerializeField] private GameObject inventoryUI;
     #endregion
 
     #region private fields
@@ -187,6 +192,12 @@ public class PlayerController : MonoBehaviour
     /// <summary>ther animator component </summary>
     private Animator animator;
 
+    private bool inventoryOpen;
+
+    #endregion
+
+    #region Public Fields
+    [HideInInspector]public bool arrested = false;
     #endregion
 
     #region core methods
@@ -216,6 +227,11 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
+
+        if (arrested)
+        {
+            Arrest();
+        }
         //Wall movement or regular movement 
         if (wallRunning && !isGrappling)
         {
@@ -261,7 +277,7 @@ public class PlayerController : MonoBehaviour
 
         //actuall move the player
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
-        //Debug.Log(velocity);
+        //Debug.Log(velocity.magnitude);
 
         //animates the player
         Animate();
@@ -484,7 +500,7 @@ public class PlayerController : MonoBehaviour
             curFriction = slideFriction;
             maxSpeed = 1.5f;
             hasSlide = true;
-            Debug.Log("Sliding");
+            //Debug.Log("Sliding");
             animator.SetBool("Slide", true);
 
         }
@@ -570,7 +586,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Dash()
     {
-        if (dashesUsed < noDashes && !hasDashed)
+        if (dashesUsed < noDashes && !hasDashed && !arrested)
         {
             Vector3 wishDashDir = cam.transform.forward;
             Vector3 wishDashVel = wishDashDir * dashSpeed;
@@ -626,7 +642,7 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit hitinfo;
             Ray tempRay = new Ray(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
-            Debug.DrawRay(transform.position + new Vector3(0, 1, 0), Quaternion.AngleAxis(45 * i, transform.up) * (-transform.right));
+            //Debug.DrawRay(transform.position+new Vector3(0,1,0), Quaternion.AngleAxis(45*i,transform.up)*(-transform.right));
 
             if (Physics.Raycast(tempRay, out hitinfo, wallDetectionDistance, mask) && hitinfo.distance < shortesthitdist)
             {
@@ -704,10 +720,10 @@ public class PlayerController : MonoBehaviour
         wallRunDirection *= wasdInput.y;
         Accelerate(maxSpeed, wallRunDirection, groundAcceleration);
         ApplyFriction();
-        Debug.Log(Quaternion.LookRotation(Quaternion.Euler(rotAdjustVal) * wallRunDirection).eulerAngles.y);
+        //Debug.Log(Quaternion.LookRotation(Quaternion.Euler(rotAdjustVal) * wallRunDirection).eulerAngles.y);
         //applys some gravity while on the wall 
         velocity.y += Time.deltaTime * -3;
-        Debug.DrawRay(transform.position, wallRunDirection * 100);
+        //Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
 
 
@@ -751,8 +767,8 @@ public class PlayerController : MonoBehaviour
         RaycastHit HitInfo;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
-            Debug.DrawRay(cam.transform.position, cam.transform.forward * 100, Color.yellow, 10f);
-            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);
+            //Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
+            Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
             isGrappling = true;
         }
     }
@@ -790,6 +806,7 @@ public class PlayerController : MonoBehaviour
         }
         grappleCooldown += Time.deltaTime * grappleCooldownSpeed;
     }
+
     #endregion
 
     #region Camera methods
@@ -803,13 +820,13 @@ public class PlayerController : MonoBehaviour
         {
             cam.transform.Rotate(0, 0, -20);
             rotAdjustVal = new Vector3(0, 5, 0);
-            Debug.Log("rotating");
+            //Debug.Log("rotating");
         }
         else if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0)
         {
             cam.transform.Rotate(0, 0, 20);
             rotAdjustVal = new Vector3(0, -5, 0);
-            Debug.Log("rotating");
+            //Debug.Log("rotating");
         }
         else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
@@ -864,12 +881,12 @@ public class PlayerController : MonoBehaviour
     {
         if (wishSprint && velocity.magnitude > 1 && stamina > 0)
         {
-            Debug.Log("sprintin");
+            //Debug.Log("sprintin");
             animator.SetInteger("Speed", 2);
         }
         else if (velocity.magnitude > 1)
         {
-            Debug.Log("walkin");
+            //Debug.Log("walkin");
             animator.SetInteger("Speed", 1);
         }
         else
@@ -882,6 +899,24 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Falling", 1);
         }
     }
+    #endregion
+
+    #region gaurdInteraction
+    private void Arrest()
+    {
+        wasdInput = Vector2.zero;
+        wallRunning = false;
+        isGrappling = false;
+        isGliding = false;
+        isBoosting = false;
+    }
+
+    private void applySlow(float slowAmt)
+    {
+        Vector3 direction = velocity.normalized;
+        velocity -= direction * slowAmt;
+    }
+
     #endregion
 
     #region Input
@@ -975,6 +1010,39 @@ public class PlayerController : MonoBehaviour
         if (ctx.performed)
         {
             Debug.Log("Interact");
+        }
+    }
+
+    public void openInventory(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            if (!inventoryOpen)
+            {
+                inventoryUI.SetActive(true);
+                inventoryOpen = true;
+                GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else
+            {
+
+                inventoryUI.SetActive(false);
+                inventoryOpen = false;
+                GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //If a projectile hits the player
+        if(other.tag == "Proj")
+        {
+            Debug.Log("Proj Hit");
+            applySlow(other.GetComponent<Projectilescript>().SlowAmount/100*velocity.magnitude);
+            Destroy(other.gameObject);
         }
     }
 
