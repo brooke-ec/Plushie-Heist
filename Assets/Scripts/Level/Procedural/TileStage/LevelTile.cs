@@ -1,12 +1,18 @@
+using System.Linq;
 using TNRD;
 using UnityEngine;
 
-public class LevelTile : MonoBehaviour, ITileList
+public class LevelTile : MonoBehaviour, ITileIdentity
 {
-    [SerializeField] public SerializableInterface<ITileList>[] positiveX;
-    [SerializeField] public SerializableInterface<ITileList>[] negativeX;
-    [SerializeField] public SerializableInterface<ITileList>[] positiveZ;
-    [SerializeField] public SerializableInterface<ITileList>[] negativeZ;
+    [SerializeField] private SerializableInterface<ITileIdentity>[] _positiveX;
+    [SerializeField] private SerializableInterface<ITileIdentity>[] _positiveZ;
+    [SerializeField] private SerializableInterface<ITileIdentity>[] _negativeX;
+    [SerializeField] private SerializableInterface<ITileIdentity>[] _negativeZ;
+
+    [HideInInspector] public LevelTile[] positiveX => _positiveX.SelectMany(l => l.Value.identity).ToArray();
+    [HideInInspector] public LevelTile[] positiveZ => _positiveZ.SelectMany(l => l.Value.identity).ToArray();
+    [HideInInspector] public LevelTile[] negativeX => _negativeX.SelectMany(l => l.Value.identity).ToArray();
+    [HideInInspector] public LevelTile[] negativeZ => _negativeZ.SelectMany(l => l.Value.identity).ToArray();
 
     public LevelTile[] identity => new LevelTile[] { this };
 
