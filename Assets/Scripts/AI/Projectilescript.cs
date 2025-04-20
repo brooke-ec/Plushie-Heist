@@ -35,15 +35,4 @@ public class Projectilescript : MonoBehaviour
         }
     }
 
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(this.gameObject.GetHashCode()+"hit"+other.name);
-        if (!other.CompareTag("Player") && !other.CompareTag("GunGuard"))
-        {
-            Debug.Log("Hit");
-            Destroy(gameObject);
-        }
-    }*/
-
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
@@ -10,26 +12,16 @@ public class InventoryController : MonoBehaviour
     /// <summary> The current grid being used to add items EVEN WHEN NOT CURRENTLY VISUALLY ACTIVE. </summary>
     public InventoryGrid inventoryGridToAddItems;
     [HideInInspector] public InventoryItem selectedItem;
+
     private RectTransform selectedItemRectTransform;
 
     private InventoryItem overlapItem;
 
+    private Vector2 mousePos;
+
     private void Update()
     {
         ItemIconDragEffect();
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RotateItem();
-        }
-
-        if (selectedInventoryGrid == null) { return; }
-
-        //to start dragging
-        if (Input.GetMouseButtonDown(0))
-        {
-            PickUpOrPlaceItem();
-        }
     }
 
     #region Inventory controls
@@ -56,7 +48,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
     /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
-    private bool InsertItem(ItemClass itemClassToInsert)
+    public bool InsertItem(ItemClass itemClassToInsert)
     {
         if (inventoryGridToAddItems == null) { return false; }
 
@@ -72,7 +64,7 @@ public class InventoryController : MonoBehaviour
 
         Vector2Int? posOnGrid = inventoryGridToAddItems.FindSpaceForObject(item);
         if (posOnGrid == null)
-        {            
+        {
             //no space on grid, so destroy item (it was used to see if there was enough space)
             Destroy(item.gameObject);
             print("no space on grid");
@@ -86,7 +78,7 @@ public class InventoryController : MonoBehaviour
         }
 
         //set grid back off if originally not active
-        if(gridWasOriginallyOff)
+        if (gridWasOriginallyOff)
         {
             inventoryGridToAddItems.gameObject.SetActive(false);
         }
@@ -125,7 +117,7 @@ public class InventoryController : MonoBehaviour
     /// <summary> Left click </summary>
     private void PickUpOrPlaceItem()
     {
-        Vector2 mousePos = Input.mousePosition;
+
         if (selectedItem != null)
         {
             mousePos.x -= (selectedItem.Width - 1) * InventoryGrid.tileSize / 2;
@@ -197,3 +189,29 @@ public class InventoryController : MonoBehaviour
 
     //MISSING DRAGGING INSTEAD OF CLICK TO-DO
 }
+    #region input
+    public void rotateItem(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            RotateItem();
+        }
+    }
+
+    public void startDrag(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            PickUpOrPlaceItem();
+        }
+    }
+
+    public void getMousePos(InputAction.CallbackContext ctx)
+    {
+        mousePos = ctx.ReadValue<Vector2>();
+    }
+
+
+    #endregion
+}
+//MISSING DRAGGING INSTEAD OF CLICK TO-DO
