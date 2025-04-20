@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -68,6 +67,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        //maybe it's better if it's only re-set to a new selected Inventory Grid if that one calls it, not sure
         inventoryController.selectedInventoryGrid = null;
     }
     #endregion
@@ -79,18 +79,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         int width = tileSize - itemToInsert.Width + 1;
         int height = tileSize - itemToInsert.Height + 1;
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if(IsSpaceAvailable(x, y, new Vector2Int(itemToInsert.Width, itemToInsert.Height)))
-                {
-                    return new Vector2Int(x, y);
-                }
-            }
-        }
-        //no space on grid
-        return null;
+        return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
     }
 
     /// <summary> Place item in inventory in tile units. Eg: [2, 5] INCLUDES OVERLAP ITEM </summary>
@@ -174,7 +163,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         return true;
     }
-    /// <summary> used to check if the position of all tiles that an item occupies are inside the grid, used in boundary check </summary>
+    /// <summary> used to check if the position of a tile that an item occupies is inside the grid, used in boundary check </summary>
     private bool IsPosInsideGrid(int xPos, int yPos)
     {
         if (xPos < 0 || yPos < 0)
@@ -190,9 +179,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private bool IsNotOverlapping(int xPos, int yPos, Vector2Int itemSize, ref InventoryItem overlapItem)
     {
-        for(int x = 0; x<itemSize.x; x++)
+        for (int x = 0; x < itemSize.x; x++)
         {
-            for(int y=0; y<itemSize.y; y++)
+            for (int y = 0; y < itemSize.y; y++)
             {
                 if (inventorySlots[xPos + x, yPos + y] != null) //if there is an item in the checked position
                 {
@@ -210,20 +199,41 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return true;
     }
 
-    //similar to overlapping check but doesn't have the overlap checks
-    private bool IsSpaceAvailable(int xPos, int yPos, Vector2Int itemSize)
+    // Similar to IsNotOverlapping but doesn't have the overlap checks
+    private Vector2Int? GetSpaceAvailable(Vector2Int itemSize)
     {
-        for (int x = 0; x < itemSize.x; x++)
+        for(int yPos = 0; yPos<inventoryHeight; yPos++)
         {
-            for (int y = 0; y < itemSize.y; y++)
+            for(int xPos = 0; xPos<inventoryWidth; xPos++)
             {
-                if (inventorySlots[xPos + x, yPos + y] != null) //if there is an item in the checked position
+                //here it looks terrible, but essentially checks for each of the slots of that item,
+                //if the required contiguous slots for its size are free
+
+                bool areAllNeededSlotsFree = true; 
+
+                for (int x = 0; x < itemSize.x; x++)
                 {
-                    return false; //not available
+                    for (int y = 0; y < itemSize.y; y++)
+                    {
+                        bool isPosInsideGrid = IsPosInsideGrid(xPos + x, yPos + y);
+                        if ((isPosInsideGrid && inventorySlots[xPos + x, yPos + y] != null) || !isPosInsideGrid) //if there is an item in the checked position
+                        {
+                            areAllNeededSlotsFree = false;
+                            break; //not available
+                        }
+                    }
+                    //start again
+                    if(!areAllNeededSlotsFree) break;
+                }
+
+                //if all the slots we need are free for this starting x and y pos, then return true, otherwise keep going
+                if(areAllNeededSlotsFree) 
+                {
+                    return new Vector2Int(xPos, yPos);
                 }
             }
         }
-        return true;
+        return null;
     }
 
     #endregion

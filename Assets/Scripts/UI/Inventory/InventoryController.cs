@@ -1,60 +1,95 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
 {
+    public GameObject itemPrefab;
+    /// <summary> The current grid being used to pick up and place items. This is set to null when you click outside of an inventory grid </summary>
     [HideInInspector] public InventoryGrid selectedInventoryGrid;
+    /// <summary> The current grid being used to add items EVEN WHEN NOT CURRENTLY VISUALLY ACTIVE. </summary>
+    public InventoryGrid inventoryGridToAddItems;
     [HideInInspector] public InventoryItem selectedItem;
+
     private RectTransform selectedItemRectTransform;
 
     private InventoryItem overlapItem;
 
+    private Vector2 mousePos;
+
     private void Update()
     {
         ItemIconDragEffect();
-
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            RotateItem();
-        }
-
-        if (selectedInventoryGrid == null) { return; }
-
-        //to start dragging
-        if (Input.GetMouseButtonDown(0))
-        {
-            LeftMouseButtonPress();
-        }
     }
 
     #region Inventory controls
     private void RotateItem()
     {
-        if(selectedItem == null) { return; }
+        if (selectedItem == null) { return; }
 
         selectedItem.Rotate();
     }
 
-    public void InsertItem(InventoryItem itemToInsert)
+    /// <summary>
+    /// Tries to add given item class to the inventory already set MANUALLY in inventoryGridToAddItems variable.
+    /// Wrapper method for InsertItem, so that it can be passed to a button (but might want to check if successful or not in the future)
+    /// </summary>
+    /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
+    public void TryInsertItem(ItemClass itemClassToInsert)
     {
-        if(selectedInventoryGrid == null) { return; }
-
-        Vector2Int? posOnGrid = selectedInventoryGrid.FindSpaceForObject(itemToInsert);
-        if(posOnGrid != null) //space on grid, so place into position found
-        {
-            selectedInventoryGrid.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
-        }
+        bool insertedSuccessfully = InsertItem(itemClassToInsert);
+        //maybe in the future check if false, do error sound or something
     }
 
-    private void LeftMouseButtonPress()
+    /// <summary>
+    /// Tries to add given item class to the inventory set MANUALLY in inventoryGridToAddItems variable.
+    /// </summary>
+    /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
+    /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
+    public bool InsertItem(ItemClass itemClassToInsert)
     {
-        Vector2 mousePos = Input.mousePosition;
-        if(selectedItem != null)
+        if (inventoryGridToAddItems == null) { return false; }
+
+        bool addedItemSuccessfully = false;
+
+        //if the inventory grid was originally not active, add the item and then set it back off
+        bool gridWasOriginallyOff = !inventoryGridToAddItems.gameObject.activeSelf;
+
+        //Instantiate the item
+        Transform rootCanvas = FindAnyObjectByType<UIManager>().rootCanvas.transform;
+        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
+        item.Set(itemClassToInsert);
+
+        Vector2Int? posOnGrid = inventoryGridToAddItems.FindSpaceForObject(item);
+        if (posOnGrid == null)
+        {
+            //no space on grid, so destroy item (it was used to see if there was enough space)
+            Destroy(item.gameObject);
+            print("no space on grid");
+        }
+        else
+        {
+            //space on grid, so place into position found
+            inventoryGridToAddItems.PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
+            addedItemSuccessfully = true;
+            print("placed item");
+        }
+
+        //set grid back off if originally not active
+        if (gridWasOriginallyOff)
+        {
+            inventoryGridToAddItems.gameObject.SetActive(false);
+        }
+
+        return addedItemSuccessfully;
+    }
+
+    /// <summary> Left click </summary>
+    private void PickUpOrPlaceItem()
+    {
+
+        if (selectedItem != null)
         {
             mousePos.x -= (selectedItem.Width - 1) * InventoryGrid.tileSize / 2;
             mousePos.y += (selectedItem.Height - 1) * InventoryGrid.tileSize / 2;
@@ -79,7 +114,7 @@ public class InventoryController : MonoBehaviour
         if (itemPlaced)
         {
             selectedItem = null;
-            if(overlapItem != null)
+            if (overlapItem != null)
             {
                 //this is so you now pick up the overlap item
                 selectedItem = overlapItem;
@@ -107,7 +142,30 @@ public class InventoryController : MonoBehaviour
             selectedItemRectTransform.position = Input.mousePosition;
         }
     }
-}
-#endregion
+    #endregion
+    #region input
+    public void rotateItem(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            RotateItem();
+        }
+    }
 
+    public void startDrag(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            PickUpOrPlaceItem();
+        }
+    }
+
+    public void getMousePos(InputAction.CallbackContext ctx)
+    {
+        mousePos = ctx.ReadValue<Vector2>();
+    }
+
+
+    #endregion
+}
 //MISSING DRAGGING INSTEAD OF CLICK TO-DO

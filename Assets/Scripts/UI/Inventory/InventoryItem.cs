@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
-public class InventoryItem : MonoBehaviour
+public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
     public ItemClass itemClass;
     private Image icon;
@@ -27,7 +24,7 @@ public class InventoryItem : MonoBehaviour
     {
         get
         {
-            if(!rotated)
+            if (!rotated)
             {
                 return itemClass.sizeHeight;
             }
@@ -39,7 +36,7 @@ public class InventoryItem : MonoBehaviour
     {
         get
         {
-            if(!rotated)
+            if (!rotated)
             {
                 return itemClass.sizeWidth;
             }
@@ -86,5 +83,16 @@ public class InventoryItem : MonoBehaviour
         //Adjust shadow so it's below
         Vector3 newBackgroundPos = new Vector3(backgroundRectTransform.position.x + InventoryGrid.offsetFromShadow, backgroundRectTransform.position.y - InventoryGrid.offsetFromShadow, 0);
         shadowRectTransform.position = newBackgroundPos;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //If right click
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            print("use");
+            //TO-DO
+            //there is a prefab with a button component for the tooltip
+        }
     }
 }
