@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 6006222253893897989}
   - component: {fileID: 781662464637518754}
   - component: {fileID: 4807997530355405682}
+  - component: {fileID: 3474409550457705061}
   m_Layer: 6
   m_Name: Wall Tile1
   m_TagString: Untagged
@@ -360,7 +361,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1642
+  m_VersionIndex: 1645
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -465,6 +466,25 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &3474409550457705061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7114465569227356738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7197e327e35e064bac414f677935067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positiveX: []
+  _positiveZ: []
+  _negativeX: []
+  _negativeZ: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &21915274675151451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -475,7 +495,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4312
+      value: 4315
       objectReference: {fileID: 0}
     - target: {fileID: 6616618366806071642, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -541,7 +561,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4312
+      value: 4315
       objectReference: {fileID: 0}
     - target: {fileID: 6616618366806071642, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -607,7 +627,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4312
+      value: 4315
       objectReference: {fileID: 0}
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -693,7 +713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4155963464863742102, guid: 10e1f74b5d190634ca01fa359ade7235, type: 3}
       propertyPath: m_VersionIndex
-      value: 7621
+      value: 7624
       objectReference: {fileID: 0}
     - target: {fileID: 6633534732519928235, guid: 10e1f74b5d190634ca01fa359ade7235, type: 3}
       propertyPath: m_LocalPosition.x
@@ -799,7 +819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9085034688409426016, guid: 00edc29ea74cb074f91a788c77584d8c, type: 3}
       propertyPath: m_VersionIndex
-      value: 5745
+      value: 5748
       objectReference: {fileID: 0}
     - target: {fileID: 9085034688409426016, guid: 00edc29ea74cb074f91a788c77584d8c, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -881,7 +901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7608852817096272530, guid: 916768490dbd34d429b2d756de5e78ca, type: 3}
       propertyPath: m_VersionIndex
-      value: 1001
+      value: 1004
       objectReference: {fileID: 0}
     - target: {fileID: 7608852817096272530, guid: 916768490dbd34d429b2d756de5e78ca, type: 3}
       propertyPath: m_Tangents.Array.data[28].y
@@ -1775,7 +1795,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4312
+      value: 4315
       objectReference: {fileID: 0}
     - target: {fileID: 6616618366806071642, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1841,7 +1861,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4315
+      value: 4318
       objectReference: {fileID: 0}
     - target: {fileID: 6616618366806071642, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1907,7 +1927,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4312
+      value: 4315
       objectReference: {fileID: 0}
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_SelectedEdges.Array.size
