@@ -20,8 +20,11 @@ public class CustomerController : MonoBehaviour
     /// <summary>THe Timer before the Next Customer is allowed to spawn in</summary>
     private float _respawnTimer;
 
+    /// <summary>Represents wether the shop is open</summary>
+    [SerializeField] private bool _shopOpen;
+
     /// <summary>The Contents of the Shop</summary>
-    [SerializeField]private List<GameObject> _shopContents;
+    [SerializeField] private List<GameObject> _shopContents;
 
     /// <summary>The Max number of Customers allowed to be spawned</summary>
     [SerializeField] private int _maxCustomers;
@@ -46,7 +49,9 @@ public class CustomerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_numCustomers < _maxCustomers && _respawnTimer <= 0)
+        if(_shopOpen)
+        {
+            if(_numCustomers < _maxCustomers && _respawnTimer <= 0)
         {
             GameObject customerSpawnPoint;
             if(Random.Range(0,2) == 0)
@@ -63,10 +68,8 @@ public class CustomerController : MonoBehaviour
 
             _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
         }
-        
-
-
         _respawnTimer -= Time.deltaTime;
+        }
     }
 
     /// <summary>
@@ -115,6 +118,22 @@ public class CustomerController : MonoBehaviour
         {
             return _Cust_Death2.transform.position;
         }
+    }
+
+    /// <summary>
+    /// Opens the Shop allowing Customers to enter
+    /// </summary>
+    public void OpenShop()
+    {
+        _shopOpen = true;
+    }
+
+    /// <summary>
+    /// Closes the Shop meaning Customers can't enter
+    /// </summary>
+    public void CloseShop()
+    {
+        _shopOpen = false;
     }
     #endregion
 }

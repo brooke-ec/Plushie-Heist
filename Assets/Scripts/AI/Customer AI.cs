@@ -71,13 +71,17 @@ public class CustomerAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_navAgent.remainingDistance == 0 && _distanceBuffer <= 0)
+        if(_navAgent.remainingDistance <= 2 && _distanceBuffer <= 0)
         {
             if(_shoppingListBought.Count != 0)
             {
-
+                _navAgent.isStopped = true;
                 SearchingShelf();
             }
+        }
+        if(_navAgent.isStopped && _navAgent.remainingDistance > 1)
+        {
+            _navAgent.isStopped = false;
         }
         
         if(_distanceBuffer > 0)
@@ -85,18 +89,18 @@ public class CustomerAI : MonoBehaviour
             _distanceBuffer -= Time.deltaTime;
         }
 
-        if(_hasPayed)
-        {
-            _hasPayed = false;
-            LeftQueue();
-        }
+        // if(_hasPayed)
+        // {
+        //     _hasPayed = false;
+        //     LeftQueue();
+        // }
         
         //Handles Killing of Customers once they have finished everything
         if(_readyToDie)
         {
-            if(_navAgent.remainingDistance == 0 && _timeBeforeDeath <= 0)
+            if(_navAgent.remainingDistance <= 2 && _timeBeforeDeath <= 0)
             {
-                GameObject.Destroy(this.gameObject);
+                Kill();
             }
             _timeBeforeDeath -= Time.deltaTime;
         }
@@ -118,6 +122,7 @@ public class CustomerAI : MonoBehaviour
     {
         if(_searchTime <= 0)
         {
+            _navAgent.isStopped = false;
             _searchTime = _maxSearchTime;
             _shoppingListBought.RemoveAt(0);
 
@@ -139,10 +144,10 @@ public class CustomerAI : MonoBehaviour
     /// <summary>
     /// The Customer has been served and will leave the shop
     /// </summary>
-    private void LeftQueue()
+    public void LeftTill()
     {
         _custController.CustomerLeft();
-        _shopTill.GetComponent<TillQueue>().TillActivation();
+        //_shopTill.GetComponent<TillQueue>().TillActivation();
         _navAgent.destination = _deathPosition;
         _readyToDie = true;
     }
@@ -166,6 +171,11 @@ public class CustomerAI : MonoBehaviour
     {
         _shoppingList = shopList;
         _shoppingListBought = shopList;
+    }
+
+    public void Kill()
+    {
+        GameObject.Destroy(this.gameObject);
     }
     #endregion
 }

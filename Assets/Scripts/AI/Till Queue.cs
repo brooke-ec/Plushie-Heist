@@ -10,7 +10,10 @@ public class TillQueue : MonoBehaviour
     private Vector3 QueueFront;
 
     /// <summary>The Gap between each customer in the queue</summary>
-    [SerializeField] private float gapForQueue;
+    private float gapForQueue = 2;
+
+    /// <summary>has the till been activated</summary>
+    [SerializeField] private bool TillActivate;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +25,11 @@ public class TillQueue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(TillActivate)
+        {
+            TillActivate = false;
+            TillActivation();
+        }
     }
 
     /// <summary>
@@ -40,6 +47,15 @@ public class TillQueue : MonoBehaviour
     /// </summary>
     public void TillActivation()
     {
+        //Returns from function if queue is empty
+        if(customerQueue.Count == 0)
+        {
+            return;
+        }
+        
+        customerQueue.Peek().GetComponent<CustomerAI>().LeftTill();
+
+
         //Causes the Customer to leave the Till
         customerQueue.Dequeue();
         
