@@ -672,6 +672,7 @@ public class PlayerController : MonoBehaviour
             rayNumber = -1;
         }
     }
+    
     /// <summary>
     /// Checks if still on the wall if on the wall 
     /// </br>
@@ -706,6 +707,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
     }
+    
     /// <summary>
     /// function that allows the player to wall run called every frame your wall running
     /// </summary>
@@ -725,7 +727,6 @@ public class PlayerController : MonoBehaviour
         velocity.y += Time.deltaTime * -3;
         //Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
-
 
     /// <summary>
     /// The function will handle gliding
@@ -917,6 +918,40 @@ public class PlayerController : MonoBehaviour
         velocity -= direction * slowAmt;
     }
 
+    #endregion
+
+    #region Hazards
+    /// <summary>
+    /// Called when the player collides with a Hazard and handles the correct follow up actions
+    /// </summary>
+    /// <param name="name"></param>
+    public void HitHazard(string name, GameObject theHazard)
+    {
+        //Debug.Log("In Function On Player");
+        switch(name)
+        {
+            case "Bounce Pad":
+                //Debug.Log("Calling Bounce Pad");
+                BouncePad(theHazard);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void BouncePad(GameObject theHazard)
+    {
+        //Debug.Log("Bounce Pad Function");
+
+        Vector3 BouncePadDirection = theHazard.GetComponent<BouncePads>().getDirection();
+        float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
+
+        Vector3 BouncePadWishVel = BouncePadDirection * BouncePadStrength;
+        //velocity = Vector3.zero;
+        Debug.Log("Velocity 1 : " + velocity);
+        velocity += BouncePadWishVel;
+        Debug.Log("Velocity 2 : " + velocity);
+    }
     #endregion
 
     #region Input
