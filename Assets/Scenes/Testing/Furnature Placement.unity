@@ -1730,6 +1730,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 594284680598497189, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: test.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 594284680598497189, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: test.Array.data[1]
+      value: 
+      objectReference: {fileID: 5375437342326135696, guid: 9b01af11153497d4da814b2f4fafdd8e, type: 3}
+    - target: {fileID: 594284680598497189, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: test.Array.data[2]
+      value: 
+      objectReference: {fileID: 5375437342326135696, guid: 60abbbd3a57d804418e1807fa64d4dd5, type: 3}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.35
@@ -1920,8 +1932,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 1.5
-  spacing: 0.15
 --- !u!65 &1653399534
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -4,40 +4,38 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(MeshRenderer))]
 public class FurnitureGrid : MonoBehaviour
 {
-    [SerializeField] private float cellSize = 2;
-    [SerializeField] private float spacing = 0.25f;
-
-    [HideInInspector] public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
-    private float height => collider.center.y + collider.size.y * .5f;
+    public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
+    private static float cellSize => FurnitureSettings.instance.cellSize;
+    private static float spacing => FurnitureSettings.instance.spacing;
 
     private List<FurnitureItem> items = new List<FurnitureItem>();
+    private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
+    private MeshFilter filter;
 
 #if UNITY_EDITOR
-    private Vector3 oldSize = Vector3.zero;
-    private Mesh mesh;
-
     private void OnDrawGizmos()
     {
-        if (collider.size != oldSize || mesh == null) mesh = BuildMarker();
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireMesh(mesh, transform.TransformPoint(collider.center));
+        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.DrawMesh(mesh.Build(size, cellSize, spacing), transform.TransformPoint(collider.center));
     }
 
     private void OnValidate()
     {
         if (collider == null) collider = GetComponent<BoxCollider>();
-        mesh = null;
     }
 #endif
 
     private void Start()
     {
         collider = GetComponent<BoxCollider>();
-        GetComponent<MeshFilter>().mesh = BuildMarker();
+        filter = GetComponent<MeshFilter>();
+
+        gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
+        filter.mesh = mesh.Build(size, cellSize);
     }
 
     public Vector2 FromWorldspace(Vector3 point)
@@ -58,7 +56,7 @@ public class FurnitureGrid : MonoBehaviour
     {
         return new Vector3(
             (coordinates.x - size.x * .5f) * cellSize,
-            height,
+            0,
             (coordinates.y - size.y * .5f) * cellSize
         );
     }
@@ -72,40 +70,19 @@ public class FurnitureGrid : MonoBehaviour
     public void AddItem(FurnitureItem item)
     {
         items.Add(item);
+
+        // Get all occupied positions
+        Vector2Int[] occupied = items.SelectMany(i => i.region.ToArray()).ToArray();
+        filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
+    }
+
+    public bool Intersects(int x, int y)
+    {
+        return Intersects(new Region().FromPoint(x, y));
     }
 
     public bool Intersects(Region region)
     {
-        return items.Any(r => r.region.Intersect(region).hit);
-    }
-
-    private Mesh BuildMarker()
-    {
-        List<Vector3> verticies = new List<Vector3>();
-        List<int> indicies = new List<int>();
-
-        float far = cellSize - spacing;
-
-        for (int x = 0; x < size.x; x++)
-            for (int y = 0; y < size.y; y++)
-            {
-                Vector3 l = ToLocalspace(new Vector2(x, y));
-
-                indicies.AddRange(new int[] {
-                    0, 1, 2,
-                    1, 3, 2
-                }.Select(i => i + verticies.Count));
-
-                verticies.Add(new Vector3(l.x + spacing, height, l.z + spacing));
-                verticies.Add(new Vector3(l.x + spacing, height, l.z + far));
-                verticies.Add(new Vector3(l.x + far, height, l.z + spacing));
-                verticies.Add(new Vector3(l.x + far, height, l.z + far));
-            }
-
-        Mesh mesh = new Mesh();
-        mesh.SetVertices(verticies);
-        mesh.SetIndices(indicies, MeshTopology.Triangles, 0);
-        mesh.SetNormals(verticies.Select(_ => new Vector3(0, 1, 0)).ToArray());
-        return mesh;
+        return items.Any(i => (i.region).Intersect(region).hit);
     }
 }

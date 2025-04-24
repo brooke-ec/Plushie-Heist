@@ -3,42 +3,43 @@ using UnityEngine;
 
 public class FurnitureItem : MonoBehaviour
 {
-    [SerializeField] private Material invalidMaterial;
-    public Vector2Int size;
+    [field: SerializeReference] public Vector2Int size { get; private set; }
 
-    public Region region { get; private set; }
-    public FurnitureGrid grid { get; private set; }
+    public Vector2Int position { get; private set; }
+    public int rotation { get; private set; } = 0;
+    public FurnitureGrid owner { get; set; }
+
+    public Region region => new Region().FromSize(position, size);
 
     private Dictionary<int, Material> originalMaterials = new Dictionary<int, Material>();
     private Material previousMaterial = null;
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null) return;
+        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.DrawCube(transform.position, new Vector3(size.x, 0, size.y) * FurnitureSettings.instance.cellSize);
+    }
+#endif
 
     public void Rotate()
     {
         size = new Vector2Int(size.y, size.x);
         transform.Rotate(0, 90, 0);
-
-        Place(grid, region.center);
     }
 
-    public void Place(FurnitureGrid grid, Vector2 coordinates)
+    public void Move(Vector2Int target)
     {
-        this.grid = grid;
-        region = new Region().FromSize(
-            Mathf.RoundToInt(coordinates.x - size.x / 2),
-            Mathf.RoundToInt(coordinates.y - size.y / 2),
-            size.x, size.y
-        );
+        position = Util.Clamp(target, Vector2Int.zero, owner.size - size);
 
-        if (region.Within(grid.size))
-        {
-            transform.position = grid.ToWorldspace(region.center);
-            SetMaterial(IsValid() ? null : invalidMaterial);
-        }
+        transform.position = owner.ToWorldspace(region.center);
+        SetMaterial(IsValid() ? null : FurnitureSettings.instance.invalidMaterial);
     }
 
     public bool IsValid()
     {
-        return grid != null && region != null && region.Within(grid.size) && !grid.Intersects(region);
+        return owner != null && position != null && region.Within(owner.size) && !owner.Intersects(region);
     }
 
     public void SetMaterial(Material material)

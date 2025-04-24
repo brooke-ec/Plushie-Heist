@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 public class FurniturePlacer : MonoBehaviour
 {
     [SerializeField] private float maxDistance = 10;
-    [SerializeField] new private Camera camera;
     [SerializeField] CharacterController controller;
+    [SerializeField] new private Camera camera;
     
     private FurnitureItem item;
     private int gridLayer;
@@ -29,19 +29,27 @@ public class FurniturePlacer : MonoBehaviour
             camera.cullingMask |= gridLayer;
             controller.excludeLayers |= itemLayer;
 
-            Ray ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, gridLayer))
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxDistance, gridLayer))
             {
-                FurnitureGrid grid = hit.transform.GetComponent<FurnitureGrid>();
-                Vector2 coordinates = grid.FromWorldspace(hit.point);
-                item.Place(grid, coordinates);
+                if (hit.transform.TryGetComponent(out FurnitureGrid grid)
+                    && !grid.transform.IsChildOf(item.transform)) item.owner = grid;
+                Move(hit.point);
             }
+            else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, ~itemLayer)) Move(hit.point);
+            else Move(transform.position + transform.forward * maxDistance);
         }
         else
         {
             camera.cullingMask &= ~gridLayer;
             controller.excludeLayers &= ~itemLayer;
         }
+    }
+
+    private void Move(Vector3 target)
+    {
+        if (item == null || item.owner == null) return;
+        target -= new Vector3(item.size.x, 0, item.size.y) / 2 * FurnitureSettings.instance.cellSize;
+        item.Move(Vector2Int.RoundToInt(item.owner.FromWorldspace(target)));
     }
 
     public void OnPlace(InputAction.CallbackContext ctx)
@@ -55,7 +63,7 @@ public class FurniturePlacer : MonoBehaviour
         }
         else if (item.IsValid())
         {
-            item.grid.AddItem(item);
+            item.owner.AddItem(item);
             item = null;
         }
     }
