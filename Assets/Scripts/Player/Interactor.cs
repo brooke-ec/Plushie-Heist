@@ -34,7 +34,7 @@ public class Interactor : MonoBehaviour
         {
             if (colliders[0] != null) 
             {
-                interactionText.text = colliders[0].GetComponent<IInteractable>() != null ? colliders[0].GetComponent<IInteractable>().interactionPrompt : "Not interactable";
+                interactionText.text = colliders[0].TryGetComponent(out IInteractable interactable) ? interactable.interactionPrompt : "Not interactable";
             }
             interactionText.gameObject.SetActive(true);
             textDisplayed = true;
@@ -46,12 +46,15 @@ public class Interactor : MonoBehaviour
         }
     }
 
-    // For Debugging
+#if UNITY_EDITOR // For Debugging
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(interactorPoint.position, interactorRadius);
+        if (interactorPoint == null) Debug.LogError("Interactor.interactorPoint not set");
+        else Gizmos.DrawWireSphere(interactorPoint.position, interactorRadius);
     }
+#endif
+
     /// <summary>
     /// If Interactor is close enough to interact call the interactables interact Method when interact button pressed
     /// </summary>
