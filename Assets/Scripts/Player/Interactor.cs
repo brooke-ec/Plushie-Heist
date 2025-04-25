@@ -16,7 +16,7 @@ public class Interactor : MonoBehaviour
     /// <summary>The radius of the interactor from the point</summary>
     [SerializeField] private float interactorRadius;
     /// <summary>Layer to interact with should be Interactable add others if needed(shouldnt be) </summary>
-    [SerializeField] private LayerMask interactorLayerMask;
+    [SerializeField] public LayerMask interactorLayerMask;
     /// <summary>The UI element to show the Interaction Text </summary>
     [SerializeField] private TextMeshProUGUI interactionText;
 
@@ -40,7 +40,11 @@ public class Interactor : MonoBehaviour
         if (!ReferenceEquals(previous, collider))
         {
             // Clean up the previous outline
-            if (previous != null && previous.TryGetComponent(out Outline outline)) outline.enabled = false;
+            if (previous != null)
+            {
+                Outline outline = previous.GetComponentInChildren<Outline>();
+                if (outline != null) outline.enabled = false;
+            }
             previous = collider;
 
             // Get new interactable
@@ -48,7 +52,10 @@ public class Interactor : MonoBehaviour
             else
             {
                 interactable = collider.GetComponent<IInteractable>();
-                if (previous.TryGetComponent(out outline)) outline.enabled = true;
+                
+                // Activate Outline
+                Outline outline = collider.GetComponentInChildren<Outline>();
+                if (outline != null) outline.enabled = true;
             }
         }
 
@@ -70,6 +77,6 @@ public class Interactor : MonoBehaviour
     /// <param name="ctx"></param>
     public void pressInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.interact(this);
+        if (ctx.performed && interactable != null) interactable.Interact(this);
     }
 }

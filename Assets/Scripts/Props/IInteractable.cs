@@ -9,5 +9,5 @@ public interface IInteractable
     /// </summary>
     /// <param name="interactor">Interactor object that called the interaction</param>
     /// <returns>True if intraction succesful</returns>
-    public bool interact(Interactor interactor);
+    public bool Interact(Interactor interactor);
 }

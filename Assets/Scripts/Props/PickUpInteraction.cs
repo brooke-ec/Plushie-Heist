@@ -5,11 +5,12 @@ using UnityEngine;
 /// Interaction for Picking items up, implements the IInteractable Interface</br>
 /// Object this is on needs a mesh collider and to be on the interactable layer
 /// </summary>
-[RequireComponent(typeof(Outline))]
-public class PickUpInteraction : MonoBehaviour, IInteractable
+public class PickUpInteraction : MonoBehaviour
 {
     /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
-    public string interactionPrompt => hasSpace ? "Press F to Pick Up" : "Inventory Full!";
+    public virtual string interactionPrompt => hasSpace ? "Press F to Pick Up" : "Inventory Full";
+    /// <summary> Whether this item can be picked up or not </summary>
+    public virtual bool canPickup => hasSpace;
     /// <summary>
     /// The item class the Object is attachted to 
     /// </summary>
@@ -21,16 +22,20 @@ public class PickUpInteraction : MonoBehaviour, IInteractable
     /// <summary> If there is space in the players inventory </summary>
     private bool hasSpace = true;
 
-    private void Start()
+    protected virtual void Start()
     {
         inventoryController = FindAnyObjectByType<InventoryController>();
-        outline = GetComponent<Outline>();
+        outline = GetComponentInChildren<Outline>();
 
         inventoryController.onChanged.AddListener(() =>
         {
             hasSpace = inventoryController.CanInsert(Item);
-            outline.color = hasSpace ? 0 : 1;
         });
+    }
+
+    protected void Update()
+    {
+        outline.color = canPickup ? 0 : 1;
     }
 
     /// <summary>
@@ -40,8 +45,10 @@ public class PickUpInteraction : MonoBehaviour, IInteractable
     /// </summary>
     /// <param name="interactor">Interactor this was called from</param>
     /// <returns>True if picked up item<returns>
-    public bool interact(Interactor interactor)
+    public virtual bool Interact(Interactor interactor)
     {
+        if (!canPickup) return false;
+
         if (inventoryController.InsertItem(Item))
         {
             Destroy(gameObject);
@@ -54,6 +61,4 @@ public class PickUpInteraction : MonoBehaviour, IInteractable
         }
         
     }
-
-    
 }

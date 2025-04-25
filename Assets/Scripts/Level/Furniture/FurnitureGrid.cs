@@ -67,12 +67,28 @@ public class FurnitureGrid : MonoBehaviour
         return transform.TransformPoint(local);
     }
 
+    public bool IsEmpty()
+    {
+        return items.Count == 0;
+    }
+
     public void AddItem(FurnitureItem item)
     {
         items.Add(item);
+        Regenerate();
+    }
 
+    public void RemoveItem(FurnitureItem item)
+    {
+        items.Remove(item);
+        Regenerate();
+    }
+
+    public void Regenerate()
+    {
         // Get all occupied positions
         Vector2Int[] occupied = items.SelectMany(i => i.region.ToArray()).ToArray();
+        mesh.SetColor(Color.green); // Reset grid mesh to green
         filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
     }
 

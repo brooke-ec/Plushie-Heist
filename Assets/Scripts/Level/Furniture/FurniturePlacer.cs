@@ -6,6 +6,7 @@ public class FurniturePlacer : MonoBehaviour
     [SerializeField] private float maxDistance = 10;
     [SerializeField] CharacterController controller;
     [SerializeField] new private Camera camera;
+    [SerializeField] private Interactor interactor;
     
     private FurnitureItem item;
     private int gridLayer;
@@ -28,6 +29,7 @@ public class FurniturePlacer : MonoBehaviour
         {
             camera.cullingMask |= gridLayer;
             controller.excludeLayers |= itemLayer;
+            interactor.interactorLayerMask &= ~itemLayer;
 
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxDistance, gridLayer))
             {
@@ -42,6 +44,7 @@ public class FurniturePlacer : MonoBehaviour
         {
             camera.cullingMask &= ~gridLayer;
             controller.excludeLayers &= ~itemLayer;
+            interactor.interactorLayerMask |= itemLayer;
         }
     }
 

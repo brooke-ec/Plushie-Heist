@@ -1,13 +1,20 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class FurnitureItem : MonoBehaviour
+public class FurnitureItem : PickUpInteraction, IInteractable
 {
     [field: SerializeReference] public Vector2Int size { get; private set; }
+
+    public bool empty => subgrids.All(s => s.IsEmpty());
+    public override bool canPickup => base.canPickup && empty;
+    public override string interactionPrompt => empty ? base.interactionPrompt : "Item Contains Sub-Items";
 
     public Vector2Int position { get; private set; }
     public int rotation { get; private set; } = 0;
     public FurnitureGrid owner { get; set; }
+    
+    public FurnitureGrid[] subgrids { get; private set; }
 
     public Region region => new Region().FromSize(position, size);
 
@@ -22,6 +29,12 @@ public class FurnitureItem : MonoBehaviour
         Gizmos.DrawCube(transform.position, new Vector3(size.x, 0, size.y) * FurnitureSettings.instance.cellSize);
     }
 #endif
+
+    protected override void Start()
+    {
+        subgrids = GetComponentsInChildren<FurnitureGrid>();
+        base.Start();
+    }
 
     public void Rotate()
     {
@@ -57,5 +70,12 @@ public class FurnitureItem : MonoBehaviour
         }
         
         previousMaterial = material;
+    }
+
+    public override bool Interact(Interactor interactor)
+    {
+        bool success = base.Interact(interactor);
+        if (success) owner.RemoveItem(this);
+        return success;
     }
 }
