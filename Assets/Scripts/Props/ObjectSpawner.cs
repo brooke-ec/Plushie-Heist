@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField] private SpawnablePropList Props;
+    
     private void Start()
     {
         if (Props.Props.Length < 1) { return; }
