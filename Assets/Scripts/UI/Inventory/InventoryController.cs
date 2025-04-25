@@ -124,6 +124,7 @@ public class InventoryController : MonoBehaviour
             mousePos.y += (selectedItem.Height - 1) * InventoryGrid.tileSize / 2;
         }
 
+        if (selectedInventoryGrid == null) { return; } //if not on a grid, do nothing
         Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(mousePos); //tile grid position
         if (selectedItem == null)
         {
@@ -179,11 +180,8 @@ public class InventoryController : MonoBehaviour
     public void PlaceTestItems()
     {
         Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InsertItem(itemsToTest[0]);
-
-        InsertItem(itemsToTest[1]);
-
-        InsertItem(itemsToTest[0]);
+        
+        foreach (ItemClass item in itemsToTest) InsertItem(item);
     }
     #endregion
 
