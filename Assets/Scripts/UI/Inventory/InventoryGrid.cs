@@ -77,10 +77,12 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public Vector2Int? FindSpaceForObject(InventoryItem itemToInsert)
     {
-        int width = tileSize - itemToInsert.Width + 1;
-        int height = tileSize - itemToInsert.Height + 1;
-
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
+    }
+
+    public Vector2Int? FindSpaceForObject(ItemClass itemToInsert)
+    {
+        return GetSpaceAvailable(new Vector2Int(itemToInsert.sizeWidth, itemToInsert.sizeHeight));
     }
 
     /// <summary> Place item in inventory in tile units. Eg: [2, 5] INCLUDES OVERLAP ITEM </summary>

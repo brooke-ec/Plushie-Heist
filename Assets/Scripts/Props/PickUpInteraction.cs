@@ -8,13 +8,30 @@ using UnityEngine;
 [RequireComponent(typeof(Outline))]
 public class PickUpInteraction : MonoBehaviour, IInteractable
 {
-    /// <summary>Prompt Shown by the UI to let the player know they can interact with it</br>
-    /// Default: "Press F to Pick Up"</summary>
-    [field: SerializeField] public string interactionPrompt { get; private set; } = "Press F to Pick Up";
+    /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
+    public string interactionPrompt => hasSpace ? "Press F to Pick Up" : "Inventory Full!";
     /// <summary>
     /// The item class the Object is attachted to 
     /// </summary>
     [SerializeField] private ItemClass Item;
+    /// <summary> The current <see cref="InventoryController"/> instance </summary>
+    private InventoryController inventoryController;
+    /// <summary> The outline script attached to this object </summary>
+    private Outline outline;
+    /// <summary> If there is space in the players inventory </summary>
+    private bool hasSpace = true;
+
+    private void Start()
+    {
+        inventoryController = FindAnyObjectByType<InventoryController>();
+        outline = GetComponent<Outline>();
+
+        inventoryController.onChanged.AddListener(() =>
+        {
+            hasSpace = inventoryController.CanInsert(Item);
+            outline.color = hasSpace ? 0 : 1;
+        });
+    }
 
     /// <summary>
     /// Called when interacted with </br>
@@ -25,8 +42,6 @@ public class PickUpInteraction : MonoBehaviour, IInteractable
     /// <returns>True if picked up item<returns>
     public bool interact(Interactor interactor)
     {
-        
-        InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
         if (inventoryController.InsertItem(Item))
         {
             Destroy(gameObject);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -12,6 +13,9 @@ public class InventoryController : MonoBehaviour
     /// <summary> The current grid being used to add items EVEN WHEN NOT CURRENTLY VISUALLY ACTIVE. </summary>
     public InventoryGrid inventoryGridToAddItems;
     [HideInInspector] public InventoryItem selectedItem;
+
+    /// <summary> Event fired whenever the inventory is changed </summary>
+    public readonly UnityEvent onChanged = new UnityEvent();
 
     private RectTransform selectedItemRectTransform;
 
@@ -41,6 +45,16 @@ public class InventoryController : MonoBehaviour
     {
         bool insertedSuccessfully = InsertItem(itemClassToInsert);
         //maybe in the future check if false, do error sound or something
+    }
+
+    /// <summary>
+    /// Checks if the item can be inserted into the inventory grid
+    /// </summary>
+    /// <param name="item">The item to check</param>
+    /// <returns></returns>
+    public bool CanInsert(ItemClass item)
+    {
+        return inventoryGridToAddItems.FindSpaceForObject(item) != null;
     }
 
     /// <summary>
@@ -75,6 +89,7 @@ public class InventoryController : MonoBehaviour
             inventoryGridToAddItems.PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
             addedItemSuccessfully = true;
             print("placed item");
+            onChanged.Invoke();
         }
 
         //set grid back off if originally not active
@@ -134,6 +149,8 @@ public class InventoryController : MonoBehaviour
         {
             PlaceItem(posOnGrid);
         }
+
+        onChanged.Invoke();
     }
     #endregion
 
