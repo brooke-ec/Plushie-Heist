@@ -63,6 +63,7 @@ public class Clock : MonoBehaviour
 
     public IEnumerator StartClock()
     {
+        clockCurrentlyRunning = true;
         elapsedTime = 0;
         while(elapsedTime < totalDayTimeSeconds)
         {
@@ -77,17 +78,27 @@ public class Clock : MonoBehaviour
         OnTimeEnded();
     }
 
-    private void OnTimeEnded()
+    /// <summary>
+    /// to stop on time ended potentially running twice when the coroutine is stopped
+    /// </summary>
+    private bool clockCurrentlyRunning = false;
+
+    public void OnTimeEnded()
     {
+        if(!clockCurrentlyRunning) { return; }
+
         //TO-DO play a sound
-        elapsedTime = totalDayTimeSeconds;
         StopCoroutine(StartClock());
+        clockCurrentlyRunning = false;
+
+        elapsedTime = totalDayTimeSeconds;
 
         SetClockUI(elapsedTime * timeMultiplier);
 
         if(isShopClock)
         {
-            ShopManager.instance.EndShoppingDay();
+            ShopManager.instance.CloseShopToCustomers();
+            ShopManager.instance.openOrCloseShopButton.SetUpOpenOrCloseButton();
             Debug.LogWarning("End of day");
         }
         else
@@ -147,7 +158,6 @@ public class Clock : MonoBehaviour
     {
         if(GetCurrentInGameTime().hour == dayEndHour) { return; }
 
-        StopCoroutine(StartClock());
         OnTimeEnded();
     }
 }
