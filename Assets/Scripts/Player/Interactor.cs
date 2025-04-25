@@ -1,5 +1,7 @@
+using cakeslice;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,32 +20,39 @@ public class Interactor : MonoBehaviour
     /// <summary>The UI element to show the Interaction Text </summary>
     [SerializeField] private TextMeshProUGUI interactionText;
 
-    /// <summary>number of colliders currently interactable with</summary>
-    private int numColliders;
+    /// <summary>number of colliders currently in range</summary>
+    private int count;
     /// <summary>array to hold colliders that are currently in range</summary>
-    private readonly Collider[] colliders = new Collider[1];
-    /// <summary>is Ui Text displayed </summary>
-    private bool textDisplayed = false;
+    private readonly Collider[] colliders = new Collider[8];
+    /// <summary> The closest interactable in range </summary>
+    private IInteractable interactable;
+    /// <summary> The closest collider in range </summary>
+    private new Collider collider;
+    /// <summary> The closest collider in range last frame </summary>
+    private Collider previous;
 
     private void Update()
     {
-        //get interactables in range
-        numColliders = Physics.OverlapSphereNonAlloc(interactorPoint.position, interactorRadius, colliders, interactorLayerMask);
+        // Get closest interactable in range
+        count = Physics.OverlapSphereNonAlloc(interactorPoint.position, interactorRadius, colliders, interactorLayerMask);
+        collider = colliders.Take(count).OrderBy(c => Vector3.Distance(interactorPoint.position, c.transform.position)).FirstOrDefault();
 
-        if (numColliders > 0 && !textDisplayed) // show relevant text 
+        if (!ReferenceEquals(previous, collider))
         {
-            if (colliders[0] != null) 
+            // Clean up the previous outline
+            if (previous != null && previous.TryGetComponent(out Outline outline)) outline.enabled = false;
+            previous = collider;
+
+            // Get new interactable
+            if (collider == null) interactable = null;
+            else
             {
-                interactionText.text = colliders[0].TryGetComponent(out IInteractable interactable) ? interactable.interactionPrompt : "Not interactable";
+                interactable = collider.GetComponent<IInteractable>();
+                if (previous.TryGetComponent(out outline)) outline.enabled = true;
             }
-            interactionText.gameObject.SetActive(true);
-            textDisplayed = true;
         }
-        else if(numColliders ==0 && textDisplayed) // hide text
-        {
-            interactionText.gameObject.SetActive(false);
-            textDisplayed = false;
-        }
+
+        interactionText.text = interactable == null ? "" : interactable.interactionPrompt;
     }
 
 #if UNITY_EDITOR // For Debugging
@@ -61,13 +70,6 @@ public class Interactor : MonoBehaviour
     /// <param name="ctx"></param>
     public void pressInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
-        {
-            if (numColliders > 0)
-            {
-                IInteractable interactable = colliders[0].GetComponent<IInteractable>();
-                if (interactable != null) { interactable.interact(this); }
-            }
-        }
+        if (ctx.performed && interactable != null) interactable.interact(this);
     }
 }

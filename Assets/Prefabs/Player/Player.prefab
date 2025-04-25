@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 7157742770895043649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.549}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -348,11 +348,35 @@ MonoBehaviour:
     m_ActionId: f65804dd-459c-4099-adf5-d259327de607
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: rotateItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
     m_ActionName: InventoryActions/Rotate[/Keyboard/r]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: startDrag
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
     m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -396,7 +420,19 @@ MonoBehaviour:
     m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
     m_ActionName: PlayerMovement/Rotate[/Keyboard/r]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: getMousePos
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
     m_ActionName: InventoryActions/Mouse[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
@@ -434,6 +470,7 @@ GameObject:
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
   - component: {fileID: 594284680598497189}
+  - component: {fileID: 7934438741709096596}
   m_Layer: 7
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -529,12 +566,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 10
-  camera: {fileID: 499776393120379558}
   controller: {fileID: 2651383046741006912}
+  camera: {fileID: 499776393120379558}
   test:
   - {fileID: 6780374097032370668, guid: 51f6989b187924040ab4e19c37861cc5, type: 3}
   - {fileID: 6780374097032370668, guid: 252f51414d68b36469e00e99b12c0e38, type: 3}
   - {fileID: 6780374097032370668, guid: 0923b4e5de3ea2a4288da2acac22b43d, type: 3}
+--- !u!114 &7934438741709096596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461329353988155359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78da3f00f3328541b4526c0b0b5ec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineThickness: 5
+  lineIntensity: 5
+  fillAmount: 0
+  lineColor0: {r: 0, g: 0.979579, b: 1, a: 1}
+  lineColor1: {r: 1, g: 0, b: 0, a: 1}
+  lineColor2: {r: 0, g: 1, b: 0, a: 1}
+  additiveRendering: 0
+  backfaceCulling: 1
+  fillTexture: {fileID: 0}
+  fillTextureScale: {x: 1, y: 1}
+  useFillColor: 0
+  fillColor: {r: 0, g: 0, b: 1, a: 1}
+  cornerOutlines: 0
+  addLinesBetweenColors: 0
+  scaleWithScreenSize: 1
+  alphaCutoff: 0.5
+  flipY: 0
+  sourceCamera: {fileID: 499776393120379558}
+  autoEnableOutlines: 0
+  outlineCamera: {fileID: 0}
+  outlineShaderMaterial: {fileID: 0}
+  renderTexture: {fileID: 0}
+  extraRenderTexture: {fileID: 0}
 --- !u!1001 &4016792249454491525
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,9 +1,11 @@
+using cakeslice;
 using UnityEngine;
 
 /// <summary>
 /// Interaction for Picking items up, implements the IInteractable Interface</br>
 /// Object this is on needs a mesh collider and to be on the interactable layer
 /// </summary>
+[RequireComponent(typeof(Outline))]
 public class PickUpInteraction : MonoBehaviour, IInteractable
 {
     /// <summary>Prompt Shown by the UI to let the player know they can interact with it</br>
