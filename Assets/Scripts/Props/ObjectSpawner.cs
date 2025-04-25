@@ -9,7 +9,7 @@ public class ObjectSpawner : MonoBehaviour
     {
         if (Props.Props.Length < 1) { return; }
         int propNo = Random.Range(0, Props.Props.Length);
-        Instantiate(Props.Props[propNo],transform.position,transform.rotation, GetComponentInParent<Transform>());
+        Instantiate(Props.Props[propNo], GetComponentInParent<Transform>());
     }
 
     private void OnDrawGizmos()
