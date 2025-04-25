@@ -19,10 +19,10 @@ public class CustomerAI : MonoBehaviour
     private Vector3 _deathPosition;
 
     /// <summary>The List that is the Customers Shopping List</summary>
-    private List<GameObject> _shoppingList;
+    private List<FurnitureItem> _shoppingList = new List<FurnitureItem>();
 
     /// <summary>The List that refers to how many items the Customer has picked up</summary>
-    private List<GameObject> _shoppingListBought;
+    private List<FurnitureItem> _shoppingListBought = new List<FurnitureItem>();
 
     /// <summary>A refernece to the Till object<summary>
     private TillQueue _tillQueue;
@@ -40,10 +40,7 @@ public class CustomerAI : MonoBehaviour
     private float _distanceBuffer = 1;
     #endregion
 
-    #region Serialized fields
-    /// <summary>A bool that determines wether the Csutomer has been served at the Till</summary>
-    [SerializeField] private bool _hasPayed= false;
-    
+    #region Serialized fields    
     /// <summary>A float for the Time the Customer Will spend at a shelf</summary>
     [SerializeField] private float _searchTime;
     #endregion
@@ -65,6 +62,13 @@ public class CustomerAI : MonoBehaviour
         _maxSearchTime = _searchTime;
 
         //Gives the customer the first point to go to
+        _shoppingList = _custController.ShoppingList();
+        Debug.Log(_shoppingList.Count);
+        Debug.Log("SpaceShip");
+        _shoppingListBought = _shoppingList;
+        //Debug.Log(_shoppingList[0]);
+        //Debug.Log(_shoppingList[0].transform.position);
+        //Debug.Log(_shoppingList[0].gameObject.transform.position);
         UpdateDestination(_shoppingList[0].transform.position);
     }
 
@@ -88,12 +92,6 @@ public class CustomerAI : MonoBehaviour
         {
             _distanceBuffer -= Time.deltaTime;
         }
-
-        // if(_hasPayed)
-        // {
-        //     _hasPayed = false;
-        //     LeftQueue();
-        // }
         
         //Handles Killing of Customers once they have finished everything
         if(_readyToDie)
@@ -161,16 +159,6 @@ public class CustomerAI : MonoBehaviour
     public void UpdateDestination(Vector3 NewDestin)
     {
         _navAgent.destination = NewDestin;
-    }
-
-    /// <summary>
-    /// Sets the shopping list to be that of the  supplied List
-    /// </summary>
-    /// <param name="shopList">The list to be applied to the customer</param>
-    public void SetShoppingList(List<GameObject> shopList)
-    {
-        _shoppingList = shopList;
-        _shoppingListBought = shopList;
     }
 
     public void Kill()

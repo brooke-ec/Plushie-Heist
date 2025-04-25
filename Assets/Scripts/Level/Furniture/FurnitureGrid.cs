@@ -108,4 +108,13 @@ public class FurnitureGrid : MonoBehaviour
         mesh.SetNormals(verticies.Select(_ => new Vector3(0, 1, 0)).ToArray());
         return mesh;
     }
+
+    /// <summary>
+    /// Returns the contents of the Grid for the cusstomers to Use
+    /// </summary>
+    /// <returns>A List of the contents of the Grid</returns>
+    public List<FurnitureItem> GetContents()
+    {
+        return items;
+    }
 }

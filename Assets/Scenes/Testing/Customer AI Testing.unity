@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a3cbb8967a811448b9bab085410fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gapForQueue: 2
+  TillActivate: 0
 --- !u!1 &562999650
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1365d71b2fd7614428adc5e994f603b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shopOpen: 0
   _shopContents:
   - {fileID: 196666710}
   - {fileID: 1188523012}
@@ -793,8 +794,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957384427}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.3011244, y: -0.36948854, z: 0.12792948, w: -0.8697336}
-  m_LocalPosition: {x: -23.73979, y: 17.899145, z: -15.664864}
+  m_LocalRotation: {x: 0.46729416, y: -0.52935827, z: 0.45813152, w: 0.5399366}
+  m_LocalPosition: {x: 6.746841, y: 48.207176, z: 8.733556}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1846,8 +1847,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 99154844}
   - {fileID: 930233427}
-  - {fileID: 217984128}
   - {fileID: 957384430}
+  - {fileID: 217984128}
   - {fileID: 562999651}
   - {fileID: 1107236533}
   - {fileID: 1062730743}
