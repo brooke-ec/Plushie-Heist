@@ -29,7 +29,8 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     public void OpenOrCloseInventory()
     {
-        inventoryGridToAddItems.transform.parent.gameObject.SetActive(!inventoryGridToAddItems.transform.parent.gameObject.activeSelf);
+        Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
+        inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
     }
 
     #region Inventory controls

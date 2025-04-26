@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NightManager : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class NightManager : MonoBehaviour
 
     private void Start()
     {
-        //StartNight();
+        LoadNight();
     }
 
     /// <summary>
@@ -29,20 +30,34 @@ public class NightManager : MonoBehaviour
     /// In % form (E.g: 20 for 20%)
     /// </summary>
     public int itemLosePercentage;
+    [SerializeField] private GameObject nightIntroUIPrefab;
+    [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
     public void LoadNight()
     {
         //TO-DO probably load ikea procedural stuff etc
 
-        //TO-DO load UI saying what the night is about, and the continue button calls StartNight()
+        //load UI saying what the night is about, and the continue button calls StartNight()
+        GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
+        nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
+                Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
+                Destroy(nightIntroUI);
+            }
+        );
     }
+
+    /// <summary>
+    /// Called after choosing an ability to be active
+    /// </summary>
     public void StartNight()
     {
+        print("night started");
+
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
         nightTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         nightTimer.SetupClock(false);
 
-        //TO-DO start clock
+        //start clock
         nightTimer.StartCoroutine(nightTimer.StartClock());
 
         //Start movement of guards?
@@ -54,9 +69,10 @@ public class NightManager : MonoBehaviour
     /// <param name="successful">Pass true if the player leaves through the door</param>
     public void OnEndNight(bool successful)
     {
+        print("night ENDED");
+
         //Call end stuff
         escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
-
     }
 
     #region UI
