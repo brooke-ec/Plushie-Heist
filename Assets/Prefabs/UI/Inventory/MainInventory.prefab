@@ -165,7 +165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7797676107083370489
 RectTransform:
   m_ObjectHideFlags: 0
@@ -276,7 +276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f3a943145e247b468018222b0acedce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryWidth: 12
-  inventoryHeight: 4
-  itemsToTest: []
+  inventoryWidth: 8
+  inventoryHeight: 3
+  itemsToTest:
+  - {fileID: 11400000, guid: f697729f7bd92d843b930fd24e844890, type: 2}
+  - {fileID: 11400000, guid: 2c400c28b11e01f41a25bded2e8965bc, type: 2}
   itemPrefab: {fileID: 4263955317388108046, guid: f14c8709cdde7294eb0083f36a0ab7bf, type: 3}

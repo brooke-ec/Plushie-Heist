@@ -23,7 +23,7 @@ public class Clock : MonoBehaviour
     /// <summary> at what time to end the day (close the shop), 17 means 5pm </summary>
     int dayEndHour;
     /// <summary> If true, behaves as the shop clock, calling the equivalent end function. Otherwise, behaves as the night clock </summary>
-    [SerializeField] bool isShopClock = true;
+    private bool isShopClock = true;
 
     private float totalDayTimeSeconds; // in seconds
     private float timeMultiplier;
@@ -39,8 +39,9 @@ public class Clock : MonoBehaviour
         return timeMultiplier;
     }
 
-    public void SetupClock()
+    public void SetupClock(bool isShopClock)
     {
+        this.isShopClock = isShopClock;
         if (isShopClock)
         {
             GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
@@ -56,7 +57,7 @@ public class Clock : MonoBehaviour
         timeMultiplier = GetTimeMultiplier();
         totalDayTimeSeconds = lengthOfDayInRealMins * 60f;
 
-        SetClockUI(dayStartHour);
+        SetClockUI(0);
     }
 
     float elapsedTime = 0;
@@ -104,6 +105,8 @@ public class Clock : MonoBehaviour
         else
         {
             Debug.LogWarning("End of night");
+            //because not successful if it's because of timer ending
+            NightManager.instance.OnEndNight(false);
         }
     }
 

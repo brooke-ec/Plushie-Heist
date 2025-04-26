@@ -35,7 +35,8 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
-        shopTimer.SetupClock();
+        shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
+        shopTimer.SetupClock(true);
         StartNewDay();
     }
 

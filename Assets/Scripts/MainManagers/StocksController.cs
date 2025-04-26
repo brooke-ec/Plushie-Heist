@@ -67,14 +67,14 @@ public class StocksController : MonoBehaviour
     /// <param name="day">The number of today's day</param>
     public void NewDay(int day)
     {
-        //TO-DO go through all stocks and randomise a bit some items market price
+        // go through all stocks and randomise a bit some items market price
         //and update last modified and last market price
 
         /*int minNumOfChanges = 1;
         int maxNumOfChanges = 3;*/
 
         int minNumOfChanges = allStocksInGame.Count / 10;
-        int maxNumOfChanges = allStocksInGame.Count / 1;
+        int maxNumOfChanges = allStocksInGame.Count / 4;
         int numOfChanges = UnityEngine.Random.Range(minNumOfChanges, maxNumOfChanges + 1);
 
         //shuffle list of items

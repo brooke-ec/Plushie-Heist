@@ -1,0 +1,153 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EscapingUI : MonoBehaviour
+{
+    [SerializeField] private GameObject successfulEscapingUIPrefab;
+    [SerializeField] private GameObject caughtEscapingUIPrefab;
+
+    [SerializeField] private Color32 pinkColour;
+    [SerializeField] private Color32 greenColour;
+
+    public GameObject itemSlotPrefab;
+    private bool successful = false;
+
+    public void CreateEscapingUI(bool successful, Transform canvasTransform)
+    {
+        this.successful = successful;
+        GameObject escapingUI;
+
+        //create needed UI element
+        if (successful)
+        {
+            escapingUI = Instantiate(successfulEscapingUIPrefab, canvasTransform);
+        }
+        else
+        {
+            escapingUI = Instantiate(caughtEscapingUIPrefab, canvasTransform);
+        }
+
+        InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
+
+        //Get the dictionary of items successfully stolen, and those lost
+        (Dictionary<ItemClass, int> successfullyStolenItems, Dictionary<ItemClass, int> lostItems) = RandomiseItemsLost(inventoryController.inventoryGridToAddItems);
+
+        //Do the first container, which is the same for both
+        Transform mainContainer = escapingUI.transform.GetChild(1);
+        Transform content = mainContainer.GetChild(0).GetChild(1).GetChild(0).GetChild(0);
+
+        if (successfullyStolenItems.Count == 0)
+        {
+            //Activate text that says "nothing"
+            mainContainer.GetChild(0).GetChild(2).gameObject.SetActive(true);
+        }
+        else
+        {
+            InstantiateGivenItemsInContainer(successfullyStolenItems, content);
+        }
+
+        if(!successful)
+        {
+            //then modify the extra container that the unsuccessful has
+            if (lostItems.Count == 0)
+            {
+                //Activate text that says "nothing"
+                mainContainer.GetChild(1).GetChild(2).gameObject.SetActive(true);
+            }
+            else
+            {
+                InstantiateGivenItemsInContainer(lostItems, mainContainer.GetChild(1).GetChild(1).GetChild(0).GetChild(0));
+            }
+        }
+
+        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));
+        //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
+    }
+
+    /// <summary>
+    /// Given an inventory grid, randomise which items are lost based on the losing items percentage
+    /// </summary>
+    /// <param name="inventoryGrid"></param>
+    /// <returns></returns>
+    private (Dictionary<ItemClass, int>, Dictionary<ItemClass, int>) RandomiseItemsLost(InventoryGrid inventoryGrid)
+    {
+        Dictionary<ItemClass, int> allItems = inventoryGrid.GetDictionaryOfCurrentItems();
+        //create the dictionaries
+        Dictionary<ItemClass, int> successfullyStolenItems = new Dictionary<ItemClass, int>(allItems);
+        //the difference in items from items originally in storage, and the ones in successfully stolen items
+        Dictionary<ItemClass, int> lostItems = new Dictionary<ItemClass, int>();
+
+        if (!successful)
+        {
+            //Now shuffle list of items
+            //create a list of items, adding every single item in dictionary the number of times the value appears in the dictionary
+            List<ItemClass> listOfItems = new List<ItemClass>();
+            foreach (KeyValuePair<ItemClass, int> itemPair in allItems)
+            {
+                for (int i = 0; i < itemPair.Value; i++)
+                {
+                    listOfItems.Add(itemPair.Key);
+                }
+            }
+
+
+            //after this you can shuffle the list
+            int numOfItemsToLose = Mathf.CeilToInt((NightManager.instance.itemLosePercentage / 100f) * allItems.Count);
+            listOfItems = listOfItems.OrderBy(x => UnityEngine.Random.value).ToList();
+            //then add the first numOfItemsToLose into the dictionary format for lostItems
+            List<ItemClass> itemsToLose = listOfItems.Take(numOfItemsToLose).ToList();
+
+            //for each item to lose, if it still exists in the successful dictionary,
+            //take it away and add it to the lostItems dictionary
+            foreach (ItemClass itemToLose in itemsToLose)
+            {
+                //if it already contains it, just do -1 to the item
+                if (successfullyStolenItems.ContainsKey(itemToLose))
+                {
+                    successfullyStolenItems[itemToLose] -= 1;
+                    if (successfullyStolenItems[itemToLose] == 0) { successfullyStolenItems.Remove(itemToLose); }
+                }
+
+                //add it to lost items
+                if (lostItems.ContainsKey(itemToLose))
+                {
+                    lostItems[itemToLose] += 1;
+                }
+                else
+                {
+                    //set it to 1
+                    lostItems.Add(itemToLose, 1);
+                }
+            }
+        }
+
+        return (successfullyStolenItems, lostItems);
+    }
+
+    private void InstantiateGivenItemsInContainer(Dictionary<ItemClass, int> items, Transform container)
+    {
+        Color32 colorToUseForQuantity = GetRightColour();
+
+        foreach (KeyValuePair<ItemClass, int> itemPair in items)
+        {
+            GameObject itemContainer = Instantiate(itemSlotPrefab, container);
+            itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = itemPair.Key.itemIcon;
+            itemContainer.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = itemPair.Value.ToString();
+            itemContainer.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().color = colorToUseForQuantity;
+        }
+    }
+
+    private Color32 GetRightColour()
+    {
+        if (successful)
+        {
+            return greenColour;
+        }
+        return pinkColour;
+    }
+}
