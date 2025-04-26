@@ -18,6 +18,23 @@ public static class Util
     {
         return Vector2Int.Min(Vector2Int.Max(vector, min), max);
     }
+
+    public static Vector2 Reciprocal(this Vector2 vector)
+    {
+        return new Vector2(
+            1 / vector.x,
+            1 / vector.y
+        );
+    }
+
+    public static Vector3 Reciprocal(this Vector3 vector)
+    {
+        return new Vector3(
+            1 / vector.x,
+            1 / vector.y,
+            1 / vector.z
+        );
+    }
 }
 
 // Fix https://stackoverflow.com/a/64749403

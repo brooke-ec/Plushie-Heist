@@ -6,45 +6,32 @@ public class GridMesh
 {
     public Vector2Int size { get; private set; }
     public Mesh mesh { get; private set; }
-    public float cellSize { get; private set; }
-    public float spacing { get; private set; }
     public Color color { get; private set; }
 
-    public GridMesh(Color color, float spacing)
+    public GridMesh(Color color)
     {
         this.color = color;
-        this.spacing = spacing;
     }
 
-    public GridMesh(Color color) : this(color, 0.3f) { }
-
-    public GridMesh() : this(Color.blue) { }
-
-    public Mesh Build(Vector2Int size, float cellSize)
+    public Mesh Build(Vector2Int size, Vector2 cellSize, float spacing)
     {
-        return Build(size, cellSize, spacing);
-    }
-
-    public Mesh Build(Vector2Int size, float cellSize, float spacing)
-    {
-        this.cellSize = cellSize;
-        this.spacing = spacing;
         this.size = size;
 
         // Initialise constants
         List<Vector3> verticies = new List<Vector3>();
         List<int> indicies = new List<int>();
 
-        float gap = cellSize * spacing / 2;
-        float far = cellSize - gap;
+        Vector2 gap = 0.5f * spacing * cellSize;
+        Vector2 far = cellSize - gap;
 
+        // Iterate through cells
         for (int x = 0; x < size.x; x++)
             for (int y = 0; y < size.y; y++)
             {
                 Vector3 l = new Vector3(
-                    (x - size.x * .5f) * cellSize,
+                    (x - size.x * .5f) * cellSize.x,
                     0,
-                    (y - size.y * .5f) * cellSize
+                    (y - size.y * .5f) * cellSize.y
                 );
 
                 indicies.AddRange(new int[] {
@@ -52,10 +39,10 @@ public class GridMesh
                     1, 3, 2
                 }.Select(i => i + verticies.Count));
 
-                verticies.Add(new Vector3(l.x + gap, 0, l.z + gap));
-                verticies.Add(new Vector3(l.x + gap, 0, l.z + far));
-                verticies.Add(new Vector3(l.x + far, 0, l.z + gap));
-                verticies.Add(new Vector3(l.x + far, 0, l.z + far));
+                verticies.Add(new Vector3(l.x + gap.x, 0, l.z + gap.y));
+                verticies.Add(new Vector3(l.x + gap.x, 0, l.z + far.y));
+                verticies.Add(new Vector3(l.x + far.x, 0, l.z + gap.y));
+                verticies.Add(new Vector3(l.x + far.x, 0, l.z + far.y));
             }
 
         mesh = new Mesh();

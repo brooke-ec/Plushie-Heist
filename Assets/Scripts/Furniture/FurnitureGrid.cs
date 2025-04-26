@@ -8,37 +8,24 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MeshRenderer))]
 public class FurnitureGrid : MonoBehaviour
 {
-    public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
     public readonly UnityEvent onChanged = new UnityEvent();
+    public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize.x), (int)(collider.size.z / cellSize.y));
     
-    private static float cellSize => FurnitureSettings.instance.cellSize;
+    private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
     private List<FurnitureItem> items = new List<FurnitureItem>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(0, 0, 1, 0.5f);
-        Gizmos.DrawMesh(mesh.Build(size, cellSize, spacing), transform.TransformPoint(collider.center));
-    }
-
-    private void OnValidate()
-    {
-        if (collider == null) collider = GetComponent<BoxCollider>();
-    }
-#endif
-
     private void Start()
     {
-        GetComponent<MeshRenderer>().material = FurnitureSettings.instance.gridMaterial;
         collider = GetComponent<BoxCollider>();
         filter = GetComponent<MeshFilter>();
 
         gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
-        filter.mesh = mesh.Build(size, cellSize);
+
+        filter.mesh = mesh.Build(size, cellSize, spacing);
     }
 
     public Vector2 FromWorldspace(Vector3 point)
@@ -50,17 +37,17 @@ public class FurnitureGrid : MonoBehaviour
     public Vector2 FromLocalspace(Vector3 point)
     {
         return new Vector2(
-            point.x / cellSize + size.x * .5f,
-            point.z / cellSize + size.y * .5f
+            point.x / cellSize.x + size.x * .5f,
+            point.z / cellSize.y + size.y * .5f
         );
     }
 
     public Vector3 ToLocalspace(Vector2 coordinates)
     {
         return new Vector3(
-            (coordinates.x - size.x * .5f) * cellSize,
+            (coordinates.x - size.x * .5f) * cellSize.x,
             0,
-            (coordinates.y - size.y * .5f) * cellSize
+            (coordinates.y - size.y * .5f) * cellSize.y
         );
     }
 
@@ -106,4 +93,20 @@ public class FurnitureGrid : MonoBehaviour
     {
         return items.Any(i => (i.gridRegion).Intersect(region).hit);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.DrawMesh(
+            mesh.Build(size,Vector2.one * FurnitureSettings.instance.cellSize,spacing),
+            transform.TransformPoint(Vector3.zero)
+        );
+    }
+
+    private void OnValidate()
+    {
+        if (collider == null) collider = GetComponent<BoxCollider>();
+    }
+#endif
 }

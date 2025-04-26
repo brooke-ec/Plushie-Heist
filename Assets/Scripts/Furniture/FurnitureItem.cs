@@ -1,4 +1,5 @@
 using cakeslice;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     [SerializeField] private ItemClass Item;
     /// <summary> The size in grid spaces of this furnature item </summary>
     [field: SerializeReference] public Vector2Int size { get; private set; }
+    /// <summary> The offset from default when placing on a <see cref="FurnitureGrid"/> </summary>
+    [field: SerializeReference] public Vector3 gridOffset { get; private set; }
 
     /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
     public string interactionPrompt => hasSpace ? empty ? "Press F to Pick Up" : "Item Contains Sub-Items" : "Inventory Full";
@@ -97,6 +100,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     {
         size = new Vector2Int(size.y, size.x);
         transform.Rotate(0, 90, 0);
+        GridMove(gridPosition);
     }
 
     /// <summary>
@@ -105,7 +109,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     public void GridMove(Vector2Int target)
     {
         gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - size);
-        transform.position = grid.ToWorldspace(gridRegion.center);
+        transform.position = grid.ToWorldspace(gridRegion.center) - transform.rotation * gridOffset;
 
         if (IsGridValid()) switcher.Reset();
         else switcher.Switch(FurnitureSettings.instance.invalidMaterial);
@@ -121,8 +125,9 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private void OnDrawGizmos()
     {
         if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null) return;
+
         Gizmos.color = new Color(0, 0, 1, 0.5f);
-        Gizmos.DrawCube(transform.position, new Vector3(size.x, 0, size.y) * FurnitureSettings.instance.cellSize);
+        Gizmos.DrawCube(transform.position + gridOffset, new Vector3(size.x, 0, size.y) * FurnitureSettings.instance.cellSize);
     }
 #endif
 }
