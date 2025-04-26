@@ -34,7 +34,7 @@ public class FurniturePlacer : MonoBehaviour
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxDistance, gridLayer))
             {
                 if (hit.transform.TryGetComponent(out FurnitureGrid grid)
-                    && !grid.transform.IsChildOf(item.transform)) item.owner = grid;
+                    && !grid.transform.IsChildOf(item.transform)) item.grid = grid;
                 Move(hit.point);
             }
             else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, ~itemLayer)) Move(hit.point);
@@ -50,9 +50,9 @@ public class FurniturePlacer : MonoBehaviour
 
     private void Move(Vector3 target)
     {
-        if (item == null || item.owner == null) return;
+        if (item == null || item.grid == null) return;
         target -= new Vector3(item.size.x, 0, item.size.y) / 2 * FurnitureSettings.instance.cellSize;
-        item.Move(Vector2Int.RoundToInt(item.owner.FromWorldspace(target)));
+        item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
     public void OnPlace(InputAction.CallbackContext ctx)
@@ -62,11 +62,12 @@ public class FurniturePlacer : MonoBehaviour
         if (item == null)
         {
             item = Instantiate(test[testIndex % test.Length]);
+            Debug.Log(item);
             testIndex++;
         }
-        else if (item.IsValid())
+        else if (item.IsGridValid())
         {
-            item.owner.AddItem(item);
+            item.grid.AddItem(item);
             item = null;
         }
     }
@@ -74,6 +75,6 @@ public class FurniturePlacer : MonoBehaviour
     public void OnRotate(InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValueAsButton() || item == null) return;
-        item.Rotate();
+        item.GridRotate();
     }
 }

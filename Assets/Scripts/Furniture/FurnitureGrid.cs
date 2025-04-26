@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(BoxCollider))]
@@ -8,9 +9,10 @@ using UnityEngine;
 public class FurnitureGrid : MonoBehaviour
 {
     public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize), (int)(collider.size.z / cellSize));
+    public readonly UnityEvent onChanged = new UnityEvent();
+    
     private static float cellSize => FurnitureSettings.instance.cellSize;
     private static float spacing => FurnitureSettings.instance.spacing;
-
     private List<FurnitureItem> items = new List<FurnitureItem>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
@@ -31,6 +33,7 @@ public class FurnitureGrid : MonoBehaviour
 
     private void Start()
     {
+        GetComponent<MeshRenderer>().material = FurnitureSettings.instance.gridMaterial;
         collider = GetComponent<BoxCollider>();
         filter = GetComponent<MeshFilter>();
 
@@ -76,18 +79,20 @@ public class FurnitureGrid : MonoBehaviour
     {
         items.Add(item);
         Regenerate();
+        onChanged.Invoke();
     }
 
     public void RemoveItem(FurnitureItem item)
     {
         items.Remove(item);
         Regenerate();
+        onChanged.Invoke();
     }
 
     public void Regenerate()
     {
         // Get all occupied positions
-        Vector2Int[] occupied = items.SelectMany(i => i.region.ToArray()).ToArray();
+        Vector2Int[] occupied = items.SelectMany(i => i.gridRegion.ToArray()).ToArray();
         mesh.SetColor(Color.green); // Reset grid mesh to green
         filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
     }
@@ -99,6 +104,6 @@ public class FurnitureGrid : MonoBehaviour
 
     public bool Intersects(Region region)
     {
-        return items.Any(i => (i.region).Intersect(region).hit);
+        return items.Any(i => (i.gridRegion).Intersect(region).hit);
     }
 }
