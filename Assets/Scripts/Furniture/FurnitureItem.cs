@@ -1,9 +1,10 @@
 using cakeslice;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Represents a furniture item, placed in the world on on a <see cref="FurnitureGrid"/>
+/// Represents an item, placed in the world or on in an inventory
 /// </summary>
 public class FurnitureItem : MonoBehaviour, IInteractable
 {
@@ -47,8 +48,12 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private InventoryController inventoryController;
     /// <summary> The outline script attached to this object </summary>
     private Outline outline;
-
+    /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
     private MaterialSwitcher switcher;
+    
+    // Temporary workaround
+    // TODO: Refactor
+    public FurnitureItem source;
 
     private void Awake()
     {
@@ -87,7 +92,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     {
         if (!canPickup) return false;
 
-        if (inventoryController.InsertItem(this))
+        if (inventoryController.InsertItem(source))
         {
             if (grid != null) grid.RemoveItem(this);
 

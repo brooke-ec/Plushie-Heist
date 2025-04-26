@@ -1007,23 +1007,25 @@ public class PlayerController : MonoBehaviour
 
     public void openInventory(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
-        {
-            if (!inventoryOpen)
-            {
-                inventoryUI.SetActive(true);
-                inventoryOpen = true;
-                GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
-                Cursor.lockState = CursorLockMode.Confined;
-            }
-            else
-            {
+        if (ctx.performed) openInventory();
+    }
 
-                inventoryUI.SetActive(false);
-                inventoryOpen = false;
-                GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
-                Cursor.lockState = CursorLockMode.Locked;
-            }
+    public void openInventory()
+    {
+        if (!inventoryOpen)
+        {
+            inventoryUI.SetActive(true);
+            inventoryOpen = true;
+            GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else
+        {
+
+            inventoryUI.SetActive(false);
+            inventoryOpen = false;
+            GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
