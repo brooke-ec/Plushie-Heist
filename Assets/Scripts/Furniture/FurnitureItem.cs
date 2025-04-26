@@ -1,5 +1,4 @@
 using cakeslice;
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -8,12 +7,22 @@ using UnityEngine;
 /// </summary>
 public class FurnitureItem : MonoBehaviour, IInteractable
 {
-    /// <summary> The item class the to pickup </summary>
-    [SerializeField] private ItemClass Item;
-    /// <summary> The size in grid spaces of this furnature item </summary>
-    [field: SerializeReference] public Vector2Int size { get; private set; }
+    /// <summary> The name of this item displayed on the stock UI </summary>
+    [field: SerializeField] public string itemName { get; private set; }
+    /// <summary> The base value of this item </summary>
+    [field: SerializeField] public int marketPrice { get; private set; }
+
+    [field: Header("Placement Settings")]
+    /// <summary> The size of this item in on the <see cref="FurnitureGrid"/> </summary>
+    [field: SerializeField] public Vector2Int gridSize { get; private set; }
     /// <summary> The offset from default when placing on a <see cref="FurnitureGrid"/> </summary>
-    [field: SerializeReference] public Vector3 gridOffset { get; private set; }
+    [field: SerializeField] public Vector3 gridOffset { get; private set; }
+
+    [field: Header("Inventory Settings")]
+    /// <summary> The size of this item in the inventory </summary>
+    [field: SerializeField] public Vector2Int inventorySize { get; private set; }
+    /// <summary> The icon to use for this item in the inventory </summary>
+    [field: SerializeField] public Sprite inventoryIcon { get; private set; }
 
     /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
     public string interactionPrompt => hasSpace ? empty ? "Press F to Pick Up" : "Item Contains Sub-Items" : "Inventory Full";
@@ -32,7 +41,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// <summary> The <see cref="FurnitureGrid"/> this item is currently attached to</summary>
     public FurnitureGrid grid { get; set; }
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
-    public Region gridRegion => new Region().FromSize(gridPosition, size);
+    public Region gridRegion => new Region().FromSize(gridPosition, gridSize);
 
     /// <summary> The current <see cref="InventoryController"/> instance </summary>
     private InventoryController inventoryController;
@@ -54,7 +63,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
         outline.enabled = false;
 
         inventoryController.onChanged.AddListener(() => {
-            hasSpace = inventoryController.CanInsert(Item);
+            hasSpace = inventoryController.CanInsert(this);
         });
 
         foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() => {
@@ -78,7 +87,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     {
         if (!canPickup) return false;
 
-        if (inventoryController.InsertItem(Item))
+        if (inventoryController.InsertItem(this))
         {
             if (grid != null) grid.RemoveItem(this);
 
@@ -98,7 +107,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     public void GridRotate()
     {
-        size = new Vector2Int(size.y, size.x);
+        gridSize = new Vector2Int(gridSize.y, gridSize.x);
         transform.Rotate(0, 90, 0);
         GridMove(gridPosition);
     }
@@ -108,7 +117,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     public void GridMove(Vector2Int target)
     {
-        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - size);
+        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - gridSize);
         transform.position = grid.ToWorldspace(gridRegion.center) - transform.rotation * gridOffset;
 
         if (IsGridValid()) switcher.Reset();
@@ -127,7 +136,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
         if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null) return;
 
         Gizmos.color = new Color(0, 0, 1, 0.5f);
-        Gizmos.DrawCube(transform.position + gridOffset, new Vector3(size.x, 0, size.y) * FurnitureSettings.instance.cellSize);
+        Gizmos.DrawCube(transform.position + gridOffset, new Vector3(gridSize.x, 0, gridSize.y) * FurnitureSettings.instance.cellSize);
     }
 #endif
 }

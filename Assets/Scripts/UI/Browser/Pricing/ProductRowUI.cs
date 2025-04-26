@@ -31,7 +31,7 @@ public class ProductRowUI : MonoBehaviour
         lastDayChanged.text = productDataRef.GetLastDayChangedText();
         price.text = productDataRef.price.ToString("F2");
         margin.text = "£"+productDataRef.GetMarginAsString();
-        icon.sprite = productData.itemRef.itemIcon;
+        icon.sprite = productData.itemRef.inventoryIcon;
 
         ChangeMarginsColour();
     }

@@ -23,7 +23,7 @@ public class ObjectSpawner : MonoBehaviour
                 currentBiggest = i;
             }
         }
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,transform.position);
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,transform.position);
     }
 }
