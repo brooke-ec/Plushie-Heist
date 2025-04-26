@@ -20,7 +20,7 @@ public class SetPricingUIFunctionality : MonoBehaviour
     public void SetUI(ProductData product)
     {
         this.product = product;
-        itemIcon.sprite = product.itemRef.itemIcon;
+        itemIcon.sprite = product.itemRef.inventoryIcon;
         itemName.text = product.itemRef.itemName;
         itemMarketPrice.text = product.marketPrice.ToString();
         priceInputField.text = product.price.ToString();

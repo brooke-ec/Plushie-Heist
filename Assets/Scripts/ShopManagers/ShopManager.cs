@@ -67,7 +67,7 @@ public class ShopManager : MonoBehaviour
     /// Call when you want to select a given item and change its price.
     /// It's assumed that the item is already in pricing table
     /// </summary>
-    public void SetPriceOfItem(ItemClass item)
+    public void SetPriceOfItem(FurnitureItem item)
     {
         stocksController.CreateSetPricingUI(item);
     }

@@ -80,9 +80,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
     }
 
-    public Vector2Int? FindSpaceForObject(ItemClass itemToInsert)
+    public Vector2Int? FindSpaceForObject(FurnitureItem itemToInsert)
     {
-        return GetSpaceAvailable(new Vector2Int(itemToInsert.sizeWidth, itemToInsert.sizeHeight));
+        return GetSpaceAvailable(new Vector2Int(itemToInsert.inventorySize.x, itemToInsert.inventorySize.y));
     }
 
     /// <summary> Place item in inventory in tile units. Eg: [2, 5] INCLUDES OVERLAP ITEM </summary>
@@ -142,7 +142,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
-    public bool IsThisItemTypeInTheInventory(ItemClass itemClass)
+    public bool IsThisItemTypeInTheInventory(FurnitureItem itemClass)
     {
         for(int x=0;x<inventoryWidth; x++)
         {
@@ -258,7 +258,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #endregion
 
     #region Test
-    public List<ItemClass> itemsToTest = new List<ItemClass>();
+    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
     public GameObject itemPrefab;
     //
     public void PlaceTestItems()

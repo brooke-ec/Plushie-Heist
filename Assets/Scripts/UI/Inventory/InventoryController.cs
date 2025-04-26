@@ -41,7 +41,7 @@ public class InventoryController : MonoBehaviour
     /// Wrapper method for InsertItem, so that it can be passed to a button (but might want to check if successful or not in the future)
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
-    public void TryInsertItem(ItemClass itemClassToInsert)
+    public void TryInsertItem(FurnitureItem itemClassToInsert)
     {
         bool insertedSuccessfully = InsertItem(itemClassToInsert);
         //maybe in the future check if false, do error sound or something
@@ -52,7 +52,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="item">The item to check</param>
     /// <returns></returns>
-    public bool CanInsert(ItemClass item)
+    public bool CanInsert(FurnitureItem item)
     {
         return inventoryGridToAddItems.FindSpaceForObject(item) != null;
     }
@@ -62,7 +62,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
     /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
-    public bool InsertItem(ItemClass itemClassToInsert)
+    public bool InsertItem(FurnitureItem itemClassToInsert)
     {
         if (inventoryGridToAddItems == null) { return false; }
 
@@ -192,13 +192,13 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     #region Test
-    public List<ItemClass> itemsToTest = new List<ItemClass>();
+    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
     //
     public void PlaceTestItems()
     {
         Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
         
-        foreach (ItemClass item in itemsToTest) InsertItem(item);
+        foreach (FurnitureItem item in itemsToTest) InsertItem(item);
     }
     #endregion
 

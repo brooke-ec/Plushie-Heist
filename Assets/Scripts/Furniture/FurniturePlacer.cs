@@ -51,7 +51,7 @@ public class FurniturePlacer : MonoBehaviour
     private void Move(Vector3 target)
     {
         if (item == null || item.grid == null) return;
-        target -= new Vector3(item.size.x, 0, item.size.y) / 2 * FurnitureSettings.instance.cellSize;
+        target -= new Vector3(item.gridSize.x, 0, item.gridSize.y) / 2 * FurnitureSettings.instance.cellSize;
         item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
