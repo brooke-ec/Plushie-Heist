@@ -11,7 +11,7 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<ItemClass> allItemsInGame = new List<ItemClass>();
+    [SerializeField] private List<FurnitureItem> allItemsInGame = new List<FurnitureItem>();
     [HideInInspector] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
@@ -28,7 +28,7 @@ public class StocksController : MonoBehaviour
         int todaysDate = ShopManager.instance.day;
 
         allStocksInGame = new List<ProductData>(allItemsInGame.Count);
-        foreach(ItemClass item in allItemsInGame)
+        foreach(FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -43,7 +43,7 @@ public class StocksController : MonoBehaviour
     /// Essentially, we check if the passed furniture is already part
     /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
     /// </summary>
-    public void TryAddFurnitureToPricingTable(ItemClass item)
+    public void TryAddFurnitureToPricingTable(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
@@ -52,7 +52,7 @@ public class StocksController : MonoBehaviour
         }
     }
 
-    public void TryRemoveFurnitureFromPricingTable(ItemClass item)
+    public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
@@ -105,7 +105,7 @@ public class StocksController : MonoBehaviour
         pricingTableManager.ResetTableToOriginalOrder();
     }
 
-    public void CreateSetPricingUI(ItemClass item)
+    public void CreateSetPricingUI(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
