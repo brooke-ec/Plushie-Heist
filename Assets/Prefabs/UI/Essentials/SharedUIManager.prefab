@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &182442933743981042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 562302263931308435}
+  - component: {fileID: 5267792166453474624}
+  - component: {fileID: 3043295824139991848}
+  - component: {fileID: 1074089012343155629}
+  m_Layer: 0
+  m_Name: SharedUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &562302263931308435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182442933743981042}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5267792166453474624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182442933743981042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb8abeb95ea3a646a6e46f6f1d3d415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootCanvas: {fileID: 0}
+  scaleFactor: 0
+  gridToStart: {fileID: 0}
+--- !u!114 &3043295824139991848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182442933743981042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dae14f8ec37754478c9d4589c95b921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 6115323284883508286, guid: 381a3714c22bd3e4a9e3d427ff14fe2f, type: 3}
+  offset: {x: -10, y: -10, z: -10}
+  coinIcon: {fileID: 21300000, guid: ec772d878687bb94c93b0f30eabbd4c1, type: 3}
+  coinTextColour:
+    serializedVersion: 2
+    rgba: 4283416053
+  blueTooltipBackground: {fileID: 21300000, guid: 00ea01c5091863a4498ef3b7ad37bfdc, type: 3}
+  greyTooltipBackground: {fileID: 21300000, guid: ce4fa02357f31134ea93b29f409f2ab3, type: 3}
+  pinkTooltipBackground: {fileID: 21300000, guid: fc06ef63e49931b4282b0128e936a3fb, type: 3}
+--- !u!114 &1074089012343155629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182442933743981042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b6cbbefc45bcc419bf947db776018c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 4263955317388108046, guid: f14c8709cdde7294eb0083f36a0ab7bf, type: 3}
+  selectedInventoryGrid: {fileID: 0}
+  inventoryGridToAddItems: {fileID: 0}
+  selectedItem: {fileID: 0}
+  itemsToTest:
+  - {fileID: 11400000, guid: f697729f7bd92d843b930fd24e844890, type: 2}
+  - {fileID: 11400000, guid: 2c400c28b11e01f41a25bded2e8965bc, type: 2}
+  - {fileID: 11400000, guid: 43665e2fec4a8294baca2170ecc5d3ec, type: 2}

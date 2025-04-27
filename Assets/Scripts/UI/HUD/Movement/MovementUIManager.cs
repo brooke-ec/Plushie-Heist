@@ -114,4 +114,31 @@ public class MovementUIManager : MonoBehaviour
             abilities[ability].UpdateUI(cooldown, maxCooldownVal);
         }
     }
+
+    internal List<(Ability, string, Sprite)> GetAllAbilitiesInfo()
+    {
+        List<(Ability, string, Sprite)> abilitiesInfo = new List<(Ability, string, Sprite)>();
+        foreach(Ability ability in abilities.Keys)
+        {
+            abilitiesInfo.Add(GetAbilityInfo(ability));
+        }
+        return abilitiesInfo;
+    }
+
+    private (Ability, string, Sprite) GetAbilityInfo(Ability ability)
+    {
+        switch (ability)
+        {
+            case Ability.Dash:
+                return (ability, "Dash", dashIcon);
+            case Ability.Boost:
+                return (ability, "Boost", boostIcon);
+            case Ability.Grapple:
+                return (ability, "Grapple", grappleIcon);
+            case Ability.Glide:
+                return (ability, "Glide", glideIcon);
+            default:
+                return (ability, null, null);
+        }
+    }
 }

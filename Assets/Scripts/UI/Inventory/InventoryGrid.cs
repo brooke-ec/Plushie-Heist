@@ -255,6 +255,43 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     #endregion
 
+    #region Extra functionality
+
+    /// <summary>
+    /// Call to get the dictionary form of the current inventory
+    /// </summary>
+    /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
+    public Dictionary<ItemClass, int> GetDictionaryOfCurrentItems()
+    {
+        Dictionary<ItemClass, int> dictionary = new Dictionary<ItemClass, int>();
+
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                InventoryItem item = inventorySlots[x, y];
+                //if there is an item and that item's main position on grid is this one
+                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
+                {
+                    //if it already contains it, just add 1 to the item
+                    if(dictionary.ContainsKey(item.itemClass))
+                    {
+                        dictionary[item.itemClass] += 1;
+                    }
+                    else
+                    {
+                        //set it to 1
+                        dictionary.Add(item.itemClass, 1);
+                    }
+                }
+            }
+        }
+
+        return dictionary;
+    }
+
+    #endregion
+
     #region Test
     public List<ItemClass> itemsToTest = new List<ItemClass>();
     public GameObject itemPrefab;

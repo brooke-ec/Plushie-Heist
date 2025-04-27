@@ -23,7 +23,7 @@ public class Clock : MonoBehaviour
     /// <summary> at what time to end the day (close the shop), 17 means 5pm </summary>
     int dayEndHour;
     /// <summary> If true, behaves as the shop clock, calling the equivalent end function. Otherwise, behaves as the night clock </summary>
-    [SerializeField] bool isShopClock = true;
+    private bool isShopClock = true;
 
     private float totalDayTimeSeconds; // in seconds
     private float timeMultiplier;
@@ -39,8 +39,9 @@ public class Clock : MonoBehaviour
         return timeMultiplier;
     }
 
-    public void SetupClock()
+    public void SetupClock(bool isShopClock)
     {
+        this.isShopClock = isShopClock;
         if (isShopClock)
         {
             GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
@@ -56,13 +57,14 @@ public class Clock : MonoBehaviour
         timeMultiplier = GetTimeMultiplier();
         totalDayTimeSeconds = lengthOfDayInRealMins * 60f;
 
-        SetClockUI(dayStartHour);
+        SetClockUI(0);
     }
 
     float elapsedTime = 0;
 
     public IEnumerator StartClock()
     {
+        clockCurrentlyRunning = true;
         elapsedTime = 0;
         while(elapsedTime < totalDayTimeSeconds)
         {
@@ -77,22 +79,34 @@ public class Clock : MonoBehaviour
         OnTimeEnded();
     }
 
-    private void OnTimeEnded()
+    /// <summary>
+    /// to stop on time ended potentially running twice when the coroutine is stopped
+    /// </summary>
+    private bool clockCurrentlyRunning = false;
+
+    public void OnTimeEnded()
     {
+        if(!clockCurrentlyRunning) { return; }
+
         //TO-DO play a sound
-        elapsedTime = totalDayTimeSeconds;
         StopCoroutine(StartClock());
+        clockCurrentlyRunning = false;
+
+        elapsedTime = totalDayTimeSeconds;
 
         SetClockUI(elapsedTime * timeMultiplier);
 
         if(isShopClock)
         {
-            ShopManager.instance.EndShoppingDay();
+            ShopManager.instance.CloseShopToCustomers();
+            ShopManager.instance.openOrCloseShopButton.SetUpOpenOrCloseButton();
             Debug.LogWarning("End of day");
         }
         else
         {
             Debug.LogWarning("End of night");
+            //because not successful if it's because of timer ending
+            NightManager.instance.OnEndNight(false);
         }
     }
 
@@ -147,7 +161,6 @@ public class Clock : MonoBehaviour
     {
         if(GetCurrentInGameTime().hour == dayEndHour) { return; }
 
-        StopCoroutine(StartClock());
         OnTimeEnded();
     }
 }
