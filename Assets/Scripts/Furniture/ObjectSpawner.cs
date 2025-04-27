@@ -24,6 +24,7 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
         Gizmos.color = Color.red;
-        Gizmos.DrawWireMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,transform.position);
+        Vector3 pos = transform.position+currentBiggest.transform.position;
+        Gizmos.DrawWireMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,pos,transform.rotation);
     }
 }
