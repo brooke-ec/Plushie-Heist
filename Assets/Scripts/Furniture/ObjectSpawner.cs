@@ -33,6 +33,8 @@ public class ObjectSpawner : MonoBehaviour
         }
         Gizmos.color = new Color(1, 0, 0, 0.5f);
         Vector3 pos = transform.position+currentBiggest.transform.position;
-        Gizmos.DrawWireMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,pos,transform.rotation);
+        Mesh mesh = currentBiggest.GetComponent<MeshFilter>().sharedMesh;
+        mesh.RecalculateNormals();
+        Gizmos.DrawWireMesh(mesh,pos,transform.rotation);
     }
 }
