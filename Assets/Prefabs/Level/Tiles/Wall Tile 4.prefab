@@ -1551,13 +1551,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7197e327e35e064bac414f677935067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _positiveX: []
-  _positiveZ: []
-  _negativeX: []
+  _positiveX:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
+    rawReference:
+      rid: -2
+  _positiveZ:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
+    rawReference:
+      rid: -2
+  _negativeX:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
+    rawReference:
+      rid: -2
   _negativeZ: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &8145983161539498986
 GameObject:
   m_ObjectHideFlags: 0
