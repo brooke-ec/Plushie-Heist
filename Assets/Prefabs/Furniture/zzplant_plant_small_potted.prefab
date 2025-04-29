@@ -62,21 +62,54 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1958272541256047459}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4303982027745297263}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4163557706695640372}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8588076604500952735}
   m_SourcePrefab: {fileID: 100100000, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
 --- !u!1 &6701179815181655450 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
   m_PrefabInstance: {fileID: 5782118725321138379}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &1958272541256047459
-MeshCollider:
+--- !u!114 &4303982027745297263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6701179815181655450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <itemName>k__BackingField: 
+  <marketPrice>k__BackingField: 0
+  <gridSize>k__BackingField: {x: 1, y: 1}
+  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <inventorySize>k__BackingField: {x: 0, y: 0}
+  <inventoryIcon>k__BackingField: {fileID: 0}
+  source: {fileID: 0}
+--- !u!114 &4163557706695640372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6701179815181655450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0
+--- !u!136 &8588076604500952735
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -93,39 +126,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2296455018237171957, guid: aa3752896fd983c2ab226fc1cd737fc9, type: 3}
---- !u!114 &4303982027745297263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6701179815181655450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <itemName>k__BackingField: 
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 0, y: 0}
-  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
-  <inventorySize>k__BackingField: {x: 0, y: 0}
-  <inventoryIcon>k__BackingField: {fileID: 0}
---- !u!114 &4163557706695640372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6701179815181655450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
+  serializedVersion: 2
+  m_Radius: 0.27771223
+  m_Height: 1.3213438
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.66107386, z: -0.0021927208}
