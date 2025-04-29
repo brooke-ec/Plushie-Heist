@@ -16,5 +16,6 @@ public enum BrowserPageType
     settings,
     pricing,
     rescuedSharks,
-    moneyFlowGraph
+    moneyFlowGraph,
+    openOrCloseShop
 }

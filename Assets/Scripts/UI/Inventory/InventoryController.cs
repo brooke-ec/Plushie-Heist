@@ -28,6 +28,15 @@ public class InventoryController : MonoBehaviour
         ItemIconDragEffect();
     }
 
+    /// <summary>
+    /// Used for the button in the menu to open the inventory
+    /// </summary>
+    public void OpenOrCloseInventory()
+    {
+        Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
+        inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
+    }
+
     #region Inventory controls
     private void RotateItem()
     {

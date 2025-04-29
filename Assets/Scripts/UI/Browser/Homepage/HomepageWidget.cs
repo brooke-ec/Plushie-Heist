@@ -20,6 +20,13 @@ public class HomepageWidget : MonoBehaviour
             case BrowserPageType.moneyFlowGraph:
                 MakeMoneyFlowGraph();
                 break;
+            case BrowserPageType.openOrCloseShop:
+                OpenOrCloseShopButton openOrCloseShopButton = GetComponent<OpenOrCloseShopButton>();
+                if (openOrCloseShopButton != null)
+                {
+                    openOrCloseShopButton.SetUpOpenOrCloseButton();
+                }
+                break;
             default:
                 break;
         }
