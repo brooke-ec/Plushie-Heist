@@ -9,11 +9,12 @@ public class AbilitySkill : Skill
     public enum AbilityToUnlock
     {
         none,
+        PlayerDash,
+        PlayerBoost,
         PlayerWallRunning,
         PlayerGrapple,
-        CustomerSuggestion,
-        CustomerConvincing,
-        CustomerHaggling,
+        PlayerGlide,
+        PlayerSecondChance
     }
 
     public override void Unlock()

@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a35c8ea57a4d07748b0f3e0cfe6c2693, type: 3}
-  m_Name: PlayerFirstPlushie
+  m_Script: {fileID: 11500000, guid: 55d081fc84869404f80664c2a1710f7c, type: 3}
+  m_Name: Boost
   m_EditorClassIdentifier: 
-  skillsToEnable:
+  skillName: Boost
+  requirements:
   - {fileID: 11400000, guid: ae0223df2b1a2e340b7610e7c6cb7a12, type: 2}
-  - {fileID: 11400000, guid: 147f695c8dc0e9f4c9d307be56682bf2, type: 2}
+  cost: 0
+  icon: {fileID: 21300000, guid: 6ef6c6b62f1ab914e9a30c3ddf41fc3c, type: 3}
+  description: 
+  abilityToUnlock: 2

@@ -9,7 +9,14 @@ public class BoostSkill : Skill
     public enum SkillType
     {
         none,
-        PlayerMovespeed,
+        PlayerPlusOneBackpackSize,
+        PlayerPlusTwoBackpackSize,
+        PlayerItemLostPercent,
+        PlayerExtraTime,
+        PlayerExtraDash,
+        PlayerExtraJump,
+        PlayerExtraBoost,
+        ShopExtraTime,
         ShopInventorySize,
     }
 
@@ -17,7 +24,7 @@ public class BoostSkill : Skill
     {
         switch (skillType)
         {
-            case SkillType.PlayerMovespeed:
+            case SkillType.PlayerPlusOneBackpackSize:
                 break;
             case SkillType.ShopInventorySize:
                 //Something like

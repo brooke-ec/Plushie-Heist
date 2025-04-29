@@ -397,7 +397,7 @@ public class SkillTreeController : MonoBehaviour
             {
                 if (nodePositions.TryGetValue(childSkill, out Vector2 childPos))
                 {
-                    GameObject edgeObject = new GameObject("Edge " + parentSkill.skillName + " to " + childSkill.skillName);
+                    GameObject edgeObject = new GameObject("Edge " + parentSkill.name + " to " + childSkill.name);
                     edgeObject.transform.SetParent(edgeContainer, false);
 
                     EdgeRenderer edgeRenderer = edgeObject.AddComponent<EdgeRenderer>();

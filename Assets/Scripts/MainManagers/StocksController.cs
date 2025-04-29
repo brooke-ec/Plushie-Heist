@@ -20,10 +20,9 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
-        CreateAllProductData();
     }
 
-    private void CreateAllProductData()
+    public void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 

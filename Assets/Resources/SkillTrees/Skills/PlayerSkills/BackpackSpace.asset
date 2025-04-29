@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c65fffcdf988e2e46b45eedf416e612f, type: 3}
-  m_Name: ShopSkillTree
+  m_Script: {fileID: 11500000, guid: b6f152092ac734646a0e5da0bb31c88f, type: 3}
+  m_Name: BackpackSpace
   m_EditorClassIdentifier: 
-  skillTreeName: Shop skill tree
-  skills:
+  skillName: More Backpack Space
+  requirements:
   - {fileID: 11400000, guid: 47a048f2e0fd0e147b92660546138cca, type: 2}
-  palette: {fileID: 11400000, guid: a74299b024a69254280ec01314eeff7e, type: 2}
-  skillTreeIcon: {fileID: 21300000, guid: a010908e71c9db7498e7d6d81daa6bca, type: 3}
-  unlockables: []
+  cost: 0
+  icon: {fileID: 21300000, guid: 02f8676297cddc747a81dfe431796237, type: 3}
+  description: 
+  modifier: 0
+  skillType: 1

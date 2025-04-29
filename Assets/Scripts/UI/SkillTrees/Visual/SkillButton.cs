@@ -153,14 +153,14 @@ public class SkillButton : MonoBehaviour
         //Change edge colour
         foreach (Skill requirement in skill.requirements)
         {
-            Transform edge = edgesContainer.Find("Edge " + requirement.skillName + " to " + skill.skillName);
+            Transform edge = edgesContainer.Find("Edge " + requirement.name + " to " + skill.name);
             if (edge != null)
             {
                 edge.GetComponent<EdgeRenderer>().ChangeColourOfEdgeRenderer(colour);
             }
             else
             {
-                Debug.LogWarning("No edge found from " + requirement.skillName + " to " + skill.skillName);
+                Debug.LogWarning("No edge found from " + requirement.name + " to " + skill.name);
             }
         }
     }
