@@ -10,6 +10,7 @@ public class ObjectSpawner : MonoBehaviour
     {
         if (Props.Props.Length < 1) { return; }
         int propNo = Random.Range(0, Props.Props.Length);
+        if (Props.Props[propNo] == null) { return; }
         Instantiate(Props.Props[propNo], GetComponentInParent<Transform>());
     }
 
@@ -18,12 +19,22 @@ public class ObjectSpawner : MonoBehaviour
         GameObject currentBiggest = Props.Props[0];
         foreach (GameObject i in Props.Props) 
         {
-            if (i.GetComponent<MeshFilter>().sharedMesh.bounds.size.magnitude > currentBiggest.GetComponent<MeshFilter>().sharedMesh.bounds.size.magnitude)
+            if (i != null)
             {
-                currentBiggest = i;
+                if (currentBiggest == null)
+                {
+                    currentBiggest = i;
+                }
+                else if (i.GetComponent<MeshFilter>().sharedMesh.bounds.size.magnitude > currentBiggest.GetComponent<MeshFilter>().sharedMesh.bounds.size.magnitude)
+                {
+                    currentBiggest = i;
+                }
             }
         }
         Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawMesh(currentBiggest.GetComponent<MeshFilter>().sharedMesh,transform.position);
+        Vector3 pos = transform.position+currentBiggest.transform.position;
+        Mesh mesh = currentBiggest.GetComponent<MeshFilter>().sharedMesh;
+        mesh.RecalculateNormals();
+        Gizmos.DrawWireMesh(mesh,pos,transform.rotation);
     }
 }
