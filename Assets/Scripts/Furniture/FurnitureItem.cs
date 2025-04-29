@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Represents an item, placed in the world or on in an inventory
 /// </summary>
+[RequireComponent(typeof(Collider))]
 public class FurnitureItem : MonoBehaviour, IInteractable
 {
     /// <summary> The name of this item displayed on the stock UI </summary>
@@ -17,8 +18,6 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     [field: SerializeField] public Vector2Int gridSize { get; private set; }
     /// <summary> The offset from default when placing on a <see cref="FurnitureGrid"/> </summary>
     [field: SerializeField] public Vector3 gridOffset { get; private set; }
-    /// <summary> The marker to denote that this item is being sold </summary>
-    [field: SerializeField] public GameObject sellingMarker { get; private set; }
 
     [field: Header("Inventory Settings")]
     /// <summary> The size of this item in the inventory </summary>
@@ -52,6 +51,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private Outline outline;
     /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
     private MaterialSwitcher switcher;
+    /// <summary> The marker to denote that this item is being sold </summary>
+    private GameObject sellingMarker;
     /// <summary> Whether this item is marked as sellable or not </summary>
     private bool selling => sellingMarker.activeSelf;
 
@@ -69,14 +70,15 @@ public class FurnitureItem : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        PlaceSellingMarker();
         outline.enabled = false;
-        sellingMarker.SetActive(false);
 
         inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(this);
         });
 
-        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() => {
+        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+        {
             empty = subgrids.All(s => s.IsEmpty());
         });
     }
@@ -84,6 +86,17 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private void Update()
     {
         outline.color = canPickup ? 0 : 1;
+    }
+
+    /// <summary>
+    /// Create and place the selling marker on this item.
+    /// </summary>
+    public void PlaceSellingMarker()
+    {
+        Bounds bounds = GetComponent<Collider>().bounds;
+        sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
+        sellingMarker.transform.position += new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
+        sellingMarker.SetActive(false);
     }
 
     /// <summary>
