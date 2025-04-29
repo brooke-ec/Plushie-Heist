@@ -78,7 +78,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a959c83361370096beee4b752d5fb39, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8781350915048729857}
+      addedObject: {fileID: 5415380403848861369}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a959c83361370096beee4b752d5fb39, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2587918450925518843}
@@ -91,8 +91,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a959c83361370096beee4b752d5fb39, type: 3}
   m_PrefabInstance: {fileID: 3733589168533750543}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &8781350915048729857
-MeshCollider:
+--- !u!135 &5415380403848861369
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,10 +109,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8854650542120891324, guid: 8a959c83361370096beee4b752d5fb39, type: 3}
+  serializedVersion: 3
+  m_Radius: 0.49517787
+  m_Center: {x: -0.000000059604645, y: 0.34, z: -0.0000002682209}
 --- !u!114 &2587918450925518843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +130,7 @@ MonoBehaviour:
   <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <inventorySize>k__BackingField: {x: 1, y: 1}
   <inventoryIcon>k__BackingField: {fileID: 0}
+  source: {fileID: 0}
 --- !u!114 &273228681326428427
 MonoBehaviour:
   m_ObjectHideFlags: 0
