@@ -1,6 +1,4 @@
 using cakeslice;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -74,9 +72,16 @@ public class Interactor : MonoBehaviour
     /// <summary>
     /// If Interactor is close enough to interact call the interactables interact Method when interact button pressed
     /// </summary>
-    /// <param name="ctx"></param>
-    public void pressInteract(InputAction.CallbackContext ctx)
+    public void pressPrimaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.Interact(this);
+        if (ctx.performed && interactable != null) interactable.PrimaryInteract(this);
+    }
+
+    /// <summary>
+    /// If Interactor is close enough to interact call the interactables secondary interact method when secondary interact button pressed
+    /// </summary>
+    public void pressSecondaryInteract(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && interactable != null) interactable.SecondaryInteract(this);
     }
 }

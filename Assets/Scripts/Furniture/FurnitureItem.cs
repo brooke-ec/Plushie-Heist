@@ -1,6 +1,5 @@
 using cakeslice;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -18,6 +17,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     [field: SerializeField] public Vector2Int gridSize { get; private set; }
     /// <summary> The offset from default when placing on a <see cref="FurnitureGrid"/> </summary>
     [field: SerializeField] public Vector3 gridOffset { get; private set; }
+    /// <summary> The marker to denote that this item is being sold </summary>
+    [field: SerializeField] public GameObject sellingMarker { get; private set; }
 
     [field: Header("Inventory Settings")]
     /// <summary> The size of this item in the inventory </summary>
@@ -25,8 +26,9 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// <summary> The icon to use for this item in the inventory </summary>
     [field: SerializeField] public Sprite inventoryIcon { get; private set; }
 
-    /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
-    public string interactionPrompt => hasSpace ? empty ? "Press F to Pick Up" : "Item Contains Sub-Items" : "Inventory Full";
+    /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
+    public string interactionPrompt => empty ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
+        + "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "Item Contains Sub-Items";
     /// <summary> Whether this item can be picked up or not </summary>
     public bool canPickup => hasSpace && empty;
     /// <summary> If there is space in the players inventory </summary>
@@ -50,10 +52,12 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private Outline outline;
     /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
     private MaterialSwitcher switcher;
-    
+    /// <summary> Whether this item is marked as sellable or not </summary>
+    private bool selling => sellingMarker.activeSelf;
+
     // Temporary workaround
     // TODO: Refactor
-    public FurnitureItem source;
+    [HideInInspector] public FurnitureItem source;
 
     private void Awake()
     {
@@ -66,6 +70,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private void Start()
     {
         outline.enabled = false;
+        sellingMarker.SetActive(false);
 
         inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(this);
@@ -88,7 +93,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     /// <param name="interactor">Interactor this was called from</param>
     /// <returns>True if picked up item<returns>
-    public bool Interact(Interactor interactor)
+    public bool PrimaryInteract(Interactor interactor)
     {
         if (!canPickup) return false;
 
@@ -105,6 +110,15 @@ public class FurnitureItem : MonoBehaviour, IInteractable
             return false;
         }
         
+    }
+
+    public bool SecondaryInteract(Interactor interactor)
+    {
+        if (!empty) return false;
+
+        subgrids.ForEach(s => s.gameObject.SetActive(selling));
+        sellingMarker.SetActive(!selling);
+        return true;
     }
 
     /// <summary>
