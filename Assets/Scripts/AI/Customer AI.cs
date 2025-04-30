@@ -30,13 +30,9 @@ public class CustomerAI : MonoBehaviour
     private Animator anim;
 
     /// <summary> The current item the customer is looking for </summary>
-    private FurnitureItem currentItem = null;
+    private FurnitureItem currentItem => shoppingList.TryPeek(out FurnitureItem item) ? item : null;
 
-    /// <summary> True if the customer has brought everything on their shopping list </summary>
-    private bool finishedShopping => shoppingList.Count == 0 && currentItem == null;
-
-    /// <summary> True if the customer is leaving the store </summary>
-    private bool leaving = false;
+    private State state = State.Uninitialized;
     #endregion
 
     #region Serialized fields    
@@ -85,10 +81,18 @@ public class CustomerAI : MonoBehaviour
             if (!navAgent.isStopped)
             {
                 navAgent.isStopped = true; // Run once after reaching the destination
-
-                if (leaving) Destroy(gameObject);
-                else if (currentItem != null) this.RunAfter(pickupTime, PickedUp);
-                else Next();
+                switch (state)
+                {
+                    case State.Uninitialized:
+                        NextAction();
+                        break;
+                    case State.Shopping:
+                        this.RunAfter(pickupTime, PickedUp);
+                        break;
+                    case State.Leaving:
+                        Destroy(gameObject);
+                        break;
+                }
             }
         }
         else navAgent.updateRotation = true;
@@ -101,17 +105,18 @@ public class CustomerAI : MonoBehaviour
     private void PickedUp()
     {
         basket.Add(currentItem);
-        currentItem = null;
-        Next();
+
+        shoppingList.Dequeue();
+        NextAction();
     }
 
     /// <summary>
     /// Start the next task for this customer
     /// </summary>
-    private void Next()
+    private void NextAction()
     {
-        if (!finishedShopping) NextItem();
-        else if (basket.Count > 0) till.AddToQueue(this); // Hand control to the till
+        if (shoppingList.Count > 0) NextItem();
+        else if (basket.Count > 0) StartQueuing();
         else LeaveShop();
     }
 
@@ -120,15 +125,25 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void NextItem()
     {
-        NavMeshHit hit;
+        if (NavMesh.SamplePosition( // Get closest position to item
+            currentItem.transform.position,
+            out NavMeshHit hit, float.PositiveInfinity, NavMesh.AllAreas)
+        ) {
+            SetDestination(hit.position);
+            state = State.Shopping;
+        } else {
+            shoppingList.Dequeue();
+            NextItem();
+        }
+    }
 
-        // Repeat until we find an item to path to
-        while (!NavMesh.SamplePosition( // Get closest position to item
-            (currentItem = shoppingList.Dequeue()).transform.position,
-            out hit, float.PositiveInfinity, NavMesh.AllAreas)
-        );
-
-        SetDestination(hit.position);
+    /// <summary>
+    /// Passes control to <see cref="till"/>
+    /// </summary>
+    public void StartQueuing()
+    {
+        state = State.Queueing;
+        till.AddToQueue(this);
     }
 
     /// <summary>
@@ -137,7 +152,7 @@ public class CustomerAI : MonoBehaviour
     public void LeaveShop()
     {
         SetDestination(customerController.PickDeathPoint());
-        leaving = true;
+        state = State.Leaving;
     }
     #endregion
 
@@ -157,4 +172,12 @@ public class CustomerAI : MonoBehaviour
         customerController.CustomerLeft();
     }
     #endregion
+
+    private enum State
+    {
+        Uninitialized,
+        Shopping,
+        Queueing,
+        Leaving
+    }
 }
