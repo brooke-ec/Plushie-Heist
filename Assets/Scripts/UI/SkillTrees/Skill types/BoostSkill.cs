@@ -4,13 +4,12 @@ using UnityEngine;
 public class BoostSkill : Skill
 {
     //Something like a stat modifier, such as for movespeed or dash
-    public float modifier;
     public SkillType skillType;
+    public float modifier;
     public enum SkillType
     {
         none,
-        PlayerPlusOneBackpackSize,
-        PlayerPlusTwoBackpackSize,
+        PlayerBackpackSize,
         PlayerItemLostPercent,
         PlayerExtraTime,
         PlayerExtraDash,
@@ -18,13 +17,19 @@ public class BoostSkill : Skill
         PlayerExtraBoost,
         ShopExtraTime,
         ShopInventorySize,
+        ShopCustomerSpawnRate,
+        ShopCustomerTips,
+        ShopHigherPrices,
+        ShopImpulseBuyers,
+        ShopMarketStability,
+        ShopExpansion
     }
 
     public override void Unlock()
     {
         switch (skillType)
         {
-            case SkillType.PlayerPlusOneBackpackSize:
+            case SkillType.PlayerBackpackSize:
                 break;
             case SkillType.ShopInventorySize:
                 //Something like

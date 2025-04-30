@@ -14,7 +14,8 @@ public class AbilitySkill : Skill
         PlayerWallRunning,
         PlayerGrapple,
         PlayerGlide,
-        PlayerSecondChance
+        PlayerSecondChance,
+        ShopAutomaticItemRestocking,
     }
 
     public override void Unlock()

@@ -51,9 +51,6 @@ public class ShopManager : MonoBehaviour
     [HideInInspector] public OpenOrCloseShopButton openOrCloseShopButton;
     private void StartNewDay()
     {
-        //moneyAtTheBeginningOfToday = money;
-        //moneyEarnedEveryDay[day] = (money - moneyAtTheBeginningOfToday);
-
         day++;
         stocksController.NewDay(day);
     }
@@ -82,8 +79,6 @@ public class ShopManager : MonoBehaviour
         shopTimer.OnTimeEnded(); //make sure it's ended
 
         //TO-DO MAKE CLIENTS STOP COMING
-
-        //TO-DO moneyEarnedEveryDay[day] = (money - moneyAtTheBeginningOfToday);
 
         //Won't be here, as this will actually be triggered once the LAST customer is done
         //AND THEN the night is over, that's when it will be called
