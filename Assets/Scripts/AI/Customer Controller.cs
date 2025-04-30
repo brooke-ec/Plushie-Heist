@@ -98,16 +98,14 @@ public class CustomerController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
         foreach (Transform spawn in customerSpawns)
         {
-            Gizmos.DrawSphere(spawn.position, 0.5f);
+            Gizmos.DrawIcon(spawn.position, "enter");
         }
 
-        Gizmos.color = Color.red;
         foreach (Transform death in customerDeaths)
         {
-            Gizmos.DrawSphere(death.position, 0.5f);
+            Gizmos.DrawIcon(death.position, "exit");
         }
     }
 #endif
