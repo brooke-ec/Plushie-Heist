@@ -27,7 +27,7 @@ public class CustomerController : MonoBehaviour
     private List<FurnitureItem> _shopContents;
 
     /// <summary>Represents wether the shop is open</summary>
-    [SerializeField] private bool _shopOpen;
+    private bool _shopOpen;
 
     /// <summary>The Max number of Customers allowed to be spawned</summary>
     [SerializeField] private int _maxCustomers;
@@ -96,8 +96,14 @@ public class CustomerController : MonoBehaviour
         }
         if(ShoppingList.Count == 0)
         {
-            ShoppingList.Add(_shopContents[Random.Range(0, _shopContents.Count + 1)]);
-            Debug.Log("Randoms Suck");
+            if(_shopContents.Count == 1)
+            {
+                ShoppingList.Add(_shopContents[0]);
+            }
+            else
+            {
+                ShoppingList.Add(_shopContents[Random.Range(0, _shopContents.Count + 1)]);
+            }
         }
         return ShoppingList;
     }
@@ -135,9 +141,6 @@ public class CustomerController : MonoBehaviour
     {
         _shopOpen = true;
         _shopContents = _furnitureGrid.GetContents();
-        Debug.Log("Doing Something");
-        Debug.Log(_shopContents.Count);
-        Debug.Log("Doing Something Else");
     }
 
     /// <summary>

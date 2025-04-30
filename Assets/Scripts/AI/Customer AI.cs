@@ -38,6 +38,9 @@ public class CustomerAI : MonoBehaviour
 
     /// <summary>A timer to allow the customer to move away from there current position. Handled Seperately as this one doesm't need to be reset.</summary>
     private float _distanceBuffer = 1;
+
+    /// <summary>The animator Component of the model</summary>
+    private Animator _anim;
     #endregion
 
     #region Serialized fields    
@@ -56,6 +59,7 @@ public class CustomerAI : MonoBehaviour
         //Assinging other values using the references
         _deathPosition = _custController.GetDeathPoint();
         _tillQueue = _shopTill.GetComponent<TillQueue>();
+        _anim = this.GetComponentInChildren<Animator>();
 
         //Assinging other values that at affected by other objects
         _navAgent.avoidancePriority = Random.Range(0, 50);
@@ -63,13 +67,8 @@ public class CustomerAI : MonoBehaviour
 
         //Gives the customer the first point to go to
         _shoppingList = _custController.ShoppingList();
-        Debug.Log(_shoppingList.Count);
-        Debug.Log("SpaceShip");
         _shoppingListBought = _shoppingList;
-        //Debug.Log(_shoppingList[0]);
-        //Debug.Log(_shoppingList[0].transform.position);
-        //Debug.Log(_shoppingList[0].gameObject.transform.position);
-        UpdateDestination(_shoppingList[0].transform.position);
+        UpdateDestination(ItemPosition());
     }
 
     // Update is called once per frame
@@ -77,15 +76,17 @@ public class CustomerAI : MonoBehaviour
     {
         if(_navAgent.remainingDistance <= 2 && _distanceBuffer <= 0)
         {
+            _navAgent.isStopped = true;
+            _anim.SetBool("Walking", false);
             if(_shoppingListBought.Count != 0)
             {
-                _navAgent.isStopped = true;
                 SearchingShelf();
             }
         }
         if(_navAgent.isStopped && _navAgent.remainingDistance > 1)
         {
             _navAgent.isStopped = false;
+            _anim.SetBool("Walking", true);
         }
         
         if(_distanceBuffer > 0)
@@ -121,12 +122,16 @@ public class CustomerAI : MonoBehaviour
         if(_searchTime <= 0)
         {
             _navAgent.isStopped = false;
+            _anim.SetBool("Walking", true);
             _searchTime = _maxSearchTime;
             _shoppingListBought.RemoveAt(0);
 
+            _anim.SetBool("Searching", true);
+            _anim.SetBool("Searching", false);
+            
             if(_shoppingListBought.Count != 0)
             {
-                UpdateDestination(_shoppingListBought[0].transform.position);
+                UpdateDestination(ItemPosition());
             }
             else
             {
@@ -140,14 +145,27 @@ public class CustomerAI : MonoBehaviour
     }
     
     /// <summary>
+    /// returns a vector3 position that is adjusted for the items of the shop
+    /// </summary>
+    /// <returns>Vector3</returns>
+    private Vector3 ItemPosition()
+    {
+        Vector3 vectorToReturn = _shoppingListBought[0].transform.position + (_shoppingListBought[0].transform.forward * 2);
+
+        return vectorToReturn;
+    }
+
+    /// <summary>
     /// The Customer has been served and will leave the shop
     /// </summary>
     public void LeftTill()
     {
+        _anim.SetBool("Paying", true);
         _custController.CustomerLeft();
         //_shopTill.GetComponent<TillQueue>().TillActivation();
         _navAgent.destination = _deathPosition;
         _readyToDie = true;
+        _anim.SetBool("Paying", false);
     }
     #endregion
 
