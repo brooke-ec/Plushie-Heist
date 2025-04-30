@@ -50,6 +50,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     public bool selling => sellingMarker.activeSelf && placed;
     /// <summary Whether this item can be marked as sellable </summary>
     public bool canSell => empty;
+    /// <summary> The world-space location of the center of this item </summary>
+    public Vector3 center => transform.TransformPoint(collider.bounds.center);
 
     public bool interactable => canPickup || canSell;
 
@@ -59,6 +61,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private MaterialSwitcher switcher;
     /// <summary> The marker to denote that this item is being sold </summary>
     private GameObject sellingMarker;
+    /// <summary> The collider attached to this item </summary>
+    private new Collider collider;
 
     // Temporary workaround
     // TODO: Refactor
@@ -69,6 +73,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
         inventoryController = FindAnyObjectByType<InventoryController>();
         subgrids = GetComponentsInChildren<FurnitureGrid>();
         switcher = new MaterialSwitcher(gameObject);
+        collider = GetComponent<Collider>();
     }
 
     private void Start()
@@ -91,7 +96,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     private void PlaceSellingMarker()
     {
-        Bounds bounds = GetComponent<Collider>().bounds;
+        Bounds bounds = collider.bounds;
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
         sellingMarker.transform.position += new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
         sellingMarker.SetActive(false);

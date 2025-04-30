@@ -2417,7 +2417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a3cbb8967a811448b9bab085410fc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gapForQueue: 2
+  queueOffset: {x: 1.32, y: -0.48, z: 0}
+  queueDirection: {x: 0, y: 0, z: 2}
 --- !u!65 &980879947
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2639,6 +2640,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 499776393120379558, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.35
@@ -3324,7 +3329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shopOpen: 0
-  _maxCustomers: 4
+  _maxCustomers: 5
   _minSpawnTime: 2
   _maxSpawnTime: 6
   _customerPrefab: {fileID: 4838222444980244618, guid: 5a942adccb99174418e456fd75abeb83, type: 3}

@@ -9,10 +9,11 @@ public class TillQueue : MonoBehaviour, IInteractable
     /// <summary>The queue that is made up by the customers</summary>
     private Queue<GameObject> customerQueue;
     /// <summary>The position that is the front of the Queue</summary>
-    private Vector3 QueueFront;
-
-    /// <summary>The Gap between each customer in the queue</summary>
-    [SerializeField] private float gapForQueue = 2;
+    [SerializeField] private Vector3 queueOffset;
+    /// <summary> The step direction of the queue from <see cref="queueOffset"/> </summary>
+    [SerializeField] private Vector3 queueDirection = Vector3.forward * 2;
+    /// <summary> The absolute position of the front of the queue </summary>
+    private Vector3 queueFront => transform.position + queueOffset;
 
     public string interactionPrompt => customerQueue.Count == 0 ? "No Customers to Serve" : "Press F to Serve Customer";
     public bool interactable => customerQueue.Count > 0;
@@ -20,7 +21,6 @@ public class TillQueue : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-        QueueFront = this.transform.position + Vector3.right * 2;
         customerQueue = new Queue<GameObject>();
     }
 
@@ -62,9 +62,9 @@ public class TillQueue : MonoBehaviour, IInteractable
     {
         //newPlayer.SendMessage("UpdateTillQueue", QueueFront)
         int position = 0;
-        foreach(GameObject customer in customerQueue)
+        foreach (GameObject customer in customerQueue)
         {
-            Vector3 queuePos = QueueFront + Vector3.forward * position * gapForQueue;
+            Vector3 queuePos = queueFront + position * queueDirection;
             customer.GetComponent<CustomerAI>().UpdateDestination(queuePos);
             position++;
         }
@@ -74,4 +74,14 @@ public class TillQueue : MonoBehaviour, IInteractable
     {
         TillActivation();
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Mesh grid = new GridMesh().Build(new Vector2Int(1, 5), Vector2.one * queueDirection.magnitude, 0.4f);
+        Vector3 position = queueFront + queueDirection * 5 * 0.5f - queueDirection * 0.5f;
+        Gizmos.DrawMesh(grid, position, Quaternion.LookRotation(queueDirection));
+    }
+#endif
 }

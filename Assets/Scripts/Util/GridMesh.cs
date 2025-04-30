@@ -8,6 +8,8 @@ public class GridMesh
     public Mesh mesh { get; private set; }
     public Color color { get; private set; }
 
+    public GridMesh() : this(Color.white) { }
+
     public GridMesh(Color color)
     {
         this.color = color;

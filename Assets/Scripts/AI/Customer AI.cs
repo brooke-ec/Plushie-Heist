@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class CustomerAI : MonoBehaviour
 {
@@ -73,10 +74,13 @@ public class CustomerAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_navAgent.remainingDistance <= 2 && _distanceBuffer <= 0)
+        Vector3? rotation = null;
+
+        if (_navAgent.remainingDistance <= 2 && _distanceBuffer <= 0)
         {
             if(_shoppingListBought.Count != 0)
             {
+                rotation = _shoppingListBought[0].center - transform.position;
                 _navAgent.isStopped = true;
                 SearchingShelf();
             }
@@ -101,14 +105,16 @@ public class CustomerAI : MonoBehaviour
             _timeBeforeDeath -= Time.deltaTime;
         }
 
-        // Rotate to face the till
+        // Rotate customer
         if (_shoppingListBought.Count == 0 && _navAgent.pathStatus == NavMeshPathStatus.PathComplete)
-        {
-            Vector3 direction = _tillQueue.transform.position - transform.position;
-            direction.y = 0;
+            rotation = _tillQueue.transform.position - transform.position;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 3);
-        }
+        if (!rotation.HasValue) _navAgent.updateRotation = true;
+        else transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.LookRotation(Vector3.Scale(rotation.Value, new Vector3(1, 0, 1))),
+            Time.deltaTime * 3
+        );
     }
 
     /// <summary>
