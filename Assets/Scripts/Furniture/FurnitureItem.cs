@@ -3,8 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Represents a furniture item, placed in the world on on a <see cref="FurnitureGrid"/>
+/// Represents an item, placed in the world or on in an inventory
 /// </summary>
+[RequireComponent(typeof(Collider))]
 public class FurnitureItem : MonoBehaviour, IInteractable
 {
     /// <summary> The name of this item displayed on the stock UI </summary>
@@ -24,8 +25,9 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// <summary> The icon to use for this item in the inventory </summary>
     [field: SerializeField] public Sprite inventoryIcon { get; private set; }
 
-    /// <summary>Prompt Shown by the UI to let the player know they can interact with it</summary>
-    public string interactionPrompt => hasSpace ? empty ? "Press F to Pick Up" : "Item Contains Sub-Items" : "Inventory Full";
+    /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
+    public string interactionPrompt => empty ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
+        + "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "Item Contains Sub-Items";
     /// <summary> Whether this item can be picked up or not </summary>
     public bool canPickup => hasSpace && empty;
     /// <summary> If there is space in the players inventory </summary>
@@ -47,8 +49,16 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     private InventoryController inventoryController;
     /// <summary> The outline script attached to this object </summary>
     private Outline outline;
-
+    /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
     private MaterialSwitcher switcher;
+    /// <summary> The marker to denote that this item is being sold </summary>
+    private GameObject sellingMarker;
+    /// <summary> Whether this item is marked as sellable or not </summary>
+    private bool selling => sellingMarker.activeSelf;
+
+    // Temporary workaround
+    // TODO: Refactor
+    [HideInInspector] public FurnitureItem source;
 
     private void Awake()
     {
@@ -60,13 +70,15 @@ public class FurnitureItem : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        PlaceSellingMarker();
         outline.enabled = false;
 
         inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(this);
         });
 
-        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() => {
+        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+        {
             empty = subgrids.All(s => s.IsEmpty());
         });
     }
@@ -77,17 +89,28 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     }
 
     /// <summary>
+    /// Create and place the selling marker on this item.
+    /// </summary>
+    public void PlaceSellingMarker()
+    {
+        Bounds bounds = GetComponent<Collider>().bounds;
+        sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
+        sellingMarker.transform.position += new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
+        sellingMarker.SetActive(false);
+    }
+
+    /// <summary>
     /// Called when interacted with </br>
     /// Adds the item to inventory if theres enough space and then destroys it</br>
     /// otherwise it doesnt
     /// </summary>
     /// <param name="interactor">Interactor this was called from</param>
     /// <returns>True if picked up item<returns>
-    public bool Interact(Interactor interactor)
+    public bool PrimaryInteract(Interactor interactor)
     {
         if (!canPickup) return false;
 
-        if (inventoryController.InsertItem(this))
+        if (inventoryController.InsertItem(source))
         {
             if (grid != null) grid.RemoveItem(this);
 
@@ -100,6 +123,15 @@ public class FurnitureItem : MonoBehaviour, IInteractable
             return false;
         }
         
+    }
+
+    public bool SecondaryInteract(Interactor interactor)
+    {
+        if (!empty) return false;
+
+        subgrids.ForEach(s => s.gameObject.SetActive(selling));
+        sellingMarker.SetActive(!selling);
+        return true;
     }
 
     /// <summary>

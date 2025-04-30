@@ -90,6 +90,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 40dd9f08a29a6cbc882a6e4e54766f37, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3974801321443316269}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 40dd9f08a29a6cbc882a6e4e54766f37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1099827619419139347}
   m_SourcePrefab: {fileID: 100100000, guid: 40dd9f08a29a6cbc882a6e4e54766f37, type: 3}
 --- !u!1 &568549974667407977 stripped
 GameObject:
@@ -125,6 +128,30 @@ MonoBehaviour:
   <itemName>k__BackingField: Small Sanseviera Plant
   <marketPrice>k__BackingField: 0
   <gridSize>k__BackingField: {x: 1, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <gridOffset>k__BackingField: {x: 0, y: -0.25, z: 0}
   <inventorySize>k__BackingField: {x: 1, y: 1}
   <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
+  source: {fileID: 0}
+--- !u!136 &1099827619419139347
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568549974667407977}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.24600174
+  m_Height: 0.86632895
+  m_Direction: 1
+  m_Center: {x: -0.0058852956, y: 0.18356645, z: 0.043271706}

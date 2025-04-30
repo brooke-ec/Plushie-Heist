@@ -82,6 +82,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c9e8823173b868e1afdd78640bc97aa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4577030482807219413}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4c9e8823173b868e1afdd78640bc97aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5519788214459525808}
   m_SourcePrefab: {fileID: 100100000, guid: 4c9e8823173b868e1afdd78640bc97aa, type: 3}
 --- !u!1 &4212390751088891858 stripped
 GameObject:
@@ -117,6 +120,30 @@ MonoBehaviour:
   <itemName>k__BackingField: Tiny Cactus
   <marketPrice>k__BackingField: 0
   <gridSize>k__BackingField: {x: 1, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <gridOffset>k__BackingField: {x: 0, y: -0.31, z: 0}
   <inventorySize>k__BackingField: {x: 1, y: 1}
   <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
+  source: {fileID: 0}
+--- !u!136 &5519788214459525808
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4212390751088891858}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 0.6505127
+  m_Direction: 1
+  m_Center: {x: -0.015781403, y: 0.020658553, z: 0.0043658987}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5510720787730997625}
   - component: {fileID: 7980136525960876623}
   - component: {fileID: 6158682181451047407}
-  - component: {fileID: 4133575259702872686}
+  - component: {fileID: 1234645777807317478}
   - component: {fileID: 105001509522667449}
   - component: {fileID: 6854122181499592312}
   m_Layer: 10
@@ -2551,8 +2551,8 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!64 &4133575259702872686
-MeshCollider:
+--- !u!65 &1234645777807317478
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2569,10 +2569,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 7.3447537, y: 3.844075, z: 3.8999999}
+  m_Center: {x: 3.572377, y: 1.9220375, z: 1.85}
 --- !u!114 &105001509522667449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2591,6 +2590,7 @@ MonoBehaviour:
   <gridOffset>k__BackingField: {x: 0.9, y: 0, z: 0.5}
   <inventorySize>k__BackingField: {x: 2, y: 2}
   <inventoryIcon>k__BackingField: {fileID: 0}
+  source: {fileID: 0}
 --- !u!114 &6854122181499592312
 MonoBehaviour:
   m_ObjectHideFlags: 0

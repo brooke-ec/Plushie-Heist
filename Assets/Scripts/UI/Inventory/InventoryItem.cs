@@ -93,6 +93,13 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
             print("use");
             //TO-DO
             //there is a prefab with a button component for the tooltip
+
+            // Just for now to get placing working- I do not like this one bit
+            FindAnyObjectByType<FurniturePlacer>().Place(itemClass).AddListener(() =>
+                FindAnyObjectByType<InventoryController>().RemoveItemFromInventory(this)
+            );
+
+            FindAnyObjectByType<PlayerController>().openInventory();
         }
     }
 }

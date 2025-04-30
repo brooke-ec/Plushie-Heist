@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class FurniturePlacer : MonoBehaviour
@@ -7,14 +8,11 @@ public class FurniturePlacer : MonoBehaviour
     [SerializeField] CharacterController controller;
     [SerializeField] new private Camera camera;
     [SerializeField] private Interactor interactor;
-    
+
+    private UnityEvent onPlaced;
     private FurnitureItem item;
     private int gridLayer;
     private int itemLayer;
-
-    [Header("Testing")]
-    [SerializeField] FurnitureItem[] test;
-    private int testIndex = 0;
 
     private void Start()
     {
@@ -55,18 +53,29 @@ public class FurniturePlacer : MonoBehaviour
         item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
+    /// <summary>
+    /// Starts placing the provided item.
+    /// </summary>
+    /// <param name="item">A prefab of the item to place</param>
+    /// <returns>An event invoked when this item is succesfully placed</returns>
+    public UnityEvent Place(FurnitureItem item)
+    {
+        if (this.item != null) Destroy(this.item.gameObject);
+
+        this.item = Instantiate(item);
+        this.item.source = item; // TODO: Refactor this system
+
+        Debug.Log($"Placing {item.itemName}");
+        return onPlaced = new UnityEvent();
+    }
+
     public void OnPlace(InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValueAsButton()) return;
 
-        if (item == null)
+        if (item != null && item.IsGridValid())
         {
-            item = Instantiate(test[testIndex % test.Length]);
-            Debug.Log(item);
-            testIndex++;
-        }
-        else if (item.IsGridValid())
-        {
+            onPlaced.Invoke();
             item.grid.AddItem(item);
             item = null;
         }
