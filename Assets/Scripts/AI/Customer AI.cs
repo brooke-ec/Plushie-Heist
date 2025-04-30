@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.HID;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class CustomerAI : MonoBehaviour
@@ -45,6 +42,8 @@ public class CustomerAI : MonoBehaviour
     #region Serialized fields    
     /// <summary>A float for the Time the Customer Will spend at a shelf</summary>
     [SerializeField] private float pickupTime = 2;
+    [SerializeField] private Animator[] models;
+    [SerializeField] private RuntimeAnimatorController controller;
     #endregion
 
     #region Private Methods
@@ -52,10 +51,13 @@ public class CustomerAI : MonoBehaviour
     void Start()
     {
         //Assigning References To Objects
-        anim = GetComponentInChildren<Animator>();
         navAgent = GetComponent<NavMeshAgent>();
         till = FindAnyObjectByType<TillQueue>();
         customerController = FindAnyObjectByType<CustomerController>();
+
+        // Pick model
+        anim = Instantiate(models[Random.Range(0, models.Length)], transform);
+        anim.runtimeAnimatorController = controller;
 
         //Assinging other values using the references
         shoppingList = new Queue<FurnitureItem>(customerController.ShoppingList());
@@ -84,13 +86,9 @@ public class CustomerAI : MonoBehaviour
             {
                 navAgent.isStopped = true; // Run once after reaching the destination
 
-                if (!finishedShopping)
-                {
-                    if (currentItem == null) Next();
-                    else this.RunAfter(pickupTime, PickedUp);
-                }
-
                 if (leaving) Destroy(gameObject);
+                else if (currentItem != null) this.RunAfter(pickupTime, PickedUp);
+                else Next();
             }
         }
         else navAgent.updateRotation = true;
@@ -130,8 +128,7 @@ public class CustomerAI : MonoBehaviour
             out hit, float.PositiveInfinity, NavMesh.AllAreas)
         );
 
-        navAgent.ResetPath();
-        navAgent.SetDestination(hit.position);
+        SetDestination(hit.position);
     }
 
     /// <summary>

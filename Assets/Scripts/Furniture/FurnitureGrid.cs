@@ -100,7 +100,8 @@ public class FurnitureGrid : MonoBehaviour
         Gizmos.color = new Color(0, 0, 1, 0.5f);
         Gizmos.DrawMesh(
             mesh.Build(size,Vector2.one * FurnitureSettings.instance.cellSize,spacing),
-            transform.TransformPoint(Vector3.zero)
+            transform.TransformPoint(Vector3.zero),
+            transform.rotation
         );
     }
 
