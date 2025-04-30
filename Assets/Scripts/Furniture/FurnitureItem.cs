@@ -31,7 +31,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// <summary> Whether this item can be picked up or not </summary>
     public bool canPickup => hasSpace && empty;
     /// <summary> If there is space in the players inventory </summary>
-    public bool hasSpace { get; private set; } = true;
+    public bool hasSpace { get; private set; } = false;
     /// <summary> Whether the subgrids of this item are empty </summary>
     public bool empty { get; private set; } = true;
     /// <summary> Any <see cref="FurnitureGrid"/>s attached to children </summary>
@@ -73,7 +73,7 @@ public class FurnitureItem : MonoBehaviour, IInteractable
         PlaceSellingMarker();
         outline.enabled = false;
 
-        inventoryController.onChanged.AddListener(() => {
+        if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(this);
         });
 

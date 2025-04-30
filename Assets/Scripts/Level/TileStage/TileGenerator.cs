@@ -45,7 +45,9 @@ public class TileGenerator
 
             TilePlacement[] possible = neighbors.Possible();
             if (possible.Length > 0) PlaceTile(possible[Random.Range(0, possible.Length)]);
-            else throw new System.IndexOutOfRangeException("Found no options for placing tile");
+            else throw new System.IndexOutOfRangeException(
+                $"Found no options for placing tile. {neighbors}\n\n"
+            );
         }
     }
 

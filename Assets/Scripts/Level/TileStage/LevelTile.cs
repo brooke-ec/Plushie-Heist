@@ -16,6 +16,11 @@ public class LevelTile : MonoBehaviour, ITileIdentity
 
     public LevelTile[] identity => new LevelTile[] { this };
 
+    public static string TilesToString(LevelTile[] array)
+    {
+        return string.Format("[{0}]", string.Join(", ", array.Select(t => "\"" + t.name + "\"")));
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

@@ -29,6 +29,11 @@ public class Interactor : MonoBehaviour
     /// <summary> The closest collider in range last frame </summary>
     private Collider previous;
 
+    private void Start()
+    {
+        if (interactionText == null) enabled = false;
+    }
+
     private void Update()
     {
         // Get closest interactable in range

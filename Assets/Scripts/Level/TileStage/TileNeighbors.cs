@@ -42,4 +42,14 @@ public record TileNeighbors(
 
         return possible.ToArray();
     }
+
+    public override string ToString()
+    {
+        return string.Format("Clockwise Neighbor Requirements: \n{0},\n{1},\n{2},\n{3}",
+            positiveZ.isWall ? "WALL" : positiveZ.isAnyTile ? "ANY" : LevelTile.TilesToString(positiveZ.negativeZ),
+            positiveX.isWall ? "WALL" : positiveX.isAnyTile ? "ANY" : LevelTile.TilesToString(positiveX.negativeX),
+            negativeZ.isWall ? "WALL" : negativeZ.isAnyTile ? "ANY" : LevelTile.TilesToString(negativeZ.positiveZ),
+            negativeX.isWall ? "WALL" : negativeX.isAnyTile ? "ANY" : LevelTile.TilesToString(negativeX.positiveX)
+        );
+    }
 }
