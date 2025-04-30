@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1875080918348636971, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
       propertyPath: _negativeZ.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1875080918348636971, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
       propertyPath: _positiveZ.Array.size
@@ -21,9 +21,17 @@ PrefabInstance:
       value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 1875080918348636971, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
+      propertyPath: _negativeZ.Array.data[1].rawReference
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875080918348636971, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
       propertyPath: _negativeZ.Array.data[0].unityReference
       value: 
       objectReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
+    - target: {fileID: 1875080918348636971, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
+      propertyPath: _negativeZ.Array.data[1].unityReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 79b9c0bfe9c2a1a42b1ed03db50feccf, type: 2}
     - target: {fileID: 2925698548392059513, guid: c9e365a7b0bd4f89790963fa150a06fa, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
