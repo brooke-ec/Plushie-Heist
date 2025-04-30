@@ -1,82 +1,53 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 public class CustomerController : MonoBehaviour
 {
-    /// <summary>The First Customer Spawn position</summary>
-    private Transform _Cust_Spawn1;
-    /// <summary>The Second Customer Spawn position</summary>
-    private Transform _Cust_Spawn2;
+    /// <summary>The customer spawn positions</summary>
+    [SerializeField] private Transform[] customerSpawns = new Transform[0];
 
     /// <summary>The First Customer Death position</summary>
-    private Transform _Cust_Death1;
-    /// <summary>The Second Customer Death position</summary>
-    private Transform _Cust_Death2;
+    [SerializeField] private Transform[] customerDeaths = new Transform[0];
 
-    /// <summary>The Current number of Customers allowed in a shop</summary>
-    private int _numCustomers;
+    /// <summary>The current number of Customers the shop</summary>
+    private int customerCount;
 
-    /// <summary>THe Timer before the Next Customer is allowed to spawn in</summary>
-    private float _respawnTimer;
+    /// <summary>THe Timer before the Next Customer is spawned in</summary>
+    private float spawnTimer;
 
     /// <summary>Represents wether the shop is open</summary>
     private bool _shopOpen;
 
     /// <summary>The Max number of Customers allowed to be spawned</summary>
-    [SerializeField] private int _maxCustomers;
+    [SerializeField] private int maxCustomers;
     /// <summary>The Min Spawn Time for the Customers</summary>
-    [SerializeField] private float _minSpawnTime;
+    [SerializeField] private float minSpawnTime;
     /// <summary>The Max spawn Time for the Customers</summary>
-    [SerializeField] private float _maxSpawnTime;
+    [SerializeField] private float maxSpawnTime;
     
     /// <summary>The Prefab that makes the Customer</summary>
-    [SerializeField] private GameObject _customerPrefab;
-
-    /// <summary>The Grid that the furntiture is placed on</summary>
-    [SerializeField] private FurnitureGrid _furnitureGrid;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _Cust_Spawn1 = transform.Find("Cust Spawn 1"); // Only searches children (parent is likely to get accidentally renamed)
-        _Cust_Spawn2 = transform.Find("Cust Spawn 2");
-        _Cust_Death1 = transform.Find("Cust Death 1");
-        _Cust_Death2 = transform.Find("Cust Death 2");
-        _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
-    }
+    [SerializeField] private GameObject customerPrefab;
 
     // Update is called once per frame
     void Update()
     {
         if(_shopOpen)
         {
-            if(_numCustomers < _maxCustomers && _respawnTimer <= 0)
+            if(customerCount < maxCustomers && spawnTimer <= 0)
             {
-                Transform customerSpawnPoint;
-                if(Random.Range(0,2) == 0)
-                {
-                    customerSpawnPoint = _Cust_Spawn1;
-                }
-                else
-                {
-                    customerSpawnPoint = _Cust_Spawn2;
-                }
-                GameObject customer = Instantiate(_customerPrefab, transform.position, transform.rotation);
-                //customer.GetComponent<CustomerAI>().SetShoppingList(ShoppingList());
-                _numCustomers++;
+                Vector3 customerSpawnPoint = customerSpawns[Random.Range(0, customerSpawns.Length)].position;
+                GameObject customer = Instantiate(customerPrefab, customerSpawnPoint, Quaternion.identity);
 
-                _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
+                spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
+                customerCount++;
             }
-            _respawnTimer -= Time.deltaTime;
+
+            spawnTimer -= Time.deltaTime;
         }
     }
 
+    #region Public Methods
     /// <summary>
     /// Randomises the Shopping List Based off of the contents of the shop
     /// If None of the objects are chosen randomly then the list defaults to giving the first item in the contents list
@@ -89,30 +60,22 @@ public class CustomerController : MonoBehaviour
         return forSale.Take(Random.Range(1, 3)).ToList();
     }
 
-    #region Public Methods
     /// <summary>
     /// Lets the customer Controller know that a customer has left the shop
     /// </summary>
     public void CustomerLeft()
     {
-        _numCustomers--;
-        _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
+        customerCount--;
+        spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
     }
 
     /// <summary>
     /// returns the Position for the Customer to be Destroyed at
     /// </summary>
     /// <returns>a Vector3 position that the player customer gets destroyed at</returns>
-    public Vector3 GetDeathPoint()
+    public Vector3 PickDeathPoint()
     {
-        if(Random.Range(0,2) == 0)
-        {
-            return _Cust_Death1.transform.position;
-        }
-        else
-        {
-            return _Cust_Death2.transform.position;
-        }
+        return customerDeaths[Random.Range(0, customerDeaths.Length)].position;
     }
 
     /// <summary>
@@ -121,7 +84,6 @@ public class CustomerController : MonoBehaviour
     public void OpenShop()
     {
         _shopOpen = true;
-        _shopContents = _furnitureGrid.GetContents();
     }
 
     /// <summary>
@@ -132,6 +94,23 @@ public class CustomerController : MonoBehaviour
         _shopOpen = false;
     }
     #endregion
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        foreach (Transform spawn in customerSpawns)
+        {
+            Gizmos.DrawSphere(spawn.position, 0.5f);
+        }
+
+        Gizmos.color = Color.red;
+        foreach (Transform death in customerDeaths)
+        {
+            Gizmos.DrawSphere(death.position, 0.5f);
+        }
+    }
+#endif
 
     [InspectorButton("OpenShop")]
     public bool Open_Shop;

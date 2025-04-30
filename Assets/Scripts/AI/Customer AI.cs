@@ -1,187 +1,146 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.InputSystem.HID;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class CustomerAI : MonoBehaviour
 {
+    #region Public fields
+    /// <summary> True if the customer is not currently walking </summary>
+    public bool finishedWalking => navAgent.remainingDistance <= navAgent.stoppingDistance && !navAgent.pathPending;
+    #endregion
+
     #region Private fields
     /// <summary>The NavMesh Agent</summary>
-    private NavMeshAgent _navAgent;
+    private NavMeshAgent navAgent;
 
     /// <summary>A refernece to the customer controller script</summary>
-    private CustomerController _custController;
+    private CustomerController customerController;
 
-    /// <summary>The Position that the customer goes to be Destroyed at</summary>
-    private Vector3 _deathPosition;
+    /// <summary> A shopping list of items the customer wants to buy </summary>
+    private Queue<FurnitureItem> shoppingList;
 
-    /// <summary>The List that is the Customers Shopping List</summary>
-    private List<FurnitureItem> _shoppingList = new List<FurnitureItem>();
-
-    /// <summary>The List that refers to how many items the Customer has picked up</summary>
-    private List<FurnitureItem> _shoppingListBought = new List<FurnitureItem>();
+    /// <summary> List of items this customer has in their basket </summary>
+    private List<FurnitureItem> basket = new List<FurnitureItem>();
 
     /// <summary>A refernece to the Till object<summary>
-    private TillQueue _tillQueue;
-
-    /// <summary>Checks wether the Customer is ready to die</summary>
-    private bool _readyToDie;
-
-    /// <summary>A  timer to allow the customer to move away from there current position.</summary>
-    private float _timeBeforeDeath = 1;
-
-    /// <summary>The time that the customer is Searching for</summary>
-    private float _maxSearchTime;
-
-    /// <summary>A timer to allow the customer to move away from there current position. Handled Seperately as this one doesm't need to be reset.</summary>
-    private float _distanceBuffer = 1;
+    private TillQueue till;
 
     /// <summary>The animator Component of the model</summary>
-    private Animator _anim;
+    private Animator anim;
+
+    /// <summary> The current item the customer is looking for </summary>
+    private FurnitureItem currentItem = null;
+
+    /// <summary> True if the customer has brought everything on their shopping list </summary>
+    private bool finishedShopping => shoppingList.Count == 0 && currentItem == null;
+
+    /// <summary> True if the customer is leaving the store </summary>
+    private bool leaving = false;
     #endregion
 
     #region Serialized fields    
     /// <summary>A float for the Time the Customer Will spend at a shelf</summary>
-    [SerializeField] private float _searchTime;
+    [SerializeField] private float pickupTime = 2;
     #endregion
+
     #region Private Methods
-    // Start is called before the first frame update
+
     void Start()
     {
-        //Assigning Refernces To Objects
-        _tillQueue = FindAnyObjectByType<TillQueue>();
-        _navAgent = GetComponent<NavMeshAgent>();
-        _custController = FindAnyObjectByType<CustomerController>();
+        //Assigning References To Objects
+        anim = GetComponentInChildren<Animator>();
+        navAgent = GetComponent<NavMeshAgent>();
+        till = FindAnyObjectByType<TillQueue>();
+        customerController = FindAnyObjectByType<CustomerController>();
 
         //Assinging other values using the references
-        _deathPosition = _custController.GetDeathPoint();
-        _anim = this.GetComponentInChildren<Animator>();
-
-        //Assinging other values that at affected by other objects
-        _navAgent.avoidancePriority = Random.Range(0, 50);
-        _maxSearchTime = _searchTime;
-
-        //Gives the customer the first point to go to
-        _shoppingList = _custController.ShoppingList();
-        if (_shoppingList.Count == 0) Kill();
-
-        Debug.Log(_shoppingList.Count);
-        Debug.Log("SpaceShip");
-        _shoppingListBought = _shoppingList;
-        UpdateDestination(ItemPosition());
+        shoppingList = new Queue<FurnitureItem>(customerController.ShoppingList());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector3? rotation = null;
-
-        if (_navAgent.remainingDistance <= 2 && _distanceBuffer <= 0)
+        if (finishedWalking)
         {
-            _navAgent.isStopped = true;
-            _anim.SetBool("Walking", false);
-            if(_shoppingListBought.Count != 0)
+            // Rotate customer
+            Vector3 target;
+            if (currentItem != null) target = currentItem.bounds.center;
+            else target = till.transform.position;
+
+            if (target != null)
             {
-                rotation = _shoppingListBought[0].center - transform.position;
-                _navAgent.isStopped = true;
-                SearchingShelf();
+                target.y = transform.position.y;
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(target - transform.position),
+                    Time.deltaTime * 3
+                );
+            }
+
+            if (!navAgent.isStopped)
+            {
+                navAgent.isStopped = true; // Run once after reaching the destination
+
+                if (!finishedShopping)
+                {
+                    if (currentItem == null) Next();
+                    else this.RunAfter(pickupTime, PickedUp);
+                }
+
+                if (leaving) Destroy(gameObject);
             }
         }
-        if(_navAgent.isStopped && _navAgent.remainingDistance > 1)
-        {
-            _navAgent.isStopped = false;
-            _anim.SetBool("Walking", true);
-        }
-        
-        if(_distanceBuffer > 0)
-        {
-            _distanceBuffer -= Time.deltaTime;
-        }
-        
-        //Handles Killing of Customers once they have finished everything
-        if(_readyToDie)
-        {
-            if(_navAgent.remainingDistance <= 2 && _timeBeforeDeath <= 0)
-            {
-                Kill();
-            }
-            _timeBeforeDeath -= Time.deltaTime;
-        }
-
-        // Rotate customer
-        if (_shoppingListBought.Count == 0 && _navAgent.pathStatus == NavMeshPathStatus.PathComplete)
-            rotation = _tillQueue.transform.position - transform.position;
-
-        if (!rotation.HasValue) _navAgent.updateRotation = true;
-        else transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(Vector3.Scale(rotation.Value, new Vector3(1, 0, 1))),
-            Time.deltaTime * 3
-        );
-    }
-
-    /// <summary>
-    /// Puts the Customer into the Queue for the Till
-    /// </summary>
-    private void AddToTill()
-    {
-        _tillQueue.AddToQueue(this.gameObject);
+        else navAgent.updateRotation = true;
     }
 
     /// <summary>
     /// Handles the customer Searching the Shelf by giving it a timer to be searching for.
     /// Then it assigns the next destination for the player to move to
     /// </summary>
-    private void SearchingShelf()
+    private void PickedUp()
     {
-        if(_searchTime <= 0)
-        {
-            _navAgent.isStopped = false;
-            _anim.SetBool("Walking", true);
-            _searchTime = _maxSearchTime;
-            _shoppingListBought.RemoveAt(0);
-
-            _anim.SetBool("Searching", true);
-            _anim.SetBool("Searching", false);
-            
-            if(_shoppingListBought.Count != 0)
-            {
-                UpdateDestination(ItemPosition());
-            }
-            else
-            {
-                AddToTill();
-            }
-
-            _distanceBuffer = 1;
-            return;
-        }
-        _searchTime -= Time.deltaTime;
+        basket.Add(currentItem);
+        currentItem = null;
+        Next();
     }
-    
-    /// <summary>
-    /// returns a vector3 position that is adjusted for the items of the shop
-    /// </summary>
-    /// <returns>Vector3</returns>
-    private Vector3 ItemPosition()
-    {
-        Vector3 vectorToReturn = _shoppingListBought[0].transform.position + (_shoppingListBought[0].transform.forward * 2);
 
-        return vectorToReturn;
+    /// <summary>
+    /// Start the next task for this customer
+    /// </summary>
+    private void Next()
+    {
+        if (!finishedShopping) NextItem();
+        else if (basket.Count > 0) till.AddToQueue(this); // Hand control to the till
+        else LeaveShop();
+    }
+
+    /// <summary>
+    /// Tells the <see cref="navAgent"/> to path to the next item on the shopping list
+    /// </summary>
+    private void NextItem()
+    {
+        NavMeshHit hit;
+
+        // Repeat until we find an item to path to
+        while (!NavMesh.SamplePosition( // Get closest position to item
+            (currentItem = shoppingList.Dequeue()).transform.position,
+            out hit, float.PositiveInfinity, NavMesh.AllAreas)
+        );
+
+        navAgent.ResetPath();
+        navAgent.SetDestination(hit.position);
     }
 
     /// <summary>
     /// The Customer has been served and will leave the shop
     /// </summary>
-    public void LeftTill()
+    public void LeaveShop()
     {
-        _anim.SetBool("Paying", true);
-        _custController.CustomerLeft();
-        //_shopTill.GetComponent<TillQueue>().TillActivation();
-        _navAgent.destination = _deathPosition;
-        _readyToDie = true;
-        _anim.SetBool("Paying", false);
+        SetDestination(customerController.PickDeathPoint());
+        leaving = true;
     }
     #endregion
 
@@ -189,16 +148,16 @@ public class CustomerAI : MonoBehaviour
     /// <summary>
     /// Updates the current Destination of the Navmesh Agent
     /// </summary>
-    /// <param name="NewDestin">The location that the customer need to go to</param>
-    public void UpdateDestination(Vector3 NewDestin)
+    /// <param name="position">The location that the customer need to go to</param>
+    public void SetDestination(Vector3 position)
     {
-        _navAgent.destination = NewDestin;
+        navAgent.ResetPath();
+        navAgent.SetDestination(position);
     }
 
-    public void Kill()
+    public void OnDestroy()
     {
-        Destroy(this.gameObject);
-        _custController.CustomerLeft();
+        customerController.CustomerLeft();
     }
     #endregion
 }

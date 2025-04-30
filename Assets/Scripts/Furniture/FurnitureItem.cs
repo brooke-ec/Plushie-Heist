@@ -50,8 +50,8 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     public bool selling => sellingMarker.activeSelf && placed;
     /// <summary Whether this item can be marked as sellable </summary>
     public bool canSell => empty;
-    /// <summary> The world-space location of the center of this item </summary>
-    public Vector3 center => transform.TransformPoint(collider.bounds.center);
+    /// <summary> The world space bounding volume of this item </summary>
+    public Bounds bounds => collider.bounds;
 
     public bool interactable => canPickup || canSell;
 
@@ -96,7 +96,6 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     private void PlaceSellingMarker()
     {
-        Bounds bounds = collider.bounds;
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
         sellingMarker.transform.position += new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
         sellingMarker.SetActive(false);

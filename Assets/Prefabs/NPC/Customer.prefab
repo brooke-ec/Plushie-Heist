@@ -55,9 +55,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.4319676
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.38764864, z: 0}
 --- !u!195 &5157161442797937198
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -72,11 +72,11 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.32
   m_BaseOffset: 0.99
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86d21f84df833b4db7d233f5edc2080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _searchTime: 2
+  pickupTime: 2
 --- !u!1001 &487735011355678391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -107,7 +107,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e3800444602e16646b4671646941ee4e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e3800444602e16646b4671646941ee4e, type: 3}
       propertyPath: m_LocalScale.z

@@ -7,7 +7,7 @@ using UnityEngine;
 public class TillQueue : MonoBehaviour, IInteractable
 {
     /// <summary>The queue that is made up by the customers</summary>
-    private Queue<GameObject> customerQueue;
+    private Queue<CustomerAI> customerQueue = new Queue<CustomerAI>();
     /// <summary>The position that is the front of the Queue</summary>
     [SerializeField] private Vector3 queueOffset;
     /// <summary> The step direction of the queue from <see cref="queueOffset"/> </summary>
@@ -15,20 +15,14 @@ public class TillQueue : MonoBehaviour, IInteractable
     /// <summary> The absolute position of the front of the queue </summary>
     private Vector3 queueFront => transform.position + queueOffset;
 
-    public string interactionPrompt => customerQueue.Count == 0 ? "No Customers to Serve" : "Press F to Serve Customer";
-    public bool interactable => customerQueue.Count > 0;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        customerQueue = new Queue<GameObject>();
-    }
+    public bool interactable => customerQueue.Count > 0 && customerQueue.Peek().finishedWalking;
+    public string interactionPrompt => interactable ? "Press F to Serve Customer" : "No Customers to Serve";
 
     /// <summary>
     /// Adds a customer to the queue
     /// </summary>
     /// <param name="newCustomer">The customer to be added to the queue</param>
-    public void AddToQueue(GameObject newCustomer)
+    public void AddToQueue(CustomerAI newCustomer)
     {
         customerQueue.Enqueue(newCustomer);
         UpdateTillQueue();
@@ -40,16 +34,10 @@ public class TillQueue : MonoBehaviour, IInteractable
     public void TillActivation()
     {
         //Returns from function if queue is empty
-        if(customerQueue.Count == 0)
-        {
-            return;
-        }
-        
-        customerQueue.Peek().GetComponent<CustomerAI>().LeftTill();
-
+        if (customerQueue.Count == 0) return;
 
         //Causes the Customer to leave the Till
-        customerQueue.Dequeue();
+        customerQueue.Dequeue().LeaveShop();
         
         //Next need to update positions of the customers in the queue
         UpdateTillQueue();
@@ -60,12 +48,11 @@ public class TillQueue : MonoBehaviour, IInteractable
     /// </summary>
     private void UpdateTillQueue()
     {
-        //newPlayer.SendMessage("UpdateTillQueue", QueueFront)
         int position = 0;
-        foreach (GameObject customer in customerQueue)
+        foreach (CustomerAI customer in customerQueue)
         {
             Vector3 queuePos = queueFront + position * queueDirection;
-            customer.GetComponent<CustomerAI>().UpdateDestination(queuePos);
+            customer.SetDestination(queuePos);
             position++;
         }
     }
