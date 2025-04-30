@@ -66,7 +66,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4838222444980244618}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.1
+  m_Radius: 0.01
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupTime: 2
+  animationController: {fileID: 9100000, guid: db4d6d4ad2fb16a41ac72f168669de28, type: 2}
   models:
   - {fileID: 5866666021909216657, guid: 7d77f8c971475fd4086388e18339a75b, type: 3}
   - {fileID: 5866666021909216657, guid: f5f7c06a861b6a34796656d3595b8f2b, type: 3}
@@ -102,4 +103,3 @@ MonoBehaviour:
   - {fileID: 5866666021909216657, guid: 9b24fae50400a5646b561ffb19308ee3, type: 3}
   - {fileID: 5866666021909216657, guid: 2d2472dd8e17ddf458dd53c000120d27, type: 3}
   - {fileID: 5866666021909216657, guid: cc6bd0031272da74ebf17492b35dbc69, type: 3}
-  controller: {fileID: 9100000, guid: db4d6d4ad2fb16a41ac72f168669de28, type: 2}

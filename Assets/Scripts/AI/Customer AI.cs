@@ -27,7 +27,7 @@ public class CustomerAI : MonoBehaviour
     private TillQueue till;
 
     /// <summary>The animator Component of the model</summary>
-    private Animator anim;
+    private Animator animator;
 
     /// <summary> The current item the customer is looking for </summary>
     private FurnitureItem currentItem => shoppingList.TryPeek(out FurnitureItem item) ? item : null;
@@ -38,8 +38,8 @@ public class CustomerAI : MonoBehaviour
     #region Serialized fields    
     /// <summary>A float for the Time the Customer Will spend at a shelf</summary>
     [SerializeField] private float pickupTime = 2;
+    [SerializeField] private RuntimeAnimatorController animationController;
     [SerializeField] private Animator[] models;
-    [SerializeField] private RuntimeAnimatorController controller;
     #endregion
 
     #region Private Methods
@@ -52,8 +52,9 @@ public class CustomerAI : MonoBehaviour
         customerController = FindAnyObjectByType<CustomerController>();
 
         // Pick model
-        anim = Instantiate(models[Random.Range(0, models.Length)], transform);
-        anim.runtimeAnimatorController = controller;
+        animator = Instantiate(models[Random.Range(0, models.Length)], transform);
+        animator.runtimeAnimatorController = animationController;
+        animator.SetFloat("pickup multiplier", 0.375f / pickupTime);
 
         //Assinging other values using the references
         shoppingList = new Queue<FurnitureItem>(customerController.ShoppingList());
@@ -61,6 +62,9 @@ public class CustomerAI : MonoBehaviour
 
     void Update()
     {
+        animator.SetBool("shopping", state == State.Shopping);
+        animator.SetBool("walking", !finishedWalking);
+
         if (finishedWalking)
         {
             // Rotate customer
@@ -68,16 +72,14 @@ public class CustomerAI : MonoBehaviour
             if (currentItem != null) target = currentItem.bounds.center;
             else target = till.transform.position;
 
-            if (target != null)
-            {
-                target.y = transform.position.y;
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    Quaternion.LookRotation(target - transform.position),
-                    Time.deltaTime * 3
-                );
-            }
+            target.y = transform.position.y;
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(target - transform.position),
+                Time.deltaTime * 3
+            );
 
+            // Handle destination
             if (!navAgent.isStopped)
             {
                 navAgent.isStopped = true; // Run once after reaching the destination
