@@ -26,7 +26,7 @@ public class CustomerController : MonoBehaviour
     private float _respawnTimer;
 
     /// <summary>Represents wether the shop is open</summary>
-    [SerializeField] private bool _shopOpen;
+    private bool _shopOpen;
 
     /// <summary>The Max number of Customers allowed to be spawned</summary>
     [SerializeField] private int _maxCustomers;
@@ -121,8 +121,7 @@ public class CustomerController : MonoBehaviour
     public void OpenShop()
     {
         _shopOpen = true;
-        Debug.Log("Doing Something");
-        Debug.Log("Doing Something Else");
+        _shopContents = _furnitureGrid.GetContents();
     }
 
     /// <summary>
