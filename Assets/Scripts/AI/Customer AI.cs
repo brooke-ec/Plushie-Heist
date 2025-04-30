@@ -9,9 +9,6 @@ public class CustomerAI : MonoBehaviour
     /// <summary>The NavMesh Agent</summary>
     private NavMeshAgent _navAgent;
 
-    /// <summary>A reference to the Till GameObject</summary>
-    private GameObject _shopTill;
-
     /// <summary>A refernece to the customer controller script</summary>
     private CustomerController _custController;
 
@@ -49,13 +46,12 @@ public class CustomerAI : MonoBehaviour
     void Start()
     {
         //Assigning Refernces To Objects
-        _shopTill = GameObject.Find("Till");
+        _tillQueue = FindAnyObjectByType<TillQueue>();
         _navAgent = GetComponent<NavMeshAgent>();
-        _custController = GameObject.Find("Customer Controller").GetComponent<CustomerController>();
+        _custController = FindAnyObjectByType<CustomerController>();
 
         //Assinging other values using the references
         _deathPosition = _custController.GetDeathPoint();
-        _tillQueue = _shopTill.GetComponent<TillQueue>();
 
         //Assinging other values that at affected by other objects
         _navAgent.avoidancePriority = Random.Range(0, 50);
@@ -63,6 +59,8 @@ public class CustomerAI : MonoBehaviour
 
         //Gives the customer the first point to go to
         _shoppingList = _custController.ShoppingList();
+        if (_shoppingList.Count == 0) Kill();
+
         Debug.Log(_shoppingList.Count);
         Debug.Log("SpaceShip");
         _shoppingListBought = _shoppingList;
@@ -102,6 +100,15 @@ public class CustomerAI : MonoBehaviour
             }
             _timeBeforeDeath -= Time.deltaTime;
         }
+
+        // Rotate to face the till
+        if (_shoppingListBought.Count == 0 && _navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        {
+            Vector3 direction = _tillQueue.transform.position - transform.position;
+            direction.y = 0;
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 3);
+        }
     }
 
     /// <summary>
@@ -109,7 +116,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void AddToTill()
     {
-        _shopTill.GetComponent<TillQueue>().AddToQueue(this.gameObject);
+        _tillQueue.AddToQueue(this.gameObject);
     }
 
     /// <summary>
@@ -144,7 +151,6 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     public void LeftTill()
     {
-        _custController.CustomerLeft();
         //_shopTill.GetComponent<TillQueue>().TillActivation();
         _navAgent.destination = _deathPosition;
         _readyToDie = true;
@@ -163,7 +169,8 @@ public class CustomerAI : MonoBehaviour
 
     public void Kill()
     {
-        GameObject.Destroy(this.gameObject);
+        Destroy(this.gameObject);
+        _custController.CustomerLeft();
     }
     #endregion
 }

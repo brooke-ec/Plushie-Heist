@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1234645777807317478}
   - component: {fileID: 105001509522667449}
   - component: {fileID: 6854122181499592312}
+  - component: {fileID: -6017496322988256119}
   m_Layer: 10
   m_Name: Desk
   m_TagString: Untagged
@@ -2605,6 +2606,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 0
+--- !u!208 &-6017496322988256119
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824853667814778167}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3642751121201749247
 GameObject:
   m_ObjectHideFlags: 0

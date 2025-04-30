@@ -1,8 +1,10 @@
-using System.Collections;
+using cakeslice;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TillQueue : MonoBehaviour
+[RequireComponent(typeof(Outline))]
+[RequireComponent(typeof(Collider))]
+public class TillQueue : MonoBehaviour, IInteractable
 {
     /// <summary>The queue that is made up by the customers</summary>
     private Queue<GameObject> customerQueue;
@@ -10,26 +12,16 @@ public class TillQueue : MonoBehaviour
     private Vector3 QueueFront;
 
     /// <summary>The Gap between each customer in the queue</summary>
-    private float gapForQueue = 2;
+    [SerializeField] private float gapForQueue = 2;
 
-    /// <summary>has the till been activated</summary>
-    [SerializeField] private bool TillActivate;
+    public string interactionPrompt => customerQueue.Count == 0 ? "No Customers to Serve" : "Press F to Serve Customer";
+    public bool interactable => customerQueue.Count > 0;
 
     // Start is called before the first frame update
     void Start()
     {
         QueueFront = this.transform.position + Vector3.right * 2;
         customerQueue = new Queue<GameObject>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(TillActivate)
-        {
-            TillActivate = false;
-            TillActivation();
-        }
     }
 
     /// <summary>
@@ -76,5 +68,10 @@ public class TillQueue : MonoBehaviour
             customer.GetComponent<CustomerAI>().UpdateDestination(queuePos);
             position++;
         }
+    }
+
+    public void PrimaryInteract(Interactor interactor)
+    {
+        TillActivation();
     }
 }

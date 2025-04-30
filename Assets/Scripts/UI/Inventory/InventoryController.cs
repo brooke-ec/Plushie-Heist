@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
@@ -29,12 +28,14 @@ public class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for the button in the menu to open the inventory
+    /// Toggle the inventory grid on or off.
     /// </summary>
-    public void OpenOrCloseInventory()
+    /// <returns>Whether the inventory is visible</returns>
+    public bool OpenOrCloseInventory()
     {
         Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
         inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
+        return inventoryTopParent.gameObject.activeSelf;
     }
 
     #region Inventory controls

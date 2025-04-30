@@ -111,9 +111,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
-
-    [Header("UI")]
-    [SerializeField] private GameObject inventoryUI;
     #endregion
 
     #region private fields
@@ -191,8 +188,6 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>ther animator component </summary>
     private Animator animator;
-
-    private bool inventoryOpen;
 
     #endregion
 
@@ -1012,18 +1007,15 @@ public class PlayerController : MonoBehaviour
 
     public void openInventory()
     {
-        if (!inventoryOpen)
+        bool inventoryOpen = SharedUIManager.instance.GetComponent<InventoryController>().OpenOrCloseInventory();
+
+        if (inventoryOpen)
         {
-            inventoryUI.SetActive(true);
-            inventoryOpen = true;
             GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
             Cursor.lockState = CursorLockMode.Confined;
         }
         else
         {
-
-            inventoryUI.SetActive(false);
-            inventoryOpen = false;
             GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
             Cursor.lockState = CursorLockMode.Locked;
         }

@@ -42,19 +42,23 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     public int gridRotation => Mathf.RoundToInt(transform.rotation.eulerAngles.y);
     /// <summary> The <see cref="FurnitureGrid"/> this item is currently attached to</summary>
     public FurnitureGrid grid { get; set; }
+    /// <summary> Whether this item is currently placed on a grid </summary>
+    public bool placed => grid != null;
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
     public Region gridRegion => new Region().FromSize(gridPosition, gridSize);
+    /// <summary> Whether this item is marked as sellable or not </summary>
+    public bool selling => sellingMarker.activeSelf && placed;
+    /// <summary Whether this item can be marked as sellable </summary>
+    public bool canSell => empty;
+
+    public bool interactable => canPickup || canSell;
 
     /// <summary> The current <see cref="InventoryController"/> instance </summary>
     private InventoryController inventoryController;
-    /// <summary> The outline script attached to this object </summary>
-    private Outline outline;
     /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
     private MaterialSwitcher switcher;
     /// <summary> The marker to denote that this item is being sold </summary>
     private GameObject sellingMarker;
-    /// <summary> Whether this item is marked as sellable or not </summary>
-    private bool selling => sellingMarker.activeSelf;
 
     // Temporary workaround
     // TODO: Refactor
@@ -64,14 +68,13 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     {
         inventoryController = FindAnyObjectByType<InventoryController>();
         subgrids = GetComponentsInChildren<FurnitureGrid>();
-        outline = GetComponentInChildren<Outline>();
         switcher = new MaterialSwitcher(gameObject);
     }
 
     private void Start()
     {
         PlaceSellingMarker();
-        outline.enabled = false;
+        GetComponentInChildren<Outline>().enabled = false;
 
         inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(this);
@@ -83,15 +86,10 @@ public class FurnitureItem : MonoBehaviour, IInteractable
         });
     }
 
-    private void Update()
-    {
-        outline.color = canPickup ? 0 : 1;
-    }
-
     /// <summary>
     /// Create and place the selling marker on this item.
     /// </summary>
-    public void PlaceSellingMarker()
+    private void PlaceSellingMarker()
     {
         Bounds bounds = GetComponent<Collider>().bounds;
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
@@ -106,9 +104,9 @@ public class FurnitureItem : MonoBehaviour, IInteractable
     /// </summary>
     /// <param name="interactor">Interactor this was called from</param>
     /// <returns>True if picked up item<returns>
-    public bool PrimaryInteract(Interactor interactor)
+    public void PrimaryInteract(Interactor interactor)
     {
-        if (!canPickup) return false;
+        if (!canPickup) return;
 
         if (inventoryController.InsertItem(source))
         {
@@ -116,22 +114,17 @@ public class FurnitureItem : MonoBehaviour, IInteractable
 
             Destroy(gameObject);
             Debug.Log("Picked Up" + gameObject.name);
-            return true;
         }
-        else { 
-            Debug.Log("Can't Pick up"+gameObject.name);
-            return false;
-        }
+        else Debug.Log("Can't Pick up" + gameObject.name);
         
     }
 
-    public bool SecondaryInteract(Interactor interactor)
+    public void SecondaryInteract(Interactor interactor)
     {
-        if (!empty) return false;
+        if (!canSell) return;
 
         subgrids.ForEach(s => s.gameObject.SetActive(selling));
         sellingMarker.SetActive(!selling);
-        return true;
     }
 
     /// <summary>

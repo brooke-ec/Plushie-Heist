@@ -6,16 +6,19 @@ public interface IInteractable
     public string interactionPrompt { get; }
 
     /// <summary>
+    /// Denotes whether this object is interactible- used for setting outline colour.
+    /// </summary>
+    public bool interactable => true;
+
+    /// <summary>
     /// Called when the primary interact key is pressed on this <see cref="IInteractable"/> instance.
     /// </summary>
     /// <param name="interactor"> Interactor object that called the interaction </param>
-    /// <returns> <see cref="true"/> if the intraction was succesful </returns>
-    public bool PrimaryInteract(Interactor interactor) { return true; }
+    public void PrimaryInteract(Interactor interactor) { }
 
     /// <summary>
     /// Called when the secondary interact key is pressed on this <see cref="IInteractable"/> instance.
     /// </summary>
     /// <param name="interactor"> Interactor object that called the interaction </param>
-    /// <returns> <see cref="true"/> if the intraction was succesful </returns>
-    public bool SecondaryInteract(Interactor interactor) { return true; }
+    public void SecondaryInteract(Interactor interactor) { }
 }

@@ -28,6 +28,9 @@ public class Interactor : MonoBehaviour
     private new Collider collider;
     /// <summary> The closest collider in range last frame </summary>
     private Collider previous;
+    /// <summary> The outline of the interactable collider in range </summary>
+    private Outline outline;
+
 
     private void Update()
     {
@@ -37,27 +40,33 @@ public class Interactor : MonoBehaviour
 
         if (!ReferenceEquals(previous, collider))
         {
-            // Clean up the previous outline
-            if (previous != null)
-            {
-                Outline outline = previous.GetComponentInChildren<Outline>();
-                if (outline != null) outline.enabled = false;
-            }
             previous = collider;
 
+            // Clean up the previous outline
+            if (outline != null) outline.enabled = false;
+
             // Get new interactable
-            if (collider == null) interactable = null;
+            if (collider == null)
+            {
+                interactable = null;
+                outline = null;
+            }
             else
             {
                 interactable = collider.GetComponent<IInteractable>();
                 
                 // Activate Outline
-                Outline outline = collider.GetComponentInChildren<Outline>();
+                outline = collider.GetComponentInChildren<Outline>();
                 if (outline != null) outline.enabled = true;
             }
         }
 
-        interactionText.text = interactable == null ? "" : interactable.interactionPrompt;
+        if (interactable == null) interactionText.text = "";
+        else
+        {
+            interactionText.text = interactable.interactionPrompt;
+            if (outline != null) outline.color = interactable.interactable ? 0 : 1;
+        }
     }
 
 #if UNITY_EDITOR // For Debugging
@@ -74,7 +83,7 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressPrimaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.PrimaryInteract(this);
+        if (ctx.performed && interactable != null && interactable.interactable) interactable.PrimaryInteract(this);
     }
 
     /// <summary>
@@ -82,6 +91,6 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressSecondaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.SecondaryInteract(this);
+        if (ctx.performed && interactable != null && interactable.interactable) interactable.SecondaryInteract(this);
     }
 }

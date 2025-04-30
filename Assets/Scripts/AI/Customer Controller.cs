@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,23 +10,20 @@ using UnityEditor;
 public class CustomerController : MonoBehaviour
 {
     /// <summary>The First Customer Spawn position</summary>
-    private GameObject _Cust_Spawn1;
+    private Transform _Cust_Spawn1;
     /// <summary>The Second Customer Spawn position</summary>
-    private GameObject _Cust_Spawn2;
+    private Transform _Cust_Spawn2;
 
     /// <summary>The First Customer Death position</summary>
-    private GameObject _Cust_Death1;
+    private Transform _Cust_Death1;
     /// <summary>The Second Customer Death position</summary>
-    private GameObject _Cust_Death2;
+    private Transform _Cust_Death2;
 
     /// <summary>The Current number of Customers allowed in a shop</summary>
     private int _numCustomers;
 
     /// <summary>THe Timer before the Next Customer is allowed to spawn in</summary>
     private float _respawnTimer;
-
-    /// <summary>The Contents of the Shop</summary>
-    private List<FurnitureItem> _shopContents;
 
     /// <summary>Represents wether the shop is open</summary>
     [SerializeField] private bool _shopOpen;
@@ -45,22 +44,21 @@ public class CustomerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _Cust_Spawn1 = GameObject.Find("Customer Controller/Cust Spawn 1");
-        _Cust_Spawn2 = GameObject.Find("Customer Controller/Cust Spawn 2");
-        _Cust_Death1 = GameObject.Find("Customer Controller/Cust Death 1");
-        _Cust_Death2 = GameObject.Find("Customer Controller/Cust Death 2");
+        _Cust_Spawn1 = transform.Find("Cust Spawn 1"); // Only searches children (parent is likely to get accidentally renamed)
+        _Cust_Spawn2 = transform.Find("Cust Spawn 2");
+        _Cust_Death1 = transform.Find("Cust Death 1");
+        _Cust_Death2 = transform.Find("Cust Death 2");
         _respawnTimer = Random.Range(_minSpawnTime, _maxSpawnTime);
-        _shopContents = new List<FurnitureItem>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_shopOpen && _shopContents.Count != 0)
+        if(_shopOpen)
         {
             if(_numCustomers < _maxCustomers && _respawnTimer <= 0)
             {
-                GameObject customerSpawnPoint;
+                Transform customerSpawnPoint;
                 if(Random.Range(0,2) == 0)
                 {
                     customerSpawnPoint = _Cust_Spawn1;
@@ -69,7 +67,7 @@ public class CustomerController : MonoBehaviour
                 {
                     customerSpawnPoint = _Cust_Spawn2;
                 }
-                GameObject customer = Instantiate(_customerPrefab, customerSpawnPoint.transform.position, this.transform.rotation);
+                GameObject customer = Instantiate(_customerPrefab, transform.position, transform.rotation);
                 //customer.GetComponent<CustomerAI>().SetShoppingList(ShoppingList());
                 _numCustomers++;
 
@@ -86,20 +84,9 @@ public class CustomerController : MonoBehaviour
     /// <returns>A list that is the Shopping List of the customer</returns>
     public List<FurnitureItem> ShoppingList()
     {
-        List<FurnitureItem> ShoppingList = new List<FurnitureItem>();
-        foreach(FurnitureItem shopContent in _shopContents)
-        {
-            if(Random.Range(0,4) == 1)
-            {
-                ShoppingList.Add(shopContent);
-            }
-        }
-        if(ShoppingList.Count == 0)
-        {
-            ShoppingList.Add(_shopContents[Random.Range(0, _shopContents.Count + 1)]);
-            Debug.Log("Randoms Suck");
-        }
-        return ShoppingList;
+        FurnitureItem[] forSale = FindObjectsOfType<FurnitureItem>()
+            .Where(i => i.selling).OrderBy(_ => Random.value).ToArray();
+        return forSale.Take(Random.Range(1, 3)).ToList();
     }
 
     #region Public Methods
@@ -134,9 +121,7 @@ public class CustomerController : MonoBehaviour
     public void OpenShop()
     {
         _shopOpen = true;
-        _shopContents = _furnitureGrid.GetContents();
         Debug.Log("Doing Something");
-        Debug.Log(_shopContents.Count);
         Debug.Log("Doing Something Else");
     }
 
