@@ -34,9 +34,6 @@ public class SharedUIManager : MonoBehaviour
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
         scaleFactor = rootCanvas.scaleFactor;
-        gridToStart.StartInventory();
-
-        GetComponent<InventoryController>().PlaceTestItems();
     }
 
     public void OpenMenu(IUIMenu menu)
@@ -53,7 +50,7 @@ public class SharedUIManager : MonoBehaviour
 
     public void CloseMenu()
     {
-        print($"Closing all menus");
+        print("Closing all menus");
         if (currentMenu != null)
         {
             currentMenu.SetOpenState(false);

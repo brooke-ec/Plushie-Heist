@@ -10,6 +10,7 @@ public class BrowserManager : MonoBehaviour, IUIMenu
     [SerializeField] private Image tabIcon;
     [SerializeField] private Button backButton;
     [SerializeField] private Button forwardButton;
+    [SerializeField] private InventoryGrid gridToStart;
     #endregion
 
     /// <summary> Transform of all the pages, index 0 is always homepage </summary>
@@ -24,6 +25,7 @@ public class BrowserManager : MonoBehaviour, IUIMenu
     {
         GoToPage(0);
         SetUpPageList();
+        gridToStart.StartInventory();
     }
 
     public int GetPageIndex(BrowserPageType pageType)

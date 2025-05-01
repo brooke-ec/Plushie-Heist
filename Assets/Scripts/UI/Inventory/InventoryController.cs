@@ -37,6 +37,14 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
 
+    private void Start()
+    {
+        inventoryGridToAddItems.StartInventory();
+#if UNITY_EDITOR
+        PlaceTestItems();
+#endif
+    }
+
     private void Update()
     {
         ItemIconDragEffect();
@@ -128,15 +136,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
             inventoryGridToAddItems.gameObject.SetActive(false);
         }
 
-        if (addedItemSuccessfully)
-        {
-            //if we're not in the night
-            if (ShopManager.instance != null)
-            {
-                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(itemClassToInsert);
-            }
-        }
-
         return addedItemSuccessfully;
     }
 
@@ -162,6 +161,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <summary> Left click </summary>
     private void PickUpOrPlaceItem()
     {
+        if (selectedInventoryGrid == null) { return; } //if not on a grid, do nothing
 
         if (selectedItem != null)
         {
@@ -169,7 +169,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
             mousePos.y += (selectedItem.Height - 1) * InventoryGrid.tileSize / 2;
         }
 
-        if (selectedInventoryGrid == null) { return; } //if not on a grid, do nothing
         Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(mousePos); //tile grid position
         if (selectedItem == null)
         {
@@ -222,6 +221,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     #endregion
 
     #region Test
+#if UNITY_EDITOR
     public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
     //
     public void PlaceTestItems()
@@ -229,8 +229,10 @@ public class InventoryController : MonoBehaviour, IUIMenu
         Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
         
         foreach (FurnitureItem item in itemsToTest) InsertItem(item);
+        itemsToTest.Clear();
     }
-    #endregion
+#endif
+#endregion
 
     //MISSING DRAGGING INSTEAD OF CLICK TO-DO
     #region input

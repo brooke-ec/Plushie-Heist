@@ -16,10 +16,22 @@ public class StocksController : MonoBehaviour
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
+    public static StocksController instance { get; private set; }
+
     #region Setup
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
     }
 
     private void Start()

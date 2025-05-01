@@ -129,6 +129,9 @@ public class FurnitureItem : MonoBehaviour, IInteractable
 
         subgrids.ForEach(s => s.gameObject.SetActive(selling));
         sellingMarker.SetActive(!selling);
+
+        if (canSell) StocksController.instance.TryAddFurnitureToPricingTable(source);
+        else StocksController.instance.TryRemoveFurnitureFromPricingTable(source);
     }
 
     /// <summary>

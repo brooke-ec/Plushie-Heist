@@ -291,25 +291,4 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     #endregion
-
-    #region Test
-    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
-    public GameObject itemPrefab;
-    //
-    public void PlaceTestItems()
-    {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemsToTest[0]);
-        PlaceItem(item, 0, 0);
-
-        InventoryItem item2 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item2.Set(itemsToTest[1]);
-        PlaceItem(item2, 0, 1);
-
-        InventoryItem item3 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item3.Set(itemsToTest[0]);
-        PlaceItem(item3, 2, 1);
-    }
-    #endregion
 }
