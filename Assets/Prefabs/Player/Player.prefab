@@ -73,8 +73,8 @@ GameObject:
   - component: {fileID: 859627439615050953}
   - component: {fileID: 2651383046741006912}
   - component: {fileID: 2593150926430451965}
-  - component: {fileID: 3655126576856739276}
   - component: {fileID: 6666046485523007560}
+  - component: {fileID: 1919195454717137726}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -176,9 +176,26 @@ MonoBehaviour:
   grappleCancelLength: 1
   grappleCooldown: 10
   grappleCooldownSpeed: 1
-  inventoryUI: {fileID: 0}
   arrested: 0
---- !u!114 &3655126576856739276
+--- !u!114 &6666046485523007560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284632359089528514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7355f5547226e4d9c59367f0c8b138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactorPoint: {fileID: 4392269727964115093}
+  interactorRadius: 0.5
+  interactorLayerMask:
+    serializedVersion: 2
+    m_Bits: 1280
+  interactionText: {fileID: 0}
+--- !u!114 &1919195454717137726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -250,7 +267,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 8efa91d1-a7f1-43c6-9802-7715701327b6
-    m_ActionName: PlayerMovement/Mouse[/Mouse/position]
+    m_ActionName: PlayerMovement/Mouse[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2593150926430451965}
@@ -314,12 +331,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
-    m_ActionName: PlayerMovement/Interact[/Keyboard/f]
+    m_ActionName: PlayerMovement/Primary Interact[/Keyboard/f]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: getInteract
+      - m_Target: {fileID: 6666046485523007560}
+        m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
+        m_MethodName: pressSecondaryInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -329,13 +346,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+    m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
+    m_ActionName: PlayerMovement/Secondary Interact[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
     m_ActionId: 12203050-eb8b-4a98-94a4-da98603cddb3
     m_ActionName: PlayerMovement/Pause[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2593150926430451965}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: openInventory
+        m_MethodName: toggleInventory
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -347,70 +368,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f65804dd-459c-4099-adf5-d259327de607
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: rotateItem
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
-    m_ActionName: InventoryActions/Rotate[/Keyboard/r]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: startDrag
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
-    m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: openInventory
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: f65804dd-459c-4099-adf5-d259327de607
-    m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: openInventory
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
-    m_ActionName: InventoryActions/CloseInventory[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 594284680598497189}
@@ -431,7 +388,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 594284680598497189}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
-        m_MethodName: OnRotate
+        m_MethodName: OnCancel
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -441,59 +398,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6666046485523007560}
-        m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
-        m_MethodName: pressSecondaryInteract
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
-    m_ActionName: PlayerMovement/Rotate[/Keyboard/r]
+    m_ActionId: b6bd0647-3eef-4cd2-a13a-ae2ee1905d5d
+    m_ActionName: PlayerMovement/Cancel[/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: getMousePos
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
+    m_ActionName: MenuActions/Rotate[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
+    m_ActionName: MenuActions/Left Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
     m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
-    m_ActionName: InventoryActions/Mouse[/Mouse/position]
+    m_ActionName: MenuActions/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
+    m_ActionName: MenuActions/Close[/Keyboard/e,/Keyboard/escape,/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &6666046485523007560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8284632359089528514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a7355f5547226e4d9c59367f0c8b138, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactorPoint: {fileID: 4392269727964115093}
-  interactorRadius: 0.5
-  interactorLayerMask:
-    serializedVersion: 2
-    m_Bits: 1280
-  interactionText: {fileID: 0}
 --- !u!1 &8461329353988155359
 GameObject:
   m_ObjectHideFlags: 0

@@ -1000,12 +1000,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void openInventory(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed) openInventory();
-    }
-
-    public void openInventory()
+    public void toggleInventory(InputAction.CallbackContext ctx)
     {
         if (SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.CloseMenu();
         else SharedUIManager.instance.OpenMenu(SharedUIManager.instance.GetComponent<InventoryController>());

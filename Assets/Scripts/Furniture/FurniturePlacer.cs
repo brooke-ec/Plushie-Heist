@@ -86,4 +86,12 @@ public class FurniturePlacer : MonoBehaviour
         if (ctx.ReadValueAsButton() || item == null) return;
         item.GridRotate();
     }
+
+    public void OnCancel(InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValueAsButton() || item == null) return;
+        Destroy(item.gameObject);
+        item = null;
+    }
+
 }
