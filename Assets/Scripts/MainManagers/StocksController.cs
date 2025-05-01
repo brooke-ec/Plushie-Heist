@@ -20,7 +20,11 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
-        CreateAllProductData();
+    }
+
+    private void Start()
+    {
+        CreateAllProductData(); // Only references should be set up in Awake()
     }
 
     private void CreateAllProductData()

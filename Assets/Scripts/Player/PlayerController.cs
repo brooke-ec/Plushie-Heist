@@ -1007,18 +1007,8 @@ public class PlayerController : MonoBehaviour
 
     public void openInventory()
     {
-        bool inventoryOpen = SharedUIManager.instance.GetComponent<InventoryController>().OpenOrCloseInventory();
-
-        if (inventoryOpen)
-        {
-            GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
-            GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        if (SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.CloseMenu();
+        else SharedUIManager.instance.OpenMenu(SharedUIManager.instance.GetComponent<InventoryController>());
     }
 
     private void OnTriggerEnter(Collider other)

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviour, IUIMenu
 {
     public GameObject itemPrefab;
     /// <summary> The current grid being used to pick up and place items. This is set to null when you click outside of an inventory grid </summary>
@@ -33,9 +33,14 @@ public class InventoryController : MonoBehaviour
     /// <returns>Whether the inventory is visible</returns>
     public bool OpenOrCloseInventory()
     {
+        SharedUIManager.instance.ToggleMenu(this);
+        return SharedUIManager.instance.isMenuOpen;
+    }
+
+    public void SetOpenState(bool open)
+    {
         Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
-        inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
-        return inventoryTopParent.gameObject.activeSelf;
+        inventoryTopParent.gameObject.SetActive(open);
     }
 
     #region Inventory controls
