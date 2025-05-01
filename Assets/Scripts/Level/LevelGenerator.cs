@@ -31,5 +31,7 @@ public class LevelGenerator : MonoBehaviour
         tileGenerator.Generate(spaces, transform, size);
         GetComponent<NavMeshSurface>().BuildNavMesh();
         GetComponent<GaurdSpawer>().SpawnGaurds();
+
+        StaticBatchingUtility.Combine(gameObject);
     }
 }
