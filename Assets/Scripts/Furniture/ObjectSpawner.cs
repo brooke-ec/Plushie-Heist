@@ -12,6 +12,7 @@ public class ObjectSpawner : MonoBehaviour
         int propNo = Random.Range(0, Props.Props.Length);
         if (Props.Props[propNo] == null) { return; }
         Instantiate(Props.Props[propNo], GetComponentInParent<Transform>());
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
