@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -28,5 +29,6 @@ public class LevelGenerator : MonoBehaviour
             .Concat(edges.Where(e => e.connected).Cast<Region>()).ToArray();
 
         tileGenerator.Generate(spaces, transform, size);
+        GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8404965260686985546}
   - component: {fileID: 6032601456301232609}
   - component: {fileID: 3269480715340361435}
+  - component: {fileID: 1556428610808127887}
   m_Layer: 10
   m_Name: TV
   m_TagString: Untagged
@@ -1304,3 +1305,19 @@ MonoBehaviour:
   <inventorySize>k__BackingField: {x: 2, y: 2}
   <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
   source: {fileID: 0}
+--- !u!208 &1556428610808127887
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308798005753994451}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

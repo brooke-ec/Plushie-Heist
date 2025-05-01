@@ -66,6 +66,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: df619675dad4b5663be2690f391d07f2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7174727519858826389}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: df619675dad4b5663be2690f391d07f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4118688008307466725}
   m_SourcePrefab: {fileID: 100100000, guid: df619675dad4b5663be2690f391d07f2, type: 3}
 --- !u!1 &1966878419224379584 stripped
 GameObject:
@@ -112,3 +115,20 @@ MonoBehaviour:
   <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <inventorySize>k__BackingField: {x: 2, y: 1}
   <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
+  source: {fileID: 0}
+--- !u!208 &-4118688008307466725
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966878419224379584}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 0.25, z: 0.35000002}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.25, z: 0.35000002}
+  m_TimeToStationary: 0.5
