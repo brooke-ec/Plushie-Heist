@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     #region References
-    private InventoryController inventoryController;
     private RectTransform rectTransform;
     #endregion
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
@@ -26,7 +25,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void StartInventory()
     {
-        inventoryController = FindAnyObjectByType<InventoryController>();
         rectTransform = GetComponent<RectTransform>();
 
         scaleFactor = SharedUIManager.instance.scaleFactor;
@@ -63,13 +61,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #region Set a grid as interactable or not
     public void OnPointerEnter(PointerEventData eventData)
     {
-        inventoryController.selectedInventoryGrid = this;
+        InventoryController.instance.selectedInventoryGrid = this;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //maybe it's better if it's only re-set to a new selected Inventory Grid if that one calls it, not sure
-        inventoryController.selectedInventoryGrid = null;
+        InventoryController.instance.selectedInventoryGrid = null;
     }
     #endregion
 

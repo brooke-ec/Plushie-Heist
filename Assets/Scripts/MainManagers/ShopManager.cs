@@ -14,7 +14,7 @@ public class ShopManager : MonoBehaviour
 {
     public Canvas mainCanvas;
     public int day;
-
+    
     public bool isShopOpen = false;
     public static ShopManager instance { get; private set; }
     public StocksController stocksController;

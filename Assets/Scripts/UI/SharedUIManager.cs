@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -42,17 +41,19 @@ public class SharedUIManager : MonoBehaviour
 
     public void OpenMenu(IUIMenu menu)
     {
+        print($"Opening Menu: {menu}");
         if (currentMenu != null) currentMenu.SetOpenState(false);
         
         currentMenu = menu;
         currentMenu.SetOpenState(true);
 
-        playerInput.SwitchCurrentActionMap("InventoryActions");
+        playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void CloseMenu()
     {
+        print($"Closing all menus");
         if (currentMenu != null)
         {
             currentMenu.SetOpenState(false);

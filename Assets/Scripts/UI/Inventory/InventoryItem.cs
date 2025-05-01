@@ -99,7 +99,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
                 FindAnyObjectByType<InventoryController>().RemoveItemFromInventory(this)
             );
 
-            FindAnyObjectByType<PlayerController>().openInventory();
+            SharedUIManager.instance.CloseMenu();
         }
     }
 }

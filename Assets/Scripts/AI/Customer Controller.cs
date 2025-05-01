@@ -16,9 +16,6 @@ public class CustomerController : MonoBehaviour
     /// <summary>THe Timer before the Next Customer is spawned in</summary>
     private float spawnTimer;
 
-    /// <summary>Represents wether the shop is open</summary>
-    private bool _shopOpen;
-
     /// <summary>The Max number of Customers allowed to be spawned</summary>
     [SerializeField] private int maxCustomers;
     /// <summary>The Min Spawn Time for the Customers</summary>
@@ -32,7 +29,7 @@ public class CustomerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_shopOpen)
+        if (ShopManager.instance.isShopOpen)
         {
             if(customerCount < maxCustomers && spawnTimer <= 0)
             {
@@ -77,22 +74,6 @@ public class CustomerController : MonoBehaviour
     {
         return customerDeaths[Random.Range(0, customerDeaths.Length)].position;
     }
-
-    /// <summary>
-    /// Opens the Shop allowing Customers to enter
-    /// </summary>
-    public void OpenShop()
-    {
-        _shopOpen = true;
-    }
-
-    /// <summary>
-    /// Closes the Shop meaning Customers can't enter
-    /// </summary>
-    public void CloseShop()
-    {
-        _shopOpen = false;
-    }
     #endregion
 
 #if UNITY_EDITOR
@@ -109,10 +90,4 @@ public class CustomerController : MonoBehaviour
         }
     }
 #endif
-
-    [InspectorButton("OpenShop")]
-    public bool Open_Shop;
-
-    [InspectorButton("CloseShop")]
-    public bool Close_Shop;
 }

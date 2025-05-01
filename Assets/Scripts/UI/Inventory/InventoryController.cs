@@ -22,6 +22,21 @@ public class InventoryController : MonoBehaviour, IUIMenu
 
     private Vector2 mousePos;
 
+    public static InventoryController instance { get; private set; }
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(this);
+            Debug.LogError("Inventory controller instance already in scene");
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
     private void Update()
     {
         ItemIconDragEffect();

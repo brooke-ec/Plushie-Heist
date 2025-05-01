@@ -1002,8 +1002,10 @@ public class PlayerController : MonoBehaviour
 
     public void toggleInventory(InputAction.CallbackContext ctx)
     {
+        if (!ctx.performed) return;
+
         if (SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.CloseMenu();
-        else SharedUIManager.instance.OpenMenu(SharedUIManager.instance.GetComponent<InventoryController>());
+        else SharedUIManager.instance.OpenMenu(InventoryController.instance);
     }
 
     private void OnTriggerEnter(Collider other)
