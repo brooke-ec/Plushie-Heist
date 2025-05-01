@@ -16,7 +16,7 @@ public class TillQueue : MonoBehaviour, IInteractable
     private Vector3 queueFront => transform.position + queueOffset;
 
     public bool interactable => customerQueue.Count > 0 && customerQueue.Peek().finishedWalking;
-    public string interactionPrompt => interactable ? "Press F to Serve Customer" : "No Customers to Serve";
+    public string interactionPrompt => customerQueue.Count > 0 ? customerQueue.Peek().finishedWalking ? "Press F to Serve Customer" : "Waiting for Customer" : "No Customers to Serve";
 
     /// <summary>
     /// Adds a customer to the queue
