@@ -1,20 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField] private SpawnablePropList Props;
     
     private void Start()
     {
-        if (Props.Props.Length < 1) { return; }
-        int propNo = Random.Range(0, Props.Props.Length);
-        if (Props.Props[propNo] == null) { return; }
-        Instantiate(Props.Props[propNo], GetComponentInParent<Transform>());
+        if (Props.Props.Length > 1)
+        {
+            GameObject prop = Props.Props[Random.Range(0, Props.Props.Length)];
+            if (prop != null) Instantiate(prop, transform.position, transform.rotation, transform.parent);
+        }
+
         Destroy(gameObject);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         GameObject currentBiggest = Props.Props[0];
@@ -38,4 +40,5 @@ public class ObjectSpawner : MonoBehaviour
         mesh.RecalculateNormals();
         Gizmos.DrawWireMesh(mesh,pos,transform.rotation);
     }
+#endif
 }
