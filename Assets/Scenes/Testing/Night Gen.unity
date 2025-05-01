@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 1291487895}
   - component: {fileID: 1291487894}
   - component: {fileID: 1291487896}
+  - component: {fileID: 1291487897}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -216,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6a0483b0c7c7e4c871d867a9a6b4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 15, y: 15}
+  size: {x: 10, y: 10}
   roomGenerator:
     seedDistance: 2
     growAmount: 4
@@ -225,7 +226,7 @@ MonoBehaviour:
   pathGenerator:
     sideRoomChance: 0.5
     collapseChance: 0.5
-    corridorWidth: 2
+    corridorWidth: 1
   tileGenerator:
     <tileSize>k__BackingField: 10
     startTile: {fileID: 4416034635028186133, guid: 6df9c615d04bbfb2484394ee7b5b726c, type: 3}
@@ -276,6 +277,23 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
+--- !u!114 &1291487897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291487893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd2daef8a7ed8d4f866e9fa2ec547b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnMin: 5
+  spawnMax: 10
+  GunGaurdRatio: 0.5
+  Guard: {fileID: 8138492032870576743, guid: b7c26b3b5cb5f624d83d729900d52f95, type: 3}
+  GunGuard: {fileID: 4629906238832381574, guid: 947f3a9e528505f4981e15ba516cca32, type: 3}
 --- !u!1001 &1865829836
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -286,7 +304,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -65.125
+      value: -42.4375
       objectReference: {fileID: 0}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -294,7 +312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -65.875
+      value: -42.9375
       objectReference: {fileID: 0}
     - target: {fileID: 859627439615050953, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_LocalRotation.w
