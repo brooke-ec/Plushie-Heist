@@ -706,15 +706,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e280bc57ee84eda40b27dfaf427a8a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bossBehaviour: 0
-  _player: {fileID: 2042054990}
+  _bossBehaviour: 2
   _moveSpeed: 10
   _maxSpeed: 50
-  _circleDistance: 20
+  _circleCloseDistance: 20
+  _circleBandWidth: 4
+  _circleSpeed: 4
+  _circleMaxSpeed: 9
   intensity: 0.5
   frequency: 1
   _ramSpeed: 50
   _ramDelay: 2.22
+  _player: {fileID: 2042054990}
 --- !u!1 &967724052
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,7 +727,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 967724053}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Arena
   m_TagString: Untagged
   m_Icon: {fileID: 0}

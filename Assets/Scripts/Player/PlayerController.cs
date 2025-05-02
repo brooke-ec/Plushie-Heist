@@ -194,6 +194,11 @@ public class PlayerController : MonoBehaviour
 
     private bool inventoryOpen;
 
+    /// <summary>Has the player entered a bouncePad</summary>
+    private bool _isBouncing;
+
+    /// <summary>The direction that the bounce pad will launch the player in</summary>
+    private Vector3 _BouncePadWishVel;
     #endregion
 
     #region Public Fields
@@ -274,6 +279,12 @@ public class PlayerController : MonoBehaviour
         GrappleCooldown();
         Boost();
         DashCooldowns();
+
+        if(_isBouncing)
+        {
+            _isBouncing = false;
+            velocity += _BouncePadWishVel;
+        }
 
         //actuall move the player
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
@@ -941,16 +952,12 @@ public class PlayerController : MonoBehaviour
 
     private void BouncePad(GameObject theHazard)
     {
-        //Debug.Log("Bounce Pad Function");
-
+        _isBouncing = true;
+        
         Vector3 BouncePadDirection = theHazard.GetComponent<BouncePads>().getDirection();
         float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
 
-        Vector3 BouncePadWishVel = BouncePadDirection * BouncePadStrength;
-        //velocity = Vector3.zero;
-        Debug.Log("Velocity 1 : " + velocity);
-        velocity += BouncePadWishVel;
-        Debug.Log("Velocity 2 : " + velocity);
+        _BouncePadWishVel = BouncePadDirection * BouncePadStrength;
     }
     #endregion
 
