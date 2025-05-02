@@ -6,34 +6,27 @@ public class TileCuller : MonoBehaviour
     private State[,,,] workingMatrix;
     private LevelTile[] tiles;
 
-    private LevelGenerator levelGenerator;
+    private TileGenerator tileGenerator;
     private Transform player;
 
     void Start()
     {
         player = FindAnyObjectByType<PlayerController>().transform;
-        levelGenerator = GetComponent<LevelGenerator>();
+        tileGenerator = GetComponent<LevelGenerator>().tileGenerator;
     }
 
     void Update()
     {
         Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(player.position));
-        tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
         print(position);
+        tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
     }
 
     public Vector2 FromWorldspace(Vector3 point)
     {
         Vector3 local = transform.InverseTransformPoint(point);
-        return FromLocalspace(local);
-    }
-
-    public Vector2 FromLocalspace(Vector3 point)
-    {
-        return new Vector2(
-            (point.x + levelGenerator.tileGenerator.physicalSize.x * .5f) / levelGenerator.tileGenerator.tileSize,
-            (point.y + levelGenerator.tileGenerator.physicalSize.x * .5f) / levelGenerator.tileGenerator.tileSize
-        );
+        Vector3 grid = (local + tileGenerator.physicalOffset) / tileGenerator.tileSize;
+        return new Vector2(grid.x, grid.z) + Vector2.one * .5f;
     }
 
     public void Setup(bool[,] spaces, LevelTile[] tiles)

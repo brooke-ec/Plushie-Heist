@@ -8,7 +8,7 @@ public class TileGenerator
     [SerializeField] private LevelTile startTile;
     [SerializeField] private LevelTile endTile;
     
-    public Vector3 physicalSize => new Vector3(size.x - 1, 0, size.y - 1) * tileSize;
+    public Vector3 physicalOffset => new Vector3(size.x, 0, size.y) * tileSize * .5f;
 
     private Dictionary<Vector2Int, TilePlacement> grid = new Dictionary<Vector2Int, TilePlacement>();
     private Queue<Vector2Int> toPlace = new Queue<Vector2Int>();
@@ -63,7 +63,7 @@ public class TileGenerator
     private void PlaceTile(TilePlacement placement)
     {
         grid[placement.position] = placement;
-        Vector3 position = new Vector3(placement.position.x - .5f, 0, placement.position.y - .5f) * tileSize - physicalSize / 2;
+        Vector3 position = new Vector3(placement.position.x, 0, placement.position.y) * tileSize - physicalOffset;
         LevelTile tile = GameObject.Instantiate(placement.tile, position, placement.quaternion, parent);
         tile.position = placement.position;
         tiles.Add(tile);
