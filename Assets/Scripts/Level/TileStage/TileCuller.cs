@@ -18,7 +18,6 @@ public class TileCuller : MonoBehaviour
     void Update()
     {
         Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(player.position));
-        print(position);
         tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
     }
 
