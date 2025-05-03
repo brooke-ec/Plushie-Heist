@@ -45,7 +45,7 @@ public class BoostSkill : Skill
                 break;
             case SkillType.ShopInventorySize:
                 //Something like
-                //FindAnyObjectByType<InventoryController>().selectedInventoryGrid.ModifyInventorySize();
+                FindAnyObjectByType<InventoryController>().inventoryGridToAddItems.ModifyInventorySize((int)modifier);
                 break;
             case SkillType.ShopCustomerSpawnRate:
                 break;

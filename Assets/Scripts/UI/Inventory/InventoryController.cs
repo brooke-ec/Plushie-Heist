@@ -1,23 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
 {
     public GameObject itemPrefab;
+
     /// <summary> The current grid being used to pick up and place items. This is set to null when you click outside of an inventory grid </summary>
     [HideInInspector] public InventoryGrid selectedInventoryGrid;
+
     /// <summary> The current grid being used to add items EVEN WHEN NOT CURRENTLY VISUALLY ACTIVE. </summary>
     public InventoryGrid inventoryGridToAddItems;
+    /// <summary> The grid for the backpack inventory </summary>
+    public InventoryGrid backpackGrid;
+
     [HideInInspector] public InventoryItem selectedItem;
 
     private RectTransform selectedItemRectTransform;
-
     private InventoryItem overlapItem;
-
     private Vector2 mousePos;
 
     private void Update()
