@@ -11,6 +11,8 @@ public class MovementUIManager : MonoBehaviour
     [SerializeField] private Transform abilitiesTransform;
     private Dictionary<Ability, AbilityCooldown> abilities = new Dictionary<Ability, AbilityCooldown>();
 
+    private List<Ability> currentlyLearnedAbilities = new List<Ability>();
+
     [Header("Prefab References")]
     [SerializeField] private GameObject abilityCooldownTimerPrefab;
 
@@ -64,6 +66,14 @@ public class MovementUIManager : MonoBehaviour
         glide.icon.sprite = glideIcon;
     }
 
+    internal void LearnAbility(Ability ability)
+    {
+        if(!currentlyLearnedAbilities.Contains(ability))
+        {
+            currentlyLearnedAbilities.Add(ability);
+        }
+    }
+
     public void UpdateStaminaBar(float stamina, float maxStamina)
     {
         staminaBar.SetStamina(stamina / maxStamina);
@@ -108,6 +118,7 @@ public class MovementUIManager : MonoBehaviour
 
     internal void UpdateAbilityCooldown(Ability ability, float cooldown, float maxCooldownVal)
     {
+        if (!currentlyLearnedAbilities.Contains(ability)) return;
 
         if (abilities.ContainsKey(ability))
         {
@@ -115,12 +126,21 @@ public class MovementUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets abilities info of ONLY LEARNT ABILITIES
+    /// </summary>
+    /// <returns></returns>
     internal List<(Ability, string, Sprite)> GetAllAbilitiesInfo()
     {
+        //TO-DO-SAVING SAVE CURRENTLYLEARNEDABILITIES IN BETWEEN SCENES
+
         List<(Ability, string, Sprite)> abilitiesInfo = new List<(Ability, string, Sprite)>();
         foreach(Ability ability in abilities.Keys)
         {
-            abilitiesInfo.Add(GetAbilityInfo(ability));
+            if (currentlyLearnedAbilities.Contains(ability))
+            {
+                abilitiesInfo.Add(GetAbilityInfo(ability));
+            }
         }
         return abilitiesInfo;
     }

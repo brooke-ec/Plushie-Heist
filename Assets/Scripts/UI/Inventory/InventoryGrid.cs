@@ -155,6 +155,24 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return false;
     }
 
+    /// <summary>
+    /// Gets the first instance of this item type in the inventory if exists, null otherwise
+    /// </summary>
+    public InventoryItem GetFirstItemType(ItemClass itemClass)
+    {
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                if (inventorySlots[x, y] != null && itemClass.Equals(inventorySlots[x, y].itemClass))
+                {
+                    return inventorySlots[x, y];
+                }
+            }
+        }
+        return null;
+    }
+
 
     /// <summary> cleans grid area of where the item used to be </summary>
     public void CleanGridReference(InventoryItem item)

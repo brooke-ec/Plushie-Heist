@@ -31,11 +31,36 @@ public class BoostSkill : Skill
         {
             case SkillType.PlayerBackpackSize:
                 break;
+            case SkillType.PlayerItemLostPercent:
+                break;
+            case SkillType.PlayerExtraTime:
+                break;
+            case SkillType.PlayerExtraDash:
+                break;
+            case SkillType.PlayerExtraJump:
+                break;
+            case SkillType.PlayerExtraBoost:
+                break;
+            case SkillType.ShopExtraTime:
+                break;
             case SkillType.ShopInventorySize:
                 //Something like
                 //FindAnyObjectByType<InventoryController>().selectedInventoryGrid.ModifyInventorySize();
                 break;
+            case SkillType.ShopCustomerSpawnRate:
+                break;
+            case SkillType.ShopCustomerTips:
+                break;
+            case SkillType.ShopHigherPrices:
+                break;
+            case SkillType.ShopImpulseBuyers:
+                break;
+            case SkillType.ShopMarketStability:
+                break;
+            case SkillType.ShopExpansion:
+                break;
             default:
+                Debug.Log("Error in boost skill type");
                 break;
         }
     }

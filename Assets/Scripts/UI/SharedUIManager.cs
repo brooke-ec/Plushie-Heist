@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -29,7 +30,12 @@ public class SharedUIManager : MonoBehaviour
     private void Start()
     {
         scaleFactor = rootCanvas.scaleFactor;
-        gridToStart.StartInventory();
+        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach(InventoryGrid grid in allGrids)
+        {
+            grid.StartInventory();
+        }
+        //gridToStart.StartInventory();
 
         GetComponent<InventoryController>().PlaceTestItems();
     }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
 public class InventoryController : MonoBehaviour
@@ -123,6 +124,22 @@ public class InventoryController : MonoBehaviour
         Destroy(item.gameObject);
     }
 
+    /// <summary>
+    /// Call to remove the first instance of the item type in the inventory if exists
+    /// </summary>
+    /// <param name="itemCLass"></param>
+    /// <returns>True if exists and was removed, false otherwise</returns>
+    public bool RemoveAnItemTypeFromInventory(ItemClass itemClass)
+    {
+        InventoryItem removedItem = inventoryGridToAddItems.GetFirstItemType(itemClass);
+        if(removedItem != null)
+        {
+            RemoveItemFromInventory(removedItem);
+            return true;
+        }
+        return false;
+    }
+
     /// <summary> Left click </summary>
     private void PickUpOrPlaceItem()
     {
@@ -196,7 +213,6 @@ public class InventoryController : MonoBehaviour
     }
     #endregion
 
-    //MISSING DRAGGING INSTEAD OF CLICK TO-DO
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)
     {
@@ -222,4 +238,3 @@ public class InventoryController : MonoBehaviour
 
     #endregion
 }
-//MISSING DRAGGING INSTEAD OF CLICK TO-DO
