@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 /// <summary> Controls a single inventory grid functionality </summary>
@@ -342,6 +343,34 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public InventoryItem[,] GetInventorySlots()
     {
         return inventorySlots;
+    }
+
+    public void CreateItemInteractionMenu(InventoryItem item)
+    {
+        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
+        Vector3 mousePos = Input.mousePosition;
+
+        InventoryController controller = FindAnyObjectByType<InventoryController>();
+
+        bool isBackpack = controller.backpackGrid.Equals(this);
+        List<string> actionTitles = new List<string>();
+        List<UnityAction> actions = new List<UnityAction>();
+
+        actionTitles.Add("Place item");
+        actionTitles.Add("Discard item");
+
+        //TO-DO whatever is called to place an item
+        //actions.Add(METHOD) but temporarily:
+        actions.Add(() => print("missing placing item method"));
+        actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
+
+        if (isBackpack)
+        {
+            actionTitles.Add("Try add to storage");
+            actions.Add(() => controller.AddItemFromBackpackToStorage(item));
+        }
+
+        FindAnyObjectByType<HoveringManager>().CreateInventoryTooltip(actionTitles, actions, mousePos);
     }
 
     #endregion

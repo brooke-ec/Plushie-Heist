@@ -1,12 +1,18 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class HoveringManager : MonoBehaviour
 {
     public GameObject tooltipPrefab;
+    public GameObject inventoryTooltipPrefab;
+    public GameObject inventoryTooltipInteractionPrefab;
 
     public static GameObject currentTooltipOpen;
+    public static GameObject currentInventoryTooltipOpen;
+
     private Transform canvasTransform;
     public Vector3 offset = Vector3.one;
 
@@ -48,6 +54,36 @@ public class HoveringManager : MonoBehaviour
     private void CalculateOffset()
     {
         offset = new Vector3((Screen.width / offset.x), (Screen.height / offset.y), 0);
+    }
+
+    /// <summary>
+    /// Call to create an inventory tooltip
+    /// </summary>
+    /// <param name="actionTitles">Titles of all the interactions</param>
+    /// <param name="actions">Actions of all the interactions</param>
+    /// <param name="screenPosition">Mouse pos</param>
+    public void CreateInventoryTooltip(List<string> actionTitles, List<UnityAction> actions, Vector3 screenPosition)
+    {
+        if(currentTooltipOpen!=null)
+        {
+            Destroy(currentTooltipOpen);
+        }
+
+        currentTooltipOpen = Instantiate(inventoryTooltipPrefab, canvasTransform);
+        currentTooltipOpen.transform.position = screenPosition - offset;
+
+        Transform container = currentTooltipOpen.transform.GetChild(0);
+
+        actionTitles.Add("Close");
+        actions.Add(() => Destroy(currentTooltipOpen));
+        for (int i=0; i<actionTitles.Count; i++)
+        {
+            Button action = Instantiate(inventoryTooltipInteractionPrefab, container).GetComponent<Button>();
+            action.onClick.AddListener(actions[i]);
+            action.onClick.AddListener(()=>Destroy(currentTooltipOpen));
+            action.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = actionTitles[i];
+        }
+
     }
 
     public void CreateBaseTooltip(string title, Color32 titleColour, string description, Vector3 screenPosition, TooltipCost tooltipCost = TooltipCost.none, string tooltipCostText = null, TooltipBackgroundColor tooltipColour = TooltipBackgroundColor.noChanges)

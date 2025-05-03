@@ -205,6 +205,12 @@ public class InventoryController : MonoBehaviour
         {
             //Then remove from the backpack grid
             RemoveItemFromInventory(backpackItem, true);
+            //Call here because removing item might do the whole stock stuff
+
+            if (ShopManager.instance != null)
+            {
+                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(backpackItem.itemClass);
+            }
         }
         return insertedItem;
     }
@@ -282,6 +288,7 @@ public class InventoryController : MonoBehaviour
 
     public void getMousePos(InputAction.CallbackContext ctx)
     {
+        print("getting mouse pos");
         mousePos = ctx.ReadValue<Vector2>();
     }
 

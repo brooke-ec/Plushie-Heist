@@ -91,6 +91,8 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             print("use");
+
+            GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
             //TO-DO
             //there is a prefab with a button component for the tooltip
         }
