@@ -122,17 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &355778953 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5990156539646860282, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
-  m_PrefabInstance: {fileID: 4326370669524279235}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f3a943145e247b468018222b0acedce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &363367198
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +216,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &762485235 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1298857052918043814, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
+  m_PrefabInstance: {fileID: 713786968259540473}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f3a943145e247b468018222b0acedce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &894829844 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 2366746433102227669, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
@@ -499,17 +499,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1944849495 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1074089012343155629, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
-  m_PrefabInstance: {fileID: 713786968259540473}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b6cbbefc45bcc419bf947db776018c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &713786968259540473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -565,7 +554,7 @@ PrefabInstance:
     - target: {fileID: 1074089012343155629, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
       propertyPath: inventoryGridToAddItems
       value: 
-      objectReference: {fileID: 355778953}
+      objectReference: {fileID: 0}
     - target: {fileID: 5267792166453474624, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
       propertyPath: rootCanvas
       value: 
@@ -573,7 +562,11 @@ PrefabInstance:
     - target: {fileID: 5267792166453474624, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
       propertyPath: gridToStart
       value: 
-      objectReference: {fileID: 355778953}
+      objectReference: {fileID: 0}
+    - target: {fileID: 6909618013825530658, guid: ad41bbc26413a6a4baa270b53e6fab29, type: 3}
+      propertyPath: inventoryGridToAddItems
+      value: 
+      objectReference: {fileID: 762485235}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -630,7 +623,7 @@ PrefabInstance:
     - target: {fileID: 4178692415714337163, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1944849495}
+      objectReference: {fileID: 0}
     - target: {fileID: 7449689605716480821, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
       propertyPath: m_Name
       value: NightManagerAndUI

@@ -33,9 +33,15 @@ public class ChooseAnAbilityUI : MonoBehaviour
             abilities.Add((info.Item1, info.Item2, abilityContainer));
         }
 
-        SelectAbility(abilities[0].Item1);
-
-        button.onClick.AddListener(() => CloseChooseAbilityUI());
+        if (allAbilitiesInfo.Count != 0)
+        {
+            SelectAbility(abilities[0].Item1);
+            button.onClick.AddListener(() => CloseChooseAbilityUI());
+        }
+        else
+        {
+            CloseChooseAbilityUI();
+        }
     }
 
     internal void SelectAbility(Ability ability)

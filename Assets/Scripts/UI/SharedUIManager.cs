@@ -38,7 +38,7 @@ public class SharedUIManager : MonoBehaviour
             //if nighttime
             //then turn off button of add items to storage
             //canvas, backpack, last child (button)
-            transform.GetChild(0).GetChild(0).GetChild(3).gameObject.SetActive(false);
+            rootCanvas.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
         }
 
         GetComponent<InventoryController>().PlaceTestItems();
