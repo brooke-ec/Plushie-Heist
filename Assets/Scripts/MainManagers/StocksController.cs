@@ -16,6 +16,11 @@ public class StocksController : MonoBehaviour
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
+    [Range(0, 1)]
+    public float maxPercentOfItemsToChange = 0.5f;
+    [Range(0, 1)]
+    public float minPercentOfItemsToChange = 0.2f;
+
     #region Setup
     private void Awake()
     {
@@ -72,8 +77,8 @@ public class StocksController : MonoBehaviour
         /*int minNumOfChanges = 1;
         int maxNumOfChanges = 3;*/
 
-        int minNumOfChanges = allStocksInGame.Count / 10;
-        int maxNumOfChanges = allStocksInGame.Count / 4;
+        int minNumOfChanges = (int) (allStocksInGame.Count * maxPercentOfItemsToChange);
+        int maxNumOfChanges = (int) (allStocksInGame.Count * minPercentOfItemsToChange);
         int numOfChanges = UnityEngine.Random.Range(minNumOfChanges, maxNumOfChanges + 1);
 
         //shuffle list of items

@@ -30,6 +30,8 @@ public class NightManager : MonoBehaviour
     /// In % form (E.g: 20 for 20%)
     /// </summary>
     public int itemLosePercentage;
+    public float extraTimeInMins = 0;
+
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
@@ -55,7 +57,7 @@ public class NightManager : MonoBehaviour
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
         nightTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
-        nightTimer.SetupClock(false);
+        nightTimer.SetupClock(false, extraTimeInMins);
 
         //start clock
         nightTimer.StartCoroutine(nightTimer.StartClock());

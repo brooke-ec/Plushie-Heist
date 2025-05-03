@@ -39,8 +39,10 @@ public class Clock : MonoBehaviour
         return timeMultiplier;
     }
 
-    public void SetupClock(bool isShopClock)
+    public void SetupClock(bool isShopClock, float extraTimeInMins = 0)
     {
+        lengthOfDayInRealMins += extraTimeInMins;
+
         this.isShopClock = isShopClock;
         if (isShopClock)
         {

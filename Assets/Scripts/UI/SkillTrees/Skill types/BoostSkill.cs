@@ -27,37 +27,55 @@ public class BoostSkill : Skill
 
     public override void Unlock()
     {
+        bool isNight = NightManager.instance != null;
+
         switch (skillType)
         {
             case SkillType.PlayerBackpackSize:
+                FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);
                 break;
             case SkillType.PlayerItemLostPercent:
+                if (isNight) { NightManager.instance.itemLosePercentage -= (int)modifier; }
                 break;
             case SkillType.PlayerExtraTime:
+                if (isNight) { NightManager.instance.extraTimeInMins += modifier; }
                 break;
             case SkillType.PlayerExtraDash:
+                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("dash", modifier);
                 break;
             case SkillType.PlayerExtraJump:
+                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("jump", modifier);
                 break;
             case SkillType.PlayerExtraBoost:
+                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("boost", modifier);
                 break;
             case SkillType.ShopExtraTime:
+                if (!isNight) { ShopManager.instance.extraTimeInMins += modifier; }
                 break;
             case SkillType.ShopInventorySize:
                 //Something like
-                FindAnyObjectByType<InventoryController>().inventoryGridToAddItems.ModifyInventorySize((int)modifier);
+                if (!isNight) { FindAnyObjectByType<InventoryController>().inventoryGridToAddItems.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
+                if (!isNight) { } //TO-DO * CUSTOMER SPAWN RATE
                 break;
             case SkillType.ShopCustomerTips:
+                if (!isNight) { } //TO-DO * AVERAGE TIPS (have a tips variable set to 1)
                 break;
             case SkillType.ShopHigherPrices:
+                if (!isNight) { } //TO-DO * AVERAGE PRICE RANGE THAT CUSTOMERS WILL BUY
                 break;
             case SkillType.ShopImpulseBuyers:
+                if (!isNight) { } //TO-DO * AVERAGE NUM OF ITEMS THAT CUSTOMERS BUY
                 break;
             case SkillType.ShopMarketStability:
+                if (!isNight) {
+                    ShopManager.instance.stocksController.maxPercentOfItemsToChange -= 0.2f;
+                    ShopManager.instance.stocksController.minPercentOfItemsToChange -= 0.2f;
+                }
                 break;
             case SkillType.ShopExpansion:
+                if (!isNight) { } //TO-DO-SAVING
                 break;
             default:
                 Debug.Log("Error in boost skill type");

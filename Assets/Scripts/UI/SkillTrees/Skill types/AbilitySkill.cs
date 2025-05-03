@@ -29,7 +29,7 @@ public class AbilitySkill : Skill
                 MovementUIManager.instance.LearnAbility(Ability.Boost);
                 break;
             case AbilityToUnlock.PlayerWallRunning:
-                    //NOT SURE BECAUSE IT'S WALL RUNNING
+                    //TO-DO NOT SURE BECAUSE IT'S WALL RUNNING
                     //MovementUIManager.instance.LearnAbility(); ?
                 break;
             case AbilityToUnlock.PlayerGrapple:
@@ -40,6 +40,7 @@ public class AbilitySkill : Skill
                 break;
             case AbilityToUnlock.PlayerSecondChance:
                 //TO-DO SOME VARIABLE WHEN CAUGHT WITH GUARDS?
+                //TP YOU TO THE START OF THE IKEA?
                 break;
             case AbilityToUnlock.ShopAutomaticItemRestocking:
                 //TO-DO AFTER PICKING UP ITEM, IF VARIABLE IS TRUE
