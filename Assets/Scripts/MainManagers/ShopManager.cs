@@ -38,7 +38,7 @@ public class ShopManager : MonoBehaviour
 
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
-        shopTimer.SetupClock(true, extraTimeInMins);
+        shopTimer.SetupClock(true);
         StartNewDay();
     }
 
@@ -47,7 +47,6 @@ public class ShopManager : MonoBehaviour
     #region Time
 
     [SerializeField] private Clock shopTimerPrefab;
-    public float extraTimeInMins = 0;
     private Clock shopTimer;
     [HideInInspector] public OpenOrCloseShopButton openOrCloseShopButton;
     private void StartNewDay()
@@ -95,6 +94,14 @@ public class ShopManager : MonoBehaviour
     public void SetPriceOfItem(ItemClass item)
     {
         stocksController.CreateSetPricingUI(item);
+    }
+
+    public void UpdateClockTime(float extraTimeInMins)
+    {
+        if(!isShopOpen)
+        {
+            shopTimer.UpdateClockTime(extraTimeInMins);
+        }
     }
     #endregion
 

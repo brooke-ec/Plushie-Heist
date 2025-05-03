@@ -38,19 +38,20 @@ public class BoostSkill : Skill
                 if (isNight) { NightManager.instance.itemLosePercentage -= (int)modifier; }
                 break;
             case SkillType.PlayerExtraTime:
-                if (isNight) { NightManager.instance.extraTimeInMins += modifier; }
+                if (isNight) { NightManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.PlayerExtraDash:
-                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("dash", modifier);
+                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("dash", modifier); }
                 break;
             case SkillType.PlayerExtraJump:
-                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("jump", modifier);
+                PlayerController playerController = FindAnyObjectByType<PlayerController>();
+                if (playerController != null) { playerController.ModifyAbilityValue("jump", modifier); }
                 break;
             case SkillType.PlayerExtraBoost:
-                FindAnyObjectByType<PlayerController>().ModifyAbilityValue("boost", modifier);
+                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("boost", modifier); }
                 break;
             case SkillType.ShopExtraTime:
-                if (!isNight) { ShopManager.instance.extraTimeInMins += modifier; }
+                if (!isNight) { ShopManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.ShopInventorySize:
                 //Something like

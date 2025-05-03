@@ -20,34 +20,39 @@ public class AbilitySkill : Skill
 
     public override void Unlock()
     {
+        bool isNight = NightManager.instance != null;
+
         switch (abilityToUnlock)
         {
             case AbilityToUnlock.PlayerDash:
-                MovementUIManager.instance.LearnAbility(Ability.Dash);
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Dash); }
                 break;
             case AbilityToUnlock.PlayerBoost:
-                MovementUIManager.instance.LearnAbility(Ability.Boost);
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Boost); }
                 break;
             case AbilityToUnlock.PlayerWallRunning:
-                    //TO-DO NOT SURE BECAUSE IT'S WALL RUNNING
-                    //MovementUIManager.instance.LearnAbility(); ?
+                if (isNight) { }
+                //TO-DO NOT SURE BECAUSE IT'S WALL RUNNING
+                //MovementUIManager.instance.LearnAbility(); ?
                 break;
             case AbilityToUnlock.PlayerGrapple:
-                MovementUIManager.instance.LearnAbility(Ability.Grapple);
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Grapple); }
                 break;
             case AbilityToUnlock.PlayerGlide:
-                MovementUIManager.instance.LearnAbility(Ability.Glide);
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Glide); }
                 break;
             case AbilityToUnlock.PlayerSecondChance:
+                if (isNight) { }
                 //TO-DO SOME VARIABLE WHEN CAUGHT WITH GUARDS?
                 //TP YOU TO THE START OF THE IKEA?
                 break;
             case AbilityToUnlock.ShopAutomaticItemRestocking:
+                if (!isNight) { }
                 //TO-DO AFTER PICKING UP ITEM, IF VARIABLE IS TRUE
                 //then checking
                 //basically IF VARIABLE IS TRUE
-                    //bool removed = FindAnyObjectByType<InventoryController>().RemoveAnItemTypeFromInventory(itemClassPassed)
-                    //place item again in the same place/shelf
+                //bool removed = FindAnyObjectByType<InventoryController>().RemoveAnItemTypeFromInventory(itemClassPassed)
+                //place item again in the same place/shelf
                 break;
             default:
                 break;
