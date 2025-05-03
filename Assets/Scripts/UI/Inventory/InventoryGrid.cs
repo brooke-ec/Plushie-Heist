@@ -339,6 +339,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         print("added " + addedRowModifier);
     }
 
+    public InventoryItem[,] GetInventorySlots()
+    {
+        return inventorySlots;
+    }
+
     #endregion
 
     #region Test

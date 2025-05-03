@@ -10,9 +10,6 @@ public class SharedUIManager : MonoBehaviour
     public Canvas rootCanvas;
     [HideInInspector] public float scaleFactor;
 
-    [Header("Testing")]
-    [SerializeField] private InventoryGrid gridToStart;
-
     public static SharedUIManager instance { get; private set; }
 
     private void Awake()
@@ -35,7 +32,14 @@ public class SharedUIManager : MonoBehaviour
         {
             grid.StartInventory();
         }
-        //gridToStart.StartInventory();
+
+        if(NightManager.instance != null)
+        {
+            //if nighttime
+            //then turn off button of add items to storage
+            //canvas, backpack, last child (button)
+            transform.GetChild(0).GetChild(0).GetChild(3).gameObject.SetActive(false);
+        }
 
         GetComponent<InventoryController>().PlaceTestItems();
     }

@@ -31,6 +31,7 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     public void OpenOrCloseInventory()
     {
+        //TO-DO NOT SURE IF USED, NEED TO CHECK OTHER BRANCH
         Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
         inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
     }
@@ -59,21 +60,24 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
     /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
-    public bool InsertItem(ItemClass itemClassToInsert)
+    public bool InsertItem(ItemClass itemClassToInsert, bool fromBackpack=false)
     {
-        if (inventoryGridToAddItems == null) { return false; }
+        InventoryGrid gridToUse = inventoryGridToAddItems;
+        if (fromBackpack) { gridToUse = backpackGrid; }
+
+        if (gridToUse == null) { return false; }
 
         bool addedItemSuccessfully = false;
 
         //if the inventory grid was originally not active, add the item and then set it back off
-        bool gridWasOriginallyOff = !inventoryGridToAddItems.gameObject.activeSelf;
+        bool gridWasOriginallyOff = !gridToUse.gameObject.activeSelf;
 
         //Instantiate the item
         Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
         InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
         item.Set(itemClassToInsert);
 
-        Vector2Int? posOnGrid = inventoryGridToAddItems.FindSpaceForObject(item);
+        Vector2Int? posOnGrid = gridToUse.FindSpaceForObject(item);
         if (posOnGrid == null)
         {
             //no space on grid, so destroy item (it was used to see if there was enough space)
@@ -83,7 +87,7 @@ public class InventoryController : MonoBehaviour
         else
         {
             //space on grid, so place into position found
-            inventoryGridToAddItems.PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
+            gridToUse.PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
             addedItemSuccessfully = true;
             print("placed item");
         }
@@ -91,7 +95,7 @@ public class InventoryController : MonoBehaviour
         //set grid back off if originally not active
         if (gridWasOriginallyOff)
         {
-            inventoryGridToAddItems.gameObject.SetActive(false);
+            gridToUse.gameObject.SetActive(false);
         }
 
         if (addedItemSuccessfully)
@@ -111,13 +115,16 @@ public class InventoryController : MonoBehaviour
     /// For example, when you want to place it, calls this so the grid space is cleared (and potentially removed from the pricing table)
     /// </summary>
     /// <param name=""></param>
-    public void RemoveItemFromInventory(InventoryItem item)
+    public void RemoveItemFromInventory(InventoryItem item, bool fromBackpack=false)
     {
-        inventoryGridToAddItems.CleanGridReference(item);
+        InventoryGrid gridToUse = inventoryGridToAddItems;
+        if (fromBackpack) { gridToUse = backpackGrid; }
+
+        gridToUse.CleanGridReference(item);
         print("item removed from inventory");
 
         //see if there is another of this in the inventory, if there isn't then call try remove
-        if(!inventoryGridToAddItems.IsThisItemTypeInTheInventory(item.itemClass) && ShopManager.instance!=null)
+        if(!gridToUse.IsThisItemTypeInTheInventory(item.itemClass) && ShopManager.instance!=null)
         {
             ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.itemClass);
         }
@@ -130,9 +137,12 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemCLass"></param>
     /// <returns>True if exists and was removed, false otherwise</returns>
-    public bool RemoveAnItemTypeFromInventory(ItemClass itemClass)
+    public bool RemoveAnItemTypeFromInventory(ItemClass itemClass, bool fromBackpack=false)
     {
-        InventoryItem removedItem = inventoryGridToAddItems.GetFirstItemType(itemClass);
+        InventoryGrid gridToUse = inventoryGridToAddItems;
+        if(fromBackpack) { gridToUse = backpackGrid; }
+
+        InventoryItem removedItem = gridToUse.GetFirstItemType(itemClass);
         if(removedItem != null)
         {
             RemoveItemFromInventory(removedItem);
@@ -160,6 +170,43 @@ public class InventoryController : MonoBehaviour
         {
             PlaceItem(posOnGrid);
         }
+    }
+
+    #endregion
+
+    #region Backpack specific
+    /// <summary>
+    /// Adds as many items from the backpack as there is space in the storage grid
+    /// </summary>
+    public void AddItemsFromBackpackToStorage()
+    {
+        if(backpackGrid==null) { print("backpack grid is null"); return; }
+        if(backpackGrid.Equals(inventoryGridToAddItems)) { print("Backpack and storage are the same?? Error"); return; }
+
+        InventoryItem[,] backpackItems = backpackGrid.GetInventorySlots();
+        foreach(InventoryItem backpackItem in backpackItems)
+        {
+            if (backpackItem != null)
+            {
+                AddItemFromBackpackToStorage(backpackItem);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Call to try to add an item from backpack to storage
+    /// </summary>
+    /// <returns>True if added, false otherwise</returns>
+    public bool AddItemFromBackpackToStorage(InventoryItem backpackItem)
+    {
+        //insert in gridToAddItems
+        bool insertedItem = InsertItem(backpackItem.itemClass);
+        if (insertedItem)
+        {
+            //Then remove from the backpack grid
+            RemoveItemFromInventory(backpackItem, true);
+        }
+        return insertedItem;
     }
     #endregion
 
@@ -211,6 +258,8 @@ public class InventoryController : MonoBehaviour
         InsertItem(itemsToTest[1]);
 
         InsertItem(itemsToTest[0]);
+
+        InsertItem(itemsToTest[1], true);
     }
     #endregion
 
