@@ -32,6 +32,11 @@ public class Interactor : MonoBehaviour
     private Outline outline;
 
 
+    private void Start()
+    {
+        if (interactionText == null) enabled = false;
+    }
+
     private void Update()
     {
         // Get closest interactable in range
