@@ -59,7 +59,7 @@ public class TillQueue : MonoBehaviour, IInteractable
 
     public void PrimaryInteract(Interactor interactor)
     {
-        TillActivation();
+        if (outline) TillActivation();
     }
 
 #if UNITY_EDITOR
