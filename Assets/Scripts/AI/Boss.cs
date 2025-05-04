@@ -162,7 +162,7 @@ public class Boss : MonoBehaviour
                 Vector3 CollisionPosition = collision.gameObject.transform.position;
 
                 Vector3 CollisionNormal = collision.GetContact(0).normal;
-                Debug.Log(CollisionNormal);
+                //Debug.Log(CollisionNormal);
 
                 _flyDirection = RandomVector3(CollisionPosition, false);
                 //_bossBehaviour = BossBehaviour.Idle;
