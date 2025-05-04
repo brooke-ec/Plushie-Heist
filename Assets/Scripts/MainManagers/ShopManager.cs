@@ -62,6 +62,8 @@ public class ShopManager : MonoBehaviour
     {
         if(isShopOpen) { print("shop is open, cannot open"); return; }
 
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.bell);
+
         print("open ");
         isShopOpen = true;
         shopTimer.StartCoroutine(shopTimer.StartClock());
@@ -75,6 +77,7 @@ public class ShopManager : MonoBehaviour
     {
         if (!isShopOpen) { print("shop is not open, cannot close"); return; }
 
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.lowPitchBell);
         isShopOpen = false;
         shopTimer.OnTimeEnded(); //make sure it's ended
 

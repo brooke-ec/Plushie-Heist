@@ -97,7 +97,15 @@ public class AudioManager : MonoBehaviour
         bought,
         UIbrowserOpen,
         UIbrowserClose,
-        UIclick2
+        UIclick2,
+        unsuccessful,
+        successful,
+        bell,
+        coins,
+        lowPitchBell,
+        UIclick3,
+        backpackOpen,
+        backpackClose
     }
 
     #endregion
