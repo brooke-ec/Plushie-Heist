@@ -162,6 +162,7 @@ public class InventoryController : MonoBehaviour
         }
 
         Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(mousePos); //tile grid position
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (selectedItem == null)
         {
             PickUpItem(posOnGrid);
