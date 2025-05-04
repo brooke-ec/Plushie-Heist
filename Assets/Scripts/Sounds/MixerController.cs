@@ -1,16 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))]
 public class MixerController : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private string mixerGroupName;
+    [SerializeField] private AudioMixerGroup group;
+    private Slider slider;
 
-    public void SetVolume(float sliderValue)
+    private void Start()
     {
-        //converts slider value to log value of base 10
-        audioMixer.SetFloat(mixerGroupName, Mathf.Log10(sliderValue) * 20);
+        slider = GetComponent<Slider>();
+        slider.onValueChanged.AddListener(SetVolume);
+        slider.value = AudioManager.instance.GetVolume(group);
+    }
+
+    public void SetVolume(float linearValue)
+    {
+        AudioManager.instance.SetVolume(group, linearValue);
     }
 }
