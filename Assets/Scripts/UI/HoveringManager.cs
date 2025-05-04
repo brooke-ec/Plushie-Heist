@@ -24,6 +24,9 @@ public class HoveringManager : MonoBehaviour
     [SerializeField] private Sprite greyTooltipBackground;
     [SerializeField] private Sprite pinkTooltipBackground;
 
+    [SerializeField] private Sprite unlockedIcon;
+    [SerializeField] private Sprite lockedIcon;
+
     /// <summary> So that some things can cost stars, money, etc, depending on what we want </summary>
     public enum TooltipCost
     {
@@ -72,6 +75,7 @@ public class HoveringManager : MonoBehaviour
         for (int i=0; i<actionTitles.Count; i++)
         {
             Button action = Instantiate(inventoryTooltipInteractionPrefab, container).GetComponent<Button>();
+            action.onClick.AddListener(() => AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick));
             action.onClick.AddListener(actions[i]);
             action.onClick.AddListener(()=>Destroy(currentTooltipOpen));
             action.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = actionTitles[i];
@@ -79,7 +83,7 @@ public class HoveringManager : MonoBehaviour
 
     }
 
-    public void CreateBaseTooltip(string title, Color32 titleColour, string description, Vector3 screenPosition, TooltipCost tooltipCost = TooltipCost.none, string tooltipCostText = null, TooltipBackgroundColor tooltipColour = TooltipBackgroundColor.noChanges)
+    public void CreateBaseTooltip(string title, Color32 titleColour, string description, Vector3 screenPosition, TooltipCost tooltipCost = TooltipCost.none, string tooltipCostText = null, string lockedText=null, TooltipBackgroundColor tooltipColour = TooltipBackgroundColor.noChanges)
     {
         currentTooltipOpen = Instantiate(tooltipPrefab, tooltipsCanvas);
         currentTooltipOpen.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = title;
@@ -92,14 +96,26 @@ public class HoveringManager : MonoBehaviour
         }
         else
         {
-            currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltipCostText;
+            if(lockedText.StartsWith("Locked"))
+            {
+                currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = lockedIcon;
+            }
+            else
+            {
+                currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = unlockedIcon;
+            }
+            currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<Image>().color = titleColour;
+            currentTooltipOpen.transform.GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().color = titleColour;
+            currentTooltipOpen.transform.GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = lockedText;
+            currentTooltipOpen.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = tooltipCostText;
+
 
             //do colours and icons
             switch (tooltipCost)
             {
                 case TooltipCost.coins:
-                    currentTooltipOpen.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().color = coinTextColour;
-                    currentTooltipOpen.transform.GetChild(2).GetChild(1).GetComponent<Image>().sprite = coinIcon;
+                    currentTooltipOpen.transform.GetChild(2).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().color = coinTextColour;
+                    currentTooltipOpen.transform.GetChild(2).GetChild(2).GetChild(1).GetComponent<Image>().sprite = coinIcon;
                     break;
                 default:
                     break;

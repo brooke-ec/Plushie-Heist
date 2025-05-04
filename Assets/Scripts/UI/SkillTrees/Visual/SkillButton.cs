@@ -19,6 +19,7 @@ public class SkillButton : MonoBehaviour
     {
         HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
         Color32 textColour;
+        string lockedString = "Locked until plushie";
         if ((CanBeUnlocked() && IsBranchVisible()) | IsUnlocked())
         {
             tooltipBackgroundColor = skillTreeController.skillTree.palette.tooltipBackgroundColor;
@@ -29,7 +30,14 @@ public class SkillButton : MonoBehaviour
             tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.grey;
             textColour = skillTreeController.skillTree.palette.notUpgradedTextColour;
         }
-        tooltip.SetInfo(skill.skillName, textColour, skill.description, HoveringManager.TooltipCost.coins, skill.cost.ToString(), tooltipBackgroundColor);
+
+        if (IsBranchVisible())
+        {
+            lockedString = "Unlocked with plushie";
+        }
+
+
+        tooltip.SetInfo(skill.skillName, textColour, skill.description, HoveringManager.TooltipCost.coins, skill.cost.ToString(), lockedString, tooltipBackgroundColor);
     }
 
     public void SetUI(SkillTreeController skillTreeController)
@@ -65,10 +73,12 @@ public class SkillButton : MonoBehaviour
                     childNode.UpdateUI();
                 }
             }
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.coins);
             skill.Unlock();
         }
         else
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.error);
             Debug.Log("Cannot get skill " + skill.skillName);
         }
     }

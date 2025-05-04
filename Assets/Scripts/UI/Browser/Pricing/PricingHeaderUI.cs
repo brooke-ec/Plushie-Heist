@@ -22,6 +22,7 @@ public class PricingHeaderUI : MonoBehaviour
     /// </summary>
     public void StartSorting()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick3);
         FindAnyObjectByType<PricingTableManager>().SortByHeader(header);
     }
 

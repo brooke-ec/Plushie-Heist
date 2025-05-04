@@ -21,14 +21,16 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
     public HoveringManager.TooltipCost tooltipCostType = HoveringManager.TooltipCost.none;
     public HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
     public string tooltipCostText = null;
+    public string tooltipLockedText = null;
 
-    public void SetInfo(string title, Color32 titleColour, string description, HoveringManager.TooltipCost tooltipCostType, string tooltipCostText, HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges)
+    public void SetInfo(string title, Color32 titleColour, string description, HoveringManager.TooltipCost tooltipCostType, string tooltipCostText, string tooltipLockedText, HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges)
     {
         this.title = title;
         this.titleColour = titleColour;
         this.description = description;
         this.tooltipCostType = tooltipCostType;
         this.tooltipCostText = tooltipCostText;
+        this.tooltipLockedText = tooltipLockedText;
         this.tooltipBackgroundColor = tooltipBackgroundColor;
     }
 
@@ -41,7 +43,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
             if ((framesPassedSinceOver / 40f) >= 2 && HoveringManager.currentTooltipOpen == null)
             {
                 //you could check here for type of tooltip to create another tooltip type
-                FindAnyObjectByType<HoveringManager>().CreateBaseTooltip(title, titleColour, description, transform.position, tooltipCostType, tooltipCostText, tooltipBackgroundColor);
+                FindAnyObjectByType<HoveringManager>().CreateBaseTooltip(title, titleColour, description, transform.position, tooltipCostType, tooltipCostText, tooltipLockedText, tooltipBackgroundColor);
             }
             else
             {
@@ -53,7 +55,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick2);
         mouseOver = true;
         framesPassedSinceOver = 0;
         GetTooltipInfo?.Invoke(this);
