@@ -8,7 +8,7 @@ public class FurnitureItem : ScriptableObject
     /// <summary> The name of this item displayed on the stock UI </summary>
     public string itemName;
     /// <summary> The prefab representing this item </summary>
-    public FurnitureSource prefab;
+    public FurnitureController prefab;
     /// <summary> The base value of this item </summary>
     [field: SerializeField] public int marketPrice { get; private set; }
 

@@ -13,7 +13,7 @@ public class FurnitureGrid : MonoBehaviour
     
     private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
-    private List<GridFurniture> items = new List<GridFurniture>();
+    private List<FurnitureController> items = new List<FurnitureController>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;
@@ -66,7 +66,7 @@ public class FurnitureGrid : MonoBehaviour
         return items.Count == 0;
     }
 
-    public void AddItem(GridFurniture item)
+    public void AddItem(FurnitureController item)
     {
         items.Add(item);
         Regenerate();
@@ -74,7 +74,7 @@ public class FurnitureGrid : MonoBehaviour
         ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(item.item);
     }
 
-    public void RemoveItem(GridFurniture item)
+    public void RemoveItem(FurnitureController item)
     {
         items.Remove(item);
         Regenerate();
@@ -85,7 +85,7 @@ public class FurnitureGrid : MonoBehaviour
     public void Regenerate()
     {
         // Get all occupied positions
-        Vector2Int[] occupied = items.SelectMany(i => i.region.ToArray()).ToArray();
+        Vector2Int[] occupied = items.SelectMany(i => i.gridRegion.ToArray()).ToArray();
         mesh.SetColor(Color.green); // Reset grid mesh to green
         filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
     }
@@ -97,7 +97,7 @@ public class FurnitureGrid : MonoBehaviour
 
     public bool Intersects(Region region)
     {
-        return items.Any(i => (i.region).Intersect(region).hit);
+        return items.Any(i => (i.gridRegion).Intersect(region).hit);
     }
 
 #if UNITY_EDITOR

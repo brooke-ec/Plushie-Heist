@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Asset postprocessor for helping maintain references between <see cref="FurnitureItem"/> and <see cref="FurnitureSource"/>.
+/// Asset postprocessor for helping maintain references between <see cref="FurnitureItem"/> and <see cref="FurnitureController"/>.
 /// </summary>
 public class ItemHelper : AssetPostprocessor
 {
@@ -13,11 +13,11 @@ public class ItemHelper : AssetPostprocessor
         try
         {
             AssetDatabase.StartAssetEditing();
-            List<FurnitureSource> sources = new List<FurnitureSource>();
+            List<FurnitureController> sources = new List<FurnitureController>();
             importedAssets.Concat(movedAssets).Concat(movedFromAssetPaths).ForEach(path =>
             {
                 // If furniture prefab, defer processing until later
-                if (TryLoad(out GameObject prefab, path) && prefab.TryGetComponent(out FurnitureSource source)) sources.Add(source);
+                if (TryLoad(out GameObject prefab, path) && prefab.TryGetComponent(out FurnitureController source)) sources.Add(source);
                 else if (TryLoad(out FurnitureItem item, path)) ProcessFurnitureItem(item);
 
             });
@@ -30,7 +30,7 @@ public class ItemHelper : AssetPostprocessor
         }
     }
 
-    private static void ProcessFurnitureSource(FurnitureSource source)
+    private static void ProcessFurnitureSource(FurnitureController source)
     {
         // Create or link item asset
         if (source.item == null)

@@ -50,9 +50,9 @@ public class CustomerController : MonoBehaviour
     /// If None of the objects are chosen randomly then the list defaults to giving the first item in the contents list
     /// </summary>
     /// <returns>A list that is the Shopping List of the customer</returns>
-    public List<GridFurniture> ShoppingList()
+    public List<FurnitureController> ShoppingList()
     {
-        GridFurniture[] forSale = FindObjectsOfType<GridFurniture>()
+        FurnitureController[] forSale = FindObjectsOfType<FurnitureController>()
             .Where(i => i.selling).OrderBy(_ => Random.value).ToArray();
         return forSale.Take(Random.Range(1, 3)).ToList();
     }

@@ -13,7 +13,7 @@ public class FurniturePlacer : MonoBehaviour
     public static FurniturePlacer instance;
 
     private UnityEvent onPlaced;
-    private GridFurniture item;
+    private FurnitureController item;
     private int gridLayer;
     private int itemLayer;
 
@@ -58,8 +58,8 @@ public class FurniturePlacer : MonoBehaviour
     private void Move(Vector3 target)
     {
         if (item == null || item.grid == null) return;
-        target -= new Vector3(item.shape.x, 0, item.shape.y) / 2 * FurnitureSettings.instance.cellSize;
-        item.Move(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
+        target -= new Vector3(item.gridShape.x, 0, item.gridShape.y) / 2 * FurnitureSettings.instance.cellSize;
+        item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class FurniturePlacer : MonoBehaviour
         Debug.Log($"Placing {item.itemName}");
         if (this.item != null) Destroy(this.item.gameObject);
 
-        this.item = Instantiate(item.prefab).AddComponent<GridFurniture>();
+        this.item = Instantiate(item.prefab);
         return onPlaced = new UnityEvent();
     }
 
@@ -80,7 +80,7 @@ public class FurniturePlacer : MonoBehaviour
     {
         if (ctx.ReadValueAsButton()) return;
 
-        if (item != null && item.IsValid())
+        if (item != null && item.IsGridValid())
         {
             onPlaced.Invoke();
             item.grid.AddItem(item);
@@ -91,7 +91,7 @@ public class FurniturePlacer : MonoBehaviour
     public void OnRotate(InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValueAsButton() || item == null) return;
-        item.Rotate();
+        item.GridRotate();
     }
 
     public void OnCancel(InputAction.CallbackContext ctx)
