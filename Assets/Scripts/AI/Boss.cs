@@ -3,12 +3,6 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-    #region the Boss state flags
-    [Header("Boss State Flags")]
-    /// <summary>An Enum that references the bosses current state</summary>
-    [SerializeField] private BossBehaviour _bossBehaviour;
-    #endregion
-    
     #region Private Fields
     /// <summary>The RigidBody of the Boss</summary>
     private Rigidbody _rb;
@@ -16,11 +10,13 @@ public class Boss : MonoBehaviour
     private Vector3 _flyDirection;
     #endregion
     
-    #region Other Serialized Fields
-    [Header("Other Serialized Fields")]
-    /// <summary>A reference to the Player</summary>
-    [SerializeField] private GameObject _player;
-    
+    #region Serialized Fields
+    [Header("Boss State Flags")]
+    /// <summary>An Enum that references the bosses current state</summary>
+    [SerializeField] private BossBehaviour _bossBehaviour;
+
+    /// <summary>An Enum that references the bosses current stage</summary>
+    [SerializeField] private BossStage _bossStage;
 
     [Header("Base Stats")]
     [SerializeField] private float _moveSpeed;
@@ -30,7 +26,16 @@ public class Boss : MonoBehaviour
 
     [Header("Circle")]
     /// <summary>The distance at which the boss should circle the player</summary>
-    [SerializeField] private float _circleDistance;
+    [SerializeField] private float _circleCloseDistance;
+
+    /// <summary>The Size of the Band that the boss will circle around the player within</summary>
+    [SerializeField] private float _circleBandWidth;
+
+    /// <summary>The Speed at which the Boss circles the player at</summary>
+    [SerializeField] private float _circleSpeed;
+
+    /// <summary>The Max Speed at which the Boss circles the player at</summary>
+    [SerializeField] private float _circleMaxSpeed;
 
 
     [Header("Idle")]
@@ -38,19 +43,26 @@ public class Boss : MonoBehaviour
     [SerializeField] private float frequency;
 
     [Header("Ramming")]
+
     [SerializeField] private float _ramSpeed;
+
+    /// <summary>The delay before the boss rams and it deciding to ram</summary>
     [SerializeField] private float _ramDelay;
+
+    [Header("Other Serialized Fields")]
+    /// <summary>A reference to the Player</summary>
+    [SerializeField] private GameObject _player;
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = this.GetComponent<Rigidbody>();
-        _flyDirection =RandomVector3();
+        _flyDirection =RandomVector3(Vector3.zero, false);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         switch(_bossBehaviour)
         {
@@ -98,24 +110,33 @@ public class Boss : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// The stay between a band of values around the player and circles them
     /// </summary>
     private void Circle()
     {
-        if(GetPlayerDirection().magnitude >= _circleDistance)
+        if(GetPlayerDirection().magnitude >= (_circleCloseDistance + _circleBandWidth))
         {
             _rb.AddForce(GetPlayerDirection());
             _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _maxSpeed);
         }
-        else if(GetPlayerDirection().magnitude <= _circleDistance)
+        else if(GetPlayerDirection().magnitude <= _circleCloseDistance)
         {
             _rb.AddForce(-GetPlayerDirection());
             _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _maxSpeed);
         }
         else
         {
-            _rb.velocity = Vector3.zero;
 
+            Vector3 Player3dVec = GetPlayerDirection();
+            Vector2 Player2dVec = new Vector2(Player3dVec.x, Player3dVec.y);
+            //float perpenX = Random.Range(-1, 1);
+            float perpenX = 1;
+            float perpenY = (-(Player2dVec.x * perpenX))/Player2dVec.y;
+            Vector3 Perpen3D = new Vector3(perpenX, 0f, perpenY);
+            Perpen3D.Normalize();
+            
+            _rb.AddForce(Perpen3D * _circleSpeed);
+            _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _circleMaxSpeed);
         }
     }
 
@@ -137,8 +158,13 @@ public class Boss : MonoBehaviour
         switch(collision.gameObject.layer)
         {
             case 6:
-                _rb.velocity = Vector3.zero;
-                _flyDirection = RandomVector3();
+                //_rb.velocity = Vector3.zero;
+                Vector3 CollisionPosition = collision.gameObject.transform.position;
+
+                Vector3 CollisionNormal = collision.GetContact(0).normal;
+                Debug.Log(CollisionNormal);
+
+                _flyDirection = RandomVector3(CollisionPosition, false);
                 //_bossBehaviour = BossBehaviour.Idle;
                 break;
             default:
@@ -146,6 +172,9 @@ public class Boss : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the boss to fly around the room
+    /// </summary>
     private void Fly()
     {
         _rb.AddForce(_flyDirection * _moveSpeed);
@@ -156,11 +185,22 @@ public class Boss : MonoBehaviour
     /// Returns a random vector where all values are between -1 and 1 inclusive
     /// </summary>
     /// <returns></returns>
-    private Vector3 RandomVector3()
+    private Vector3 RandomVector3(Vector3 CollisionPostion, bool UseCollisionPosition)
     {
-        float x = Random.Range(-1f, 1f);
-        float y = Random.Range(-1f, 1f);
-        float z = Random.Range(-1f, 1f);
+        float x = 0;
+        float y = 0;
+        float z = 0;
+        if(!UseCollisionPosition)
+        {
+            x = Random.Range(-1f, 1f);
+            y = Random.Range(-1f, 1f);
+            z = Random.Range(-1f, 1f);
+        }
+        else
+        {
+            
+        }
+
         Vector3 returnVector = new Vector3(x,y,z);
         returnVector.Normalize();
         return returnVector;
@@ -173,4 +213,11 @@ enum BossBehaviour
     Flying,
     Circling,
     Ramming
+}
+
+enum BossStage
+{
+    Big,
+    Medium,
+    Small
 }
