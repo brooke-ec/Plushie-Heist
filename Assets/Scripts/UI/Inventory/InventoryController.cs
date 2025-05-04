@@ -166,6 +166,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
 
         Destroy(item.gameObject);
+        onChanged.Invoke();
     }
 
     /// <summary>
@@ -182,6 +183,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         if(removedItem != null)
         {
             RemoveItemFromInventory(removedItem);
+            onChanged.Invoke();
             return true;
         }
         return false;

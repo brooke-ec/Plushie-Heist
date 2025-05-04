@@ -10,10 +10,18 @@ public class FurniturePlacer : MonoBehaviour
     [SerializeField] new private Camera camera;
     [SerializeField] private Interactor interactor;
 
+    public static FurniturePlacer instance;
+
     private UnityEvent onPlaced;
     private GridFurniture item;
     private int gridLayer;
     private int itemLayer;
+
+    private void Awake()
+    {
+        if (instance != null) Destroy(instance);
+        instance = this;
+    }
 
     private void Start()
     {
@@ -51,7 +59,7 @@ public class FurniturePlacer : MonoBehaviour
     {
         if (item == null || item.grid == null) return;
         target -= new Vector3(item.shape.x, 0, item.shape.y) / 2 * FurnitureSettings.instance.cellSize;
-        item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
+        item.Move(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
     /// <summary>
@@ -65,7 +73,6 @@ public class FurniturePlacer : MonoBehaviour
         if (this.item != null) Destroy(this.item.gameObject);
 
         this.item = Instantiate(item.prefab).AddComponent<GridFurniture>();
-
         return onPlaced = new UnityEvent();
     }
 
@@ -73,7 +80,7 @@ public class FurniturePlacer : MonoBehaviour
     {
         if (ctx.ReadValueAsButton()) return;
 
-        if (item != null && item.IsGridValid())
+        if (item != null && item.IsValid())
         {
             onPlaced.Invoke();
             item.grid.AddItem(item);
@@ -84,7 +91,7 @@ public class FurniturePlacer : MonoBehaviour
     public void OnRotate(InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValueAsButton() || item == null) return;
-        item.GridRotate();
+        item.Rotate();
     }
 
     public void OnCancel(InputAction.CallbackContext ctx)

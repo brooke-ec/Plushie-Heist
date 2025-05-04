@@ -20,12 +20,16 @@ public class FurnitureGrid : MonoBehaviour
 
     private void Start()
     {
-        collider = GetComponent<BoxCollider>();
-        filter = GetComponent<MeshFilter>();
+        if (ShopManager.instance == null) Destroy(gameObject);
+        else
+        {
+            collider = GetComponent<BoxCollider>();
+            filter = GetComponent<MeshFilter>();
 
-        gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
+            gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
 
-        filter.mesh = mesh.Build(size, cellSize, spacing);
+            filter.mesh = mesh.Build(size, cellSize, spacing);
+        }
     }
 
     public Vector2 FromWorldspace(Vector3 point)
@@ -67,6 +71,7 @@ public class FurnitureGrid : MonoBehaviour
         items.Add(item);
         Regenerate();
         onChanged.Invoke();
+        ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(item.item);
     }
 
     public void RemoveItem(GridFurniture item)
@@ -74,12 +79,13 @@ public class FurnitureGrid : MonoBehaviour
         items.Remove(item);
         Regenerate();
         onChanged.Invoke();
+        ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.item);
     }
 
     public void Regenerate()
     {
         // Get all occupied positions
-        Vector2Int[] occupied = items.SelectMany(i => i.gridRegion.ToArray()).ToArray();
+        Vector2Int[] occupied = items.SelectMany(i => i.region.ToArray()).ToArray();
         mesh.SetColor(Color.green); // Reset grid mesh to green
         filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
     }
@@ -91,7 +97,7 @@ public class FurnitureGrid : MonoBehaviour
 
     public bool Intersects(Region region)
     {
-        return items.Any(i => (i.gridRegion).Intersect(region).hit);
+        return items.Any(i => (i.region).Intersect(region).hit);
     }
 
 #if UNITY_EDITOR

@@ -356,12 +356,16 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         List<string> actionTitles = new List<string>();
         List<UnityAction> actions = new List<UnityAction>();
 
-        actionTitles.Add("Place item");
-        actionTitles.Add("Discard item");
 
-        //TO-DO whatever is called to place an item
-        //actions.Add(METHOD) but temporarily:
-        actions.Add(() => print("missing placing item method"));
+        actionTitles.Add("Place item");
+        actions.Add(() =>
+        {
+            SharedUIManager.instance.CloseMenu();
+            FurniturePlacer.instance.Place(item.itemClass)
+                .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
+        });
+
+        actionTitles.Add("Discard item");
         actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
 
         if (isBackpack)

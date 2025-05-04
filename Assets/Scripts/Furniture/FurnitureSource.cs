@@ -7,9 +7,11 @@ public class FurnitureSource : MonoBehaviour, IInteractable
     /// <summary> The item this prefab represents </summary>
     public FurnitureItem item = null;
     /// <summary> Prompt Shown by the UI to let the player know they can interact with this </summary>
-    public string interactionPrompt => inventoryHasSpace ? "Press F to Pickup" : "Inventory Full";
+    string IInteractable.interactionPrompt => inventoryHasSpace ? "Press F to Pickup" : "Inventory Full";
     /// <summary> If there is enough space in the players inventory for this item </summary>
-    public bool inventoryHasSpace { get; private set; } = false;
+    public bool inventoryHasSpace { get; private set; } = true;
+    /// <summary> Whether this the interable outline should be red </summary>
+    bool IInteractable.outline => inventoryHasSpace;
 
     private void Start()
     {

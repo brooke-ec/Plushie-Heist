@@ -8,7 +8,7 @@ public interface IInteractable
     /// <summary>
     /// Denotes whether this object is interactible- used for setting outline colour.
     /// </summary>
-    public bool interactable => true;
+    public bool outline => true;
 
     /// <summary>
     /// Called when the primary interact key is pressed on this <see cref="IInteractable"/> instance.

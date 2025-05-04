@@ -22,8 +22,8 @@ public class Interactor : MonoBehaviour
     private int count;
     /// <summary>array to hold colliders that are currently in range</summary>
     private readonly Collider[] colliders = new Collider[8];
-    /// <summary> The closest interactable in range </summary>
-    private IInteractable interactable;
+    /// <summary> The closest interactables in range </summary>
+    private IInteractable[] interactables;
     /// <summary> The closest collider in range </summary>
     private new Collider collider;
     /// <summary> The closest collider in range last frame </summary>
@@ -54,11 +54,11 @@ public class Interactor : MonoBehaviour
             if (collider == null)
             {
                 outlines = new Outline[0];
-                interactable = null;
+                interactables = new IInteractable[0];
             }
             else
             {
-                interactable = collider.GetComponent<IInteractable>();
+                interactables = collider.GetComponents<IInteractable>();
                 
                 // Activate Outline
                 outlines = collider.GetComponentsInChildren<Outline>();
@@ -66,11 +66,11 @@ public class Interactor : MonoBehaviour
             }
         }
 
-        if (interactable == null) interactionText.text = "";
+        if (interactables == null) interactionText.text = "";
         else
         {
-            interactionText.text = interactable.interactionPrompt;
-            outlines.ForEach((o) => o.color = interactable.interactable ? 0 : 1);
+            interactionText.text = string.Join("\n", interactables.Select(i => i.interactionPrompt));
+            outlines.ForEach((o) => o.color = interactables.Any(i => i.outline) ? 0 : 1);
         }
     }
 
@@ -88,7 +88,7 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressPrimaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null && interactable.interactable) interactable.PrimaryInteract(this);
+        if (ctx.performed && interactables.Length > 0) interactables.ForEach(i => i.PrimaryInteract(this));
     }
 
     /// <summary>
@@ -96,6 +96,6 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressSecondaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null && interactable.interactable) interactable.SecondaryInteract(this);
+        if (ctx.performed && interactables.Length > 0) interactables.ForEach(i => i.SecondaryInteract(this));
     }
 }
