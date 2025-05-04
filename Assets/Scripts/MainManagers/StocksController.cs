@@ -16,7 +16,6 @@ public class StocksController : MonoBehaviour
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
-    public static StocksController instance { get; private set; }
     [Range(0, 1)]
     public float maxPercentOfItemsToChange = 0.5f;
     [Range(0, 1)]
@@ -26,16 +25,6 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
-
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-            return;
-        }
     }
 
     private void Start()
@@ -125,7 +114,7 @@ public class StocksController : MonoBehaviour
         pricingTableManager.ResetTableToOriginalOrder();
     }
 
-    public void CreateSetPricingUI(FurnitureController item)
+    public void CreateSetPricingUI(GridFurniture item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)

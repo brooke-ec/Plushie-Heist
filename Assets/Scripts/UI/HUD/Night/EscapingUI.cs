@@ -35,7 +35,7 @@ public class EscapingUI : MonoBehaviour
         InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
 
         //Get the dictionary of items successfully stolen, and those lost
-        (Dictionary<FurnitureItem, int> successfullyStolenItems, Dictionary<FurnitureItem, int> lostItems) = RandomiseItemsLost(inventoryController.inventoryGridToAddItems);
+        (Dictionary<FurnitureItem, int> successfullyStolenItems, Dictionary<FurnitureItem, int> lostItems) = RandomiseItemsLost(inventoryController.backpackGrid);
 
         //Do the first container, which is the same for both
         Transform mainContainer = escapingUI.transform.GetChild(1);

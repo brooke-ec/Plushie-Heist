@@ -18,10 +18,10 @@ public class CustomerAI : MonoBehaviour
     private CustomerController customerController;
 
     /// <summary> A shopping list of items the customer wants to buy </summary>
-    private Queue<FurnitureController> shoppingList;
+    private Queue<GridFurniture> shoppingList;
 
     /// <summary> List of items this customer has in their basket </summary>
-    private List<FurnitureController> basket = new List<FurnitureController>();
+    private List<GridFurniture> basket = new List<GridFurniture>();
 
     /// <summary>A refernece to the Till object<summary>
     private TillQueue till;
@@ -30,7 +30,7 @@ public class CustomerAI : MonoBehaviour
     private Animator animator;
 
     /// <summary> The current item the customer is looking for </summary>
-    private FurnitureController currentItem => shoppingList.TryPeek(out FurnitureController item) ? item : null;
+    private GridFurniture currentItem => shoppingList.TryPeek(out GridFurniture item) ? item : null;
 
     private State state = State.Uninitialized;
     #endregion
@@ -57,7 +57,7 @@ public class CustomerAI : MonoBehaviour
         animator.SetFloat("pickup multiplier", 0.375f / pickupTime);
 
         //Assinging other values using the references
-        shoppingList = new Queue<FurnitureController>(customerController.ShoppingList());
+        shoppingList = new Queue<GridFurniture>(customerController.ShoppingList());
     }
 
     void Update()

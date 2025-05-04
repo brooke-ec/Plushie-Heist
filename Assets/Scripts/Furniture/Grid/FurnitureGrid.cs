@@ -13,7 +13,7 @@ public class FurnitureGrid : MonoBehaviour
     
     private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
-    private List<FurnitureController> items = new List<FurnitureController>();
+    private List<GridFurniture> items = new List<GridFurniture>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;
@@ -62,14 +62,14 @@ public class FurnitureGrid : MonoBehaviour
         return items.Count == 0;
     }
 
-    public void AddItem(FurnitureController item)
+    public void AddItem(GridFurniture item)
     {
         items.Add(item);
         Regenerate();
         onChanged.Invoke();
     }
 
-    public void RemoveItem(FurnitureController item)
+    public void RemoveItem(GridFurniture item)
     {
         items.Remove(item);
         Regenerate();

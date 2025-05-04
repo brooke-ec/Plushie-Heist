@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -10,7 +11,7 @@ public class FurniturePlacer : MonoBehaviour
     [SerializeField] private Interactor interactor;
 
     private UnityEvent onPlaced;
-    private FurnitureController item;
+    private GridFurniture item;
     private int gridLayer;
     private int itemLayer;
 
@@ -49,7 +50,7 @@ public class FurniturePlacer : MonoBehaviour
     private void Move(Vector3 target)
     {
         if (item == null || item.grid == null) return;
-        target -= new Vector3(item.gridSize.x, 0, item.gridSize.y) / 2 * FurnitureSettings.instance.cellSize;
+        target -= new Vector3(item.shape.x, 0, item.shape.y) / 2 * FurnitureSettings.instance.cellSize;
         item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
     }
 
@@ -58,14 +59,13 @@ public class FurniturePlacer : MonoBehaviour
     /// </summary>
     /// <param name="item">A prefab of the item to place</param>
     /// <returns>An event invoked when this item is succesfully placed</returns>
-    public UnityEvent Place(FurnitureController item)
+    public UnityEvent Place(FurnitureItem item)
     {
+        Debug.Log($"Placing {item.itemName}");
         if (this.item != null) Destroy(this.item.gameObject);
 
-        this.item = Instantiate(item);
-        this.item.source = item; // TODO: Refactor this system
+        this.item = Instantiate(item.prefab).AddComponent<GridFurniture>();
 
-        Debug.Log($"Placing {item.itemName}");
         return onPlaced = new UnityEvent();
     }
 

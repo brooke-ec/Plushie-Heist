@@ -28,8 +28,8 @@ public class Interactor : MonoBehaviour
     private new Collider collider;
     /// <summary> The closest collider in range last frame </summary>
     private Collider previous;
-    /// <summary> The outline of the interactable collider in range </summary>
-    private Outline outline;
+    /// <summary> The outlines of the interactable collider in range </summary>
+    private Outline[] outlines = new Outline[0];
 
 
     private void Start()
@@ -47,22 +47,22 @@ public class Interactor : MonoBehaviour
         {
             previous = collider;
 
-            // Clean up the previous outline
-            if (outline != null) outline.enabled = false;
+            // Clean up the previous outline, check not destroyed
+            outlines.Where(o => o != null).ForEach(o => o.enabled = false);
 
             // Get new interactable
             if (collider == null)
             {
+                outlines = new Outline[0];
                 interactable = null;
-                outline = null;
             }
             else
             {
                 interactable = collider.GetComponent<IInteractable>();
                 
                 // Activate Outline
-                outline = collider.GetComponentInChildren<Outline>();
-                if (outline != null) outline.enabled = true;
+                outlines = collider.GetComponentsInChildren<Outline>();
+                outlines.ForEach(o => o.enabled = true);
             }
         }
 
@@ -70,7 +70,7 @@ public class Interactor : MonoBehaviour
         else
         {
             interactionText.text = interactable.interactionPrompt;
-            if (outline != null) outline.color = interactable.interactable ? 0 : 1;
+            outlines.ForEach((o) => o.color = interactable.interactable ? 0 : 1);
         }
     }
 

@@ -6,32 +6,14 @@ using UnityEngine;
 /// Represents an item, placed in the world or on in an inventory
 /// </summary>
 [RequireComponent(typeof(Collider))]
-public class FurnitureController : MonoBehaviour, IInteractable
+public class GridFurniture : MonoBehaviour
 {
-    /// <summary> The name of this item displayed on the stock UI </summary>
-    [field: SerializeField] public string itemName { get; private set; }
-    /// <summary> The base value of this item </summary>
-    [field: SerializeField] public int marketPrice { get; private set; }
-
-    [field: Header("Placement Settings")]
-    /// <summary> The size of this item in on the <see cref="FurnitureGrid"/> </summary>
-    [field: SerializeField] public Vector2Int gridSize { get; private set; }
-    /// <summary> The offset from default when placing on a <see cref="FurnitureGrid"/> </summary>
-    [field: SerializeField] public Vector3 gridOffset { get; private set; }
-
-    [field: Header("Inventory Settings")]
-    /// <summary> The size of this item in the inventory </summary>
-    [field: SerializeField] public Vector2Int inventorySize { get; private set; }
-    /// <summary> The icon to use for this item in the inventory </summary>
-    [field: SerializeField] public Sprite inventoryIcon { get; private set; }
-
     /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
-    public string interactionPrompt => empty ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
-        + "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "Item Contains Sub-Items";
+    //public string interactionPrompt => empty ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
+    //    + "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "Item Contains Sub-Items";
     /// <summary> Whether this item can be picked up or not </summary>
-    public bool canPickup => hasSpace && empty;
-    /// <summary> If there is space in the players inventory </summary>
-    public bool hasSpace { get; private set; } = false;
+    //public bool canPickup => hasSpace && empty;
+
     /// <summary> Whether the subgrids of this item are empty </summary>
     public bool empty { get; private set; } = true;
     /// <summary> Any <see cref="FurnitureGrid"/>s attached to children </summary>
@@ -45,15 +27,17 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <summary> Whether this item is currently placed on a grid </summary>
     public bool placed => grid != null;
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
-    public Region gridRegion => new Region().FromSize(gridPosition, gridSize);
+    public Region gridRegion => new Region().FromSize(gridPosition, shape);
     /// <summary> Whether this item is marked as sellable or not </summary>
     public bool selling => sellingMarker.activeSelf && placed;
     /// <summary Whether this item can be marked as sellable </summary>
     public bool canSell => empty;
     /// <summary> The world space bounding volume of this item </summary>
     public Bounds bounds => collider.bounds;
+    /// <summary> The shape of this furniture item </summary>
+    public Vector2Int shape {  get; private set; }
 
-    public bool interactable => canPickup || canSell;
+    public bool interactable => canSell;
 
     /// <summary> The current <see cref="InventoryController"/> instance </summary>
     private InventoryController inventoryController;
@@ -63,10 +47,6 @@ public class FurnitureController : MonoBehaviour, IInteractable
     private GameObject sellingMarker;
     /// <summary> The collider attached to this item </summary>
     private new Collider collider;
-
-    // Temporary workaround
-    // TODO: Refactor
-    [HideInInspector] public FurnitureController source;
 
     private void Awake()
     {
@@ -80,10 +60,6 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         PlaceSellingMarker();
         GetComponentInChildren<Outline>().enabled = false;
-
-        if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
-            //hasSpace = inventoryController.CanInsert(this);
-        });
 
         foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
         {
@@ -101,28 +77,6 @@ public class FurnitureController : MonoBehaviour, IInteractable
         sellingMarker.SetActive(false);
     }
 
-    /// <summary>
-    /// Called when interacted with </br>
-    /// Adds the item to inventory if theres enough space and then destroys it</br>
-    /// otherwise it doesnt
-    /// </summary>
-    /// <param name="interactor">Interactor this was called from</param>
-    /// <returns>True if picked up item<returns>
-    public void PrimaryInteract(Interactor interactor)
-    {
-        if (!canPickup) return;
-
-        //if (inventoryController.InsertItem(source))
-        //{
-        //    if (grid != null) grid.RemoveItem(this);
-
-        //    Destroy(gameObject);
-        //    Debug.Log("Picked Up" + gameObject.name);
-        //}
-        //else Debug.Log("Can't Pick up" + gameObject.name);
-        
-    }
-
     public void SecondaryInteract(Interactor interactor)
     {
         if (!canSell) return;
@@ -136,7 +90,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// </summary>
     public void GridRotate()
     {
-        gridSize = new Vector2Int(gridSize.y, gridSize.x);
+        shape = new Vector2Int(shape.y, shape.x);
         transform.Rotate(0, 90, 0);
         GridMove(gridPosition);
     }
@@ -146,8 +100,8 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// </summary>
     public void GridMove(Vector2Int target)
     {
-        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - gridSize);
-        transform.position = grid.ToWorldspace(gridRegion.center) - transform.rotation * gridOffset;
+        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - shape);
+        //transform.position = grid.ToWorldspace(gridRegion.center) - transform.rotation * gridOffset;
 
         if (IsGridValid()) switcher.Reset();
         else switcher.Switch(FurnitureSettings.instance.invalidMaterial);
