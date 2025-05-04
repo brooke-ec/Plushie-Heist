@@ -11,12 +11,16 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<FurnitureController> allItemsInGame = new List<FurnitureController>();
+    [SerializeField] private List<FurnitureItem> allItemsInGame = new List<FurnitureItem>();
     [HideInInspector] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
     public static StocksController instance { get; private set; }
+    [Range(0, 1)]
+    public float maxPercentOfItemsToChange = 0.5f;
+    [Range(0, 1)]
+    public float minPercentOfItemsToChange = 0.2f;
 
     #region Setup
     private void Awake()
@@ -39,12 +43,12 @@ public class StocksController : MonoBehaviour
         CreateAllProductData(); // Only references should be set up in Awake()
     }
 
-    private void CreateAllProductData()
+    public void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 
         allStocksInGame = new List<ProductData>(allItemsInGame.Count);
-        foreach(FurnitureController item in allItemsInGame)
+        foreach(FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -59,7 +63,7 @@ public class StocksController : MonoBehaviour
     /// Essentially, we check if the passed furniture is already part
     /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
     /// </summary>
-    public void TryAddFurnitureToPricingTable(FurnitureController item)
+    public void TryAddFurnitureToPricingTable(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
@@ -68,7 +72,7 @@ public class StocksController : MonoBehaviour
         }
     }
 
-    public void TryRemoveFurnitureFromPricingTable(FurnitureController item)
+    public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
@@ -89,8 +93,8 @@ public class StocksController : MonoBehaviour
         /*int minNumOfChanges = 1;
         int maxNumOfChanges = 3;*/
 
-        int minNumOfChanges = allStocksInGame.Count / 10;
-        int maxNumOfChanges = allStocksInGame.Count / 4;
+        int minNumOfChanges = (int) (allStocksInGame.Count * maxPercentOfItemsToChange);
+        int maxNumOfChanges = (int) (allStocksInGame.Count * minPercentOfItemsToChange);
         int numOfChanges = UnityEngine.Random.Range(minNumOfChanges, maxNumOfChanges + 1);
 
         //shuffle list of items

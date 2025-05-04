@@ -82,7 +82,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
         GetComponentInChildren<Outline>().enabled = false;
 
         if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
-            hasSpace = inventoryController.CanInsert(this);
+            //hasSpace = inventoryController.CanInsert(this);
         });
 
         foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
@@ -112,14 +112,14 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         if (!canPickup) return;
 
-        if (inventoryController.InsertItem(source))
-        {
-            if (grid != null) grid.RemoveItem(this);
+        //if (inventoryController.InsertItem(source))
+        //{
+        //    if (grid != null) grid.RemoveItem(this);
 
-            Destroy(gameObject);
-            Debug.Log("Picked Up" + gameObject.name);
-        }
-        else Debug.Log("Can't Pick up" + gameObject.name);
+        //    Destroy(gameObject);
+        //    Debug.Log("Picked Up" + gameObject.name);
+        //}
+        //else Debug.Log("Can't Pick up" + gameObject.name);
         
     }
 
@@ -129,9 +129,6 @@ public class FurnitureController : MonoBehaviour, IInteractable
 
         subgrids.ForEach(s => s.gameObject.SetActive(selling));
         sellingMarker.SetActive(!selling);
-
-        if (canSell) StocksController.instance.TryAddFurnitureToPricingTable(source);
-        else StocksController.instance.TryRemoveFurnitureFromPricingTable(source);
     }
 
     /// <summary>

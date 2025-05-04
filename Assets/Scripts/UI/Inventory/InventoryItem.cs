@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
-    public FurnitureController itemClass;
+    public FurnitureItem itemClass;
     private Image icon;
     private RectTransform shadowRectTransform;
     private RectTransform backgroundRectTransform;
@@ -49,7 +49,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public bool rotated = false;
 
-    public void Set(FurnitureController itemClass)
+    public void Set(FurnitureItem itemClass)
     {
         this.itemClass = itemClass;
         icon.sprite = itemClass.inventoryIcon;
@@ -91,15 +91,8 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             print("use");
-            //TO-DO
-            //there is a prefab with a button component for the tooltip
 
-            // Just for now to get placing working- I do not like this one bit
-            FindAnyObjectByType<FurniturePlacer>().Place(itemClass).AddListener(() =>
-                FindAnyObjectByType<InventoryController>().RemoveItemFromInventory(this)
-            );
-
-            SharedUIManager.instance.CloseMenu();
+            GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
         }
     }
 }

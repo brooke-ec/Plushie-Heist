@@ -34,6 +34,8 @@ public class ShopManager : MonoBehaviour
     }
     private void Start()
     {
+        stocksController.CreateAllProductData();
+
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         shopTimer.SetupClock(true);
@@ -49,9 +51,6 @@ public class ShopManager : MonoBehaviour
     [HideInInspector] public OpenOrCloseShopButton openOrCloseShopButton;
     private void StartNewDay()
     {
-        //moneyAtTheBeginningOfToday = money;
-        //moneyEarnedEveryDay[day] = (money - moneyAtTheBeginningOfToday);
-
         day++;
         stocksController.NewDay(day);
     }
@@ -81,8 +80,6 @@ public class ShopManager : MonoBehaviour
 
         //TO-DO MAKE CLIENTS STOP COMING
 
-        //TO-DO moneyEarnedEveryDay[day] = (money - moneyAtTheBeginningOfToday);
-
         //Won't be here, as this will actually be triggered once the LAST customer is done
         //AND THEN the night is over, that's when it will be called
         //StartNewDay();
@@ -97,6 +94,14 @@ public class ShopManager : MonoBehaviour
     public void SetPriceOfItem(FurnitureController item)
     {
         stocksController.CreateSetPricingUI(item);
+    }
+
+    public void UpdateClockTime(float extraTimeInMins)
+    {
+        if(!isShopOpen)
+        {
+            shopTimer.UpdateClockTime(extraTimeInMins);
+        }
     }
     #endregion
 

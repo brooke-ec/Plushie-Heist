@@ -30,6 +30,7 @@ public class NightManager : MonoBehaviour
     /// In % form (E.g: 20 for 20%)
     /// </summary>
     public int itemLosePercentage;
+
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
@@ -73,6 +74,11 @@ public class NightManager : MonoBehaviour
 
         //Call end stuff
         escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
+    }
+
+    public void UpdateClockTime(float extraTimeInMins)
+    {
+        nightTimer.UpdateClockTime(extraTimeInMins);
     }
 
     #region UI

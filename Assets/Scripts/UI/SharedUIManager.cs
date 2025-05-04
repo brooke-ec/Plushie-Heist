@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,9 +14,6 @@ public class SharedUIManager : MonoBehaviour
     [HideInInspector] public bool isMenuOpen => currentMenu != null;
     
     private PlayerInput playerInput;
-
-    [Header("Testing")]
-    [SerializeField] private InventoryGrid gridToStart;
 
     public static SharedUIManager instance { get; private set; }
 
@@ -34,6 +33,19 @@ public class SharedUIManager : MonoBehaviour
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
         scaleFactor = rootCanvas.scaleFactor;
+        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (InventoryGrid grid in allGrids)
+        {
+            grid.StartInventory();
+        }
+
+        if (NightManager.instance != null)
+        {
+            //if nighttime
+            //then turn off button of add items to storage
+            //canvas, backpack, last child (button)
+            rootCanvas.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
+        }
     }
 
     public void OpenMenu(IUIMenu menu)

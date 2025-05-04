@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 /// <summary> Controls a single inventory grid functionality </summary>
@@ -78,7 +79,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
     }
 
-    public Vector2Int? FindSpaceForObject(FurnitureController itemToInsert)
+    public Vector2Int? FindSpaceForObject(FurnitureItem itemToInsert)
     {
         return GetSpaceAvailable(new Vector2Int(itemToInsert.inventorySize.x, itemToInsert.inventorySize.y));
     }
@@ -140,7 +141,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
-    public bool IsThisItemTypeInTheInventory(FurnitureController itemClass)
+    public bool IsThisItemTypeInTheInventory(FurnitureItem itemClass)
     {
         for(int x=0;x<inventoryWidth; x++)
         {
@@ -153,6 +154,24 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets the first instance of this item type in the inventory if exists, null otherwise
+    /// </summary>
+    public InventoryItem GetFirstItemType(FurnitureItem itemClass)
+    {
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                if (inventorySlots[x, y] != null && itemClass.Equals(inventorySlots[x, y].itemClass))
+                {
+                    return inventorySlots[x, y];
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -261,9 +280,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// Call to get the dictionary form of the current inventory
     /// </summary>
     /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
-    public Dictionary<FurnitureController, int> GetDictionaryOfCurrentItems()
+    public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
     {
-        Dictionary<FurnitureController, int> dictionary = new Dictionary<FurnitureController, int>();
+        Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
 
         for (int x = 0; x < inventoryWidth; x++)
         {
@@ -288,6 +307,70 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         return dictionary;
+    }
+
+    public void ModifyInventorySize(int addedRowModifier)
+    {
+        //copy inventory items to here
+        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
+        for(int x=0; x<inventoryWidth; x++)
+        {
+            for(int y=0; y<inventoryHeight; y++)
+            {
+                copyOfInventorySlots[x, y] = inventorySlots[x, y];
+            }
+        }
+
+        CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
+
+        //now add those items properly to the new inventory slots
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                InventoryItem item = copyOfInventorySlots[x, y];
+                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
+                {
+                    PlaceItem(item, x, y);
+                }
+            }
+        }
+
+        inventoryHeight += addedRowModifier;
+        print("added " + addedRowModifier);
+    }
+
+    public InventoryItem[,] GetInventorySlots()
+    {
+        return inventorySlots;
+    }
+
+    public void CreateItemInteractionMenu(InventoryItem item)
+    {
+        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
+        Vector3 mousePos = Input.mousePosition;
+
+        InventoryController controller = FindAnyObjectByType<InventoryController>();
+
+        bool isBackpack = controller.backpackGrid.Equals(this);
+        List<string> actionTitles = new List<string>();
+        List<UnityAction> actions = new List<UnityAction>();
+
+        actionTitles.Add("Place item");
+        actionTitles.Add("Discard item");
+
+        //TO-DO whatever is called to place an item
+        //actions.Add(METHOD) but temporarily:
+        actions.Add(() => print("missing placing item method"));
+        actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
+
+        if (isBackpack)
+        {
+            actionTitles.Add("Try add to storage");
+            actions.Add(() => controller.AddItemFromBackpackToStorage(item));
+        }
+
+        FindAnyObjectByType<HoveringManager>().CreateInventoryTooltip(actionTitles, actions, mousePos);
     }
 
     #endregion

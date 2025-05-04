@@ -41,6 +41,8 @@ public class Clock : MonoBehaviour
 
     public void SetupClock(bool isShopClock)
     {
+        print("clock setup");
+
         this.isShopClock = isShopClock;
         if (isShopClock)
         {
@@ -58,6 +60,17 @@ public class Clock : MonoBehaviour
         totalDayTimeSeconds = lengthOfDayInRealMins * 60f;
 
         SetClockUI(0);
+    }
+
+    public void UpdateClockTime(float extraTimeInMins)
+    {
+        if (!clockCurrentlyRunning)
+        {
+            lengthOfDayInRealMins += extraTimeInMins;
+
+            timeMultiplier = GetTimeMultiplier();
+            totalDayTimeSeconds = lengthOfDayInRealMins * 60f;
+        }
     }
 
     float elapsedTime = 0;
