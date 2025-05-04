@@ -325,6 +325,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Modifies the needed values for skills upgrades. Only "dash", "jump" and "boost"
+    /// </summary>
+    /// <param name="ability">The ability to modify the values of</param>
+    /// <param name="modifier">the modifier of the values</param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ModifyAbilityValue(string ability, float modifier)
+    {
+        switch(ability)
+        {
+            case "dash":
+                dashSpeed *= modifier;
+                break;
+            case "jump":
+                noJumps += (int)modifier;
+                break;
+            case "boost":
+                boostSpeedCap *= modifier;
+                boostGroundAcceleration *= modifier;
+                break;
+            default:
+                print("Error modifying ability value");
+                break;
+        }
+    }
+
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
