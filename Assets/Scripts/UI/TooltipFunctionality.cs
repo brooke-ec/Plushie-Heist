@@ -53,6 +53,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
         mouseOver = true;
         framesPassedSinceOver = 0;
         GetTooltipInfo?.Invoke(this);

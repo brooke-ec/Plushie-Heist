@@ -92,6 +92,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             print("use");
 
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
             GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
         }
     }

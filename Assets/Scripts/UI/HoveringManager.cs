@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class HoveringManager : MonoBehaviour
 {
+    [SerializeField] private Transform tooltipsCanvas;
+
     public GameObject tooltipPrefab;
     public GameObject inventoryTooltipPrefab;
     public GameObject inventoryTooltipInteractionPrefab;
@@ -13,7 +15,6 @@ public class HoveringManager : MonoBehaviour
     public static GameObject currentTooltipOpen;
     public static GameObject currentInventoryTooltipOpen;
 
-    private Transform canvasTransform;
     public Vector3 offset = Vector3.one;
 
     [SerializeField] private Sprite coinIcon;
@@ -40,14 +41,6 @@ public class HoveringManager : MonoBehaviour
 
     private void Start()
     {
-        if (ShopManager.instance == null)
-        {
-            canvasTransform = SharedUIManager.instance.rootCanvas.transform;
-        }
-        else
-        {
-            canvasTransform = ShopManager.instance.mainCanvas.transform;
-        }
         CalculateOffset();
     }
 
@@ -69,7 +62,7 @@ public class HoveringManager : MonoBehaviour
             Destroy(currentTooltipOpen);
         }
 
-        currentTooltipOpen = Instantiate(inventoryTooltipPrefab, canvasTransform);
+        currentTooltipOpen = Instantiate(inventoryTooltipPrefab, tooltipsCanvas);
         currentTooltipOpen.transform.position = screenPosition - offset;
 
         Transform container = currentTooltipOpen.transform.GetChild(0);
@@ -88,7 +81,7 @@ public class HoveringManager : MonoBehaviour
 
     public void CreateBaseTooltip(string title, Color32 titleColour, string description, Vector3 screenPosition, TooltipCost tooltipCost = TooltipCost.none, string tooltipCostText = null, TooltipBackgroundColor tooltipColour = TooltipBackgroundColor.noChanges)
     {
-        currentTooltipOpen = Instantiate(tooltipPrefab, canvasTransform);
+        currentTooltipOpen = Instantiate(tooltipPrefab, tooltipsCanvas);
         currentTooltipOpen.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = title;
         currentTooltipOpen.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = titleColour;
         currentTooltipOpen.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = description;

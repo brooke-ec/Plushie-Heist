@@ -368,7 +368,8 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         actionTitles.Add("Discard item");
         actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
 
-        if (isBackpack)
+        //if backpack and it's daytime
+        if (isBackpack && NightManager.instance==null)
         {
             actionTitles.Add("Try add to storage");
             actions.Add(() => controller.AddItemFromBackpackToStorage(item));
