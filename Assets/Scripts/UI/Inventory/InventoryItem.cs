@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
-    public FurnitureItem itemClass;
+    public FurnitureController itemClass;
     private Image icon;
     private RectTransform shadowRectTransform;
     private RectTransform backgroundRectTransform;
@@ -49,7 +49,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public bool rotated = false;
 
-    public void Set(FurnitureItem itemClass)
+    public void Set(FurnitureController itemClass)
     {
         this.itemClass = itemClass;
         icon.sprite = itemClass.inventoryIcon;

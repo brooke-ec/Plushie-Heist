@@ -13,9 +13,7 @@ GameObject:
   - component: {fileID: 7980136525960876623}
   - component: {fileID: 6158682181451047407}
   - component: {fileID: 1234645777807317478}
-  - component: {fileID: 105001509522667449}
-  - component: {fileID: 6854122181499592312}
-  - component: {fileID: -1769590190634984225}
+  - component: {fileID: 8239301275697909666}
   m_Layer: 10
   m_Name: Desk
   m_TagString: Untagged
@@ -2573,7 +2571,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.3447537, y: 3.844075, z: 3.8999999}
   m_Center: {x: 3.572377, y: 1.9220375, z: 1.85}
---- !u!114 &105001509522667449
+--- !u!114 &8239301275697909666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2582,46 +2580,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2824853667814778167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Desk
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 3, y: 2}
-  <gridOffset>k__BackingField: {x: 0.9, y: 0, z: 0.5}
-  <inventorySize>k__BackingField: {x: 2, y: 2}
-  <inventoryIcon>k__BackingField: {fileID: 0}
-  source: {fileID: 0}
---- !u!114 &6854122181499592312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824853667814778167}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
---- !u!208 &-1769590190634984225
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824853667814778167}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  item: {fileID: 11400000, guid: 8f40071fc5db9dc4ba5708bdb8dd9fd8, type: 2}
 --- !u!1 &3642751121201749247
 GameObject:
   m_ObjectHideFlags: 0

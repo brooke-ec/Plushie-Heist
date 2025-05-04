@@ -85,13 +85,10 @@ PrefabInstance:
       addedObject: {fileID: 2186574622209388153}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 641dacfd5f2049271995094fced85d09, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4036166717477865437}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 641dacfd5f2049271995094fced85d09, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1664077237758184505}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 641dacfd5f2049271995094fced85d09, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -8195762537477855264}
+      addedObject: {fileID: -961269223774476260}
   m_SourcePrefab: {fileID: 100100000, guid: 641dacfd5f2049271995094fced85d09, type: 3}
 --- !u!1 &7633837979402319371 stripped
 GameObject:
@@ -112,25 +109,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 0
---- !u!114 &4036166717477865437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7633837979402319371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Tiny Cactus
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 1, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: -0.25, z: 0}
-  <inventorySize>k__BackingField: {x: 1, y: 1}
-  <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
-  source: {fileID: 0}
 --- !u!136 &1664077237758184505
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -154,19 +132,16 @@ CapsuleCollider:
   m_Height: 0.73333037
   m_Direction: 1
   m_Center: {x: -0.009912759, y: 0.1166652, z: -0.034706153}
---- !u!208 &-8195762537477855264
-NavMeshObstacle:
+--- !u!114 &-961269223774476260
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7633837979402319371}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.25800002, y: 0.367, z: 0.24700001}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.010000001, y: 0.117000006, z: -0.035}
-  m_TimeToStationary: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: e2de9d19f2b4d8847b505bcd237820c8, type: 2}

@@ -35,7 +35,7 @@ public class EscapingUI : MonoBehaviour
         InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
 
         //Get the dictionary of items successfully stolen, and those lost
-        (Dictionary<FurnitureItem, int> successfullyStolenItems, Dictionary<FurnitureItem, int> lostItems) = RandomiseItemsLost(inventoryController.inventoryGridToAddItems);
+        (Dictionary<FurnitureController, int> successfullyStolenItems, Dictionary<FurnitureController, int> lostItems) = RandomiseItemsLost(inventoryController.inventoryGridToAddItems);
 
         //Do the first container, which is the same for both
         Transform mainContainer = escapingUI.transform.GetChild(1);
@@ -74,20 +74,20 @@ public class EscapingUI : MonoBehaviour
     /// </summary>
     /// <param name="inventoryGrid"></param>
     /// <returns></returns>
-    private (Dictionary<FurnitureItem, int>, Dictionary<FurnitureItem, int>) RandomiseItemsLost(InventoryGrid inventoryGrid)
+    private (Dictionary<FurnitureController, int>, Dictionary<FurnitureController, int>) RandomiseItemsLost(InventoryGrid inventoryGrid)
     {
-        Dictionary<FurnitureItem, int> allItems = inventoryGrid.GetDictionaryOfCurrentItems();
+        Dictionary<FurnitureController, int> allItems = inventoryGrid.GetDictionaryOfCurrentItems();
         //create the dictionaries
-        Dictionary<FurnitureItem, int> successfullyStolenItems = new Dictionary<FurnitureItem, int>(allItems);
+        Dictionary<FurnitureController, int> successfullyStolenItems = new Dictionary<FurnitureController, int>(allItems);
         //the difference in items from items originally in storage, and the ones in successfully stolen items
-        Dictionary<FurnitureItem, int> lostItems = new Dictionary<FurnitureItem, int>();
+        Dictionary<FurnitureController, int> lostItems = new Dictionary<FurnitureController, int>();
 
         if (!successful)
         {
             //Now shuffle list of items
             //create a list of items, adding every single item in dictionary the number of times the value appears in the dictionary
-            List<FurnitureItem> listOfItems = new List<FurnitureItem>();
-            foreach (KeyValuePair<FurnitureItem, int> itemPair in allItems)
+            List<FurnitureController> listOfItems = new List<FurnitureController>();
+            foreach (KeyValuePair<FurnitureController, int> itemPair in allItems)
             {
                 for (int i = 0; i < itemPair.Value; i++)
                 {
@@ -100,11 +100,11 @@ public class EscapingUI : MonoBehaviour
             int numOfItemsToLose = Mathf.CeilToInt((NightManager.instance.itemLosePercentage / 100f) * allItems.Count);
             listOfItems = listOfItems.OrderBy(x => UnityEngine.Random.value).ToList();
             //then add the first numOfItemsToLose into the dictionary format for lostItems
-            List<FurnitureItem> itemsToLose = listOfItems.Take(numOfItemsToLose).ToList();
+            List<FurnitureController> itemsToLose = listOfItems.Take(numOfItemsToLose).ToList();
 
             //for each item to lose, if it still exists in the successful dictionary,
             //take it away and add it to the lostItems dictionary
-            foreach (FurnitureItem itemToLose in itemsToLose)
+            foreach (FurnitureController itemToLose in itemsToLose)
             {
                 //if it already contains it, just do -1 to the item
                 if (successfullyStolenItems.ContainsKey(itemToLose))
@@ -129,11 +129,11 @@ public class EscapingUI : MonoBehaviour
         return (successfullyStolenItems, lostItems);
     }
 
-    private void InstantiateGivenItemsInContainer(Dictionary<FurnitureItem, int> items, Transform container)
+    private void InstantiateGivenItemsInContainer(Dictionary<FurnitureController, int> items, Transform container)
     {
         Color32 colorToUseForQuantity = GetRightColour();
 
-        foreach (KeyValuePair<FurnitureItem, int> itemPair in items)
+        foreach (KeyValuePair<FurnitureController, int> itemPair in items)
         {
             GameObject itemContainer = Instantiate(itemSlotPrefab, container);
             itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = itemPair.Key.inventoryIcon;

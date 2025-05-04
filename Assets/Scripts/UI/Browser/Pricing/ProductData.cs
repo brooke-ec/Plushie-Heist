@@ -5,13 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class ProductData
 {
-    public FurnitureItem itemRef;
+    public FurnitureController itemRef;
     public int lastDayChanged;
     [HideInInspector] public float marketPrice;
     [HideInInspector] public float lastMarketPrice;
     public float price;
 
-    public ProductData(FurnitureItem item, int todaysDay)
+    public ProductData(FurnitureController item, int todaysDay)
     {
         itemRef = item;
         lastMarketPrice = item.marketPrice;

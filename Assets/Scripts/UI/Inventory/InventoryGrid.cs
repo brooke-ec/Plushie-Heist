@@ -78,7 +78,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
     }
 
-    public Vector2Int? FindSpaceForObject(FurnitureItem itemToInsert)
+    public Vector2Int? FindSpaceForObject(FurnitureController itemToInsert)
     {
         return GetSpaceAvailable(new Vector2Int(itemToInsert.inventorySize.x, itemToInsert.inventorySize.y));
     }
@@ -140,7 +140,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
-    public bool IsThisItemTypeInTheInventory(FurnitureItem itemClass)
+    public bool IsThisItemTypeInTheInventory(FurnitureController itemClass)
     {
         for(int x=0;x<inventoryWidth; x++)
         {
@@ -261,9 +261,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// Call to get the dictionary form of the current inventory
     /// </summary>
     /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
-    public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
+    public Dictionary<FurnitureController, int> GetDictionaryOfCurrentItems()
     {
-        Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
+        Dictionary<FurnitureController, int> dictionary = new Dictionary<FurnitureController, int>();
 
         for (int x = 0; x < inventoryWidth; x++)
         {

@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
       propertyPath: m_Name
-      value: fridge
+      value: Fridge
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
       propertyPath: m_Layer
@@ -89,13 +89,7 @@ PrefabInstance:
       addedObject: {fileID: 1448001998135029079}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8621296713315971958}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5885569553923050381}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6245613511705458544}
+      addedObject: {fileID: 2843225981174554082}
   m_SourcePrefab: {fileID: 100100000, guid: 20eabd9ad67966c6bb5e0c3624bb1a74, type: 3}
 --- !u!1 &6398412667397960686 stripped
 GameObject:
@@ -123,7 +117,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0400004, y: 3, z: 1.4412291}
   m_Center: {x: -0.020000273, y: 1.5, z: 0.22061303}
---- !u!114 &8621296713315971958
+--- !u!114 &2843225981174554082
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,43 +126,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6398412667397960686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Fridge
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 3, y: 2}
-  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0.3}
-  <inventorySize>k__BackingField: {x: 2, y: 3}
-  <inventoryIcon>k__BackingField: {fileID: 0}
-  source: {fileID: 0}
---- !u!114 &5885569553923050381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6398412667397960686}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
---- !u!208 &6245613511705458544
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6398412667397960686}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 1.0200001, y: 1.5000001, z: 0.505}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.020000001, y: 1.5000001, z: 0.0050000004}
-  m_TimeToStationary: 0.5
+  item: {fileID: 11400000, guid: 2087d668d8e846c4e8cb88b3d57ef4af, type: 2}

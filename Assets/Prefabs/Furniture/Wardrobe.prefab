@@ -14,9 +14,7 @@ GameObject:
   - component: {fileID: 89862424940255868}
   - component: {fileID: 4477108522379866496}
   - component: {fileID: 188073379478780520}
-  - component: {fileID: 5623067190077194977}
-  - component: {fileID: 5734917450837901289}
-  - component: {fileID: 2839567335347024844}
+  - component: {fileID: -494702361504739822}
   m_Layer: 10
   m_Name: Wardrobe
   m_TagString: Untagged
@@ -1357,7 +1355,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &5623067190077194977
+--- !u!114 &-494702361504739822
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1366,43 +1364,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5514138811806394875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Wardrobe
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 2, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: -0.8, z: 0.06}
-  <inventorySize>k__BackingField: {x: 2, y: 4}
-  <inventoryIcon>k__BackingField: {fileID: 21300000, guid: 670c3ffe64ad23f46a9d570fcb96a198, type: 3}
-  source: {fileID: 0}
---- !u!114 &5734917450837901289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5514138811806394875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
---- !u!208 &2839567335347024844
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5514138811806394875}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  item: {fileID: 11400000, guid: d3412f68180435647ac91a5f530c8bd7, type: 2}
