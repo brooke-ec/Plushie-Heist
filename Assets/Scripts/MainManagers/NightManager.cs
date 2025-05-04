@@ -1,0 +1,91 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class NightManager : MonoBehaviour
+{
+    //might want to make a static instance
+    public static NightManager instance { get; private set; }
+    private void Awake()
+    {
+        if(instance!=null)
+        {
+            Destroy(this);
+            print("Night manager already in scene");
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    private void Start()
+    {
+        LoadNight();
+    }
+
+    /// <summary>
+    /// The percentage of items to lose. Will need to read from saved file to get the itemLosePercentage from skills obtained.
+    /// In % form (E.g: 20 for 20%)
+    /// </summary>
+    public int itemLosePercentage;
+
+    [SerializeField] private GameObject nightIntroUIPrefab;
+    [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
+
+    public void LoadNight()
+    {
+        //TO-DO probably load ikea procedural stuff etc
+
+        //load UI saying what the night is about, and the continue button calls StartNight()
+        GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
+        nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
+                Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
+                Destroy(nightIntroUI);
+            }
+        );
+    }
+
+    /// <summary>
+    /// Called after choosing an ability to be active
+    /// </summary>
+    public void StartNight()
+    {
+        print("night started");
+
+        nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
+        nightTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
+        nightTimer.SetupClock(false);
+
+        //start clock
+        nightTimer.StartCoroutine(nightTimer.StartClock());
+
+        //Start movement of guards?
+    }
+
+    /// <summary>
+    /// Either called by the clock ending or the player going through the exit door
+    /// </summary>
+    /// <param name="successful">Pass true if the player leaves through the door</param>
+    public void OnEndNight(bool successful)
+    {
+        print("night ENDED");
+
+        //Call end stuff
+        escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
+    }
+
+    public void UpdateClockTime(float extraTimeInMins)
+    {
+        nightTimer.UpdateClockTime(extraTimeInMins);
+    }
+
+    #region UI
+    [SerializeField] private Clock nightTimerPrefab;
+    private Clock nightTimer;
+    public Canvas nightUICanvas;
+
+    [SerializeField] private EscapingUI escapingUI;
+    #endregion
+}

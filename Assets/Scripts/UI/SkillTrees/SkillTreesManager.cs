@@ -106,5 +106,12 @@ public class SkillTreesManager : MonoBehaviour
             skillTrees[skillTreeNumber].EnableBranch(plushieNumber);
         }
     }
+
+    int nextPlushie = 0;
+    public void EnableNextBranch(int skillTreeNumber)
+    {
+        EnableBranch(nextPlushie, skillTreeNumber);
+        nextPlushie++;
+    }
     #endregion
 }
