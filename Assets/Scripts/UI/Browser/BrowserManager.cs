@@ -41,11 +41,19 @@ public class BrowserManager : MonoBehaviour
     #region Button functionality
     public void CloseBrowser()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIbrowserClose);
         transform.gameObject.SetActive(false);
     }
     public void OpenBrowser()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIbrowserOpen);
         transform.gameObject.SetActive(true);
+    }
+
+    public void HomeButtonClick()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
+        GoToPage(0);
     }
 
     public void GoToPage(int index)
@@ -92,6 +100,7 @@ public class BrowserManager : MonoBehaviour
 
     public void BackButtonClick()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (historyStackIndex > 1)
         {
             historyStackIndex--;
@@ -103,6 +112,7 @@ public class BrowserManager : MonoBehaviour
 
     public void ForwardButtonClick()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (historyStackIndex < historyStack.Count)
         {
             historyStackIndex++;
@@ -127,7 +137,12 @@ public class BrowserManager : MonoBehaviour
         {
             Transform page = Instantiate(listPagePrefab, listButtonTransform).transform;
             int index = i;
-            page.GetComponent<Button>().onClick.AddListener(() => GoToPage(index));
+            page.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                GoToPage(index);
+                AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
+            }
+            );
             page.GetChild(0).GetComponent<Image>().sprite = pages[i].icon;
             page.GetChild(1).GetComponent<TextMeshProUGUI>().text = pages[i].pageName;
         }
@@ -137,6 +152,7 @@ public class BrowserManager : MonoBehaviour
     public void OnClickPageList()
     {
         listButtonTransform.gameObject.SetActive(!listButtonTransform.gameObject.activeSelf);
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
     }
     #endregion
 

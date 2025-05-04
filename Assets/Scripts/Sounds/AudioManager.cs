@@ -94,7 +94,10 @@ public class AudioManager : MonoBehaviour
         UIhover,
         UIclick,
         error,
-        bought
+        bought,
+        UIbrowserOpen,
+        UIbrowserClose,
+        UIclick2
     }
 
     #endregion

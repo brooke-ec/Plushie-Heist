@@ -1,10 +1,12 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class HomepageWidget : MonoBehaviour
 {
@@ -18,7 +20,9 @@ public class HomepageWidget : MonoBehaviour
 
     public void SetUp()
     {
-        switch(pageType)
+        button.onClick.AddListener(() => AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick));
+
+        switch (pageType)
         {
             case BrowserPageType.moneyFlowGraph:
                 //MakeMoneyFlowGraph();
