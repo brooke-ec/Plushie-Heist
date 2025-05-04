@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     #region References
-    private InventoryController inventoryController;
     private RectTransform rectTransform;
     #endregion
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
@@ -27,7 +26,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void StartInventory()
     {
-        inventoryController = FindAnyObjectByType<InventoryController>();
         rectTransform = GetComponent<RectTransform>();
 
         scaleFactor = SharedUIManager.instance.scaleFactor;
@@ -64,13 +62,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #region Set a grid as interactable or not
     public void OnPointerEnter(PointerEventData eventData)
     {
-        inventoryController.selectedInventoryGrid = this;
+        InventoryController.instance.selectedInventoryGrid = this;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //maybe it's better if it's only re-set to a new selected Inventory Grid if that one calls it, not sure
-        inventoryController.selectedInventoryGrid = null;
+        InventoryController.instance.selectedInventoryGrid = null;
     }
     #endregion
 
@@ -78,10 +76,12 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public Vector2Int? FindSpaceForObject(InventoryItem itemToInsert)
     {
-        int width = tileSize - itemToInsert.Width + 1;
-        int height = tileSize - itemToInsert.Height + 1;
-
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
+    }
+
+    public Vector2Int? FindSpaceForObject(FurnitureItem itemToInsert)
+    {
+        return GetSpaceAvailable(new Vector2Int(itemToInsert.inventorySize.x, itemToInsert.inventorySize.y));
     }
 
     /// <summary> Place item in inventory in tile units. Eg: [2, 5] INCLUDES OVERLAP ITEM </summary>
@@ -141,7 +141,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
-    public bool IsThisItemTypeInTheInventory(ItemClass itemClass)
+    public bool IsThisItemTypeInTheInventory(FurnitureItem itemClass)
     {
         for(int x=0;x<inventoryWidth; x++)
         {
@@ -159,7 +159,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <summary>
     /// Gets the first instance of this item type in the inventory if exists, null otherwise
     /// </summary>
-    public InventoryItem GetFirstItemType(ItemClass itemClass)
+    public InventoryItem GetFirstItemType(FurnitureItem itemClass)
     {
         for (int x = 0; x < inventoryWidth; x++)
         {
@@ -280,9 +280,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// Call to get the dictionary form of the current inventory
     /// </summary>
     /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
-    public Dictionary<ItemClass, int> GetDictionaryOfCurrentItems()
+    public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
     {
-        Dictionary<ItemClass, int> dictionary = new Dictionary<ItemClass, int>();
+        Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
 
         for (int x = 0; x < inventoryWidth; x++)
         {
@@ -356,12 +356,16 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         List<string> actionTitles = new List<string>();
         List<UnityAction> actions = new List<UnityAction>();
 
-        actionTitles.Add("Place item");
-        actionTitles.Add("Discard item");
 
-        //TO-DO whatever is called to place an item
-        //actions.Add(METHOD) but temporarily:
-        actions.Add(() => print("missing placing item method"));
+        actionTitles.Add("Place item");
+        actions.Add(() =>
+        {
+            SharedUIManager.instance.CloseMenu();
+            FurniturePlacer.instance.Place(item.itemClass)
+                .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
+        });
+
+        actionTitles.Add("Discard item");
         actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
 
         if (isBackpack)
@@ -373,26 +377,5 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         FindAnyObjectByType<HoveringManager>().CreateInventoryTooltip(actionTitles, actions, mousePos);
     }
 
-    #endregion
-
-    #region Test
-    public List<ItemClass> itemsToTest = new List<ItemClass>();
-    public GameObject itemPrefab;
-    //
-    public void PlaceTestItems()
-    {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemsToTest[0]);
-        PlaceItem(item, 0, 0);
-
-        InventoryItem item2 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item2.Set(itemsToTest[1]);
-        PlaceItem(item2, 0, 1);
-
-        InventoryItem item3 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item3.Set(itemsToTest[0]);
-        PlaceItem(item3, 2, 1);
-    }
     #endregion
 }

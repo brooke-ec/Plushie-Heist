@@ -111,9 +111,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
-
-    [Header("UI")]
-    [SerializeField] private GameObject inventoryUI;
     #endregion
 
     #region private fields
@@ -1073,34 +1070,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void getInteract(InputAction.CallbackContext ctx)
+    public void toggleInventory(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
-        {
-            Debug.Log("Interact");
-        }
-    }
+        if (!ctx.performed) return;
 
-    public void openInventory(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed)
-        {
-            if (!inventoryOpen)
-            {
-                inventoryUI.SetActive(true);
-                inventoryOpen = true;
-                GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
-                Cursor.lockState = CursorLockMode.Confined;
-            }
-            else
-            {
-
-                inventoryUI.SetActive(false);
-                inventoryOpen = false;
-                GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
+        if (SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.CloseMenu();
+        else SharedUIManager.instance.OpenMenu(InventoryController.instance);
     }
 
     private void OnTriggerEnter(Collider other)

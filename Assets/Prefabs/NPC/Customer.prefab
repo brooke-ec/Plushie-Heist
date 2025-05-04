@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4838222444980244618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1435351885828524112}
+  - component: {fileID: 3064465622262627738}
+  - component: {fileID: 5157161442797937198}
+  - component: {fileID: 6096626662938335113}
+  m_Layer: 11
+  m_Name: Customer
+  m_TagString: Customer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1435351885828524112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4838222444980244618}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3064465622262627738
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4838222444980244618}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 2560
+  m_LayerOverridePriority: 1
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 0.75
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.35, z: 0}
+--- !u!195 &5157161442797937198
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4838222444980244618}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.01
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.72
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &6096626662938335113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4838222444980244618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86d21f84df833b4db7d233f5edc2080, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupTime: 2
+  animationController: {fileID: 9100000, guid: db4d6d4ad2fb16a41ac72f168669de28, type: 2}
+  models:
+  - {fileID: 5866666021909216657, guid: 7d77f8c971475fd4086388e18339a75b, type: 3}
+  - {fileID: 5866666021909216657, guid: f5f7c06a861b6a34796656d3595b8f2b, type: 3}
+  - {fileID: 5866666021909216657, guid: 38bdaa7bc424cdd4690ee006ba76e1d6, type: 3}
+  - {fileID: 5866666021909216657, guid: e3800444602e16646b4671646941ee4e, type: 3}
+  - {fileID: 5866666021909216657, guid: e2eb88235b885bd41a79485b5827763f, type: 3}
+  - {fileID: 5866666021909216657, guid: 5e5b4846281ea3c4b96cce7ecafbd77d, type: 3}
+  - {fileID: 5866666021909216657, guid: 9b24fae50400a5646b561ffb19308ee3, type: 3}
+  - {fileID: 5866666021909216657, guid: 2d2472dd8e17ddf458dd53c000120d27, type: 3}
+  - {fileID: 5866666021909216657, guid: cc6bd0031272da74ebf17492b35dbc69, type: 3}
+  - {fileID: 5866666021909216657, guid: 96b8d0f74e2e81a408852f3491a46f77, type: 3}
+  - {fileID: 5866666021909216657, guid: 2c8af36b374bbef19accdc165f9050af, type: 3}
+  - {fileID: 5866666021909216657, guid: fc7d731b6b5ad33fcb19c9cfbf5640e2, type: 3}

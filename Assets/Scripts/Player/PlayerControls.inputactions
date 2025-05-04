@@ -60,9 +60,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "Primary Interact",
                     "type": "Button",
                     "id": "047af27c-f110-4638-8308-e0616b8467ba",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary Interact",
+                    "type": "Button",
+                    "id": "be0eb423-5b96-46e2-a716-7887491cc0af",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -96,9 +105,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Rotate",
+                    "name": "Cancel",
                     "type": "Button",
-                    "id": "be0eb423-5b96-46e2-a716-7887491cc0af",
+                    "id": "b6bd0647-3eef-4cd2-a13a-ae2ee1905d5d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -223,7 +232,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "Primary Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -267,14 +276,25 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Rotate",
+                    "action": "Secondary Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21438027-0333-4727-b2f1-a214b16d20da",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "InventoryActions",
+            "name": "MenuActions",
             "id": "dfcae38c-d7c0-443d-b8b0-84ae1945156a",
             "actions": [
                 {
@@ -287,7 +307,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Drag",
+                    "name": "Left Click",
                     "type": "Button",
                     "id": "06d20dda-dbd3-43d7-a4a7-d8a890a5476a",
                     "expectedControlType": "Button",
@@ -296,7 +316,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Mouse",
+                    "name": "Point",
                     "type": "Value",
                     "id": "96780512-7c98-4cf9-859b-40f2a12e7fb9",
                     "expectedControlType": "Vector2",
@@ -305,7 +325,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "CloseInventory",
+                    "name": "Close",
                     "type": "Button",
                     "id": "1cc6a7b2-3fc3-4b93-b630-477054c5889b",
                     "expectedControlType": "Button",
@@ -333,7 +353,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Drag",
+                    "action": "Left Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -344,7 +364,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mouse",
+                    "action": "Point",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -355,7 +375,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CloseInventory",
+                    "action": "Close",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9c0ee655-f8b4-4575-b7b0-70477c82fcfb",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Close",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "34a3db2f-77e6-41f6-be41-bfacc86dd567",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Close",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -48,18 +48,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7197e327e35e064bac414f677935067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positiveX:
-  - {fileID: 2300827449402454805, guid: 000745fd8ea510243bcdce41709e3a6a, type: 3}
-  - {fileID: 2300827449402454805}
-  - {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
-  - {fileID: 2300827449402454805, guid: a0edf2d520c5c96448c993a5dedc19ac, type: 3}
-  negativeX: []
-  positiveZ:
-  - {fileID: 2300827449402454805, guid: 000745fd8ea510243bcdce41709e3a6a, type: 3}
-  - {fileID: 2300827449402454805}
-  - {fileID: 2300827449402454805, guid: d2a32ddedadbd7141bb03d60582cf117, type: 3}
-  - {fileID: 2300827449402454805, guid: a0edf2d520c5c96448c993a5dedc19ac, type: 3}
-  negativeZ: []
+  _positiveX:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: e52232b30be184c419c1606dc314c06b, type: 2}
+    rawReference:
+      rid: -2
+  _positiveZ:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: e52232b30be184c419c1606dc314c06b, type: 2}
+    rawReference:
+      rid: -2
+  _negativeX: []
+  _negativeZ: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &679554211939982461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1928,7 +1933,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1149
+  m_VersionIndex: 1155
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
