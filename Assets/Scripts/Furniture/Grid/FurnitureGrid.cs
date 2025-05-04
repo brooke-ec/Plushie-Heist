@@ -28,6 +28,7 @@ public class FurnitureGrid : MonoBehaviour
 
             gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
 
+            GetComponent<MeshRenderer>().material = FurnitureSettings.instance.gridMaterial;
             filter.mesh = mesh.Build(size, cellSize, spacing);
         }
     }
@@ -103,6 +104,12 @@ public class FurnitureGrid : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (collider.center != Vector3.zero)
+        {
+            transform.position += collider.center;
+            collider.center = Vector3.zero;
+        }
+
         Gizmos.color = new Color(0, 0, 1, 0.5f);
         Gizmos.DrawMesh(
             mesh.Build(size,Vector2.one * FurnitureSettings.instance.cellSize,spacing),

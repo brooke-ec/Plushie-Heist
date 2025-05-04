@@ -23,7 +23,7 @@ public class Interactor : MonoBehaviour
     /// <summary>array to hold colliders that are currently in range</summary>
     private readonly Collider[] colliders = new Collider[8];
     /// <summary> The closest interactables in range </summary>
-    private IInteractable[] interactables;
+    private IInteractable[] interactables = new IInteractable[0];
     /// <summary> The closest collider in range </summary>
     private new Collider collider;
     /// <summary> The closest collider in range last frame </summary>

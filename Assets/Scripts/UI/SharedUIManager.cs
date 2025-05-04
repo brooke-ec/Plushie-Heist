@@ -33,11 +33,6 @@ public class SharedUIManager : MonoBehaviour
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
         scaleFactor = rootCanvas.scaleFactor;
-        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (InventoryGrid grid in allGrids)
-        {
-            grid.StartInventory();
-        }
 
         if (NightManager.instance != null)
         {

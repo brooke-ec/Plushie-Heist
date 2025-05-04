@@ -42,7 +42,11 @@ public class InventoryController : MonoBehaviour, IUIMenu
 
     private void Start()
     {
-        storageGrid.StartInventory();
+        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (InventoryGrid grid in allGrids)
+        {
+            grid.StartInventory();
+        }
 #if UNITY_EDITOR
         PlaceTestItems();
 #endif
