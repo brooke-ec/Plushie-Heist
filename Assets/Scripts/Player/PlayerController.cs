@@ -182,6 +182,8 @@ public class PlayerController : MonoBehaviour
     private GameObject Hook;
     ///<summary></summary>
     private float grappleCooldownMax;
+    /// <summary> The current offset of the camera </summary>
+    private Vector3 cameraOffset;
 
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
@@ -193,6 +195,7 @@ public class PlayerController : MonoBehaviour
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
+    [HideInInspector] public Transform seat = null;
     #endregion
 
     #region core methods
@@ -222,7 +225,6 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-
         if (arrested)
         {
             Arrest();
@@ -278,6 +280,14 @@ public class PlayerController : MonoBehaviour
         Animate();
 
         UpdateAbilitiesCooldowns();
+
+        if (seat != null)
+        {
+            velocity = Vector3.zero;
+            SetCameraOffset(Vector3.up * -0.4f);
+            transform.position = seat.position;
+            animator.SetTrigger("Sit");
+        }
     }
 
     /// <summary> Update UI of ability with cooldown </summary>
@@ -876,7 +886,7 @@ public class PlayerController : MonoBehaviour
     private void Crouch()
     {
         isCrouchPressed = true;
-        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        SetCameraOffset(Vector3.up * -0.25f);
         cc.height = 1.5f;
         cc.center = new Vector3(0, 0.75f, 0);
     }
@@ -887,9 +897,15 @@ public class PlayerController : MonoBehaviour
     private void Uncrouch()
     {
         isCrouchPressed = false;
-        cam.transform.localPosition = new Vector3(0, 1.25f, 0);
+        SetCameraOffset(Vector3.zero);
         cc.height = 2;
         cc.center = new Vector3(0, 1f, 0);
+    }
+
+    private void SetCameraOffset(Vector3 vector)
+    {
+        cam.transform.localPosition += vector - cameraOffset;
+        cameraOffset = vector;
     }
     #endregion
 
@@ -961,9 +977,11 @@ public class PlayerController : MonoBehaviour
     {
         if (ctx.performed)
         {
+            seat = null;
             wishJump = true;
             jumpTimer = 0;
             animator.SetTrigger("Jump");
+            SetCameraOffset(Vector3.zero);
         }
     }
 

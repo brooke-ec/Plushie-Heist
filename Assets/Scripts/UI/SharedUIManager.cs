@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -12,6 +11,7 @@ public class SharedUIManager : MonoBehaviour
     [HideInInspector] public float scaleFactor;
     [HideInInspector] public IUIMenu currentMenu = null;
     [HideInInspector] public bool isMenuOpen => currentMenu != null;
+    [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
     
     private PlayerInput playerInput;
 
@@ -58,6 +58,8 @@ public class SharedUIManager : MonoBehaviour
     public void CloseMenu()
     {
         print("Closing all menus");
+        onMenuClose.Invoke();
+
         if (currentMenu != null)
         {
             currentMenu.SetOpenState(false);
