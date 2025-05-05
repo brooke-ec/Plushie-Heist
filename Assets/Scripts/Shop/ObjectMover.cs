@@ -17,7 +17,6 @@ public class ObjectMover : MonoBehaviour
         this.RunAfter(0, () =>
         {
             int iterations = Mathf.RoundToInt(destination.magnitude / (speed * Time.deltaTime));
-            print(iterations);
             for (int i = 0; i < iterations; i++) Update();
         });
     }
