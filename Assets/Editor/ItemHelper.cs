@@ -18,7 +18,11 @@ public class ItemHelper : AssetPostprocessor
             {
                 // If furniture prefab, defer processing until later
                 if (TryLoad(out GameObject prefab, path) && prefab.TryGetComponent(out FurnitureController source)) sources.Add(source);
-                else if (TryLoad(out FurnitureItem item, path)) ProcessFurnitureItem(item);
+                else if (TryLoad(out FurnitureItem item, path))
+                {
+                    if (!path.StartsWith(FurnitureItem.ASSET_PATH)) Debug.LogError($"'Item {path}' is not in the items directory", item);
+                    ProcessFurnitureItem(item);
+                }
 
             });
 
@@ -59,7 +63,7 @@ public class ItemHelper : AssetPostprocessor
             EditorUtility.SetDirty(source.item);
             AssetDatabase.SaveAssetIfDirty(source.item);
         }
-        else if (source.item.prefab != source) Debug.LogError($"'{source.name}' references '{source.item.name}', but it references '{source.item.prefab.name}'");
+        else if (source.item.prefab != source) Debug.LogError($"'Item controller {source.name}' references '{source.item.name}', but it references '{source.item.prefab.name}'", source);
     }
 
     private static void ProcessFurnitureItem(FurnitureItem item)
@@ -73,9 +77,9 @@ public class ItemHelper : AssetPostprocessor
                 EditorUtility.SetDirty(item.prefab);
                 AssetDatabase.SaveAssetIfDirty(item.prefab);
             }
-            else if (item.prefab.item != item) Debug.LogError($"'{item.name}' references '{item.prefab.name}', but it references '{item.prefab.item.name}'");
+            else if (item.prefab.item != item) Debug.LogError($"Item '{item.name}' references '{item.prefab.name}', but it references '{item.prefab.item.name}'", item);
         }
-        else Debug.LogError($"'{item.name}' has no referenced prefab");
+        else Debug.LogError($"Item '{item.name}' has no referenced prefab", item);
     }
 
     private static bool TryLoad<T>(out T asset, string path) where T : Object
