@@ -52,10 +52,8 @@ public class ObjectMover : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(transform.position, 0.2f);
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.TransformPoint(destination), 0.2f);
+        Gizmos.DrawIcon(transform.position, "enter");
+        Gizmos.DrawIcon(transform.TransformPoint(destination), "exit");
     }
 #endif
 }
