@@ -10,6 +10,10 @@ public class SkillButton : MonoBehaviour
     private SkillTreeController skillTreeController;
 
     public bool branchIsEnabled = true;
+    /// <summary>
+    /// by default this is a skill tree button so you interact, but in the case of the plushies I want this false
+    /// </summary>
+    [HideInInspector] public bool interactableSkill = true;
 
     private void Start()
     {
@@ -47,10 +51,19 @@ public class SkillButton : MonoBehaviour
         UpdateUI();
     }
 
+    public void SetUI(Skill skill, SkillTreeController skillTreeController)
+    {
+        this.skill = skill;
+        SetUI(skillTreeController);
+    }
+
     private void UpdateUI()
     {
         UpdateColours();
-        UpdateParentEdges();
+        if (interactableSkill)
+        {
+            UpdateParentEdges();
+        }
     }
 
     public void TryGetSkill()

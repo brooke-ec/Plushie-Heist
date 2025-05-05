@@ -109,5 +109,10 @@ public class SkillTreesManager : MonoBehaviour
             nextPlushie[skillTreeNum]++;
         }
     }
+
+    public List<SkillTreeController> GetSkillTreeControllers()
+    {
+        return skillTrees;
+    }
     #endregion
 }

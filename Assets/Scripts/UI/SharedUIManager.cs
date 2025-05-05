@@ -51,7 +51,10 @@ public class SharedUIManager : MonoBehaviour
         currentMenu = menu;
         currentMenu.SetOpenState(true);
 
-        playerInput.SwitchCurrentActionMap("MenuActions");
+        if (playerInput != null)
+        {
+            playerInput.SwitchCurrentActionMap("MenuActions");
+        }
         Cursor.lockState = CursorLockMode.Confined;
     }
 
@@ -66,7 +69,10 @@ public class SharedUIManager : MonoBehaviour
             currentMenu = null;
         }
 
-        playerInput.SwitchCurrentActionMap("PlayerMovement");
+        if (playerInput != null)
+        {
+            playerInput.SwitchCurrentActionMap("PlayerMovement");
+        }
         Cursor.lockState = CursorLockMode.Locked;
     }
 
