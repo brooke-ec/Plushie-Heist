@@ -1,9 +1,26 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Util
 {
+    /// <summary>
+    /// Invokes the provided function after the specified delay in seconds
+    /// </summary>
+    /// <param name="delay">The number of seconds to delay the function by</param>
+    /// <param name="action">The funciton to run after the specified delay</param>
+    public static void RunAfter(this MonoBehaviour behviour, float delay, System.Action action)
+    {
+        IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(delay);
+            action();
+        }
+
+        behviour.StartCoroutine(Delay());
+    }
+
     public static void ForEach<T>(this IEnumerator<T> enumerator, Action<T> action)
     {
         using (enumerator) while (enumerator.MoveNext()) action(enumerator.Current);

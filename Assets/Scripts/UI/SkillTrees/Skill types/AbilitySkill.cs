@@ -9,19 +9,50 @@ public class AbilitySkill : Skill
     public enum AbilityToUnlock
     {
         none,
+        PlayerDash,
+        PlayerBoost,
         PlayerWallRunning,
         PlayerGrapple,
-        CustomerSuggestion,
-        CustomerConvincing,
-        CustomerHaggling,
+        PlayerGlide,
+        PlayerSecondChance,
+        ShopAutomaticItemRestocking,
     }
 
     public override void Unlock()
     {
+        bool isNight = NightManager.instance != null;
+
         switch (abilityToUnlock)
         {
+            case AbilityToUnlock.PlayerDash:
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Dash); }
+                break;
+            case AbilityToUnlock.PlayerBoost:
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Boost); }
+                break;
             case AbilityToUnlock.PlayerWallRunning:
-                UnlockWallRunning();
+                if (isNight) { }
+                //TO-DO NOT SURE BECAUSE IT'S WALL RUNNING
+                //MovementUIManager.instance.LearnAbility(); ?
+                break;
+            case AbilityToUnlock.PlayerGrapple:
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Grapple); }
+                break;
+            case AbilityToUnlock.PlayerGlide:
+                if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Glide); }
+                break;
+            case AbilityToUnlock.PlayerSecondChance:
+                if (isNight) { }
+                //TO-DO SOME VARIABLE WHEN CAUGHT WITH GUARDS?
+                //TP YOU TO THE START OF THE IKEA?
+                break;
+            case AbilityToUnlock.ShopAutomaticItemRestocking:
+                if (!isNight) { }
+                //TO-DO AFTER PICKING UP ITEM, IF VARIABLE IS TRUE
+                //then checking
+                //basically IF VARIABLE IS TRUE
+                //bool removed = FindAnyObjectByType<InventoryController>().RemoveAnItemTypeFromInventory(itemClassPassed)
+                //place item again in the same place/shelf
                 break;
             default:
                 break;
@@ -32,7 +63,7 @@ public class AbilitySkill : Skill
     #region Player
     public void UnlockWallRunning()
     {
-        //Something like FindAnyObjectByType<PlayerController>().UnlockWallRunning();
+        //Something like FindAnyObjectByType<PlayerController>().UnlockWallRunning(); ?
     }
 
     public void UnlockGrapple()

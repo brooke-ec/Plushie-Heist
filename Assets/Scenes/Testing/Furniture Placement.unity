@@ -186,17 +186,6 @@ LightingSettings:
   m_PVRTiledBaking: 0
   m_NumRaysToShootPerTexel: -1
   m_RespectSceneVisibilityWhenBakingGI: 0
---- !u!114 &538443616 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3750863158792779971, guid: 3d5490c6c89479a4c8ec93b52b430dc6, type: 3}
-  m_PrefabInstance: {fileID: 1678793550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f3a943145e247b468018222b0acedce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &608857282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1745,16 +1734,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interaction Text
       objectReference: {fileID: 0}
-    - target: {fileID: 1036328969324984904, guid: 17af0cb5361c8724ebf0f9a564d14440, type: 3}
-      propertyPath: m_text
-      value: 'Press E to Pickup
-
-        Press Q to mark as sellable'
-      objectReference: {fileID: 0}
-    - target: {fileID: 1036328969324984904, guid: 17af0cb5361c8724ebf0f9a564d14440, type: 3}
-      propertyPath: m_margin.w
-      value: -28.491936
-      objectReference: {fileID: 0}
     - target: {fileID: 6845011403985609483, guid: 17af0cb5361c8724ebf0f9a564d14440, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2670,7 +2649,7 @@ PrefabInstance:
     - target: {fileID: 5202309720933945349, guid: 167521ec9eeeea44abfb8aeaa6e3b618, type: 3}
       propertyPath: inventoryGridToAddItems
       value: 
-      objectReference: {fileID: 538443616}
+      objectReference: {fileID: 0}
     - target: {fileID: 5202309720933945349, guid: 167521ec9eeeea44abfb8aeaa6e3b618, type: 3}
       propertyPath: itemsToTest.Array.data[0]
       value: 
@@ -2706,7 +2685,7 @@ PrefabInstance:
     - target: {fileID: 5256204066029779274, guid: 167521ec9eeeea44abfb8aeaa6e3b618, type: 3}
       propertyPath: gridToStart
       value: 
-      objectReference: {fileID: 538443616}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

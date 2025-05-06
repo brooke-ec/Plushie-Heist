@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
       propertyPath: m_Name
-      value: toaster
+      value: Toaster
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
       propertyPath: m_Layer
@@ -81,13 +81,7 @@ PrefabInstance:
       addedObject: {fileID: 4077854633877614320}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4513425701937446547}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3885287692757807190}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8214892476655548997}
+      addedObject: {fileID: 4823342866783082998}
   m_SourcePrefab: {fileID: 100100000, guid: 63b5e8095f8ed10418d477c6d8e7de92, type: 3}
 --- !u!1 &395033548925300356 stripped
 GameObject:
@@ -115,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8288561, y: 0.6, z: 0.50000006}
   m_Center: {x: 0.012905672, y: 0.30000514, z: -0.000000055879354}
---- !u!114 &4513425701937446547
+--- !u!114 &4823342866783082998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,43 +118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 395033548925300356}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Toaster
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 1, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: 0, z: 0}
-  <inventorySize>k__BackingField: {x: 1, y: 1}
-  <inventoryIcon>k__BackingField: {fileID: 0}
-  source: {fileID: 0}
---- !u!114 &3885287692757807190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395033548925300356}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
---- !u!208 &8214892476655548997
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395033548925300356}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.45800003, y: 0.3, z: 0.25}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.031000001, y: 0.3, z: 0}
-  m_TimeToStationary: 0.5
+  item: {fileID: 11400000, guid: e5a43f6857e8cec4da1d755566a30650, type: 2}

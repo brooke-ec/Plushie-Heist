@@ -144,19 +144,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.000000021855694
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
-      propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -164,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -190,13 +190,7 @@ PrefabInstance:
       addedObject: {fileID: 6032376825804599574}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7167867983714605704}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3306666977156212433}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -5053903313918393249}
+      addedObject: {fileID: 8056955707997376254}
   m_SourcePrefab: {fileID: 100100000, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}
 --- !u!1 &26487692483908025 stripped
 GameObject:
@@ -224,7 +218,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000001, y: 0.19804749, z: 0.5000001}
   m_Center: {x: -0.000000059604645, y: -0.000976596, z: 0.25000006}
---- !u!114 &7167867983714605704
+--- !u!114 &8056955707997376254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,46 +227,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 26487692483908025}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd083ad91c4e79c4ab2a543a3a68da2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <itemName>k__BackingField: Inverted Narrow Shelf
-  <marketPrice>k__BackingField: 0
-  <gridSize>k__BackingField: {x: 2, y: 1}
-  <gridOffset>k__BackingField: {x: 0, y: -1, z: 0.35}
-  <inventorySize>k__BackingField: {x: 1, y: 1}
-  <inventoryIcon>k__BackingField: {fileID: 0}
-  source: {fileID: 0}
---- !u!114 &3306666977156212433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 26487692483908025}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
---- !u!208 &-5053903313918393249
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 26487692483908025}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.2, z: 0.25}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.1, z: 0.25}
-  m_TimeToStationary: 0.5
+  item: {fileID: 11400000, guid: 2908ce3822ba2a5409fd6d1266901ce4, type: 2}
 --- !u!4 &798767464570424067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b39dd2d14dd4e8b4fae9420b0747c786, type: 3}

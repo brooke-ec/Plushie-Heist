@@ -111,9 +111,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
-
-    [Header("UI")]
-    [SerializeField] private GameObject inventoryUI;
     #endregion
 
     #region private fields
@@ -185,6 +182,8 @@ public class PlayerController : MonoBehaviour
     private GameObject Hook;
     ///<summary></summary>
     private float grappleCooldownMax;
+    /// <summary> The current offset of the camera </summary>
+    private Vector3 cameraOffset;
 
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
@@ -192,12 +191,11 @@ public class PlayerController : MonoBehaviour
     /// <summary>ther animator component </summary>
     private Animator animator;
 
-    private bool inventoryOpen;
-
     #endregion
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
+    [HideInInspector] public Transform seat = null;
     #endregion
 
     #region core methods
@@ -227,7 +225,6 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-
         if (arrested)
         {
             Arrest();
@@ -283,6 +280,14 @@ public class PlayerController : MonoBehaviour
         Animate();
 
         UpdateAbilitiesCooldowns();
+
+        if (seat != null)
+        {
+            velocity = Vector3.zero;
+            SetCameraOffset(Vector3.up * -0.4f);
+            transform.position = seat.position;
+            animator.SetTrigger("Sit");
+        }
     }
 
     /// <summary> Update UI of ability with cooldown </summary>
@@ -322,6 +327,32 @@ public class PlayerController : MonoBehaviour
                 MovementUIManager.instance.UpdateAbilityCooldown((Ability)i, cooldown, cooldownMax);
                 MovementUIManager.instance.UpdateStaminaBar(stamina, maxStamina);
             }
+        }
+    }
+
+    /// <summary>
+    /// Modifies the needed values for skills upgrades. Only "dash", "jump" and "boost"
+    /// </summary>
+    /// <param name="ability">The ability to modify the values of</param>
+    /// <param name="modifier">the modifier of the values</param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ModifyAbilityValue(string ability, float modifier)
+    {
+        switch(ability)
+        {
+            case "dash":
+                dashSpeed *= modifier;
+                break;
+            case "jump":
+                noJumps += (int)modifier;
+                break;
+            case "boost":
+                boostSpeedCap *= modifier;
+                boostGroundAcceleration *= modifier;
+                break;
+            default:
+                print("Error modifying ability value");
+                break;
         }
     }
 
@@ -855,7 +886,7 @@ public class PlayerController : MonoBehaviour
     private void Crouch()
     {
         isCrouchPressed = true;
-        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        SetCameraOffset(Vector3.up * -0.25f);
         cc.height = 1.5f;
         cc.center = new Vector3(0, 0.75f, 0);
     }
@@ -866,9 +897,15 @@ public class PlayerController : MonoBehaviour
     private void Uncrouch()
     {
         isCrouchPressed = false;
-        cam.transform.localPosition = new Vector3(0, 1.25f, 0);
+        SetCameraOffset(Vector3.zero);
         cc.height = 2;
         cc.center = new Vector3(0, 1f, 0);
+    }
+
+    private void SetCameraOffset(Vector3 vector)
+    {
+        cam.transform.localPosition += vector - cameraOffset;
+        cameraOffset = vector;
     }
     #endregion
 
@@ -940,9 +977,11 @@ public class PlayerController : MonoBehaviour
     {
         if (ctx.performed)
         {
+            seat = null;
             wishJump = true;
             jumpTimer = 0;
             animator.SetTrigger("Jump");
+            SetCameraOffset(Vector3.zero);
         }
     }
 
@@ -1005,28 +1044,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void openInventory(InputAction.CallbackContext ctx)
+    public void toggleInventory(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed) openInventory();
-    }
+        if (!ctx.performed) return;
 
-    public void openInventory()
-    {
-        if (!inventoryOpen)
-        {
-            inventoryUI.SetActive(true);
-            inventoryOpen = true;
-            GetComponent<PlayerInput>().SwitchCurrentActionMap("InventoryActions");
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
-
-            inventoryUI.SetActive(false);
-            inventoryOpen = false;
-            GetComponent<PlayerInput>().SwitchCurrentActionMap("PlayerMovement");
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        if (SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.CloseMenu();
+        else SharedUIManager.instance.OpenMenu(InventoryController.instance);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -22,12 +22,15 @@ public class Interactor : MonoBehaviour
     private int count;
     /// <summary>array to hold colliders that are currently in range</summary>
     private readonly Collider[] colliders = new Collider[8];
-    /// <summary> The closest interactable in range </summary>
-    private IInteractable interactable;
+    /// <summary> The closest interactables in range </summary>
+    private IInteractable[] interactables = new IInteractable[0];
     /// <summary> The closest collider in range </summary>
     private new Collider collider;
     /// <summary> The closest collider in range last frame </summary>
     private Collider previous;
+    /// <summary> The outlines of the interactable collider in range </summary>
+    private Outline[] outlines = new Outline[0];
+
 
     private void Start()
     {
@@ -42,27 +45,33 @@ public class Interactor : MonoBehaviour
 
         if (!ReferenceEquals(previous, collider))
         {
-            // Clean up the previous outline
-            if (previous != null)
-            {
-                Outline outline = previous.GetComponentInChildren<Outline>();
-                if (outline != null) outline.enabled = false;
-            }
             previous = collider;
 
+            // Clean up the previous outline, check not destroyed
+            outlines.Where(o => o != null).ForEach(o => o.enabled = false);
+
             // Get new interactable
-            if (collider == null) interactable = null;
+            if (collider == null)
+            {
+                outlines = new Outline[0];
+                interactables = new IInteractable[0];
+            }
             else
             {
-                interactable = collider.GetComponent<IInteractable>();
+                interactables = collider.GetComponents<IInteractable>();
                 
                 // Activate Outline
-                Outline outline = collider.GetComponentInChildren<Outline>();
-                if (outline != null) outline.enabled = true;
+                outlines = collider.GetComponentsInChildren<Outline>();
+                outlines.ForEach(o => o.enabled = true);
             }
         }
 
-        interactionText.text = interactable == null ? "" : interactable.interactionPrompt;
+        if (interactables == null) interactionText.text = "";
+        else
+        {
+            interactionText.text = string.Join("\n", interactables.Select(i => i.interactionPrompt));
+            outlines.ForEach((o) => o.color = interactables.Any(i => i.outline) ? 0 : 1);
+        }
     }
 
 #if UNITY_EDITOR // For Debugging
@@ -79,7 +88,7 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressPrimaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.PrimaryInteract(this);
+        if (ctx.performed && interactables.Length > 0) interactables.ForEach(i => i.PrimaryInteract(this));
     }
 
     /// <summary>
@@ -87,6 +96,6 @@ public class Interactor : MonoBehaviour
     /// </summary>
     public void pressSecondaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && interactable != null) interactable.SecondaryInteract(this);
+        if (ctx.performed && interactables.Length > 0) interactables.ForEach(i => i.SecondaryInteract(this));
     }
 }

@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 /// <summary> Controls a single inventory grid functionality </summary>
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     #region References
-    private InventoryController inventoryController;
     private RectTransform rectTransform;
     #endregion
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
@@ -26,7 +26,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void StartInventory()
     {
-        inventoryController = FindAnyObjectByType<InventoryController>();
         rectTransform = GetComponent<RectTransform>();
 
         scaleFactor = SharedUIManager.instance.scaleFactor;
@@ -63,13 +62,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #region Set a grid as interactable or not
     public void OnPointerEnter(PointerEventData eventData)
     {
-        inventoryController.selectedInventoryGrid = this;
+        InventoryController.instance.selectedInventoryGrid = this;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //maybe it's better if it's only re-set to a new selected Inventory Grid if that one calls it, not sure
-        inventoryController.selectedInventoryGrid = null;
+        InventoryController.instance.selectedInventoryGrid = null;
     }
     #endregion
 
@@ -155,6 +154,24 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets the first instance of this item type in the inventory if exists, null otherwise
+    /// </summary>
+    public InventoryItem GetFirstItemType(FurnitureItem itemClass)
+    {
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                if (inventorySlots[x, y] != null && itemClass.Equals(inventorySlots[x, y].itemClass))
+                {
+                    return inventorySlots[x, y];
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -257,24 +274,109 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     #endregion
 
-    #region Test
-    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
-    public GameObject itemPrefab;
-    //
-    public void PlaceTestItems()
+    #region Extra functionality
+
+    /// <summary>
+    /// Call to get the dictionary form of the current inventory
+    /// </summary>
+    /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
+    public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
     {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemsToTest[0]);
-        PlaceItem(item, 0, 0);
+        Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
 
-        InventoryItem item2 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item2.Set(itemsToTest[1]);
-        PlaceItem(item2, 0, 1);
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                InventoryItem item = inventorySlots[x, y];
+                //if there is an item and that item's main position on grid is this one
+                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
+                {
+                    //if it already contains it, just add 1 to the item
+                    if(dictionary.ContainsKey(item.itemClass))
+                    {
+                        dictionary[item.itemClass] += 1;
+                    }
+                    else
+                    {
+                        //set it to 1
+                        dictionary.Add(item.itemClass, 1);
+                    }
+                }
+            }
+        }
 
-        InventoryItem item3 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item3.Set(itemsToTest[0]);
-        PlaceItem(item3, 2, 1);
+        return dictionary;
     }
+
+    public void ModifyInventorySize(int addedRowModifier)
+    {
+        //copy inventory items to here
+        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
+        for(int x=0; x<inventoryWidth; x++)
+        {
+            for(int y=0; y<inventoryHeight; y++)
+            {
+                copyOfInventorySlots[x, y] = inventorySlots[x, y];
+            }
+        }
+
+        CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
+
+        //now add those items properly to the new inventory slots
+        for (int x = 0; x < inventoryWidth; x++)
+        {
+            for (int y = 0; y < inventoryHeight; y++)
+            {
+                InventoryItem item = copyOfInventorySlots[x, y];
+                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
+                {
+                    PlaceItem(item, x, y);
+                }
+            }
+        }
+
+        inventoryHeight += addedRowModifier;
+        print("added " + addedRowModifier);
+    }
+
+    public InventoryItem[,] GetInventorySlots()
+    {
+        return inventorySlots;
+    }
+
+    public void CreateItemInteractionMenu(InventoryItem item)
+    {
+        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
+        Vector3 mousePos = Input.mousePosition;
+
+        InventoryController controller = FindAnyObjectByType<InventoryController>();
+
+        bool isBackpack = controller.backpackGrid.Equals(this);
+        List<string> actionTitles = new List<string>();
+        List<UnityAction> actions = new List<UnityAction>();
+
+
+        actionTitles.Add("Place item");
+        actions.Add(() =>
+        {
+            SharedUIManager.instance.CloseMenu();
+            FurniturePlacer.instance.Place(item.itemClass)
+                .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
+        });
+
+        actionTitles.Add("Discard item");
+        actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
+
+        //if backpack and it's daytime
+        if (isBackpack && NightManager.instance==null)
+        {
+            actionTitles.Add("Try add to storage");
+            actions.Add(() => controller.AddItemFromBackpackToStorage(item));
+        }
+
+        FindAnyObjectByType<HoveringManager>().CreateInventoryTooltip(actionTitles, actions, mousePos);
+    }
+
     #endregion
 }

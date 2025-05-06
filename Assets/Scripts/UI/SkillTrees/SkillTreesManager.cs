@@ -23,6 +23,8 @@ public class SkillTreesManager : MonoBehaviour
         ShopManager.OnMoneyChanged += UpdateCoins;
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
+
+        //EnableNextBranch();
     }
 
     public void CreateAllSkillTrees()
@@ -93,18 +95,24 @@ public class SkillTreesManager : MonoBehaviour
     #endregion
 
     #region User control
+
+    //TO-DO-SAVING NEEDS TO BE SAVED
+    List<int> nextPlushie = new List<int>() { 0, 0 };
+
     /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>
     /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
-    public void EnableBranch(int plushieNumber, int skillTreeNumber)
+    public void EnableNextBranch()
     {
-        if (skillTreeNumber < 0 || skillTreeNumber >= skillTrees.Count)
+        for (int skillTreeNum = 0; skillTreeNum < skillTrees.Count; skillTreeNum++)
         {
-            Debug.Log("Error enabling branch. Skill tree number too high");
+            skillTrees[skillTreeNum].EnableBranch(nextPlushie[skillTreeNum]);
+            nextPlushie[skillTreeNum]++;
         }
-        else
-        {
-            skillTrees[skillTreeNumber].EnableBranch(plushieNumber);
-        }
+    }
+
+    public List<SkillTreeController> GetSkillTreeControllers()
+    {
+        return skillTrees;
     }
     #endregion
 }

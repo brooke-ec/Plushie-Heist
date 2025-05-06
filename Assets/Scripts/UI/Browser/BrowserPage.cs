@@ -15,6 +15,9 @@ public enum BrowserPageType
     storage,
     settings,
     pricing,
-    rescuedSharks,
-    moneyFlowGraph
+    rescuedPlushies,
+    moneyFlowGraph,
+    openOrCloseShop,
+    leaveGame,
+    gossipOfTheDay
 }
