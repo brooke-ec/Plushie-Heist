@@ -89,7 +89,7 @@ public class SkillTreesManager : MonoBehaviour
         Sprite newButtonBackground = skillTrees[currentlyActiveSkillTree].skillTree.palette.canBeUpgradedSprite;
         coinsContainer.GetChild(1).GetComponent<Image>().sprite = newButtonBackground;
 
-        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString();
+        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString("n2");
     }
 
     #endregion

@@ -160,6 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8527225860675725932}
   - component: {fileID: 7434120593816506730}
+  - component: {fileID: 8362946892462908161}
   m_Layer: 5
   m_Name: CustomerBuyingUI
   m_TagString: Untagged
@@ -203,6 +204,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endScale: 1.05
+--- !u!114 &8362946892462908161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065687187430741515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c66b89452b4e1a419b45219e3dd70c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalMoneyText: {fileID: 585465596912870539}
+  tipsText: {fileID: 1210400757363379602}
+  itemsBuyingContainer: {fileID: 7605406707873493007}
+  continueButton: {fileID: 7024201369969691629}
+  itemPrefab: {fileID: 3001563620447134554, guid: 247c3fc84e0e207429f8a9bb6d8f0fa3, type: 3}
 --- !u!1 &1278140423178761495
 GameObject:
   m_ObjectHideFlags: 0

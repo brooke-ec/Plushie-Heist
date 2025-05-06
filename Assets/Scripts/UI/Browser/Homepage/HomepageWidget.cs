@@ -26,6 +26,7 @@ public class HomepageWidget : MonoBehaviour
         {
             case BrowserPageType.moneyFlowGraph:
                 //MakeMoneyFlowGraph();
+                GetComponent<MoneyAndCustomerInfoWidget>().SetUp(button);
                 break;
             case BrowserPageType.openOrCloseShop:
                 OpenOrCloseShopButton openOrCloseShopButton = GetComponent<OpenOrCloseShopButton>();
@@ -54,7 +55,6 @@ public class HomepageWidget : MonoBehaviour
         edgeObject.AddComponent<CanvasRenderer>();
         edgeRenderer.AddNewPoints(new Vector2(50, 20), new Vector2(100, 50), new Color32(233, 127, 143, 255));
         edgeRenderer.AddNewPoint(new Vector2(150, 0));
-
     }
 
     private void MakeClosingGamePopup()
