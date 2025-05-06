@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public class ShopSpawner : MonoBehaviour
+public class ShopSpawner : MonoBehaviour, ISavableMap
 {
-    [SerializeField] private GameObject[] levels;
-    private GameObject current;
+    [SerializeField] private GridSaver[] levels;
+    private GridSaver current;
 
     [Header("Testing")]
     [SerializeField] private int level = 0;
+
+    string ISavable.key => "shop";
 
     private void Start()
     {
@@ -18,5 +20,10 @@ public class ShopSpawner : MonoBehaviour
         if (current != null) Destroy(current);
 
         current = Instantiate(levels[level], transform);
+    }
+
+    ISavable[] ISavableMap.Collect()
+    {
+        return new ISavable[] { current };
     }
 }

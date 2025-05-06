@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,13 +7,16 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(MeshRenderer))]
-public class FurnitureGrid : MonoBehaviour
+public class FurnitureGrid : MonoBehaviour, ISavableArray
 {
     public readonly UnityEvent onChanged = new UnityEvent();
     public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize.x), (int)(collider.size.z / cellSize.y));
     
     private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
+
+    string ISavable.key => throw new System.NotImplementedException();
+
     private List<FurnitureController> items = new List<FurnitureController>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
@@ -121,6 +125,11 @@ public class FurnitureGrid : MonoBehaviour
     private void OnValidate()
     {
         if (collider == null) collider = GetComponent<BoxCollider>();
+    }
+
+    ISavable[] ISavableArray.Collect()
+    {
+        return items.ToArray();
     }
 #endif
 }

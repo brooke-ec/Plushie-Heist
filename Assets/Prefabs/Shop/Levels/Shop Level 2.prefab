@@ -1808,6 +1808,7 @@ GameObject:
   - component: {fileID: 6834240221773579810}
   - component: {fileID: 2425741038917622605}
   - component: {fileID: 8307370554546080924}
+  - component: {fileID: 4820629226293560446}
   m_Layer: 0
   m_Name: Shop Level 2
   m_TagString: Untagged
@@ -1938,6 +1939,21 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 51fc82c2225f6304ca3f12731499d8cd, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &4820629226293560446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614761264543775150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9294e8eb606860447bb8c78643358e12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grids:
+  - {fileID: 4505329272702996206}
+  - {fileID: 190648609410090661}
 --- !u!1001 &101293157150064209
 PrefabInstance:
   m_ObjectHideFlags: 0

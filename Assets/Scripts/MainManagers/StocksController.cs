@@ -29,7 +29,7 @@ public class StocksController : MonoBehaviour
 
     private void Start()
     {
-        allItemsInGame = Resources.LoadAll<FurnitureItem>("Items");
+        allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.RESOURCES_PATH);
         CreateAllProductData(); // Only references should be set up in Awake()
     }
 

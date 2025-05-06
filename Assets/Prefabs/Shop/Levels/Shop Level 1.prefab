@@ -872,6 +872,7 @@ GameObject:
   - component: {fileID: 2699152910574363471}
   - component: {fileID: 5293465505495473646}
   - component: {fileID: 4799903892525986856}
+  - component: {fileID: 2917651711818364530}
   m_Layer: 0
   m_Name: Shop Level 1
   m_TagString: Untagged
@@ -999,6 +1000,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 41.69756, y: 0, z: 31.799343}
   m_Center: {x: 1.7469654, y: -2.503673, z: 2.0795155}
+--- !u!114 &2917651711818364530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2928157653311225182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9294e8eb606860447bb8c78643358e12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grids:
+  - {fileID: 5159991964532644811}
+  - {fileID: 1276859420272332961}
+  - {fileID: 6930559893186903229}
 --- !u!1 &3157716172329368395
 GameObject:
   m_ObjectHideFlags: 0

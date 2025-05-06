@@ -3,8 +3,10 @@ using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.AI;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
-public class FurnitureController : MonoBehaviour, IInteractable
+public class FurnitureController : MonoBehaviour, IInteractable, ISavable
 {
     /// <summary> The item this prefab represents </summary>
     public FurnitureItem item = null;
@@ -40,6 +42,8 @@ public class FurnitureController : MonoBehaviour, IInteractable
     public bool canSell => empty && ShopManager.instance != null && placed;
     /// <summary> The world space bounding volume of this item </summary>
     public Bounds bounds => collider.bounds;
+
+    public string key => throw new System.NotImplementedException();
 
     /// <summary> The current <see cref="InventoryController"/> instance </summary>
     private InventoryController inventoryController;
@@ -156,6 +160,22 @@ public class FurnitureController : MonoBehaviour, IInteractable
 
         Gizmos.color = new Color(0, 0, 1, 0.5f);
         Gizmos.DrawCube(transform.position + item.gridOffset, new Vector3(item.gridSize.x, 0, item.gridSize.y) * FurnitureSettings.instance.cellSize);
+    }
+
+    public void Deserialize(JObject obj)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public JToken Serialize()
+    {
+        return new JObject(
+            new JProperty("item", item.filename),
+            new JProperty("rotation", gridRotation),
+            new JProperty("selling", selling),
+            new JProperty("position", JsonUtility.ToJson(gridPosition)),
+            new JProperty("subgrids", subgrids.Select(s => s.Serialize()))
+        );
     }
 #endif
 }
