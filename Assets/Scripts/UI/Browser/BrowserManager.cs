@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BrowserManager : MonoBehaviour
+public class BrowserManager : MonoBehaviour, IUIMenu
 {
     #region Internal references
     [SerializeField] private Transform listButtonTransform;
@@ -38,16 +38,21 @@ public class BrowserManager : MonoBehaviour
         return -1;
     }
 
+    public void SetOpenState(bool open)
+    {
+        transform.gameObject.SetActive(open);
+        AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.UIbrowserOpen : AudioManager.SoundEnum.UIbrowserClose);
+    }
+
     #region Button functionality
     public void CloseBrowser()
     {
-        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIbrowserClose);
-        transform.gameObject.SetActive(false);
+        SharedUIManager.instance.CloseMenu();
     }
+
     public void OpenBrowser()
     {
-        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIbrowserOpen);
-        transform.gameObject.SetActive(true);
+        SharedUIManager.instance.OpenMenu(this);
     }
 
     public void HomeButtonClick()

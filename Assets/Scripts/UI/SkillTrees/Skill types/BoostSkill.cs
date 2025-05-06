@@ -55,7 +55,7 @@ public class BoostSkill : Skill
                 break;
             case SkillType.ShopInventorySize:
                 //Something like
-                if (!isNight) { FindAnyObjectByType<InventoryController>().inventoryGridToAddItems.ModifyInventorySize((int)modifier);}
+                if (!isNight) { FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
                 if (!isNight) { } //TO-DO * CUSTOMER SPAWN RATE

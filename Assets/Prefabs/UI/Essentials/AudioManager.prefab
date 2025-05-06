@@ -123,10 +123,31 @@ MonoBehaviour:
     pitch: 0.8
     mixerGroup: {fileID: -4707534048135764498, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
     audioSource: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 151429c0282f52c4e98a178d82b783df, type: 3}
+    soundName: 15
+    volume: 0.6
+    pitch: 1
+    mixerGroup: {fileID: -4707534048135764498, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    audioSource: {fileID: 0}
+  - clip: {fileID: 8300000, guid: bc9eeaad6074d8345a2f6635bbe8f13a, type: 3}
+    soundName: 16
+    volume: 0.6
+    pitch: 1
+    mixerGroup: {fileID: -4707534048135764498, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    audioSource: {fileID: 0}
   music:
   - clip: {fileID: 8300000, guid: 7b8dae591a428334296600a73b51d0d6, type: 3}
     musicName: 0
-    volume: 0.1
+    volume: 0.5
     pitch: 1
     mixerGroup: {fileID: 8035693612084983896, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
     audioSource: {fileID: 0}
+  persistentGroups:
+  - group: {fileID: 24300002, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    parameter: MasterVolume
+  - group: {fileID: 8035693612084983896, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    parameter: MusicVolume
+  - group: {fileID: -9123791724040441456, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    parameter: SoundEffectsVolume
+  - group: {fileID: -4707534048135764498, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
+    parameter: UIVolume

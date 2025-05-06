@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary> Controls all interaction with all inventory grids (so we can have multiple) </summary>
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviour, IUIMenu
 {
     public GameObject itemPrefab;
 
@@ -11,15 +12,45 @@ public class InventoryController : MonoBehaviour
     [HideInInspector] public InventoryGrid selectedInventoryGrid;
 
     /// <summary> The current grid being used to add items EVEN WHEN NOT CURRENTLY VISUALLY ACTIVE. </summary>
-    public InventoryGrid inventoryGridToAddItems;
+    public InventoryGrid storageGrid;
     /// <summary> The grid for the backpack inventory </summary>
     public InventoryGrid backpackGrid;
 
     [HideInInspector] public InventoryItem selectedItem;
 
+    /// <summary> Event fired whenever the inventory is changed </summary>
+    public readonly UnityEvent onChanged = new UnityEvent();
+
     private RectTransform selectedItemRectTransform;
     private InventoryItem overlapItem;
     private Vector2 mousePos;
+
+    public static InventoryController instance { get; private set; }
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(this);
+            Debug.LogError("Inventory controller instance already in scene");
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    private void Start()
+    {
+        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (InventoryGrid grid in allGrids)
+        {
+            grid.StartInventory();
+        }
+#if UNITY_EDITOR
+        PlaceTestItems();
+#endif
+    }
 
     private void Update()
     {
@@ -27,13 +58,21 @@ public class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for the button in the menu to open the inventory
+    /// Toggle the inventory grid on or off.
     /// </summary>
-    public void OpenOrCloseInventory()
+    /// <returns>Whether the inventory is visible</returns>
+    public bool OpenOrCloseInventory()
+    {
+        SharedUIManager.instance.ToggleMenu(this);
+        return SharedUIManager.instance.isMenuOpen;
+    }
+
+    public void SetOpenState(bool open)
     {
         //TO-DO NOT SURE IF USED, NEED TO CHECK OTHER BRANCH
-        Transform inventoryTopParent = inventoryGridToAddItems.transform.parent.parent.parent.parent;
-        inventoryTopParent.gameObject.SetActive(!inventoryTopParent.gameObject.activeSelf);
+        AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.backpackOpen : AudioManager.SoundEnum.backpackClose);
+        Transform inventoryTopParent = backpackGrid.transform.parent.parent.parent.parent;
+        inventoryTopParent.gameObject.SetActive(open);
     }
 
     #region Inventory controls
@@ -49,10 +88,20 @@ public class InventoryController : MonoBehaviour
     /// Wrapper method for InsertItem, so that it can be passed to a button (but might want to check if successful or not in the future)
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
-    public void TryInsertItem(ItemClass itemClassToInsert)
+    public void TryInsertItem(FurnitureItem itemClassToInsert)
     {
         bool insertedSuccessfully = InsertItem(itemClassToInsert);
         //maybe in the future check if false, do error sound or something
+    }
+
+    /// <summary>
+    /// Checks if the item can be inserted into the inventory grid
+    /// </summary>
+    /// <param name="item">The item to check</param>
+    /// <returns></returns>
+    public bool CanInsert(FurnitureItem item)
+    {
+        return storageGrid.FindSpaceForObject(item) != null;
     }
 
     /// <summary>
@@ -60,9 +109,9 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemClassToInsert">The item class to create the Inventory Item from</param>
     /// <returns>True if it was a successful insertion, false otherwise (like not enough space)</returns>
-    public bool InsertItem(ItemClass itemClassToInsert, bool fromBackpack=false)
+    public bool InsertItem(FurnitureItem itemClassToInsert, bool fromBackpack=true)
     {
-        InventoryGrid gridToUse = inventoryGridToAddItems;
+        InventoryGrid gridToUse = storageGrid;
         if (fromBackpack) { gridToUse = backpackGrid; }
 
         if (gridToUse == null) { return false; }
@@ -90,21 +139,13 @@ public class InventoryController : MonoBehaviour
             gridToUse.PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
             addedItemSuccessfully = true;
             print("placed item");
+            onChanged.Invoke();
         }
 
         //set grid back off if originally not active
         if (gridWasOriginallyOff)
         {
             gridToUse.gameObject.SetActive(false);
-        }
-
-        if (addedItemSuccessfully)
-        {
-            //if we're not in the night
-            if (ShopManager.instance != null)
-            {
-                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(itemClassToInsert);
-            }
         }
 
         return addedItemSuccessfully;
@@ -115,9 +156,9 @@ public class InventoryController : MonoBehaviour
     /// For example, when you want to place it, calls this so the grid space is cleared (and potentially removed from the pricing table)
     /// </summary>
     /// <param name=""></param>
-    public void RemoveItemFromInventory(InventoryItem item, bool fromBackpack=false)
+    public void RemoveItemFromInventory(InventoryItem item, bool fromBackpack=true)
     {
-        InventoryGrid gridToUse = inventoryGridToAddItems;
+        InventoryGrid gridToUse = storageGrid;
         if (fromBackpack) { gridToUse = backpackGrid; }
 
         gridToUse.CleanGridReference(item);
@@ -130,6 +171,7 @@ public class InventoryController : MonoBehaviour
         }
 
         Destroy(item.gameObject);
+        onChanged.Invoke();
     }
 
     /// <summary>
@@ -137,15 +179,16 @@ public class InventoryController : MonoBehaviour
     /// </summary>
     /// <param name="itemCLass"></param>
     /// <returns>True if exists and was removed, false otherwise</returns>
-    public bool RemoveAnItemTypeFromInventory(ItemClass itemClass, bool fromBackpack=false)
+    public bool RemoveAnItemTypeFromInventory(FurnitureItem itemClass, bool fromBackpack= true)
     {
-        InventoryGrid gridToUse = inventoryGridToAddItems;
+        InventoryGrid gridToUse = storageGrid;
         if(fromBackpack) { gridToUse = backpackGrid; }
 
         InventoryItem removedItem = gridToUse.GetFirstItemType(itemClass);
         if(removedItem != null)
         {
             RemoveItemFromInventory(removedItem);
+            onChanged.Invoke();
             return true;
         }
         return false;
@@ -154,6 +197,7 @@ public class InventoryController : MonoBehaviour
     /// <summary> Left click </summary>
     private void PickUpOrPlaceItem()
     {
+        if (selectedInventoryGrid == null) { return; } //if not on a grid, do nothing
 
         if (selectedItem != null)
         {
@@ -171,6 +215,8 @@ public class InventoryController : MonoBehaviour
         {
             PlaceItem(posOnGrid);
         }
+
+        onChanged.Invoke();
     }
 
     #endregion
@@ -182,7 +228,7 @@ public class InventoryController : MonoBehaviour
     public void AddItemsFromBackpackToStorage()
     {
         if(backpackGrid==null) { print("backpack grid is null"); return; }
-        if(backpackGrid.Equals(inventoryGridToAddItems)) { print("Backpack and storage are the same?? Error"); return; }
+        if(backpackGrid.Equals(storageGrid)) { print("Backpack and storage are the same?? Error"); return; }
 
         InventoryItem[,] backpackItems = backpackGrid.GetInventorySlots();
         foreach(InventoryItem backpackItem in backpackItems)
@@ -201,7 +247,7 @@ public class InventoryController : MonoBehaviour
     public bool AddItemFromBackpackToStorage(InventoryItem backpackItem)
     {
         //insert in gridToAddItems
-        bool insertedItem = InsertItem(backpackItem.itemClass);
+        bool insertedItem = InsertItem(backpackItem.itemClass, false);
         if (insertedItem)
         {
             //Then remove from the backpack grid
@@ -255,20 +301,17 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     #region Test
-    public List<ItemClass> itemsToTest = new List<ItemClass>();
+#if UNITY_EDITOR
+    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
     //
     public void PlaceTestItems()
     {
         Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InsertItem(itemsToTest[0]);
-
-        InsertItem(itemsToTest[1]);
-
-        InsertItem(itemsToTest[0]);
-
-        InsertItem(itemsToTest[1], true);
+        
+        foreach (FurnitureItem item in itemsToTest) InsertItem(item);
     }
-    #endregion
+#endif
+#endregion
 
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)
@@ -289,7 +332,6 @@ public class InventoryController : MonoBehaviour
 
     public void getMousePos(InputAction.CallbackContext ctx)
     {
-        print("getting mouse pos");
         mousePos = ctx.ReadValue<Vector2>();
     }
 

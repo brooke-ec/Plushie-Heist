@@ -11,7 +11,7 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<ItemClass> allItemsInGame = new List<ItemClass>();
+    [SerializeField] private FurnitureItem[] allItemsInGame;
     [HideInInspector] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
@@ -27,12 +27,18 @@ public class StocksController : MonoBehaviour
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
     }
 
+    private void Start()
+    {
+        allItemsInGame = Resources.LoadAll<FurnitureItem>("Items");
+        CreateAllProductData(); // Only references should be set up in Awake()
+    }
+
     public void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 
-        allStocksInGame = new List<ProductData>(allItemsInGame.Count);
-        foreach(ItemClass item in allItemsInGame)
+        allStocksInGame = new List<ProductData>(allItemsInGame.Length);
+        foreach(FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -47,17 +53,19 @@ public class StocksController : MonoBehaviour
     /// Essentially, we check if the passed furniture is already part
     /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
     /// </summary>
-    public void TryAddFurnitureToPricingTable(ItemClass item)
+    public void TryAddFurnitureToPricingTable(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
+            print("Adding");
             pricingTableManager.TryAddNewProduct(product);
         }
     }
 
-    public void TryRemoveFurnitureFromPricingTable(ItemClass item)
+    public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
     {
+        print("Removing");
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
@@ -109,7 +117,7 @@ public class StocksController : MonoBehaviour
         pricingTableManager.ResetTableToOriginalOrder();
     }
 
-    public void CreateSetPricingUI(ItemClass item)
+    public void CreateSetPricingUI(FurnitureController item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)

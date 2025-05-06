@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
-    public ItemClass itemClass;
+    public FurnitureItem itemClass;
     private Image icon;
     private RectTransform shadowRectTransform;
     private RectTransform backgroundRectTransform;
@@ -26,9 +26,9 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             if (!rotated)
             {
-                return itemClass.sizeHeight;
+                return itemClass.inventorySize.y;
             }
-            return itemClass.sizeWidth;
+            return itemClass.inventorySize.x;
         }
     }
 
@@ -38,9 +38,9 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             if (!rotated)
             {
-                return itemClass.sizeWidth;
+                return itemClass.inventorySize.x;
             }
-            return itemClass.sizeHeight;
+            return itemClass.inventorySize.y;
         }
     }
 
@@ -49,10 +49,10 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public bool rotated = false;
 
-    public void Set(ItemClass itemClass)
+    public void Set(FurnitureItem itemClass)
     {
         this.itemClass = itemClass;
-        icon.sprite = itemClass.itemIcon;
+        icon.sprite = itemClass.inventoryIcon;
 
         Vector2 size = new Vector2();
         size.x = Width * InventoryGrid.usableTileSize;
@@ -74,7 +74,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public void Rotate()
     {
-        if (itemClass.sizeWidth == itemClass.sizeHeight) { return; }
+        if (itemClass.inventorySize.x == itemClass.inventorySize.y) { return; }
 
         rotated = !rotated;
         RectTransform itemRectTransform = GetComponent<RectTransform>();
@@ -94,8 +94,6 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
             AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
             GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
-            //TO-DO
-            //there is a prefab with a button component for the tooltip
         }
     }
 }

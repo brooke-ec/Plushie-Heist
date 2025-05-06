@@ -35,7 +35,7 @@ public class EscapingUI : MonoBehaviour
         InventoryController inventoryController = FindAnyObjectByType<InventoryController>();
 
         //Get the dictionary of items successfully stolen, and those lost
-        (Dictionary<ItemClass, int> successfullyStolenItems, Dictionary<ItemClass, int> lostItems) = RandomiseItemsLost(inventoryController.inventoryGridToAddItems);
+        (Dictionary<FurnitureItem, int> successfullyStolenItems, Dictionary<FurnitureItem, int> lostItems) = RandomiseItemsLost(inventoryController.backpackGrid);
 
         //Do the first container, which is the same for both
         Transform mainContainer = escapingUI.transform.GetChild(1);
@@ -74,20 +74,20 @@ public class EscapingUI : MonoBehaviour
     /// </summary>
     /// <param name="inventoryGrid"></param>
     /// <returns></returns>
-    private (Dictionary<ItemClass, int>, Dictionary<ItemClass, int>) RandomiseItemsLost(InventoryGrid inventoryGrid)
+    private (Dictionary<FurnitureItem, int>, Dictionary<FurnitureItem, int>) RandomiseItemsLost(InventoryGrid inventoryGrid)
     {
-        Dictionary<ItemClass, int> allItems = inventoryGrid.GetDictionaryOfCurrentItems();
+        Dictionary<FurnitureItem, int> allItems = inventoryGrid.GetDictionaryOfCurrentItems();
         //create the dictionaries
-        Dictionary<ItemClass, int> successfullyStolenItems = new Dictionary<ItemClass, int>(allItems);
+        Dictionary<FurnitureItem, int> successfullyStolenItems = new Dictionary<FurnitureItem, int>(allItems);
         //the difference in items from items originally in storage, and the ones in successfully stolen items
-        Dictionary<ItemClass, int> lostItems = new Dictionary<ItemClass, int>();
+        Dictionary<FurnitureItem, int> lostItems = new Dictionary<FurnitureItem, int>();
 
         if (!successful)
         {
             //Now shuffle list of items
             //create a list of items, adding every single item in dictionary the number of times the value appears in the dictionary
-            List<ItemClass> listOfItems = new List<ItemClass>();
-            foreach (KeyValuePair<ItemClass, int> itemPair in allItems)
+            List<FurnitureItem> listOfItems = new List<FurnitureItem>();
+            foreach (KeyValuePair<FurnitureItem, int> itemPair in allItems)
             {
                 for (int i = 0; i < itemPair.Value; i++)
                 {
@@ -100,11 +100,11 @@ public class EscapingUI : MonoBehaviour
             int numOfItemsToLose = Mathf.CeilToInt((NightManager.instance.itemLosePercentage / 100f) * allItems.Count);
             listOfItems = listOfItems.OrderBy(x => UnityEngine.Random.value).ToList();
             //then add the first numOfItemsToLose into the dictionary format for lostItems
-            List<ItemClass> itemsToLose = listOfItems.Take(numOfItemsToLose).ToList();
+            List<FurnitureItem> itemsToLose = listOfItems.Take(numOfItemsToLose).ToList();
 
             //for each item to lose, if it still exists in the successful dictionary,
             //take it away and add it to the lostItems dictionary
-            foreach (ItemClass itemToLose in itemsToLose)
+            foreach (FurnitureItem itemToLose in itemsToLose)
             {
                 //if it already contains it, just do -1 to the item
                 if (successfullyStolenItems.ContainsKey(itemToLose))
@@ -129,14 +129,14 @@ public class EscapingUI : MonoBehaviour
         return (successfullyStolenItems, lostItems);
     }
 
-    private void InstantiateGivenItemsInContainer(Dictionary<ItemClass, int> items, Transform container)
+    private void InstantiateGivenItemsInContainer(Dictionary<FurnitureItem, int> items, Transform container)
     {
         Color32 colorToUseForQuantity = GetRightColour();
 
-        foreach (KeyValuePair<ItemClass, int> itemPair in items)
+        foreach (KeyValuePair<FurnitureItem, int> itemPair in items)
         {
             GameObject itemContainer = Instantiate(itemSlotPrefab, container);
-            itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = itemPair.Key.itemIcon;
+            itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = itemPair.Key.inventoryIcon;
             itemContainer.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = itemPair.Value.ToString();
             itemContainer.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().color = colorToUseForQuantity;
         }

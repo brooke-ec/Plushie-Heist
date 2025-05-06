@@ -45,6 +45,10 @@ public class HoveringManager : MonoBehaviour
     private void Start()
     {
         CalculateOffset();
+        SharedUIManager.instance.onMenuClose.AddListener(() =>
+        {
+            if (currentTooltipOpen != null) Destroy(currentTooltipOpen);
+        });
     }
 
     private void CalculateOffset()

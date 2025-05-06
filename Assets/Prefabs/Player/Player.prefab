@@ -56,11 +56,11 @@ Transform:
   m_GameObject: {fileID: 7157742770895043649}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 859627439615050953}
+  m_Father: {fileID: 5249751877190587910}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8284632359089528514
 GameObject:
@@ -71,9 +71,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 859627439615050953}
+  - component: {fileID: 1919195454717137726}
   - component: {fileID: 2651383046741006912}
   - component: {fileID: 2593150926430451965}
-  - component: {fileID: 3655126576856739276}
   - component: {fileID: 6666046485523007560}
   m_Layer: 7
   m_Name: Player
@@ -98,88 +98,9 @@ Transform:
   - {fileID: 3473465231848214638}
   - {fileID: 5249751877190587910}
   - {fileID: 8525110476067233454}
-  - {fileID: 4392269727964115093}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &2651383046741006912
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8284632359089528514}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.1
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2593150926430451965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8284632359089528514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9f445c0d2bc1b5439bf6633f950be4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 8
-  crouchSpeed: 3
-  airAcceleration: 7
-  groundFriction: 10
-  gravity: 15
-  baseGroundAcceleration: 7
-  currentAbility: 0
-  sprintMaxSpeed: 10
-  maxStamina: 20
-  staminaDrain: 1
-  staminaRecover: 1
-  lookSensitivity: 0.15
-  MaxPitch: 80
-  glideGravity: 1
-  jumpSpeed: 6
-  noJumps: 1
-  jumpWindow: 0.1
-  coyoteTime: 0.5
-  slideThreshold: 6
-  slideFriction: 0.75
-  boostSpeedCap: 20
-  boostGroundAcceleration: 20
-  maxBoostTime: 3
-  boostRecoverSpeed: 1
-  dashSpeed: 15
-  noDashes: 1
-  dashRechargeTime: 10
-  dashCooldownTime: 0.5
-  wallDetectionDistance: 0.7
-  wallSpeedThreshold: 8
-  wallRunningSpeed: 18
-  grappleLength: 1000
-  grappleHook: {fileID: 2542746430392280090, guid: 624981e69544b204d8aa86d4e957a3db, type: 3}
-  grappleSpeed: 12
-  grappleAccel: 8
-  grappleCancelLength: 1
-  grappleCooldown: 10
-  grappleCooldownSpeed: 1
-  inventoryUI: {fileID: 0}
-  arrested: 0
---- !u!114 &3655126576856739276
+--- !u!114 &1919195454717137726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -251,7 +172,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 8efa91d1-a7f1-43c6-9802-7715701327b6
-    m_ActionName: PlayerMovement/Mouse[/Mouse/position]
+    m_ActionName: PlayerMovement/Mouse[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2593150926430451965}
@@ -304,7 +225,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6666046485523007560}
         m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
-        m_MethodName: pressInteract
+        m_MethodName: pressPrimaryInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -315,12 +236,12 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 047af27c-f110-4638-8308-e0616b8467ba
-    m_ActionName: PlayerMovement/Interact[/Keyboard/f]
+    m_ActionName: PlayerMovement/Primary Interact[/Keyboard/f]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2593150926430451965}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: getInteract
+      - m_Target: {fileID: 6666046485523007560}
+        m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
+        m_MethodName: pressSecondaryInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -330,13 +251,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 594284680598497189}
+        m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
+        m_MethodName: OnRotate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
+    m_ActionName: PlayerMovement/Secondary Interact[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
     m_ActionId: 12203050-eb8b-4a98-94a4-da98603cddb3
     m_ActionName: PlayerMovement/Pause[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: rotateItem
+      - m_Target: {fileID: 2593150926430451965}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: toggleInventory
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -348,22 +285,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f65804dd-459c-4099-adf5-d259327de607
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
-    m_ActionName: InventoryActions/Rotate[/Keyboard/r]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
-    m_ActionName: InventoryActions/Drag[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
-    m_ActionName: InventoryActions/Mouse[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
-    m_ActionName: InventoryActions/CloseInventory[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 594284680598497189}
@@ -384,7 +305,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 594284680598497189}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
-        m_MethodName: OnRotate
+        m_MethodName: OnCancel
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -394,13 +315,154 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: be0eb423-5b96-46e2-a716-7887491cc0af
-    m_ActionName: PlayerMovement/Rotate[/Keyboard/r]
+    m_ActionId: b6bd0647-3eef-4cd2-a13a-ae2ee1905d5d
+    m_ActionName: PlayerMovement/Cancel[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: rotateItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0216b8f4-c096-4ab8-96b2-f9c3522195a8
+    m_ActionName: MenuActions/Rotate[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: startDrag
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 06d20dda-dbd3-43d7-a4a7-d8a890a5476a
+    m_ActionName: MenuActions/Left Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: getMousePos
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 96780512-7c98-4cf9-859b-40f2a12e7fb9
+    m_ActionName: MenuActions/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2593150926430451965}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: toggleInventory
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
+    m_ActionName: MenuActions/Close[/Keyboard/e,/Keyboard/escape,/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!143 &2651383046741006912
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284632359089528514}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.1
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2593150926430451965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8284632359089528514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9f445c0d2bc1b5439bf6633f950be4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 8
+  crouchSpeed: 3
+  airAcceleration: 7
+  groundFriction: 10
+  gravity: 15
+  baseGroundAcceleration: 7
+  currentAbility: 2
+  sprintMaxSpeed: 10
+  maxStamina: 20
+  staminaDrain: 1
+  staminaRecover: 1
+  lookSensitivity: 0.15
+  MaxPitch: 80
+  glideGravity: 1
+  jumpSpeed: 6
+  noJumps: 1
+  jumpWindow: 0.1
+  coyoteTime: 0.5
+  slideThreshold: 6
+  slideFriction: 0.75
+  boostSpeedCap: 20
+  boostGroundAcceleration: 20
+  maxBoostTime: 3
+  boostRecoverSpeed: 1
+  dashSpeed: 15
+  noDashes: 1
+  dashRechargeTime: 10
+  dashCooldownTime: 0.5
+  wallDetectionDistance: 0.7
+  wallSpeedThreshold: 8
+  wallRunningSpeed: 18
+  grappleLength: 1000
+  grappleHook: {fileID: 2542746430392280090, guid: 624981e69544b204d8aa86d4e957a3db, type: 3}
+  grappleSpeed: 12
+  grappleAccel: 8
+  grappleCancelLength: 1
+  grappleCooldown: 10
+  grappleCooldownSpeed: 1
+  arrested: 0
 --- !u!114 &6666046485523007560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +479,7 @@ MonoBehaviour:
   interactorRadius: 0.5
   interactorLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   interactionText: {fileID: 0}
 --- !u!1 &8461329353988155359
 GameObject:
@@ -431,6 +493,7 @@ GameObject:
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
   - component: {fileID: 594284680598497189}
+  - component: {fileID: 7934438741709096596}
   m_Layer: 7
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -450,7 +513,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4392269727964115093}
   m_Father: {fileID: 859627439615050953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &499776393120379558
@@ -525,12 +589,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 10
-  camera: {fileID: 499776393120379558}
   controller: {fileID: 2651383046741006912}
-  test:
-  - {fileID: 6780374097032370668, guid: 51f6989b187924040ab4e19c37861cc5, type: 3}
-  - {fileID: 6780374097032370668, guid: 252f51414d68b36469e00e99b12c0e38, type: 3}
-  - {fileID: 6780374097032370668, guid: 0923b4e5de3ea2a4288da2acac22b43d, type: 3}
+  camera: {fileID: 499776393120379558}
+  interactor: {fileID: 6666046485523007560}
+--- !u!114 &7934438741709096596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461329353988155359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78da3f00f3328541b4526c0b0b5ec5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineThickness: 5
+  lineIntensity: 5
+  fillAmount: 0
+  lineColor0: {r: 0, g: 0.979579, b: 1, a: 1}
+  lineColor1: {r: 1, g: 0, b: 0, a: 1}
+  lineColor2: {r: 0, g: 1, b: 0, a: 1}
+  additiveRendering: 0
+  backfaceCulling: 1
+  fillTexture: {fileID: 0}
+  fillTextureScale: {x: 1, y: 1}
+  useFillColor: 0
+  fillColor: {r: 0, g: 0, b: 1, a: 1}
+  cornerOutlines: 0
+  addLinesBetweenColors: 0
+  scaleWithScreenSize: 1
+  alphaCutoff: 0.5
+  flipY: 0
+  sourceCamera: {fileID: 499776393120379558}
+  autoEnableOutlines: 0
+  outlineCamera: {fileID: 0}
+  outlineShaderMaterial: {fileID: 0}
+  renderTexture: {fileID: 0}
+  extraRenderTexture: {fileID: 0}
 --- !u!1001 &4016792249454491525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -601,15 +697,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7134394785105016132, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5151492872390713093, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5069531478518834764, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1924330416772942832, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_CastShadows
@@ -625,15 +721,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3250163066507786643, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4361710834771507933, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5788240856288092216, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Controller
@@ -641,11 +737,11 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 48d615e34b311ab49ab796bf16f52293, type: 2}
     - target: {fileID: 8303906797054990637, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8908311948669537042, guid: f5c7c5ed110a2da4082b1f05e9206c27, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
