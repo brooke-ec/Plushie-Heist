@@ -17,6 +17,8 @@ public class PlushieInfoUI : MonoBehaviour
     [SerializeField] private Sprite downArrowIcon;
     [SerializeField] private Sprite unlockedIcon;
     [SerializeField] private Sprite lockedIcon;
+    [SerializeField] private Sprite topTrim;
+    [SerializeField] private Sprite topTrimSquareBottom;
 
     [HideInInspector] public PlushieInfo plushieInfo;
     private PlushieManager plushieManagerRef;
@@ -71,14 +73,18 @@ public class PlushieInfoUI : MonoBehaviour
         if(openInfo)
         {
             topContainer.GetChild(3).GetComponent<Image>().sprite = upArrowIcon;
+            topContainer.GetComponent<Image>().sprite = topTrimSquareBottom;
         }
         else
         {
             topContainer.GetChild(3).GetComponent<Image>().sprite = downArrowIcon;
+            topContainer.GetComponent<Image>().sprite = topTrim;
         }
 
         bottomContainer.gameObject.SetActive(openInfo);
         bottomShadow.gameObject.SetActive(openInfo);
         topShadow.gameObject.SetActive(!openInfo);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
     }
 }

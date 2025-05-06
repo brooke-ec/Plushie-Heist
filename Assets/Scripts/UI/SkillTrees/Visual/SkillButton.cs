@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ public class SkillButton : MonoBehaviour
     /// by default this is a skill tree button so you interact, but in the case of the plushies I want this false
     /// </summary>
     [HideInInspector] public bool interactableSkill = true;
+    private string plushieName = "plushie";
 
     private void Start()
     {
@@ -37,7 +39,8 @@ public class SkillButton : MonoBehaviour
 
         if (IsBranchVisible())
         {
-            lockedString = "Unlocked with plushie";
+            GetPlushieInfo();
+            lockedString = "Unlocked with " + plushieName;
         }
 
 
@@ -186,6 +189,18 @@ public class SkillButton : MonoBehaviour
                 Debug.LogWarning("No edge found from " + requirement.name + " to " + skill.name);
             }
         }
+    }
+
+    private void GetPlushieInfo()
+    {
+        PlushieManager plushieManager = FindAnyObjectByType<PlushieManager>(FindObjectsInactive.Include);
+        if(plushieManager==null) { Debug.LogError("Plushie manager is null when trying to get plushie info for a skill"); return; }
+
+        if (plushieName == "plushie") {
+            //NEED TO FIX NULL REF ERROR HERE
+            //plushieName = plushieManager.GetPlushieForSkill(skill).plushieName;
+        }
+
     }
 
 }

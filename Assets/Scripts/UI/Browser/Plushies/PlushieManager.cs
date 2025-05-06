@@ -26,7 +26,7 @@ public class PlushieManager : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            plushies[i].plushieNumber = i;
+            plushies[i].plushieNumber = i+1;
             if(i<3)
             {
                 CreatePlushieInfoUI(leftPlushieContainer, plushies[i]);
@@ -48,5 +48,13 @@ public class PlushieManager : MonoBehaviour
     public SkillTreeController GetSkillTreeController(int skillTreeNumber)
     {
         return skillTreeControllers[skillTreeNumber];
+    }
+
+    public PlushieInfo GetPlushieForSkill(Skill skill)
+    {
+        //basically look for the unlockable lists in the plushies list, if this skill is here then return that plushie info
+        PlushieInfo plushieInfo = plushies.Find(p => p.unlockableSkills.Find(
+            unlockables => unlockables.skillsToEnable.Contains(skill)) != null);
+        return plushieInfo;
     }
 }
