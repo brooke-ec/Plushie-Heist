@@ -11,7 +11,7 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<FurnitureItem> allItemsInGame = new List<FurnitureItem>();
+    [SerializeField] private FurnitureItem[] allItemsInGame;
     [HideInInspector] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
@@ -29,6 +29,7 @@ public class StocksController : MonoBehaviour
 
     private void Start()
     {
+        allItemsInGame = Resources.LoadAll<FurnitureItem>("Items");
         CreateAllProductData(); // Only references should be set up in Awake()
     }
 
@@ -36,7 +37,7 @@ public class StocksController : MonoBehaviour
     {
         int todaysDate = ShopManager.instance.day;
 
-        allStocksInGame = new List<ProductData>(allItemsInGame.Count);
+        allStocksInGame = new List<ProductData>(allItemsInGame.Length);
         foreach(FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
@@ -57,12 +58,14 @@ public class StocksController : MonoBehaviour
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
+            print("Adding");
             pricingTableManager.TryAddNewProduct(product);
         }
     }
 
     public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
     {
+        print("Removing");
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
