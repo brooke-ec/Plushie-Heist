@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 2058476292118711920}
   m_HorizontalScrollbar: {fileID: 701560933576687882}
   m_VerticalScrollbar: {fileID: 5502548440542120110}
@@ -2499,7 +2499,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 1120845526626477675}
   m_HorizontalScrollbar: {fileID: 6149408048967806743}
   m_VerticalScrollbar: {fileID: 4694515300664983287}
@@ -3246,7 +3246,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 3431951883847919201}
   m_HorizontalScrollbar: {fileID: 6696435748831285911}
   m_VerticalScrollbar: {fileID: 9080598137907245013}
@@ -5694,8 +5694,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5464272927154493358}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.0000021457672}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6989,7 +6989,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 354.50046}
+  m_AnchoredPosition: {x: 0, y: 354.50092}
   m_SizeDelta: {x: 1628.1138, y: 709}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3477509494547937845
@@ -7816,7 +7816,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 8160123453879913647}
   m_HorizontalScrollbar: {fileID: 2919573864262286407}
   m_VerticalScrollbar: {fileID: 5436076279688540015}
@@ -8119,9 +8119,9 @@ RectTransform:
   m_Father: {fileID: 3277214413529337109}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &2904214612586586007
 CanvasRenderer:
@@ -8205,7 +8205,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7629171733700446064}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999785
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8243,7 +8243,7 @@ RectTransform:
   m_Father: {fileID: 6140713981354739342}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9329,9 +9329,9 @@ RectTransform:
   m_Father: {fileID: 3277214413529337109}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &8606376960646936259
 CanvasRenderer:
@@ -10713,7 +10713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bcd4cc220318bf4880fc374a4b2f9df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  group: {fileID: 0}
+  group: {fileID: 24300002, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
 --- !u!1 &5905222092541508185
 GameObject:
   m_ObjectHideFlags: 0
@@ -11028,6 +11028,7 @@ GameObject:
   - component: {fileID: 4313275812946288592}
   - component: {fileID: 6170634860539538375}
   - component: {fileID: 3498377954648177128}
+  - component: {fileID: 2157180361678423331}
   m_Layer: 0
   m_Name: AllShopManagers
   m_TagString: Untagged
@@ -11107,6 +11108,64 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7733cca253644844da70274f4a5f2230, type: 2}
   - {fileID: 11400000, guid: 59b45d1587e788947aa536cd0321559d, type: 2}
   currentlyActiveSkillTree: 0
+--- !u!114 &2157180361678423331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078119644212793155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d75362fa0c73b4592c2ce9d4b3c00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plushies:
+  - plushieName: NALLEBY
+    plushieIcon: {fileID: 21300000, guid: 7d27e54dc25d12a4baba7316bd499e43, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 2c1f75c3cc4149b41ba5d169f8800e5f, type: 2}
+    - {fileID: 11400000, guid: 2115bc2d14d969240a64c25af46ea2c0, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  - plushieName: "SK\xD6LDIS"
+    plushieIcon: {fileID: 21300000, guid: bad46d415afc27c488ed690a16630ab7, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 835768b3b776a6a499df4833389f4b12, type: 2}
+    - {fileID: 11400000, guid: b26bd6c8a3574ac40b6ea45e61c9abe1, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  - plushieName: ANKLIG
+    plushieIcon: {fileID: 21300000, guid: 037cbff6a0ede464397fc1a168479312, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 1d4b9b0a7f123c643a9dfa3657f568cf, type: 2}
+    - {fileID: 11400000, guid: f83102ec3bf08974c91281bc27587570, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  - plushieName: GRODDAN
+    plushieIcon: {fileID: 21300000, guid: 4145c402555ee8e4e8ea61a1c5b416bd, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 7a3ed164144bee542b92e194ef3afbb5, type: 2}
+    - {fileID: 11400000, guid: dab7a6cb44752164484a92dcf1f1f2f0, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  - plushieName: HUNDRA
+    plushieIcon: {fileID: 21300000, guid: 888de05001c99f046a6bcb9029ea29ca, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 6361bd934eb50e541bd5f82f2f6a3e74, type: 2}
+    - {fileID: 11400000, guid: a4fd6c5d0591e3b4da315e2f1dd0c8a9, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  - plushieName: "BL\xC5HAJ"
+    plushieIcon: {fileID: 21300000, guid: 789c0f23a9504bd438c3d099cc364173, type: 3}
+    unlockableSkills:
+    - {fileID: 11400000, guid: 7129bb8721729aa4491f93e5b6918c6b, type: 2}
+    - {fileID: 11400000, guid: b16dd382512788242a1f7b0bcf6d0d6b, type: 2}
+    unlocked: 0
+    plushieNumber: 0
+  plushieInfoUIPrefab: {fileID: 8252867278447403532, guid: 641bb286ae476df4287a1a6f5de82f3a, type: 3}
+  leftPlushieContainer: {fileID: 6977423197407776895}
+  rightPlushieContainer: {fileID: 6726635428696212125}
 --- !u!1 &6111602565122784183
 GameObject:
   m_ObjectHideFlags: 0
@@ -11936,7 +11995,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 8057444456414617980}
   m_HorizontalScrollbar: {fileID: 1616563479951397026}
   m_VerticalScrollbar: {fileID: 7048120891553163962}
@@ -12809,14 +12868,13 @@ GameObject:
   - component: {fileID: 9065979819593668570}
   - component: {fileID: 3212882150869832961}
   - component: {fileID: 5820146947789758037}
-  - component: {fileID: 143724110773246092}
   m_Layer: 5
   m_Name: PlushiesBrowserBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1918853596286040288
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12890,64 +12948,6 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: f002d8f9a70945f49a1e6f494718f293, type: 3}
   pageName: Plushies
   pageType: 6
---- !u!114 &143724110773246092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7237257151418403727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3d75362fa0c73b4592c2ce9d4b3c00b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plushies:
-  - plushieName: NALLEBY
-    plushieIcon: {fileID: 21300000, guid: 7d27e54dc25d12a4baba7316bd499e43, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 2c1f75c3cc4149b41ba5d169f8800e5f, type: 2}
-    - {fileID: 11400000, guid: 2115bc2d14d969240a64c25af46ea2c0, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  - plushieName: "SK\xD6LDIS"
-    plushieIcon: {fileID: 21300000, guid: bad46d415afc27c488ed690a16630ab7, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 835768b3b776a6a499df4833389f4b12, type: 2}
-    - {fileID: 11400000, guid: b26bd6c8a3574ac40b6ea45e61c9abe1, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  - plushieName: ANKLIG
-    plushieIcon: {fileID: 21300000, guid: 037cbff6a0ede464397fc1a168479312, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 1d4b9b0a7f123c643a9dfa3657f568cf, type: 2}
-    - {fileID: 11400000, guid: f83102ec3bf08974c91281bc27587570, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  - plushieName: GRODDAN
-    plushieIcon: {fileID: 21300000, guid: 4145c402555ee8e4e8ea61a1c5b416bd, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 7a3ed164144bee542b92e194ef3afbb5, type: 2}
-    - {fileID: 11400000, guid: dab7a6cb44752164484a92dcf1f1f2f0, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  - plushieName: HUNDRA
-    plushieIcon: {fileID: 21300000, guid: 888de05001c99f046a6bcb9029ea29ca, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 6361bd934eb50e541bd5f82f2f6a3e74, type: 2}
-    - {fileID: 11400000, guid: a4fd6c5d0591e3b4da315e2f1dd0c8a9, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  - plushieName: "BL\xC5HAJ"
-    plushieIcon: {fileID: 21300000, guid: 789c0f23a9504bd438c3d099cc364173, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 7129bb8721729aa4491f93e5b6918c6b, type: 2}
-    - {fileID: 11400000, guid: b16dd382512788242a1f7b0bcf6d0d6b, type: 2}
-    unlocked: 0
-    plushieNumber: 0
-  plushieInfoUIPrefab: {fileID: 8252867278447403532, guid: 641bb286ae476df4287a1a6f5de82f3a, type: 3}
-  leftPlushieContainer: {fileID: 6977423197407776895}
-  rightPlushieContainer: {fileID: 6726635428696212125}
 --- !u!1 &7293203623918730272
 GameObject:
   m_ObjectHideFlags: 0
@@ -13059,8 +13059,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0009765625, y: 297.12094}
-  m_SizeDelta: {x: 1663, y: 0}
+  m_AnchoredPosition: {x: 0.0009765625, y: 297.1209}
+  m_SizeDelta: {x: 1663, y: 505}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2077879138677019449
 MonoBehaviour:
@@ -15052,7 +15052,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 30
+  m_ScrollSensitivity: 7
   m_Viewport: {fileID: 3155381308017408433}
   m_HorizontalScrollbar: {fileID: 8592394574756399995}
   m_VerticalScrollbar: {fileID: 2059128577968050078}

@@ -25,7 +25,9 @@ public class SkillButton : MonoBehaviour
     {
         HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
         Color32 textColour;
-        string lockedString = "Locked until plushie";
+
+        GetPlushieInfo();
+        string lockedString = "Locked until "+plushieName;
         if ((CanBeUnlocked() && IsBranchVisible()) | IsUnlocked())
         {
             tooltipBackgroundColor = skillTreeController.skillTree.palette.tooltipBackgroundColor;
@@ -39,8 +41,7 @@ public class SkillButton : MonoBehaviour
 
         if (IsBranchVisible())
         {
-            GetPlushieInfo();
-            lockedString = "Unlocked with " + plushieName;
+            lockedString = "Unlocked by " + plushieName;
         }
 
 
@@ -198,7 +199,17 @@ public class SkillButton : MonoBehaviour
 
         if (plushieName == "plushie") {
             //NEED TO FIX NULL REF ERROR HERE
-            //plushieName = plushieManager.GetPlushieForSkill(skill).plushieName;
+            PlushieInfo info = plushieManager.GetPlushieForSkill(skill);
+
+            //if null it means it's one of the default skills with no plushie associated
+            if(info==null)
+            {
+                plushieName = "default";
+            }
+            else
+            {
+                plushieName = info.plushieName;
+            }
         }
 
     }
