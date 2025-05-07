@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -10,6 +11,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
     public Music[] music;
     [SerializeField] private MixerGroupMapping[] persistentGroups;
+
+    private Music currentMusicPlaying;
 
     private void Awake()
     {
@@ -39,20 +42,64 @@ public class AudioManager : MonoBehaviour
             sound.audioSource.pitch = sound.pitch;
             sound.audioSource.outputAudioMixerGroup = sound.mixerGroup;
         }
+
+        currentMusicPlaying = music[0];
     }
 
     private void Start()
     {
-        if (music.Length > 0 && music[0] != null)
-        {
-            PlayMusic(music[0].musicName);
-        }
-
         // Load saved mixer levels
         persistentGroups.ForEach(map =>
         {
             if (PlayerPrefs.HasKey(map.name)) map.Set(PlayerPrefs.GetFloat(map.name));
         });
+    }
+
+    private void LateUpdate()
+    {
+        if (currentMusicPlaying != null && currentMusicPlaying.audioSource != null && !currentMusicPlaying.audioSource.isPlaying)
+        {
+            //IF SHOP FIND MUSIC FOR THAT
+            if (ShopManager.instance != null)
+            {
+                RandomiseMusicFromType(MusicEnum.levelMusic);
+            }
+            else if (NightManager.instance != null)
+            {
+                RandomiseMusicFromType(MusicEnum.nightMusic);
+                //OR IF NIGHT FIND MUSIC FOR THAT
+            }
+            else
+            {
+                //OTHERWISE PLAY MAIN MENU MUSIC
+                PlayMusic(music[0].musicName);
+            }
+        }
+    }
+
+    private void RandomiseMusicFromType(MusicEnum musicType)
+    {
+        List<Music> musicToChoose = new List<Music>();
+
+        //find all of that type
+        for(int i=0; i<music.Length; i++)
+        {
+            if (music[i]!=null && music[i].musicName.Equals(musicType))
+            {
+                musicToChoose.Add(music[i]);
+            }
+        }
+
+        if(musicToChoose.Count > 0)
+        {
+            int num = UnityEngine.Random.Range(0, musicToChoose.Count);
+            PlaySpecificMusic(musicToChoose[num]);
+        }
+        else
+        {
+            Debug.LogWarning("No music found for " + musicType);
+            PlayMusic(music[0].musicName);
+        }
     }
 
     /// <summary>
@@ -154,16 +201,38 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayMusic(MusicEnum musicName)
     {
+        if (currentMusicPlaying.musicName != MusicEnum.none)
+        {
+            ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+        }
+
         Music soundGiven = Array.Find(music, sound => sound.musicName == musicName);
         ChangeVolumeGradually(0.05f, soundGiven.volume, 0.001f, soundGiven.audioSource);
         soundGiven.audioSource.Play();
 
         soundGiven.audioSource.loop = true;
+        currentMusicPlaying = soundGiven;
+    }
+
+    public void PlaySpecificMusic(Music musicGiven)
+    {
+        if (currentMusicPlaying.musicName != MusicEnum.none)
+        {
+            ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+        }
+        ChangeVolumeGradually(0.05f, musicGiven.volume, 0.001f, musicGiven.audioSource);
+        musicGiven.audioSource.Play();
+
+        musicGiven.audioSource.loop = true;
+        currentMusicPlaying = musicGiven;
     }
     public enum MusicEnum
     {
         mainMenu,
         levelMusic,
+        nightMusic,
+        guardChasingMusic,
+        bossFight,
         none
     }
 
