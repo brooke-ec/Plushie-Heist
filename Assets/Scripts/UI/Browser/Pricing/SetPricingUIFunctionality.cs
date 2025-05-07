@@ -49,6 +49,7 @@ public class SetPricingUIFunctionality : MonoBehaviour
     public void OnSetPricing()
     {
         //not updating price because that is done when text is edited
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
         ShopManager.instance.stocksController.UpdateProduct(product);
         Destroy(this.gameObject);
     }

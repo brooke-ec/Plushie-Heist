@@ -17,6 +17,7 @@ public class ShopManager : MonoBehaviour
     public int day;
     
     public bool isShopOpen = false;
+    private bool hasShopBeenOpenToday = false;
     public static ShopManager instance { get; private set; }
     public StocksController stocksController;
 
@@ -54,6 +55,7 @@ public class ShopManager : MonoBehaviour
     private void StartNewDay()
     {
         day++;
+        hasShopBeenOpenToday = false;
         stocksController.NewDay(day);
     }
 
@@ -62,12 +64,13 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void OpenShopToCustomers()
     {
-        if(isShopOpen) { print("shop is open, cannot open"); return; }
+        if(isShopOpen || hasShopBeenOpenToday) { print("cannot open"); return; }
 
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.bell);
 
         print("open ");
         isShopOpen = true;
+        hasShopBeenOpenToday = true;
         shopTimer.StartCoroutine(shopTimer.StartClock());
         //TO-DO Make clients come
     }
@@ -82,7 +85,7 @@ public class ShopManager : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.lowPitchBell);
         isShopOpen = false;
         shopTimer.OnTimeEnded(); //make sure it's ended
-
+        
         //TO-DO MAKE CLIENTS STOP COMING
 
         //Won't be here, as this will actually be triggered once the LAST customer is done
