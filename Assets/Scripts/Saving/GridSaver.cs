@@ -1,13 +1,9 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
-public class GridSaver : MonoBehaviour, ISavableArray
+public class GridSaver : MonoBehaviour, IMapCollection
 {
-    [SerializeField] FurnitureGrid[] grids = new FurnitureGrid[0];
+    [SerializeField] [JsonProperty("grids"), Populate] FurnitureGrid[] grids;
     
-    string ISavable.key => "grids";
-
-    ISavable[] ISavableArray.Collect()
-    {
-        return grids;
-    }
+    string IMapCollection.key => "grids";
 }

@@ -1,29 +1,33 @@
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
 using UnityEngine;
 
-public class ShopSpawner : MonoBehaviour, ISavableMap
+public class ShopSpawner : MonoBehaviour
 {
+    [SerializeField] [JsonProperty] private int level = 0;
     [SerializeField] private GridSaver[] levels;
-    private GridSaver current;
+    
+    [SerializeField] [JsonProperty("layout")] private GridSaver current;
 
-    [Header("Testing")]
-    [SerializeField] private int level = 0;
+    static ShopSpawner instance;
 
-    string ISavable.key => "shop";
-
-    private void Start()
+    private void Awake()
     {
-        SetLevel(level);
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+    }
+
+    [OnDeserializing]
+    internal void Factory(StreamingContext context)
+    {
+        instance.SetLevel(level);
     }
 
     private void SetLevel(int level)
     {
         if (current != null) Destroy(current);
-
+        
         current = Instantiate(levels[level], transform);
-    }
-
-    ISavable[] ISavableMap.Collect()
-    {
-        return new ISavable[] { current };
+        this.level = level;
     }
 }

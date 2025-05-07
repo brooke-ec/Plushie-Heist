@@ -3,13 +3,12 @@ using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.AI;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-public class FurnitureController : MonoBehaviour, IInteractable, ISavable
+public class FurnitureController : MonoBehaviour, IInteractable
 {
     /// <summary> The item this prefab represents </summary>
-    [JsonProperty("item")] [Unwitable] public FurnitureItem item = null;
+    [JsonProperty("item"), Unwitable] public FurnitureItem item = null;
     /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
     string IInteractable.interactionPrompt => empty 
         ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
@@ -23,7 +22,7 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// <summary> Whether the subgrids of this item are empty </summary>
     public bool empty { get; private set; } = true;
     /// <summary> Any <see cref="FurnitureGrid"/>s attached to children </summary>
-    public FurnitureGrid[] subgrids { get; private set; }
+    [JsonProperty("subgrids"), Populate] public FurnitureGrid[] subgrids { get; private set; }
     /// <summary> The grid-position of this item on <see cref="grid"/></summary>
     [JsonProperty("position")] public Vector2Int gridPosition { get; private set; }
     /// <summary> The current Y euler rotation of this object </summary>
@@ -38,7 +37,7 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
     public Region gridRegion => new Region().FromSize(gridPosition, gridShape);
     /// <summary> Whether this item is marked as sellable or not </summary>
-    [JsonProperty("selling")] public bool selling => sellingMarker.activeSelf && placed;
+    [JsonProperty("selling")] public bool selling { get; private set; }
     /// <summary> The shape of this furniture item </summary>
     public Vector2Int gridShape => gridRotation % 180 < 90 ? item.gridSize.Rotate() : item.gridSize;
     /// <summary Whether this item can be marked as sellable </summary>
@@ -60,12 +59,12 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     [DeserializationFactory]
     protected static FurnitureController Factory(FurnitureItem item)
     {
-        return Instantiate(item.prefab);
+        FurnitureController instance = Instantiate(item.prefab);
+        return instance;
     }
 
     private void Awake()
     {
-
         inventoryController = FindAnyObjectByType<InventoryController>();
         subgrids = GetComponentsInChildren<FurnitureGrid>();
         switcher = new MaterialSwitcher(gameObject);
@@ -74,7 +73,6 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
 
     private void Start()
     {
-        PlaceSellingMarker();
         GetComponentsInChildren<MeshRenderer>().ForEach(m => m.AddComponent<Outline>().enabled = false);
         this.AddComponent<NavMeshObstacle>().carving = true;
 
@@ -86,6 +84,8 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
         {
             empty = subgrids.All(s => s.IsEmpty());
         });
+
+        PlaceSellingMarker();
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     {
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
         sellingMarker.transform.position += new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
-        sellingMarker.SetActive(false);
+        sellingMarker.SetActive(selling);
     }
 
     /// <summary>
@@ -129,7 +129,8 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
         if (!canSell) return;
 
         subgrids.ForEach(s => s.gameObject.SetActive(selling));
-        sellingMarker.SetActive(!selling);
+        selling = !selling;
+        sellingMarker.SetActive(selling);
     }
 
     /// <summary>
@@ -146,11 +147,21 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// </summary>
     public void GridMove(Vector2Int target)
     {
-        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - gridShape);
-        transform.position = grid.ToWorldspace(gridRegion.center) - transform.rotation * item.gridOffset;
-
+        GridPlace(grid, target);
         if (IsGridValid()) switcher.Reset();
         else switcher.Switch(FurnitureSettings.instance.invalidMaterial);
+    }
+
+    /// <summary>
+    /// Sets this item to the specified position on the specified grid
+    /// </summary>
+    public void GridPlace(FurnitureGrid grid, Vector2Int target)
+    {
+        this.grid = grid;
+        gridPosition = Util.Clamp(target, Vector2Int.zero, grid.size - gridShape);
+        
+        transform.parent = grid.transform;
+        transform.localPosition = grid.ToLocalspace(gridRegion.center) - transform.rotation * item.gridOffset;
     }
 
     /// <returns>True if this item is currently in a valid grid position</returns>
@@ -167,22 +178,6 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
 
         Gizmos.color = new Color(0, 0, 1, 0.5f);
         Gizmos.DrawCube(transform.position + item.gridOffset, new Vector3(item.gridSize.x, 0, item.gridSize.y) * FurnitureSettings.instance.cellSize);
-    }
-
-    void ISavable.Deserialize(JToken obj)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    JToken ISavable.Serialize()
-    {
-        return new JObject(
-            new JProperty("item", item.filename),
-            new JProperty("rotation", gridRotation),
-            new JProperty("selling", selling),
-            new JProperty("position", JObject.FromObject(gridPosition)),
-            new JProperty("subgrids", subgrids.Select(s => s.Serialize()))
-        );
     }
 #endif
 }

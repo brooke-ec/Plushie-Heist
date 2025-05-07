@@ -20,6 +20,10 @@ public class ContractResolver : DefaultContractResolver
                 JsonProperty p = CreateProperty(field, memberSerialization);
                 p.Writable = !field.HasAttribute<UnwitableAttribute>();
                 p.Readable = true;
+
+                // Use collection converter if applicable
+                PopulateConverter converter = new PopulateConverter(field.HasAttribute<PopulateAttribute>());
+                if (converter.CanConvert(field.FieldType)) p.Converter = converter;
                 properties.Add(p);
             }
 
@@ -29,6 +33,10 @@ public class ContractResolver : DefaultContractResolver
                 JsonProperty p = CreateProperty(property, memberSerialization);
                 p.Writable = property.CanWrite && !property.HasAttribute<UnwitableAttribute>();
                 p.Readable = property.CanRead;
+
+                // Use collection converter if applicable
+                PopulateConverter converter = new PopulateConverter(property.HasAttribute<PopulateAttribute>());
+                if (converter.CanConvert(property.PropertyType)) p.Converter = converter;
                 properties.Add(p);
             }
 

@@ -1,30 +1,29 @@
 
 using Newtonsoft.Json;
 using System.IO;
-using System.Linq;
-using TNRD;
 using UnityEngine;
 
-public class SaveController : MonoBehaviour, ISavableMap
+public class SaveController : MonoBehaviour
 {
+    #region Static
     public static readonly JsonSerializer serializer = new JsonSerializer();
 
     static SaveController()
     {
-        serializer.Converters.Add(FactoryConverter.instance);
         serializer.ContractResolver = ContractResolver.instance;
+
+        serializer.Converters.Add(DeserializationFactoryConverter.instance);
     }
+    #endregion
 
-    [SerializeField] private SerializableInterface<ISavable>[] nodes;
+    [SerializeField] [JsonProperty("shop")] private ShopSpawner shop;
 
-    public static string slot = "default";
     private string path => Application.persistentDataPath + "/" + slot + ".json";
-
-    string ISavable.key => throw new System.NotImplementedException();
+    public static string slot = "default";
 
     private void Start()
     {
-        //Load();
+        Load();
     }
 
     public void Load()
@@ -32,7 +31,7 @@ public class SaveController : MonoBehaviour, ISavableMap
         using StreamReader sr = new StreamReader(path);
         using JsonReader jr = new JsonTextReader(sr);
 
-        serializer.Deserialize(jr, typeof(FurnitureController));
+        serializer.Populate(jr, this);
     }
 
     public void Save()
@@ -40,13 +39,8 @@ public class SaveController : MonoBehaviour, ISavableMap
         using StreamWriter sw = new StreamWriter(path);
         using JsonWriter jw = new JsonTextWriter(sw);
 
-        serializer.Serialize(jw, this.Serialize());
+        serializer.Serialize(jw, this);
 
         Debug.Log($"Data succesfully saved to '{path}'");
-    }
-
-    ISavable[] ISavableMap.Collect()
-    {
-        return nodes.Select(i => i.Value).ToArray();
     }
 }
