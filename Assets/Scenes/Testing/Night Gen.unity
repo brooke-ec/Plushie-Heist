@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 1291487894}
   - component: {fileID: 1291487896}
   - component: {fileID: 1291487897}
+  - component: {fileID: 1291487898}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -294,6 +295,18 @@ MonoBehaviour:
   GunGaurdRatio: 0.5
   Guard: {fileID: 8138492032870576743, guid: b7c26b3b5cb5f624d83d729900d52f95, type: 3}
   GunGuard: {fileID: 4629906238832381574, guid: 947f3a9e528505f4981e15ba516cca32, type: 3}
+--- !u!114 &1291487898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291487893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6c634e0e75f3c498a8ec4091833e16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1865829836
 PrefabInstance:
   m_ObjectHideFlags: 0

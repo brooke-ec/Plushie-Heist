@@ -8,20 +8,24 @@ public class TileGenerator
     [SerializeField] private LevelTile startTile;
     [SerializeField] private LevelTile endTile;
     
-    private Vector3 physicalSize => new Vector3(size.x - 1, 0, size.y - 1) * tileSize;
+    public Vector3 physicalOffset => new Vector3(size.x, 0, size.y) * tileSize * .5f;
 
     private Dictionary<Vector2Int, TilePlacement> grid = new Dictionary<Vector2Int, TilePlacement>();
     private Queue<Vector2Int> toPlace = new Queue<Vector2Int>();
+    private List<LevelTile> tiles;
     private Transform parent;
     private Vector2Int size;
 
-    public void Generate(Region[] regions, Transform parent, Vector2Int size)
+    public LevelTile[] Generate(Region[] regions, Transform parent, Vector2Int size)
     {
+        tiles = new List<LevelTile>();
         this.parent = parent;
         this.size = size;
 
         regions.ForEach(r => r.ForEach(p => grid[p] = null));
         PlaceTiles();
+
+        return tiles.ToArray();
     }
 
     private void PlaceTiles()
@@ -59,8 +63,10 @@ public class TileGenerator
     private void PlaceTile(TilePlacement placement)
     {
         grid[placement.position] = placement;
-        Vector3 position = new Vector3(placement.position.x - .5f, 0, placement.position.y - .5f) * tileSize - physicalSize / 2;
-        GameObject.Instantiate(placement.tile, position, placement.quaternion, parent);
+        Vector3 position = new Vector3(placement.position.x, 0, placement.position.y) * tileSize - physicalOffset;
+        LevelTile tile = GameObject.Instantiate(placement.tile, position, placement.quaternion, parent);
+        tile.position = placement.position;
+        tiles.Add(tile);
 
         Vector2Int v;
         if (grid.ContainsKey(v = placement.position + new Vector2Int(+1, 0)) && !toPlace.Contains(v)) toPlace.Enqueue(v);
