@@ -58,43 +58,44 @@ public class Dialogue : MonoBehaviour
             case DialogueEnum.plushie1:
                 lines = new string[]
                 {
-                    "dwdwdwda da"
+                    "You have a new message from NALLEBY:\n"
                 };
                 break;
             case DialogueEnum.plushie2:
                 lines = new string[]
                 {
-
+                    "You have a new message from SKÖLDIS:\n"
                 };
                 break;
             case DialogueEnum.plushie3:
                 lines = new string[]
                 {
-
+                    "You have a new message from ANKLIG:\n"
                 };
                 break;
             case DialogueEnum.plushie4:
                 lines = new string[]
                 {
-
+                    "You have a new message from GRODDAN:\n"
                 };
                 break;
             case DialogueEnum.plushie5:
                 lines = new string[]
                 {
-
+                    "You have a new message from HUNDRA:\n"
                 };
                 break;
             case DialogueEnum.plushie6:
                 lines = new string[]
                 {
-
+                    "You have a new message from BLÅHAJ:\n"
                 };
                 break;
             case DialogueEnum.boss:
                 lines = new string[]
                 {
-
+                    //CONTINUE HERE
+                    "You have now saved all plushies."
                 };
                 break;
             default:
