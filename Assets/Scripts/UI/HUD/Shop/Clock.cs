@@ -54,7 +54,7 @@ public class Clock : MonoBehaviour
         }
         else
         {
-            lengthOfDayInRealMins = 2.5f;
+            lengthOfDayInRealMins = 2f;
             dayStartHour = 21;
             dayEndHour = 5;
         }

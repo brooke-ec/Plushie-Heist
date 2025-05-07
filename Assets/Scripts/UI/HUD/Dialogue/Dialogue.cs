@@ -2,19 +2,96 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
+using UnityEngine.Events;
 
 public class Dialogue : MonoBehaviour
 {
+    public DialogueEnum dialogueEnum;
+    public UnityAction onDialogueEnd;
+    public enum DialogueEnum
+    {
+        none,
+        mainMenu,
+        plushie1,
+        plushie2,
+        plushie3,
+        plushie4,
+        plushie5,
+        plushie6,
+        boss
+    }
+
     public TextMeshProUGUI textComponent;
-    public string[] lines;
+    private string[] lines;
     public float secsBetweenCharacters;
 
     private int index;
 
-    private void Start()
+    public void SetUp(DialogueEnum dialogueEnum)
     {
+        this.dialogueEnum = dialogueEnum;
+
         textComponent.text = string.Empty;
+        GetCorrectLines();
         StartDialogue();
+    }
+
+    private void GetCorrectLines()
+    {
+        switch(dialogueEnum)
+        {
+            case DialogueEnum.mainMenu:
+                lines = new string[]
+                {
+                    
+                };
+                break;
+            case DialogueEnum.plushie1:
+                lines = new string[]
+                {
+                    "dwdwdwda da"
+                };
+                break;
+            case DialogueEnum.plushie2:
+                lines = new string[]
+                {
+
+                };
+                break;
+            case DialogueEnum.plushie3:
+                lines = new string[]
+                {
+
+                };
+                break;
+            case DialogueEnum.plushie4:
+                lines = new string[]
+                {
+
+                };
+                break;
+            case DialogueEnum.plushie5:
+                lines = new string[]
+                {
+
+                };
+                break;
+            case DialogueEnum.plushie6:
+                lines = new string[]
+                {
+
+                };
+                break;
+            case DialogueEnum.boss:
+                lines = new string[]
+                {
+
+                };
+                break;
+            default:
+                break;
+        }
     }
 
     private void Update()
@@ -41,9 +118,24 @@ public class Dialogue : MonoBehaviour
 
     private IEnumerator TypeLine()
     {
-        foreach(char character in lines[index].ToCharArray())
+        Sound sound = Array.Find(AudioManager.instance.sounds, sound => sound.soundName == AudioManager.SoundEnum.dialogueBeep);
+        int beepCooldown = 3;
+
+        //the number of times secsBetweenCharacters passes
+        int timePassedSinceBeep = beepCooldown;
+
+        foreach (char character in lines[index].ToCharArray())
         {
             textComponent.text += character;
+
+            timePassedSinceBeep++;
+            if (timePassedSinceBeep >= beepCooldown)
+            {
+                sound.audioSource.pitch = sound.pitch * UnityEngine.Random.Range(0.7f, 1f);
+                //if(!sound.audioSource.isPlaying) { AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep); }
+                AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep);
+                timePassedSinceBeep = 0;
+            }
             yield return new WaitForSeconds(secsBetweenCharacters);
         }
     }
@@ -59,6 +151,9 @@ public class Dialogue : MonoBehaviour
         else
         {
             print("dialogue done");
+            onDialogueEnd?.Invoke();
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
+            Destroy(this.gameObject);
         }
     }
 }

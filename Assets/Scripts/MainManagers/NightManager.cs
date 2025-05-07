@@ -78,7 +78,14 @@ public class NightManager : MonoBehaviour
         print("night ENDED");
 
         //Call end stuff
-        escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
+        if(!hasRescuedPlushie)
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, null);
+        }
+        else
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, defaultPlushieInfo);
+        }
     }
 
     public void UpdateClockTime(float extraTimeInMins)

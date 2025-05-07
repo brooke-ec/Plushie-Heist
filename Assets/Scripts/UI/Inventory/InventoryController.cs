@@ -238,6 +238,8 @@ public class InventoryController : MonoBehaviour, IUIMenu
                 AddItemFromBackpackToStorage(backpackItem);
             }
         }
+        
+        if(HoveringManager.currentTooltipOpen != null) { Destroy(HoveringManager.currentTooltipOpen); }
     }
 
     /// <summary>
