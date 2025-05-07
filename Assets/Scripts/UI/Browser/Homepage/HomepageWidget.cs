@@ -36,7 +36,7 @@ public class HomepageWidget : MonoBehaviour
                 }
                 break;
             case BrowserPageType.leaveGame:
-                button.onClick.AddListener(() => MakeClosingGamePopup());
+                button.onClick.AddListener(() => GetComponent<CloseGamePopup>().SetUp());
                 break;
             case BrowserPageType.gossipOfTheDay:
                 MakeGossipOfTheDay();
@@ -55,11 +55,6 @@ public class HomepageWidget : MonoBehaviour
         edgeObject.AddComponent<CanvasRenderer>();
         edgeRenderer.AddNewPoints(new Vector2(50, 20), new Vector2(100, 50), new Color32(233, 127, 143, 255));
         edgeRenderer.AddNewPoint(new Vector2(150, 0));
-    }
-
-    private void MakeClosingGamePopup()
-    {
-        print("close game");
     }
 
     private void MakeGossipOfTheDay()
