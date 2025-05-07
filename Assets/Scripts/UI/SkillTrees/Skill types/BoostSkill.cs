@@ -63,7 +63,7 @@ public class BoostSkill : Skill
                     }
                 break;
             case SkillType.ShopCustomerTips:
-                if (!isNight) { ShopManager.instance.tipPercentage += modifier; } //TO-DO * AVERAGE TIPS (have a tips variable set to 1)
+                if (!isNight) { ShopManager.instance.tipPercentage += modifier; } //TO-DO * AVERAGE TIPS (have a tips variable set to 0)
                 break;
             case SkillType.ShopHigherPrices:
                 if (!isNight) { } //TO-DO * AVERAGE PRICE RANGE THAT CUSTOMERS WILL BUY

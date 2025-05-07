@@ -46,7 +46,7 @@ public class Clock : MonoBehaviour
         this.isShopClock = isShopClock;
         if (isShopClock)
         {
-            lengthOfDayInRealMins = 5;
+            lengthOfDayInRealMins = 3f;
 
             GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
             dayStartHour = 9;
