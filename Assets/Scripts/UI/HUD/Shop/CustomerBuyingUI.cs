@@ -41,7 +41,6 @@ public class CustomerBuyingUI : MonoBehaviour
 
     private float GenerateTip(float totalMoney)
     {
-        //ShopManager.instance.tipPercentage
-        return 0;
+        return totalMoney * ShopManager.instance.tipPercentage;
     }
 }
