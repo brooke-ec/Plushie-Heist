@@ -18,6 +18,9 @@ public class MainMenu : MonoBehaviour
     {
         //LOAD LIST OF SAVE FILES
 
+        GameObject savefileUI = Instantiate(saveFileIconPrefab, saveFileContentTransform);
+        savefileUI.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => LoadingSceneController.instance.LoadSceneAsync("Shop 1"));
+
         /*
         List<SaveFile?> saveFiles = new List<SaveFile>();
         for(int i=0;i<saveFiles.Count; i++)
