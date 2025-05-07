@@ -615,8 +615,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1351086167620230888}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40, y: 5, z: 40}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -631,7 +631,7 @@ Transform:
   - {fileID: 4259042271051653117}
   - {fileID: 9035246203591839062}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &5323946368815507209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,15 +905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _positiveX: []
-  _positiveZ:
-  - mode: 0
-    unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
-    rawReference:
-      rid: -2
-  - mode: 0
-    unityReference: {fileID: 11400000, guid: 79b9c0bfe9c2a1a42b1ed03db50feccf, type: 2}
-    rawReference:
-      rid: -2
+  _positiveZ: []
   _negativeX:
   - mode: 0
     unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
@@ -923,7 +915,16 @@ MonoBehaviour:
     unityReference: {fileID: 11400000, guid: 79b9c0bfe9c2a1a42b1ed03db50feccf, type: 2}
     rawReference:
       rid: -2
-  _negativeZ: []
+  _negativeZ:
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: b3878e5c6fed4ca469bc9477bace3bec, type: 2}
+    rawReference:
+      rid: -2
+  - mode: 0
+    unityReference: {fileID: 11400000, guid: 79b9c0bfe9c2a1a42b1ed03db50feccf, type: 2}
+    rawReference:
+      rid: -2
+  exclude: 1
   references:
     version: 2
     RefIds:
@@ -1265,7 +1266,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2742397091856644124}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
   m_Name: 

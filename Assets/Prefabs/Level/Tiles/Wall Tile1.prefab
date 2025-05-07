@@ -365,7 +365,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1825
+  m_VersionIndex: 1834
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -511,6 +511,7 @@ MonoBehaviour:
     rawReference:
       rid: -2
   _negativeZ: []
+  exclude: 0
   references:
     version: 2
     RefIds:
@@ -724,7 +725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4155963464863742102, guid: 10e1f74b5d190634ca01fa359ade7235, type: 3}
       propertyPath: m_VersionIndex
-      value: 7788
+      value: 7797
       objectReference: {fileID: 0}
     - target: {fileID: 6633534732519928235, guid: 10e1f74b5d190634ca01fa359ade7235, type: 3}
       propertyPath: m_LocalPosition.x
@@ -962,7 +963,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7608852817096272530, guid: 916768490dbd34d429b2d756de5e78ca, type: 3}
       propertyPath: m_VersionIndex
-      value: 1168
+      value: 1177
       objectReference: {fileID: 0}
     - target: {fileID: 7608852817096272530, guid: 916768490dbd34d429b2d756de5e78ca, type: 3}
       propertyPath: m_Tangents.Array.data[28].y
@@ -2022,6 +2023,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8745890829904264775, guid: 1c7980a954bc446469c1a8144977a535, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294963199
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2170,7 +2175,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_VersionIndex
-      value: 4514
+      value: 4523
       objectReference: {fileID: 0}
     - target: {fileID: 2271468917094269766, guid: 00d218988754ced4fa0820472d776eb6, type: 3}
       propertyPath: m_Faces.Array.size
