@@ -23,10 +23,16 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private int inventoryWidth;
     [SerializeField] private int inventoryHeight;
 
+    [JsonProperty("size")] public Vector2Int size
+    {
+        get { return new Vector2Int(inventoryWidth, inventoryHeight); }
+        set { CreateInventoryGrid(value.x, value.y); }
+    }
+
     InventoryItem[,] inventorySlots;
     private float scaleFactor;
 
-    [JsonProperty("items")]
+    [JsonProperty("items", Order = 999)]
     public InventoryItem[] items
     {
         get
@@ -50,13 +56,14 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         scaleFactor = SharedUIManager.instance.scaleFactor;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight);
-        //PlaceTestItems();
     }
 
     #region Setup
     /// <summary> Create inventory grid of width and height, such as 3x3  /// </summary>
     public void CreateInventoryGrid(int width, int height)
     {
+        inventoryWidth = width;
+        inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];
         rectTransform.sizeDelta = new Vector2((width * tileSize) - offsetFromImage, (height * tileSize) - offsetFromImage); //actual size of inventory
     }
