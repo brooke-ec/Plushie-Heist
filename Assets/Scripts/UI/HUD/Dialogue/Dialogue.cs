@@ -124,19 +124,22 @@ public class Dialogue : MonoBehaviour
         //the number of times secsBetweenCharacters passes
         int timePassedSinceBeep = beepCooldown;
 
-        foreach (char character in lines[index].ToCharArray())
+        if (index != lines.Length)
         {
-            textComponent.text += character;
-
-            timePassedSinceBeep++;
-            if (timePassedSinceBeep >= beepCooldown)
+            foreach (char character in lines[index].ToCharArray())
             {
-                sound.audioSource.pitch = sound.pitch * UnityEngine.Random.Range(0.7f, 1f);
-                //if(!sound.audioSource.isPlaying) { AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep); }
-                AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep);
-                timePassedSinceBeep = 0;
+                textComponent.text += character;
+
+                timePassedSinceBeep++;
+                if (timePassedSinceBeep >= beepCooldown)
+                {
+                    sound.audioSource.pitch = sound.pitch * UnityEngine.Random.Range(0.7f, 1f);
+                    //if(!sound.audioSource.isPlaying) { AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep); }
+                    AudioManager.instance.PlaySound(AudioManager.SoundEnum.dialogueBeep);
+                    timePassedSinceBeep = 0;
+                }
+                yield return new WaitForSeconds(secsBetweenCharacters);
             }
-            yield return new WaitForSeconds(secsBetweenCharacters);
         }
     }
 
