@@ -17,7 +17,7 @@ public record TileNeighbors(
         union.AddRange(positiveZ.negativeZ);
         union.AddRange(negativeX.positiveX);
         union.AddRange(negativeZ.positiveZ);
-        return union.Where(t => t != null).ToArray();
+        return union.Where(t => t != null && !t.exclude).ToArray();
     }
 
     public bool IsValid(TilePlacement tile)

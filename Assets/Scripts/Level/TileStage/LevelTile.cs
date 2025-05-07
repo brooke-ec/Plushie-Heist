@@ -8,6 +8,7 @@ public class LevelTile : MonoBehaviour, ITileIdentity
     [SerializeField] private SerializableInterface<ITileIdentity>[] _positiveZ;
     [SerializeField] private SerializableInterface<ITileIdentity>[] _negativeX;
     [SerializeField] private SerializableInterface<ITileIdentity>[] _negativeZ;
+    [Tooltip("Exclude this tile from spawning naturally")] public bool exclude = false;
 
     [HideInInspector] public LevelTile[] positiveX => _positiveX.SelectMany(l => l.Value.identity).ToArray();
     [HideInInspector] public LevelTile[] positiveZ => _positiveZ.SelectMany(l => l.Value.identity).ToArray();
