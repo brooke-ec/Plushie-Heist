@@ -44,7 +44,7 @@ public class Dialogue : MonoBehaviour
             case DialogueEnum.mainMenu:
                 lines = new string[]
                 {
-                    
+                    "A certain Swedish furniture company has become the largest company in the world, wielding the power of build-it-yourself furniture, incredible meatballs and the cutest of plushies."
                 };
                 break;
             case DialogueEnum.plushie1:
