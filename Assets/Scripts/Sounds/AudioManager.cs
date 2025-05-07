@@ -190,7 +190,8 @@ public class AudioManager : MonoBehaviour
         lowPitchBell,
         UIclick3,
         backpackOpen,
-        backpackClose
+        backpackClose,
+        selling
     }
 
     #endregion

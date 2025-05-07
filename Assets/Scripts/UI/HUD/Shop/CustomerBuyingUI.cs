@@ -33,6 +33,7 @@ public class CustomerBuyingUI : MonoBehaviour
         totalMoneyText.text = "Total: £"+totalMoney.ToString("n2");
         tipsText.text = "Tips: £" + tips.ToString("n2");
 
+        continueButton.onClick.AddListener(() => AudioManager.instance.PlaySound(AudioManager.SoundEnum.selling));
         continueButton.onClick.AddListener(actionForButton);
         continueButton.onClick.AddListener(() => ShopManager.instance.OnCustomerBuying(totalMoney, tips));
         continueButton.onClick.AddListener(() => Destroy(gameObject));
