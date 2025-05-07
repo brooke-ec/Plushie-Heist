@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Furniture Item", menuName ="Scriptable Objects/Furniture Item", order = 9999)]
@@ -6,7 +7,7 @@ public class FurnitureItem : ScriptableObject
     public const string FULL_PATH = "Assets/Resources/Items/";
     public const string RESOURCES_PATH = "Items/";
 
-    [SerializeField] public string filename;
+    [JsonProperty] [Unwitable] public string filename;
 
     [Space(20)]
     /// <summary> The name of this item displayed on the stock UI </summary>
@@ -27,4 +28,10 @@ public class FurnitureItem : ScriptableObject
     [field: SerializeField] public Vector2Int inventorySize { get; private set; }
     /// <summary> The icon to use for this item in the inventory </summary>
     [field: SerializeField] public Sprite inventoryIcon { get; private set; }
+
+    [DeserializationFactory]
+    public static FurnitureItem Load(string filename)
+    {
+        return Resources.Load<FurnitureItem>(RESOURCES_PATH + filename);
+    }
 }

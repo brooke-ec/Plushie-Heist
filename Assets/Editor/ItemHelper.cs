@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -78,7 +79,8 @@ public class ItemHelper : AssetPostprocessor
 
         if (path.StartsWith(FurnitureItem.FULL_PATH))
         {
-            string filename = path.Substring(FurnitureItem.FULL_PATH.Length, path.Length - FurnitureItem.FULL_PATH.Length);
+            string filename = Path.GetFileNameWithoutExtension(Path.GetRelativePath(FurnitureItem.FULL_PATH, path));
+            
             if (filename != item.filename)
             {
                 item.filename = filename;

@@ -7,6 +7,14 @@ using UnityEngine;
 
 public class SaveController : MonoBehaviour, ISavableMap
 {
+    public static readonly JsonSerializer serializer = new JsonSerializer();
+
+    static SaveController()
+    {
+        serializer.Converters.Add(FactoryConverter.instance);
+        serializer.ContractResolver = ContractResolver.instance;
+    }
+
     [SerializeField] private SerializableInterface<ISavable>[] nodes;
 
     public static string slot = "default";
@@ -14,14 +22,25 @@ public class SaveController : MonoBehaviour, ISavableMap
 
     string ISavable.key => throw new System.NotImplementedException();
 
+    private void Start()
+    {
+        //Load();
+    }
+
+    public void Load()
+    {
+        using StreamReader sr = new StreamReader(path);
+        using JsonReader jr = new JsonTextReader(sr);
+
+        serializer.Deserialize(jr, typeof(FurnitureController));
+    }
+
     public void Save()
     {
-        JsonSerializer json = new JsonSerializer();
-
         using StreamWriter sw = new StreamWriter(path);
         using JsonWriter jw = new JsonTextWriter(sw);
 
-        json.Serialize(jw, this.Serialize());
+        serializer.Serialize(jw, this.Serialize());
 
         Debug.Log($"Data succesfully saved to '{path}'");
     }

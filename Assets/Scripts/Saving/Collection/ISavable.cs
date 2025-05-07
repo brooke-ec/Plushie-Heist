@@ -3,8 +3,16 @@ using Newtonsoft.Json.Linq;
 public interface ISavable
 {
     string key { get; }
-    void Deserialize(JObject obj);
-    JToken Serialize();
+
+    void Deserialize(JToken token)
+    {
+        SaveController.serializer.Populate(token.CreateReader(), this);
+    }
+
+    JToken Serialize()
+    {
+        return JToken.FromObject(this, SaveController.serializer);
+    }
 }
 
 public static class SavableExtension

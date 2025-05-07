@@ -3,7 +3,7 @@ using System.Linq;
 
 public interface ISavableArray : ISavable
 {
-    void ISavable.Deserialize(JObject obj)
+    void ISavable.Deserialize(JToken token)
     {
 
     }

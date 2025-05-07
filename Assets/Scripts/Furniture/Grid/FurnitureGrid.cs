@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(MeshRenderer))]
-public class FurnitureGrid : MonoBehaviour, ISavableArray
+public class FurnitureGrid : MonoBehaviour, ISavable
 {
     public readonly UnityEvent onChanged = new UnityEvent();
     public Vector2Int size => new Vector2Int((int)(collider.size.x / cellSize.x), (int)(collider.size.z / cellSize.y));
@@ -17,7 +17,7 @@ public class FurnitureGrid : MonoBehaviour, ISavableArray
 
     string ISavable.key => throw new System.NotImplementedException();
 
-    private List<FurnitureController> items = new List<FurnitureController>();
+    [JsonProperty("items")] private List<FurnitureController> items = new List<FurnitureController>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;
@@ -125,11 +125,6 @@ public class FurnitureGrid : MonoBehaviour, ISavableArray
     private void OnValidate()
     {
         if (collider == null) collider = GetComponent<BoxCollider>();
-    }
-
-    ISavable[] ISavableArray.Collect()
-    {
-        return items.ToArray();
     }
 #endif
 }

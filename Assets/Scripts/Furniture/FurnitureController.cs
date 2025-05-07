@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 public class FurnitureController : MonoBehaviour, IInteractable, ISavable
 {
     /// <summary> The item this prefab represents </summary>
-    public FurnitureItem item = null;
+    [JsonProperty("item")] [Unwitable] public FurnitureItem item = null;
     /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
     string IInteractable.interactionPrompt => empty 
         ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
@@ -25,9 +25,12 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// <summary> Any <see cref="FurnitureGrid"/>s attached to children </summary>
     public FurnitureGrid[] subgrids { get; private set; }
     /// <summary> The grid-position of this item on <see cref="grid"/></summary>
-    public Vector2Int gridPosition { get; private set; }
+    [JsonProperty("position")] public Vector2Int gridPosition { get; private set; }
     /// <summary> The current Y euler rotation of this object </summary>
-    public int gridRotation => Mathf.RoundToInt(transform.rotation.eulerAngles.y);
+    [JsonProperty("rotation")] public int gridRotation { 
+        get { return Mathf.RoundToInt(transform.rotation.eulerAngles.y); } 
+        set { transform.rotation = Quaternion.Euler(transform.eulerAngles.x, value, transform.eulerAngles.z); }
+    }
     /// <summary> The <see cref="FurnitureGrid"/> this item is currently attached to</summary>
     public FurnitureGrid grid { get; set; }
     /// <summary> Whether this item is currently placed on a grid </summary>
@@ -35,9 +38,9 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
     public Region gridRegion => new Region().FromSize(gridPosition, gridShape);
     /// <summary> Whether this item is marked as sellable or not </summary>
-    public bool selling => sellingMarker.activeSelf && placed;
+    [JsonProperty("selling")] public bool selling => sellingMarker.activeSelf && placed;
     /// <summary> The shape of this furniture item </summary>
-    public Vector2Int gridShape { get; private set; }
+    public Vector2Int gridShape => gridRotation % 180 < 90 ? item.gridSize.Rotate() : item.gridSize;
     /// <summary Whether this item can be marked as sellable </summary>
     public bool canSell => empty && ShopManager.instance != null && placed;
     /// <summary> The world space bounding volume of this item </summary>
@@ -54,6 +57,12 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// <summary> The collider attached to this item </summary>
     private new Collider collider;
 
+    [DeserializationFactory]
+    protected static FurnitureController Factory(FurnitureItem item)
+    {
+        return Instantiate(item.prefab);
+    }
+
     private void Awake()
     {
 
@@ -68,7 +77,6 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
         PlaceSellingMarker();
         GetComponentsInChildren<MeshRenderer>().ForEach(m => m.AddComponent<Outline>().enabled = false);
         this.AddComponent<NavMeshObstacle>().carving = true;
-        gridShape = item.gridSize;
 
         if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(item);
@@ -129,7 +137,6 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
     /// </summary>
     public void GridRotate()
     {
-        gridShape = new Vector2Int(gridShape.y, gridShape.x);
         transform.Rotate(0, 90, 0);
         GridMove(gridPosition);
     }
@@ -162,18 +169,18 @@ public class FurnitureController : MonoBehaviour, IInteractable, ISavable
         Gizmos.DrawCube(transform.position + item.gridOffset, new Vector3(item.gridSize.x, 0, item.gridSize.y) * FurnitureSettings.instance.cellSize);
     }
 
-    public void Deserialize(JObject obj)
+    void ISavable.Deserialize(JToken obj)
     {
         throw new System.NotImplementedException();
     }
 
-    public JToken Serialize()
+    JToken ISavable.Serialize()
     {
         return new JObject(
             new JProperty("item", item.filename),
             new JProperty("rotation", gridRotation),
             new JProperty("selling", selling),
-            new JProperty("position", JsonUtility.ToJson(gridPosition)),
+            new JProperty("position", JObject.FromObject(gridPosition)),
             new JProperty("subgrids", subgrids.Select(s => s.Serialize()))
         );
     }

@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 
 public interface ISavableMap : ISavable
 {
-    void ISavable.Deserialize(JObject obj)
+    void ISavable.Deserialize(JToken token)
     {
 
     }
