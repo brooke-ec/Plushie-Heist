@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Manages the flow of things in the daytime.
@@ -16,6 +17,7 @@ public class ShopManager : MonoBehaviour
     public int day;
     
     public bool isShopOpen = false;
+    private bool hasShopBeenOpenToday = false;
     public static ShopManager instance { get; private set; }
     public StocksController stocksController;
 
@@ -39,6 +41,7 @@ public class ShopManager : MonoBehaviour
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         shopTimer.SetupClock(true);
+
         StartNewDay();
     }
 
@@ -52,6 +55,7 @@ public class ShopManager : MonoBehaviour
     private void StartNewDay()
     {
         day++;
+        hasShopBeenOpenToday = false;
         stocksController.NewDay(day);
     }
 
@@ -60,12 +64,13 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void OpenShopToCustomers()
     {
-        if(isShopOpen) { print("shop is open, cannot open"); return; }
+        if(isShopOpen || hasShopBeenOpenToday) { print("cannot open"); return; }
 
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.bell);
 
         print("open ");
         isShopOpen = true;
+        hasShopBeenOpenToday = true;
         shopTimer.StartCoroutine(shopTimer.StartClock());
         //TO-DO Make clients come
     }
@@ -80,7 +85,7 @@ public class ShopManager : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.lowPitchBell);
         isShopOpen = false;
         shopTimer.OnTimeEnded(); //make sure it's ended
-
+        
         //TO-DO MAKE CLIENTS STOP COMING
 
         //Won't be here, as this will actually be triggered once the LAST customer is done
@@ -109,23 +114,53 @@ public class ShopManager : MonoBehaviour
     #endregion
 
     #region Money
-    private int money = 30;
-    /// <summary> Set at the beginning of the day. Money - moneyAtTheBeginningOfToday is added to the end of moneyEarnedEveryDay </summary>
-    //private int moneyAtTheBeginningOfToday = 0;
+    private float money = 0;
     public static event Action OnMoneyChanged;
 
-    public List<int> moneyEarnedEveryDay = new List<int>();
-
-    public int GetMoney()
+    public float GetMoney()
     {
         return money;
     }
 
 
-    public void ModifyMoney(int modification)
+    public void ModifyMoney(float modification)
     {
         money += modification;
         OnMoneyChanged?.Invoke();
+    }
+    #endregion
+
+    #region Customers
+    [HideInInspector] public float tipPercentage = 1;
+    [HideInInspector] public float itemBuyingMultiplier = 1;
+
+    [HideInInspector] public int numOfCustomersServed = 0;
+    [HideInInspector] public float tipsReceivedToday = 0;
+    [HideInInspector] public float salesMadeToday = 0;
+
+    [SerializeField] private CustomerBuyingUI customerBuyingUIPrefab;
+
+    public static event Action OnCustomerServed;
+    public void CreateCustomerBuyingUI(List<FurnitureItem> basket, UnityAction actionForButton)
+    {
+        CustomerBuyingUI customerBuyingUI = Instantiate(customerBuyingUIPrefab, mainCanvas.transform);
+        customerBuyingUI.SetUp(basket, actionForButton);
+    }
+
+    public float GetTotalMoneyEarnedToday()
+    {
+        return tipsReceivedToday + salesMadeToday;
+    }
+
+    public void OnCustomerBuying(float salesMade, float tipsReceived)
+    {
+        salesMadeToday += salesMade;
+        tipsReceivedToday += tipsReceived;
+        numOfCustomersServed++;
+
+        ModifyMoney(salesMade + tipsReceived);
+
+        OnCustomerServed?.Invoke();
     }
 
     #endregion

@@ -132,19 +132,35 @@ public class StocksController : MonoBehaviour
         pricingTableManager.UpdateThisProductInfo(product);
     }
 
+    /// <summary>
+    /// Call to get the selling price of a given item
+    /// </summary>
+    public float GetSellingPriceOfItem(FurnitureItem item)
+    {
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            return product.price;
+        }
+        else
+        {
+            Debug.LogError("Selling price of item is wrong. Giving 0");
+            return 0;
+        }
+    }
     #endregion
 
     #region Extras
-    private float RoundToRetailPrice(float price)
-    {
-        float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
+            private float RoundToRetailPrice(float price)
+            {
+                float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
 
-        float basePart = Mathf.Floor(price);
-        float decimalPart = price - basePart;
+                float basePart = Mathf.Floor(price);
+                float decimalPart = price - basePart;
 
-        float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
+                float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
 
-        return basePart + closestEnding;
-    }
+                return basePart + closestEnding;
+            }
     #endregion
 }

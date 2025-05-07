@@ -21,7 +21,7 @@ public class CustomerAI : MonoBehaviour
     private Queue<FurnitureController> shoppingList;
 
     /// <summary> List of items this customer has in their basket </summary>
-    private List<FurnitureController> basket = new List<FurnitureController>();
+    public List<FurnitureItem> basket = new List<FurnitureItem>();
 
     /// <summary>A refernece to the Till object<summary>
     private TillQueue till;
@@ -102,7 +102,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void PickedUp()
     {
-        basket.Add(currentItem);
+        basket.Add(currentItem.item);
 
         shoppingList.Dequeue();
         NextAction();

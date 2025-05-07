@@ -160,6 +160,8 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public InventoryItem PickUpItem(int xPos, int yPos)
     {
+        if (xPos >= inventoryWidth || yPos >= inventoryHeight) { return null; }
+
         InventoryItem item = inventorySlots[xPos, yPos];
 
         if (item == null) { return null; }

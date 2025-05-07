@@ -36,11 +36,13 @@ public class TillQueue : MonoBehaviour, IInteractable
         //Returns from function if queue is empty
         if (customerQueue.Count == 0) return;
 
-        //Causes the Customer to leave the Till
-        customerQueue.Dequeue().LeaveShop();
-        
-        //Next need to update positions of the customers in the queue
-        UpdateTillQueue();
+        CustomerAI customer = customerQueue.Dequeue();
+        ShopManager.instance.CreateCustomerBuyingUI(customer.basket, () =>
+        {
+            customer.LeaveShop();
+            //Next need to update positions of the customers in the queue
+            UpdateTillQueue();
+        });
     }
 
     /// <summary>

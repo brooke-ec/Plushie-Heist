@@ -89,7 +89,7 @@ public class SkillTreesManager : MonoBehaviour
         Sprite newButtonBackground = skillTrees[currentlyActiveSkillTree].skillTree.palette.canBeUpgradedSprite;
         coinsContainer.GetChild(1).GetComponent<Image>().sprite = newButtonBackground;
 
-        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString();
+        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString("n2");
     }
 
     #endregion
@@ -97,7 +97,7 @@ public class SkillTreesManager : MonoBehaviour
     #region User control
 
     //TO-DO-SAVING NEEDS TO BE SAVED
-    List<int> nextPlushie = new List<int>() { 0, 0 };
+    private int nextPlushieToBeRescued = 0;
 
     /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>
     /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
@@ -105,8 +105,8 @@ public class SkillTreesManager : MonoBehaviour
     {
         for (int skillTreeNum = 0; skillTreeNum < skillTrees.Count; skillTreeNum++)
         {
-            skillTrees[skillTreeNum].EnableBranch(nextPlushie[skillTreeNum]);
-            nextPlushie[skillTreeNum]++;
+            skillTrees[skillTreeNum].EnableBranch(nextPlushieToBeRescued);
+            nextPlushieToBeRescued++;
         }
     }
 
