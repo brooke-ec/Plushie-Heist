@@ -844,7 +844,7 @@ MonoBehaviour:
       m_Rotation: 0
       m_Anchor: 9
     m_Material: {fileID: 0}
-    m_SubmeshIndex: 5
+    m_SubmeshIndex: 2
     m_ManualUV: 0
     elementGroup: -1
     m_TextureGroup: -1
@@ -1998,11 +1998,21 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1207
+  m_VersionIndex: 1223
   m_IsSelectable: 1
-  m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedFaces: 2f000000
+  m_SelectedEdges:
+  - a: 239
+    b: 240
+  - a: 240
+    b: 236
+  - a: 237
+    b: 238
+  - a: 238
+    b: 239
+  - a: 236
+    b: 237
+  m_SelectedVertices: ef000000f0000000ec000000ed000000ee000000
 --- !u!114 &4577328405091878511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2939,7 +2949,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fd2de6472cefbea469ef0c4af08201e8, type: 2}
     - target: {fileID: 9085034688409426016, guid: 00edc29ea74cb074f91a788c77584d8c, type: 3}
       propertyPath: m_VersionIndex
-      value: 5869
+      value: 5881
       objectReference: {fileID: 0}
     - target: {fileID: 9085034688409426016, guid: 00edc29ea74cb074f91a788c77584d8c, type: 3}
       propertyPath: m_Faces.Array.size
