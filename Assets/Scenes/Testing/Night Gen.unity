@@ -226,7 +226,7 @@ MonoBehaviour:
     maxRoom: 6
   pathGenerator:
     sideRoomChance: 0.5
-    collapseChance: 0.5
+    collapseChance: 1
     corridorWidth: 1
   tileGenerator:
     <tileSize>k__BackingField: 10
@@ -307,6 +307,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6c634e0e75f3c498a8ec4091833e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reset: 0
+  a: {x: -7, y: -5}
+  b: {x: 2, y: -8}
 --- !u!1 &1531873854
 GameObject:
   m_ObjectHideFlags: 0

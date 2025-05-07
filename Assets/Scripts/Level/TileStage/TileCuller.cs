@@ -8,6 +8,7 @@ public class TileCuller : MonoBehaviour
 
     private TileGenerator tileGenerator;
     private Transform player;
+    private Vector2Int previous;
 
     void Start()
     {
@@ -18,7 +19,11 @@ public class TileCuller : MonoBehaviour
     void Update()
     {
         Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(player.position));
-        tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
+        if (previous != position)
+        {
+            tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
+            previous = position;
+        }
     }
 
     public Vector2 FromWorldspace(Vector3 point)
@@ -74,7 +79,7 @@ public class TileCuller : MonoBehaviour
                     {
                         Vector2 c = new Vector2(a.x + x1o, a.y + y1o);
                         Vector2 d = new Vector2(b.x + x2o, b.y + y2o);
-                        if (CheckLine(a, b, spaces))
+                        if (CheckLine(c, d, a, spaces))
                         {
                             connections++;
                             float newGradient = float.PositiveInfinity;
@@ -98,9 +103,18 @@ public class TileCuller : MonoBehaviour
         return State.Hidden;
     }
 
-    private bool CheckLine(Vector2 a, Vector2 b, bool[,] spaces)
+    private bool CheckLine(Vector2 a, Vector2 b, Vector2Int cell, bool[,] spaces)
     {
-        Vector2 c = Vector2Int.FloorToInt(a);
+        if (a == b) return true;
+        Vector2 c = cell;
+
+        Vector2 center = cell + Vector2.one * 0.5f;
+        bool horizontal = Mathf.Sign(a.x - center.x) == Mathf.Sign(b.x - center.x);
+        bool vertical = Mathf.Sign(a.y - center.y) == Mathf.Sign(b.y - center.y);
+        
+        bool skipFirst = !(horizontal && vertical);
+        bool skipDiagonal = horizontal != vertical;
+
         bool visible = true;
 
         while (true)
@@ -124,14 +138,20 @@ public class TileCuller : MonoBehaviour
                 c.x - a.x - Mathf.Min(reflection.x, 0),
                 c.y - a.y - Mathf.Min(reflection.y, 0) 
             );
- 
-            if (direction.x - length.x <= 0 || direction.y - length.y <= 0) break;
 
-            Vector2Int position = Vector2Int.FloorToInt(c);
-            visible &= spaces[position.x, position.y];
+            if (Mathf.Abs(length.x) >= Mathf.Abs(direction.x) && direction.x != 0 || Mathf.Abs(length.y) >= Mathf.Abs(direction.y) && direction.y != 0) break;
+            
+            if (!skipFirst)
+            {
+                Vector2Int position = Vector2Int.FloorToInt(c);
+                if (position.x >= spaces.GetLength(0) || position.y >= spaces.GetLength(1)) visible &= true;
+                else visible &= spaces[position.x, position.y];
 
-            visible &= !diagonal || spaces[position.x, Mathf.RoundToInt(position.y - reflection.y)] 
-                && spaces[Mathf.RoundToInt(position.x - reflection.x), position.y];
+                if (!skipDiagonal) visible &= !diagonal || spaces[position.x, position.y - Mathf.RoundToInt(reflection.y)]
+                    || spaces[position.x - Mathf.RoundToInt(reflection.x), position.y];
+            }
+            skipDiagonal = false;
+            skipFirst = false;
         }
 
         return visible;
