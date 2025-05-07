@@ -8,6 +8,7 @@ public class ShopSpawner : MonoBehaviour
     [SerializeField] private GridSaver[] levels;
     
     [SerializeField] [JsonProperty("layout")] private GridSaver current;
+    [SerializeField] [JsonProperty("storage")] private InventoryGrid storage;
 
     static ShopSpawner instance;
 

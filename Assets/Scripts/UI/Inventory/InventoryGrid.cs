@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 /// <summary> Controls a single inventory grid functionality </summary>
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -23,6 +25,23 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     InventoryItem[,] inventorySlots;
     private float scaleFactor;
+
+    [JsonProperty("items")]
+    public InventoryItem[] items
+    {
+        get
+        {
+            return (from InventoryItem item in inventorySlots
+                    where item != null select item).Distinct().ToArray();
+        }
+        set
+        {
+            foreach (InventoryItem item in value)
+            {
+                PlaceItem(item, item.position.x, item.position.y);
+            }
+        }
+    }
 
     public void StartInventory()
     {
@@ -107,6 +126,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         RectTransform itemRectTransform = item.GetComponent<RectTransform>();
         itemRectTransform.SetParent(rectTransform);
+        item.position = new Vector2Int(xPos, yPos);
 
         //telling the grid that this item is present on each of these tiles of the grid (if bigger than 1x1)
         for (int x = 0; x < item.Width; x++)

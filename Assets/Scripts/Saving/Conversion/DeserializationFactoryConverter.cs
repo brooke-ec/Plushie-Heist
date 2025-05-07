@@ -51,7 +51,7 @@ public class DeserializationFactoryConverter : JsonConverter
                 if (value != null) return value;
             }
 
-            throw new ArgumentException($"Could deserialize parameter '{p.Name}' in '{objectType.Name}' load factory");
+            throw new ArgumentException($"Could deserialize parameter '{p.Name}' in '{objectType.Name}' deserialization factory");
         }).ToArray();
 
         // Run factory and populate fields
