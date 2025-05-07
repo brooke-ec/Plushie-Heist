@@ -54,20 +54,22 @@ public class BoostSkill : Skill
                 if (!isNight) { ShopManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.ShopInventorySize:
-                //Something like
                 if (!isNight) { FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
-                if (!isNight) { } //TO-DO * CUSTOMER SPAWN RATE
+                if (!isNight) {
+                    CustomerController customerController = FindAnyObjectByType<CustomerController>();
+                    if(customerController!=null) { customerController.IncreaseCustomerSpawnRate(modifier); }
+                    }
                 break;
             case SkillType.ShopCustomerTips:
-                if (!isNight) { } //TO-DO * AVERAGE TIPS (have a tips variable set to 1)
+                if (!isNight) { ShopManager.instance.tipPercentage += modifier; } //TO-DO * AVERAGE TIPS (have a tips variable set to 1)
                 break;
             case SkillType.ShopHigherPrices:
                 if (!isNight) { } //TO-DO * AVERAGE PRICE RANGE THAT CUSTOMERS WILL BUY
                 break;
             case SkillType.ShopImpulseBuyers:
-                if (!isNight) { } //TO-DO * AVERAGE NUM OF ITEMS THAT CUSTOMERS BUY
+                if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; } //TO-DO * AVERAGE NUM OF ITEMS THAT CUSTOMERS BUY
                 break;
             case SkillType.ShopMarketStability:
                 if (!isNight) {

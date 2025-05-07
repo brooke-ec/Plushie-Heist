@@ -123,6 +123,10 @@ public class EscapingUI : MonoBehaviour
                     //set it to 1
                     lostItems.Add(itemToLose, 1);
                 }
+
+                //Now remove from inventory
+                InventoryController controller = FindAnyObjectByType<InventoryController>();
+                controller.RemoveAnItemTypeFromInventory(itemToLose, true);
             }
         }
 
