@@ -47,7 +47,6 @@ public class LoadingSceneController : MonoBehaviour
 
     public IEnumerator UpdateLoadingText(string text)
     {
-        yield return new WaitForSeconds(3f);
         loadingText.GetComponent<CanvasGroup>().DOFade(0, 0.5f);
         yield return new WaitForSeconds(0.5f);
         loadingText.text = text;
