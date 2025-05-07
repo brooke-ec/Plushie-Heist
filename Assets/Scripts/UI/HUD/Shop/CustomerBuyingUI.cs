@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class CustomerBuyingUI : MonoBehaviour
+public class CustomerBuyingUI : MonoBehaviour, IUIMenu
 {
     [SerializeField] private TextMeshProUGUI totalMoneyText;
     [SerializeField] private TextMeshProUGUI tipsText;
@@ -14,6 +14,8 @@ public class CustomerBuyingUI : MonoBehaviour
     [SerializeField] private Button continueButton;
 
     [SerializeField] private GameObject itemPrefab;
+
+    UnityAction closeAction;
 
     public void SetUp(List<FurnitureItem> basket, UnityAction actionForButton)
     {
@@ -33,10 +35,25 @@ public class CustomerBuyingUI : MonoBehaviour
         totalMoneyText.text = "Total: £"+totalMoney.ToString("n2");
         tipsText.text = "Tips: £" + tips.ToString("n2");
 
-        continueButton.onClick.AddListener(() => AudioManager.instance.PlaySound(AudioManager.SoundEnum.selling));
-        continueButton.onClick.AddListener(actionForButton);
-        continueButton.onClick.AddListener(() => ShopManager.instance.OnCustomerBuying(totalMoney, tips));
-        continueButton.onClick.AddListener(() => Destroy(gameObject));
+        SharedUIManager.instance.OpenMenu(this);
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.selling);
+        
+        continueButton.onClick.AddListener(SharedUIManager.instance.CloseMenu);
+        closeAction = () =>
+        {
+            ShopManager.instance.OnCustomerBuying(totalMoney, tips);
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.coins);
+            actionForButton();
+        };
+    }
+
+    void IUIMenu.SetOpenState(bool open)
+    {
+        if (!open)
+        {
+            closeAction.Invoke();
+            Destroy(gameObject);
+        }
     }
 
     private float GenerateTip(float totalMoney)
