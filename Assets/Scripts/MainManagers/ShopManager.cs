@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,14 +15,32 @@ using UnityEngine.Events;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
+    [SerializeField][JsonProperty("storage")] private InventoryGrid storage;
+    [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
+    [JsonProperty("layout")] private GridSaver layout;
+    [JsonProperty("level")] private int level = 0;
+    [JsonProperty("day")] public int day;
+
+    [SerializeField] private GridSaver[] levels;
+
     public Canvas mainCanvas;
-    public int day;
-    
     public bool isShopOpen = false;
-    private bool hasShopBeenOpenToday = false;
     public static ShopManager instance { get; private set; }
     public StocksController stocksController;
 
+    [OnDeserializing]
+    internal void Factory(StreamingContext context)
+    {
+        instance.SetLevel(level);
+    }
+
+    private void SetLevel(int level)
+    {
+        if (layout != null) Destroy(layout);
+
+        layout = Instantiate(levels[level]);
+        this.level = level;
+    }
 
     private void Awake()
     {
