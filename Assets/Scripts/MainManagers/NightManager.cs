@@ -77,6 +77,8 @@ public class NightManager : MonoBehaviour
     {
         print("night ENDED");
 
+        //even if you rescue it, if caught then you lose it
+        if(!successful) { hasRescuedPlushie = false; LoadPlushieIndicator(defaultPlushieInfo); }
         //Call end stuff
         if(!hasRescuedPlushie)
         {

@@ -44,7 +44,15 @@ public class Dialogue : MonoBehaviour
             case DialogueEnum.mainMenu:
                 lines = new string[]
                 {
-                    "A certain Swedish furniture company has become the largest company in the world, wielding the power of build-it-yourself furniture, incredible meatballs and the cutest of plushies."
+                    "A certain Swedish furniture company has become the largest company in the world, wielding the power of build-it-yourself furniture, incredible meatballs and the cutest of plushies.",
+                    "The CEO of said furniture company slowly went mad with power named himself the King of BKEA. His power madness became so great that he decided to claim the Title of King of the country.",
+                    "In his Madness he decided that children should no longer be happy, deciding to kidnap and torture all of the plushies.",
+                    "You, an ex- employee, having seen the horrors of what they are doing to the Plushies so have decided to save them from this.",
+                    "To help you achieve this goal you’ve decided to create a competitor to BKEA that sells stolen BKEA products.",
+                    "Therefore, every night you go into different BKEAs and take some of their furniture. However, be careful of guards or they might take all your findings.",
+                    "In the daytime, you sell this furniture you bought at cheaper prices than original, to attract customers.",
+                    "But most importantly: do not forget to try to rescue each Plushie from the madness of the King of BKEA.",
+                    "Their fate is in your hands."
                 };
                 break;
             case DialogueEnum.plushie1:
