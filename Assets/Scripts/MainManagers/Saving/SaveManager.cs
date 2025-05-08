@@ -3,12 +3,13 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
-[DefaultExecutionOrder(-60)]
+[DefaultExecutionOrder(-80)]
 public class SaveManager : MonoBehaviour
 {
     #region Static
     public static readonly JsonSerializer serializer = new JsonSerializer();
     public static readonly UnityEvent onLoaded = new UnityEvent();
+    public static SaveManager instance { get; private set; }
     public static bool deserializing { get; private set; }
     public static string slot = "default";
 
@@ -24,6 +25,12 @@ public class SaveManager : MonoBehaviour
     [JsonProperty("shop")] internal ShopManager shop => ShopManager.instance;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
+
+    private void Awake()
+    {
+        if (instance == null) instance = this;
+        else Destroy(instance);
+    }
 
     private void Start()
     {

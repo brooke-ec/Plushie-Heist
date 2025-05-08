@@ -56,17 +56,12 @@ public class ShopManager : MonoBehaviour
         shopTimer.SetupClock(true);
     }
 
-    private void Start()
-    {
-        StartNewDay();
-    }
-
     #region Time
 
     [SerializeField] private Clock shopTimerPrefab;
     private Clock shopTimer;
     [HideInInspector] public OpenOrCloseShopButton openOrCloseShopButton;
-    private void StartNewDay()
+    public void StartNewDay()
     {
         day++;
         hasShopBeenOpenToday = false;
