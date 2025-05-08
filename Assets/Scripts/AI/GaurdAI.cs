@@ -75,6 +75,7 @@ public class GaurdAI : MonoBehaviour
             detectionTimer = 0;
             agent.speed = 5;
             anim.SetBool("Chasing", true);
+            chasee.GetComponent<PlayerController>().addGuard(this);
         }
     }
 
@@ -87,6 +88,7 @@ public class GaurdAI : MonoBehaviour
             agent.destination = patrolPoints[curPatrolIndex].position;
             agent.speed = 3.5f;
             anim.SetBool("Chasing", false);
+            chasee.GetComponent<PlayerController>().removeGuard(this);
             //Debug.Log("Patrol");
         }
     }

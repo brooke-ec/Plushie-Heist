@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class NightManager : MonoBehaviour
@@ -19,6 +20,7 @@ public class NightManager : MonoBehaviour
         {
             instance = this;
         }
+        playerInput = FindAnyObjectByType<PlayerInput>();
     }
 
     private void Start()
@@ -37,11 +39,14 @@ public class NightManager : MonoBehaviour
 
     [SerializeField] private PlushieInfo defaultPlushieInfo;
 
+    private PlayerInput playerInput;
+
     public void LoadNight()
     {
         //TO-DO probably load ikea procedural stuff etc
 
         //load UI saying what the night is about, and the continue button calls StartNight()
+        playerInput.SwitchCurrentActionMap("MenuActions");
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
                 Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
@@ -58,6 +63,7 @@ public class NightManager : MonoBehaviour
     public void StartNight()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        playerInput.SwitchCurrentActionMap("PlayerMovement");
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);

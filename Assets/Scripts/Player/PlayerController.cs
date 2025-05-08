@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -191,11 +192,14 @@ public class PlayerController : MonoBehaviour
     /// <summary>ther animator component </summary>
     private Animator animator;
 
+    private List<GaurdAI> guardsChasing;
+
     #endregion
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     [HideInInspector] public Transform seat = null;
+    [HideInInspector] public bool lookLocked;
     #endregion
 
     #region core methods
@@ -204,6 +208,7 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
+        guardsChasing = new List<GaurdAI>();
     }
 
     public void Start()
@@ -950,6 +955,24 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 direction = velocity.normalized;
         velocity -= direction * slowAmt;
+    }
+
+    public void addGuard(GaurdAI guard)
+    {
+        guardsChasing.Add(guard);
+        if(AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+        {
+            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+        }
+    }
+
+    public void removeGuard(GaurdAI guard)
+    {
+        guardsChasing.Remove(guard);
+        if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+        {
+            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+        }
     }
 
     #endregion

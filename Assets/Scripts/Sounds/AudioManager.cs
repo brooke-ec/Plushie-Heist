@@ -12,7 +12,7 @@ public class AudioManager : MonoBehaviour
     public Music[] music;
     [SerializeField] private MixerGroupMapping[] persistentGroups;
 
-    private Music currentMusicPlaying;
+    public Music currentMusicPlaying { get; private set; }
 
     private void Awake()
     {
