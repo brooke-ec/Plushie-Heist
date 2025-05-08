@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public class StocksController : MonoBehaviour
     private PricingTableManager pricingTableManager;
 
     [SerializeField] private FurnitureItem[] allItemsInGame;
-    [HideInInspector] public List<ProductData> allStocksInGame;
+    [HideInInspector] [JsonProperty("pricing")] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
 
@@ -27,6 +28,7 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
+        SaveManager.onLoaded.AddListener(UpdatePricingTable);
     }
 
     private void Start()
@@ -50,29 +52,21 @@ public class StocksController : MonoBehaviour
     #endregion
 
     #region Actions
-    /// <summary>
-    /// TO-DO Call when furniture is placed OR new item added to inventory
-    /// Essentially, we check if the passed furniture is already part
-    /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
-    /// </summary>
-    public void TryAddFurnitureToPricingTable(FurnitureItem item)
+    public void UpdatePricingTable()
     {
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
+        FurnitureItem[] all = GetAllItems();
+        foreach (ProductData stock in allStocksInGame)
         {
-            print("Adding");
-            pricingTableManager.TryAddNewProduct(product);
+            if (all.Contains(stock.itemRef)) pricingTableManager.TryAddNewProduct(stock);
+            else pricingTableManager.TryRemoveProduct(stock);
         }
     }
 
-    public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
+    public FurnitureItem[] GetAllItems()
     {
-        print("Removing");
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
-        {
-            pricingTableManager.TryRemoveProduct(product);
-        }
+        return FindObjectsOfType<FurnitureController>().Select(c => c.item)
+            .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
+            .Distinct().ToArray();
     }
 
     /// <summary>

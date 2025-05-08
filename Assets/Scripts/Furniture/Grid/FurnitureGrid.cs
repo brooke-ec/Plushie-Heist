@@ -76,16 +76,16 @@ public class FurnitureGrid : MonoBehaviour
 
     public void AddItem(FurnitureController item)
     {
+        ShopManager.instance.stocksController.UpdatePricingTable();
         items.Add(item);
         Regenerate();
-        ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(item.item);
     }
 
     public void RemoveItem(FurnitureController item)
     {
+        ShopManager.instance.stocksController.UpdatePricingTable();
         items.Remove(item);
         Regenerate();
-        ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.item);
     }
 
     public void Regenerate()

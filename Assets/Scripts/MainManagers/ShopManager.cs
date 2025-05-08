@@ -19,13 +19,13 @@ public class ShopManager : MonoBehaviour
     [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
     [JsonProperty("layout")] private ShopLayout layout;
     [JsonProperty("day")] public int day;
+    [JsonProperty("stock")] public StocksController stocksController;
 
     [SerializeField] private ShopLayout[] layouts;
 
     public Canvas mainCanvas;
     public bool isShopOpen = false;
     public static ShopManager instance { get; private set; }
-    public StocksController stocksController;
 
     public ShopLayout SetLayout(int level)
     {

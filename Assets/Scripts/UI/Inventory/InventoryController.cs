@@ -143,6 +143,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
             gridToUse.gameObject.SetActive(false);
         }
 
+        ShopManager.instance.stocksController.UpdatePricingTable();
         return addedItemSuccessfully;
     }
 
@@ -159,14 +160,10 @@ public class InventoryController : MonoBehaviour, IUIMenu
         gridToUse.CleanGridReference(item);
         print("item removed from inventory");
 
-        //see if there is another of this in the inventory, if there isn't then call try remove
-        if(!gridToUse.IsThisItemTypeInTheInventory(item.itemClass) && ShopManager.instance!=null)
-        {
-            ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.itemClass);
-        }
-
         Destroy(item.gameObject);
         onChanged.Invoke();
+        
+        ShopManager.instance.stocksController.UpdatePricingTable();
     }
 
     /// <summary>
@@ -248,11 +245,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
             //Then remove from the backpack grid
             RemoveItemFromInventory(backpackItem, true);
             //Call here because removing item might do the whole stock stuff
-
-            if (ShopManager.instance != null)
-            {
-                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(backpackItem.itemClass);
-            }
         }
         return insertedItem;
     }
