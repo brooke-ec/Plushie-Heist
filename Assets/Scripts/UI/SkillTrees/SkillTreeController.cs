@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class SkillTreeController : MonoBehaviour
 {
     [Header("References")]
     public SkillTree skillTree;
-    public List<Skill> unlockedSkills = new List<Skill>();
+    public List<Skill> unlockedSkills => SharedUIManager.instance.unlockedSkills;
 
     public void CreateSkillTree(SkillTree skillTree)
     {

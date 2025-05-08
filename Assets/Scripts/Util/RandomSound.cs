@@ -16,6 +16,6 @@ public class RandomSound : MonoBehaviour
 
     private void Update()
     {
-        if (!source.isPlaying) Destroy(gameObject);
+        if (destroy && !source.isPlaying) Destroy(gameObject);
     }
 }

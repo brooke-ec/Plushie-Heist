@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -15,6 +16,7 @@ public class SharedUIManager : MonoBehaviour
     [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
     [JsonProperty("plushie")] public PlushieInfo plushie = null;
     [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
+    [JsonProperty("skills")] public List<Skill> unlockedSkills = new List<Skill>();
     public int plushieIndex => plushie == null ? 0 : plushie.order;
     
     private PlayerInput playerInput;
