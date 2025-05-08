@@ -53,11 +53,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         scaleFactor = SharedUIManager.instance.scaleFactor;
         rectTransform = GetComponent<RectTransform>();
-    }
 
-    public void StartInventory()
-    {
-        CreateInventoryGrid(inventoryWidth, inventoryHeight);
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
+        });
     }
 
     #region Setup
@@ -346,9 +346,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ModifyInventorySize(int addedRowModifier)
     {
+        InventoryItem[] original = items;
+
         CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
 
-        foreach (var item in items)
+        foreach (var item in original)
         {
             PlaceItem(item, item.position.x, item.position.y);
         }

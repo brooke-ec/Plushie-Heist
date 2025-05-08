@@ -40,15 +40,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
 
-    private void Start()
-    {
-        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (InventoryGrid grid in allGrids)
-        {
-            grid.StartInventory();
-        }
-    }
-
     private void Update()
     {
         ItemIconDragEffect();

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.AI;
@@ -155,7 +156,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void PathItem()
     {
-        if (currentItem != null && NavMesh.SamplePosition( // Get closest position to item
+        if (!currentItem.IsDestroyed() && NavMesh.SamplePosition( // Get closest position to item
             currentItem.transform.position,
             out NavMeshHit hit, float.PositiveInfinity, NavMesh.AllAreas)
         ) {
