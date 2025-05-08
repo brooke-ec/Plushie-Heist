@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -192,14 +194,23 @@ public class PlayerController : MonoBehaviour
     /// <summary>ther animator component </summary>
     private Animator animator;
 
-    private List<GaurdAI> guardsChasing;
+    /// <summary>the array of the guards that are chasing you </summary>
+    public List<GaurdAI> guardsChasing;
+    
+    /// <summary>number of times been arrested</summary>
+    private int arrestCount =0;
 
+    /// <summary>The inital position of the player</summary>
+    private Vector3 initalPos;
+
+    private bool sentBack;
     #endregion
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     [HideInInspector] public Transform seat = null;
-    [HideInInspector] public bool lookLocked;
+    /// <summary>bool if second chance activated</summary>
+    public bool secondChance;
     #endregion
 
     #region core methods
@@ -211,6 +222,7 @@ public class PlayerController : MonoBehaviour
         guardsChasing = new List<GaurdAI>();
     }
 
+    private int frameNo;
     public void Start()
     {
         wishJump = false;
@@ -224,14 +236,13 @@ public class PlayerController : MonoBehaviour
 
         playerGravity = gravity;
 
+        initalPos = transform.position;
     }
 
     public void Update()
     {
-        if (arrested)
-        {
-            Arrest();
-        }
+        frameNo++;
+        
         //Wall movement or regular movement 
         if (wallRunning && !isGrappling)
         {
@@ -290,6 +301,10 @@ public class PlayerController : MonoBehaviour
             SetCameraOffset(Vector3.up * -0.4f);
             transform.position = seat.position;
             animator.SetTrigger("Sit");
+        }
+        if (arrested)
+        {
+            Arrest();
         }
     }
 
@@ -944,6 +959,24 @@ public class PlayerController : MonoBehaviour
     #region gaurdInteraction
     private void Arrest()
     {
+        if(secondChance && arrestCount < 1)
+        {
+            Debug.Log("arrested");
+            arrestCount += 1;
+            transform.position = initalPos;
+            arrested = false;
+
+            while (guardsChasing.Count > 0)
+            {
+                guardsChasing[0].loseIntrest();
+            }
+            
+        }
+        else { ArrestMovement();
+               }
+    }
+    private void ArrestMovement()
+    {
         wasdInput = Vector2.zero;
         wallRunning = false;
         isGrappling = false;
@@ -959,19 +992,27 @@ public class PlayerController : MonoBehaviour
 
     public void addGuard(GaurdAI guard)
     {
-        guardsChasing.Add(guard);
-        if(AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+        if (!guardsChasing.Contains(guard))
         {
-            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+            Debug.Log("added guard"+frameNo);
+            guardsChasing.Add(guard);
+            if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+            }
         }
     }
 
     public void removeGuard(GaurdAI guard)
     {
-        guardsChasing.Remove(guard);
-        if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+        if (guardsChasing.Contains(guard))
         {
-            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+            Debug.Log("removed guard"+frameNo);
+            guardsChasing.Remove(guard);
+            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+            }
         }
     }
 

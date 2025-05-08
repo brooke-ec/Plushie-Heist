@@ -11,12 +11,13 @@ public class GaurdAI : MonoBehaviour
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
     public Transform[] patrolPoints;
+    
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
     protected NavMeshAgent agent;
     /// <summary>The animator component</summary>
-    protected Animator anim;
+    public Animator anim;
     /// <summary>NavMeshAgent component </summary>
     protected GameObject chasee;
     /// <summary>Time since last detected</summary>
@@ -54,11 +55,7 @@ public class GaurdAI : MonoBehaviour
         }
         else
         {
-            if (chasee != null)
-            {
-                chasee = null;
-            }
-            Patrol();
+            loseIntrest();
         }
     }
     #endregion
@@ -88,7 +85,7 @@ public class GaurdAI : MonoBehaviour
             agent.destination = patrolPoints[curPatrolIndex].position;
             agent.speed = 3.5f;
             anim.SetBool("Chasing", false);
-            chasee.GetComponent<PlayerController>().removeGuard(this);
+            anim.SetBool("Arrest", false);
             //Debug.Log("Patrol");
         }
     }
@@ -100,6 +97,18 @@ public class GaurdAI : MonoBehaviour
         //Debug.Log(agent.remainingDistance+transform.position.ToString());
         //Debug.Break();
         
+    }
+
+    public void loseIntrest()
+    {
+        
+        if (chasee != null)
+        {
+            chasee.GetComponent<PlayerController>().removeGuard(this);
+            chasee = null;
+        }
+
+        Patrol();
     }
     #endregion
 }
