@@ -15,12 +15,12 @@ using UnityEngine.Events;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField][JsonProperty("storage")] private InventoryGrid storage;
+    [JsonProperty("storage")] public InventoryGrid storage => InventoryController.instance.storageGrid;
     [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
-    [JsonProperty("layout")] private ShopLayout layout;
-    [JsonProperty("day")] public int day;
-    [JsonProperty("money")] private float money = 0;
     [JsonProperty("stock")] public StocksController stocksController;
+    [JsonProperty("layout")] private ShopLayout layout;
+    [JsonProperty("money")] private float money = 0;
+    [JsonProperty("day")] public int day;
 
     [SerializeField] private ShopLayout[] layouts;
 

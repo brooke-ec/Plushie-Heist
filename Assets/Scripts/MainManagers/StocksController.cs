@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -133,9 +132,11 @@ public class StocksController : MonoBehaviour
     /// </summary>
     public float GetSellingPriceOfItem(FurnitureItem item)
     {
+
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
+            print(product.price);
             return product.price;
         }
         else

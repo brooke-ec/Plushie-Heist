@@ -32,7 +32,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     InventoryItem[,] inventorySlots;
     private float scaleFactor;
 
-    [JsonProperty("items", Order = 999)]
+    [JsonProperty("items")]
     public InventoryItem[] items
     {
         get

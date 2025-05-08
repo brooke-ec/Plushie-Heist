@@ -19,8 +19,8 @@ public class SaveManager : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] [JsonProperty("shop")] internal ShopManager shop;
     [JsonProperty("player")] internal SharedUIManager player => SharedUIManager.instance;
+    [JsonProperty("shop")] internal ShopManager shop => ShopManager.instance;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
     public static string slot = "default";
