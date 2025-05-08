@@ -10,13 +10,13 @@ using UnityEngine.InputSystem;
 public class SharedUIManager : MonoBehaviour
 {
     public Canvas rootCanvas;
+    [JsonProperty("skills", Order = -1)] public List<Skill> unlockedSkills = new List<Skill>();
     [HideInInspector] public float scaleFactor;
     [HideInInspector] public IUIMenu currentMenu = null;
     [HideInInspector] public bool isMenuOpen => currentMenu != null;
     [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
     [JsonProperty("plushie")] public PlushieInfo plushie = null;
     [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
-    [JsonProperty("skills")] public List<Skill> unlockedSkills = new List<Skill>();
     public int plushieIndex => plushie == null ? 0 : plushie.order;
     
     private PlayerInput playerInput;
@@ -34,6 +34,11 @@ public class SharedUIManager : MonoBehaviour
         {
             instance = this;
         }
+
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            foreach (var item in unlockedSkills) item.Unlock();
+        });
     }
 
     private void Start()

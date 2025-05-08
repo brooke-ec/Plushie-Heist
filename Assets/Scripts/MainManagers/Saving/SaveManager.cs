@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
@@ -10,6 +9,8 @@ public class SaveManager : MonoBehaviour
     #region Static
     public static readonly JsonSerializer serializer = new JsonSerializer();
     public static readonly UnityEvent onLoaded = new UnityEvent();
+    public static bool deserializing { get; private set; }
+    public static string slot = "default";
 
     static SaveManager()
     {
@@ -19,11 +20,10 @@ public class SaveManager : MonoBehaviour
     }
     #endregion
 
-    [JsonProperty("player")] internal SharedUIManager player => SharedUIManager.instance;
+    [JsonProperty("player", Order = -1)] internal SharedUIManager player => SharedUIManager.instance;
     [JsonProperty("shop")] internal ShopManager shop => ShopManager.instance;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
-    public static string slot = "default";
 
     private void Start()
     {
@@ -32,11 +32,13 @@ public class SaveManager : MonoBehaviour
 
     public void Load()
     {
+        deserializing = true;
         using StreamReader sr = new StreamReader(path);
         using JsonReader jr = new JsonTextReader(sr);
 
         serializer.Populate(jr, this);
         onLoaded.Invoke();
+        deserializing = false;
     }
 
     public void Save()

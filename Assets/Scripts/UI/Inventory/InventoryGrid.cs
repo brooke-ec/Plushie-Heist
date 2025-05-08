@@ -29,7 +29,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         set { CreateInventoryGrid(value.x, value.y); }
     }
 
-    InventoryItem[,] inventorySlots;
+    InventoryItem[,] inventorySlots = new InventoryItem[0,0];
     private float scaleFactor;
 
     [JsonProperty("items")]

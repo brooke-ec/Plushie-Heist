@@ -49,13 +49,15 @@ public class ShopManager : MonoBehaviour
         {
             instance = this;
         }
+
+        // Not good practice
+        shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
+        shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
+        shopTimer.SetupClock(true);
     }
 
     private void Start()
     {
-        shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
-        shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
-        shopTimer.SetupClock(true);
         StartNewDay();
     }
 
@@ -84,7 +86,6 @@ public class ShopManager : MonoBehaviour
         isShopOpen = true;
         hasShopBeenOpenToday = true;
         shopTimer.StartCoroutine(shopTimer.StartClock());
-        //TO-DO Make clients come
     }
 
     /// <summary>
@@ -97,12 +98,6 @@ public class ShopManager : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.lowPitchBell);
         isShopOpen = false;
         shopTimer.OnTimeEnded(); //make sure it's ended
-        
-        //TO-DO MAKE CLIENTS STOP COMING
-
-        //Won't be here, as this will actually be triggered once the LAST customer is done
-        //AND THEN the night is over, that's when it will be called
-        //StartNewDay();
     }
     #endregion
 

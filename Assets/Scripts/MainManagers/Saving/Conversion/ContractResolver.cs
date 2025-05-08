@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
 using System.Reflection;
+using System.Linq;
 
 public class ContractResolver : DefaultContractResolver
 {
@@ -40,6 +41,6 @@ public class ContractResolver : DefaultContractResolver
                 properties.Add(p);
             }
 
-        return properties;
+        return properties.OrderBy(p => p.Order).ToArray();
     }
 }

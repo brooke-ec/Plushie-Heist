@@ -32,7 +32,7 @@ public class BoostSkill : Skill
         switch (skillType)
         {
             case SkillType.PlayerBackpackSize:
-                FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);
+                if (!SaveManager.deserializing) FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);
                 break;
             case SkillType.PlayerItemLostPercent:
                 if (isNight) { NightManager.instance.itemLosePercentage -= (int)modifier; }
@@ -54,22 +54,22 @@ public class BoostSkill : Skill
                 if (!isNight) { ShopManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.ShopInventorySize:
-                if (!isNight) { FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);}
+                if (!isNight && !SaveManager.deserializing) { FindAnyObjectByType<InventoryController>().storageGrid.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
                 if (!isNight) {
-                    CustomerController customerController = FindAnyObjectByType<CustomerController>();
-                    if(customerController!=null) { customerController.IncreaseCustomerSpawnRate(modifier); }
+                        CustomerController customerController = FindAnyObjectByType<CustomerController>();
+                        if(customerController!=null) { customerController.IncreaseCustomerSpawnRate(modifier); }
                     }
                 break;
             case SkillType.ShopCustomerTips:
-                if (!isNight) { ShopManager.instance.tipPercentage += modifier; } //TO-DO * AVERAGE TIPS (have a tips variable set to 0)
+                if (!isNight) { Debug.Log("Unlock"); ShopManager.instance.tipPercentage += modifier; }
                 break;
             case SkillType.ShopHigherPrices:
-                if (!isNight) { } //TO-DO * AVERAGE PRICE RANGE THAT CUSTOMERS WILL BUY
+                if (!isNight) ShopManager.instance.stocksController.purchaseRange += Vector2.one * 0.05f;
                 break;
             case SkillType.ShopImpulseBuyers:
-                if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; } //TO-DO * AVERAGE NUM OF ITEMS THAT CUSTOMERS BUY
+                if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; }
                 break;
             case SkillType.ShopMarketStability:
                 if (!isNight) {

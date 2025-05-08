@@ -54,7 +54,7 @@ public class CustomerController : MonoBehaviour
     {
         FurnitureController[] forSale = FindObjectsOfType<FurnitureController>()
             .Where(i => i.selling).OrderBy(_ => Random.value).ToArray();
-        return forSale.Take(Random.Range(1, 3)).ToList();
+        return forSale.Take(Random.Range(1, Mathf.RoundToInt(3 * ShopManager.instance.itemBuyingMultiplier))).ToList();
     }
 
     /// <summary>
