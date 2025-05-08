@@ -810,7 +810,7 @@ public class PlayerController : MonoBehaviour
             curFriction = groundFriction;
             float rotValue = 0 - cam.transform.localEulerAngles.z;
             rotValue = rotValue < -180 ? rotValue+360:rotValue;
-            cam.transform.DOLocalRotate(new(0, 0, rotValue), 0.2f, RotateMode.LocalAxisAdd);
+            cam.transform.DOLocalRotate(new(cam.transform.localEulerAngles.x, 0, 0), 0.2f);
             maxSpeed = walkSpeed;
             return;
         }
