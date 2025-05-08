@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
 
-public class SaveController : MonoBehaviour
+public class SaveManager : MonoBehaviour
 {
     #region Static
     public static readonly JsonSerializer serializer = new JsonSerializer();
 
-    static SaveController()
+    static SaveManager()
     {
         serializer.ContractResolver = ContractResolver.instance;
 
@@ -16,7 +16,8 @@ public class SaveController : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] [JsonProperty("shop")] private ShopManager shop;
+    [SerializeField] [JsonProperty("shop")] internal ShopManager shop;
+    [JsonProperty("backpack")] internal InventoryGrid backpack => InventoryController.instance.backpackGrid;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
     public static string slot = "default";

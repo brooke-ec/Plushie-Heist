@@ -21,9 +21,10 @@ public class AbilitySkill : Skill
     public override void Unlock()
     {
         bool isNight = NightManager.instance != null;
-
+        PlayerController controller = FindAnyObjectByType<PlayerController>();
         switch (abilityToUnlock)
         {
+      
             case AbilityToUnlock.PlayerDash:
                 if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Dash); }
                 break;
@@ -31,9 +32,7 @@ public class AbilitySkill : Skill
                 if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Boost); }
                 break;
             case AbilityToUnlock.PlayerWallRunning:
-                if (isNight) { }
-                //TO-DO NOT SURE BECAUSE IT'S WALL RUNNING
-                //MovementUIManager.instance.LearnAbility(); ?
+                controller.wallRunEnabled = true;
                 break;
             case AbilityToUnlock.PlayerGrapple:
                 if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Grapple); }
@@ -42,9 +41,7 @@ public class AbilitySkill : Skill
                 if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Glide); }
                 break;
             case AbilityToUnlock.PlayerSecondChance:
-                if (isNight) { }
-                //TO-DO SOME VARIABLE WHEN CAUGHT WITH GUARDS?
-                //TP YOU TO THE START OF THE IKEA?
+                controller.secondChance = true;
                 break;
             case AbilityToUnlock.ShopAutomaticItemRestocking:
                 if (!isNight) { }

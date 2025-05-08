@@ -26,7 +26,7 @@ public class LoadingSceneController : MonoBehaviour
 
     private AsyncOperation sceneLoading;
 
-    public void LoadSceneAsync(string sceneString)
+    public void LoadSceneAsync(int sceneId)
     {
         loadingScreenCanvas = Instantiate(loadingScreenCanvasPrefab);
         progressBar = loadingScreenCanvas.transform.GetChild(1).GetComponent<Slider>();
@@ -36,7 +36,7 @@ public class LoadingSceneController : MonoBehaviour
         StartCoroutine(UpdateLoadingText("Loading Scene"));
         StartCoroutine(SpinPlushie());
 
-        sceneLoading = SceneManager.LoadSceneAsync(sceneString);
+        sceneLoading = SceneManager.LoadSceneAsync(sceneId);
         StartCoroutine(GetSceneLoadingProgress());
     }
 

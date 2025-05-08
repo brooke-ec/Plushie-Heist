@@ -209,6 +209,8 @@ public class PlayerController : MonoBehaviour
     /// <summary>The inital position of the player</summary>
     private Vector3 initalPos;
 
+    private bool nightEnded;
+
     private bool inventoryOpen;
 
     /// <summary>Has the player entered a bouncePad</summary>
@@ -325,7 +327,7 @@ public class PlayerController : MonoBehaviour
             transform.position = seat.position;
             animator.SetTrigger("Sit");
         }
-        if (arrested)
+        if (arrested & !nightEnded)
         {
             Arrest();
         }
@@ -1016,8 +1018,12 @@ public class PlayerController : MonoBehaviour
             }
             
         }
-        else { ArrestMovement();
-               }
+        else 
+        {
+            nightEnded = true;
+            ArrestMovement();
+            NightManager.instance.OnEndNight(false);
+        }
     }
     private void ArrestMovement()
     {
