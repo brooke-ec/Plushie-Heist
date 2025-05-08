@@ -191,7 +191,8 @@ public class AudioManager : MonoBehaviour
         UIclick3,
         backpackOpen,
         backpackClose,
-        selling
+        selling,
+        dialogueBeep
     }
 
     #endregion

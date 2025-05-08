@@ -10,6 +10,7 @@ public class EscapingUI : MonoBehaviour
 {
     [SerializeField] private GameObject successfulEscapingUIPrefab;
     [SerializeField] private GameObject caughtEscapingUIPrefab;
+    [SerializeField] private Dialogue dialoguePrefab;
 
     [SerializeField] private Color32 pinkColour;
     [SerializeField] private Color32 greenColour;
@@ -17,7 +18,7 @@ public class EscapingUI : MonoBehaviour
     public GameObject itemSlotPrefab;
     private bool successful = false;
 
-    public void CreateEscapingUI(bool successful, Transform canvasTransform)
+    public void CreateEscapingUI(bool successful, Transform canvasTransform, PlushieInfo plushieInfo)
     {
         this.successful = successful;
         GameObject escapingUI;
@@ -25,10 +26,12 @@ public class EscapingUI : MonoBehaviour
         //create needed UI element
         if (successful)
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.successful);
             escapingUI = Instantiate(successfulEscapingUIPrefab, canvasTransform);
         }
         else
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.unsuccessful);
             escapingUI = Instantiate(caughtEscapingUIPrefab, canvasTransform);
         }
 
@@ -65,8 +68,20 @@ public class EscapingUI : MonoBehaviour
             }
         }
 
+        //NOW ADD PLUSHIE DIALOGUE IF PLUSHIE WAS RESCUED (if it's not null)
+        if (plushieInfo != null)
+        {
+            escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
+                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.plushieNumber + 2);
+            });
+        }
         escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));
-        //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
+
+        //TO-DO-SAVING ADD ON-CLICK OF PASSING TO THE DAY SCENE
+        //IF IT'S INSIDE THE PLUSHIEINFO != NULL, DO IT INSTEAD IN THE ONDIALOGUEEND
+        // like dialogue.onDialogueEnd = pass to scene method
     }
 
     /// <summary>

@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     public GameObject saveFileIconPrefab;
     public Transform saveFileContentTransform;
     public GameObject noSavedGamesText;
-
+    public Dialogue dialoguePrefab;
     private void Start()
     {
         MakeSavesAsUI();
@@ -43,7 +43,11 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
-        //TO-DO
+        transform.GetChild(1).gameObject.SetActive(true);
+        Dialogue dialogue = Instantiate(dialoguePrefab, transform.GetChild(1));
+        
+        //TO-DO-SAVING dialogue.onDialogueEnd = (LOAD NIGHT SCENE METHOD)
+        dialogue.SetUp(Dialogue.DialogueEnum.mainMenu);
     }
 
     public void CloseGame()
