@@ -21,7 +21,7 @@ public class CustomerAI : MonoBehaviour
     private Queue<FurnitureController> shoppingList;
 
     /// <summary> List of items this customer has in their basket </summary>
-    private List<FurnitureController> basket = new List<FurnitureController>();
+    public List<FurnitureItem> basket = new List<FurnitureItem>();
 
     /// <summary>A refernece to the Till object<summary>
     private TillQueue till;
@@ -38,8 +38,6 @@ public class CustomerAI : MonoBehaviour
     #region Serialized fields    
     /// <summary>A float for the Time the Customer Will spend at a shelf</summary>
     [SerializeField] private float pickupTime = 2;
-    [SerializeField] private RuntimeAnimatorController animationController;
-    [SerializeField] private Animator[] models;
     #endregion
 
     #region Private Methods
@@ -51,9 +49,7 @@ public class CustomerAI : MonoBehaviour
         till = FindAnyObjectByType<TillQueue>();
         customerController = FindAnyObjectByType<CustomerController>();
 
-        // Pick model
-        animator = Instantiate(models[Random.Range(0, models.Length)], transform);
-        animator.runtimeAnimatorController = animationController;
+        animator = GetComponentInChildren<Animator>();
         animator.SetFloat("pickup multiplier", 0.375f / pickupTime);
 
         //Assinging other values using the references
@@ -106,7 +102,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void PickedUp()
     {
-        basket.Add(currentItem);
+        basket.Add(currentItem.item);
 
         shoppingList.Dequeue();
         NextAction();

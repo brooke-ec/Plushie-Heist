@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class NightManager : MonoBehaviour
@@ -18,6 +20,7 @@ public class NightManager : MonoBehaviour
         {
             instance = this;
         }
+        playerInput = FindAnyObjectByType<PlayerInput>();
     }
 
     private void Start()
@@ -34,17 +37,24 @@ public class NightManager : MonoBehaviour
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
+    [SerializeField] private PlushieInfo defaultPlushieInfo;
+
+    private PlayerInput playerInput;
+
     public void LoadNight()
     {
         //TO-DO probably load ikea procedural stuff etc
 
         //load UI saying what the night is about, and the continue button calls StartNight()
+        playerInput.SwitchCurrentActionMap("MenuActions");
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
                 Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
                 Destroy(nightIntroUI);
             }
         );
+
+        LoadPlushieIndicator(defaultPlushieInfo);
     }
 
     /// <summary>
@@ -52,6 +62,8 @@ public class NightManager : MonoBehaviour
     /// </summary>
     public void StartNight()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        playerInput.SwitchCurrentActionMap("PlayerMovement");
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -87,5 +99,31 @@ public class NightManager : MonoBehaviour
     public Canvas nightUICanvas;
 
     [SerializeField] private EscapingUI escapingUI;
+
+    [SerializeField] private Image plushieIcon;
+    [HideInInspector] public bool hasRescuedPlushie = false;
+
+    private void LoadPlushieIndicator(PlushieInfo plushieInfo=null)
+    {
+        //TO-DO-SAVING load what plushie needs to be rescued next (PlushieInfo)
+
+        if(plushieInfo!=null) { plushieIcon.sprite = plushieInfo.plushieIcon; }
+        if (hasRescuedPlushie)
+        {
+            plushieIcon.color = Color.white;
+        }
+        else {
+            plushieIcon.color = new Color(1, 1, 1, 0.5f);
+        }
+    }
+
+    /// <summary>
+    /// Call when plushie is rescued
+    /// </summary>
+    public void OnRescuePlushie()
+    {
+        hasRescuedPlushie = true;
+        LoadPlushieIndicator();
+    }
     #endregion
 }

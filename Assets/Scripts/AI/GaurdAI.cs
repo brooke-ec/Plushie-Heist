@@ -11,12 +11,13 @@ public class GaurdAI : MonoBehaviour
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
     public Transform[] patrolPoints;
+    
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
     protected NavMeshAgent agent;
     /// <summary>The animator component</summary>
-    protected Animator anim;
+    public Animator anim;
     /// <summary>NavMeshAgent component </summary>
     protected GameObject chasee;
     /// <summary>Time since last detected</summary>
@@ -45,7 +46,7 @@ public class GaurdAI : MonoBehaviour
             {
                 agent.speed = 0;
             }
-            else if (agent.remainingDistance <= 1.2)
+            else if (agent.remainingDistance <= 1.2&&!agent.pathPending)
             {
                 Arrest();
                 anim.SetBool("Arrest", true);
@@ -54,11 +55,7 @@ public class GaurdAI : MonoBehaviour
         }
         else
         {
-            if (chasee != null)
-            {
-                chasee = null;
-            }
-            Patrol();
+            loseIntrest();
         }
     }
     #endregion
@@ -71,10 +68,11 @@ public class GaurdAI : MonoBehaviour
         RaycastHit hitinfo = new RaycastHit();
         if (Physics.Raycast(LOSRay, out hitinfo) && hitinfo.collider.gameObject.tag == "Player"){
             chasee = detectee;
-            //Debug.Log("hit");
+            //Debug.Log("Detected");
             detectionTimer = 0;
             agent.speed = 5;
             anim.SetBool("Chasing", true);
+            chasee.GetComponent<PlayerController>().addGuard(this);
         }
     }
 
@@ -87,12 +85,30 @@ public class GaurdAI : MonoBehaviour
             agent.destination = patrolPoints[curPatrolIndex].position;
             agent.speed = 3.5f;
             anim.SetBool("Chasing", false);
+            anim.SetBool("Arrest", false);
+            //Debug.Log("Patrol");
         }
     }
 
     private void Arrest()
     {
         chasee.GetComponent<PlayerController>().arrested = true;
+        //Debug.Log("arrest"+transform.position);
+        //Debug.Log(agent.remainingDistance+transform.position.ToString());
+        //Debug.Break();
+        
+    }
+
+    public void loseIntrest()
+    {
+        
+        if (chasee != null)
+        {
+            chasee.GetComponent<PlayerController>().removeGuard(this);
+            chasee = null;
+        }
+
+        Patrol();
     }
     #endregion
 }

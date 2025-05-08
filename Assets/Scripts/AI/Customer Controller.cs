@@ -74,6 +74,13 @@ public class CustomerController : MonoBehaviour
     {
         return customerDeaths[Random.Range(0, customerDeaths.Length)].position;
     }
+
+    public void IncreaseCustomerSpawnRate(float addedMultiplier)
+    {
+        maxCustomers *= Mathf.CeilToInt(1 + addedMultiplier);
+        minSpawnTime /= Mathf.CeilToInt(1 + addedMultiplier);
+        maxCustomers *= Mathf.CeilToInt(1 + addedMultiplier);
+    }
     #endregion
 
 #if UNITY_EDITOR

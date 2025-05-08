@@ -70,6 +70,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     public void SetOpenState(bool open)
     {
         //TO-DO NOT SURE IF USED, NEED TO CHECK OTHER BRANCH
+        AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.backpackOpen : AudioManager.SoundEnum.backpackClose);
         Transform inventoryTopParent = backpackGrid.transform.parent.parent.parent.parent;
         inventoryTopParent.gameObject.SetActive(open);
     }
@@ -100,7 +101,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <returns></returns>
     public bool CanInsert(FurnitureItem item)
     {
-        return storageGrid.FindSpaceForObject(item) != null;
+        return backpackGrid.FindSpaceForObject(item) != null;
     }
 
     /// <summary>
@@ -121,9 +122,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         bool gridWasOriginallyOff = !gridToUse.gameObject.activeSelf;
 
         //Instantiate the item
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemClassToInsert);
+        InventoryItem item = InventoryItem.Factory(itemClassToInsert);
 
         Vector2Int? posOnGrid = gridToUse.FindSpaceForObject(item);
         if (posOnGrid == null)
@@ -205,6 +204,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
 
         Vector2Int posOnGrid = selectedInventoryGrid.GetTileGridPosition(mousePos); //tile grid position
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (selectedItem == null)
         {
             PickUpItem(posOnGrid);

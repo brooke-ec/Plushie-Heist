@@ -1,13 +1,31 @@
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
-    public FurnitureItem itemClass;
+    [JsonProperty("item"), Unwitable] public FurnitureItem itemClass;
+    [JsonProperty("position")] public Vector2Int position;
+    [JsonProperty("rotated")] public bool rotated = false;
     private Image icon;
     private RectTransform shadowRectTransform;
     private RectTransform backgroundRectTransform;
+
+    [DeserializationFactory]
+    public static InventoryItem Factory(FurnitureItem item, bool rotated)
+    {
+        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
+        InventoryItem ii = Instantiate(InventoryController.instance.itemPrefab, rootCanvas).GetComponent<InventoryItem>();
+        ii.Set(item);
+        if (rotated) ii.Rotate();
+        return ii;
+    }
+
+    public static InventoryItem Factory(FurnitureItem item)
+    {
+        return Factory(item, false);
+    }
 
     private float scaleFactor;
 
@@ -46,8 +64,6 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     /// <summary> Mostly used to pick up an item. Gets the INDEXES of the main position on grid, x and y </summary>
     public Vector2Int mainPositionOnGrid = new Vector2Int();
-
-    public bool rotated = false;
 
     public void Set(FurnitureItem itemClass)
     {
@@ -92,6 +108,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             print("use");
 
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
             GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
         }
     }

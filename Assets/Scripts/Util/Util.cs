@@ -52,6 +52,11 @@ public static class Util
             1 / vector.z
         );
     }
+
+    public static Vector2Int Rotate(this Vector2Int vector)
+    {
+        return new Vector2Int(vector.y, vector.x);
+    }
 }
 
 // Fix https://stackoverflow.com/a/64749403

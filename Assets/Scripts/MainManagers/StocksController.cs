@@ -11,7 +11,7 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<FurnitureItem> allItemsInGame = new List<FurnitureItem>();
+    [SerializeField] private FurnitureItem[] allItemsInGame;
     [HideInInspector] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
@@ -29,6 +29,7 @@ public class StocksController : MonoBehaviour
 
     private void Start()
     {
+        allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.RESOURCES_PATH);
         CreateAllProductData(); // Only references should be set up in Awake()
     }
 
@@ -36,7 +37,7 @@ public class StocksController : MonoBehaviour
     {
         int todaysDate = ShopManager.instance.day;
 
-        allStocksInGame = new List<ProductData>(allItemsInGame.Count);
+        allStocksInGame = new List<ProductData>(allItemsInGame.Length);
         foreach(FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
@@ -57,12 +58,14 @@ public class StocksController : MonoBehaviour
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
+            print("Adding");
             pricingTableManager.TryAddNewProduct(product);
         }
     }
 
     public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
     {
+        print("Removing");
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
@@ -129,19 +132,35 @@ public class StocksController : MonoBehaviour
         pricingTableManager.UpdateThisProductInfo(product);
     }
 
+    /// <summary>
+    /// Call to get the selling price of a given item
+    /// </summary>
+    public float GetSellingPriceOfItem(FurnitureItem item)
+    {
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            return product.price;
+        }
+        else
+        {
+            Debug.LogError("Selling price of item is wrong. Giving 0");
+            return 0;
+        }
+    }
     #endregion
 
     #region Extras
-    private float RoundToRetailPrice(float price)
-    {
-        float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
+            private float RoundToRetailPrice(float price)
+            {
+                float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
 
-        float basePart = Mathf.Floor(price);
-        float decimalPart = price - basePart;
+                float basePart = Mathf.Floor(price);
+                float decimalPart = price - basePart;
 
-        float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
+                float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
 
-        return basePart + closestEnding;
-    }
+                return basePart + closestEnding;
+            }
     #endregion
 }

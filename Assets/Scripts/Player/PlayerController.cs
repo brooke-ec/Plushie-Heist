@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.Versioning;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -188,12 +191,23 @@ public class PlayerController : MonoBehaviour
     private GameObject Hook;
     ///<summary></summary>
     private float grappleCooldownMax;
+    /// <summary> The current offset of the camera </summary>
+    private Vector3 cameraOffset;
 
     /// <summary>rotation to adjust camera to away from wall should only be 5 or -5 </summary>
     private Vector3 rotAdjustVal;
 
     /// <summary>ther animator component </summary>
     private Animator animator;
+
+    /// <summary>the array of the guards that are chasing you </summary>
+    public List<GaurdAI> guardsChasing;
+    
+    /// <summary>number of times been arrested</summary>
+    private int arrestCount =0;
+
+    /// <summary>The inital position of the player</summary>
+    private Vector3 initalPos;
 
     private bool inventoryOpen;
 
@@ -209,6 +223,11 @@ public class PlayerController : MonoBehaviour
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
+    [HideInInspector] public Transform seat = null;
+    /// <summary>bool if second chance activated</summary>
+    public bool secondChance;
+
+    public bool wallRunEnabled;
     #endregion
 
     #region core methods
@@ -217,12 +236,12 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-
+        guardsChasing = new List<GaurdAI>();
     }
 
+    private int frameNo;
     public void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         wishJump = false;
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
@@ -234,20 +253,17 @@ public class PlayerController : MonoBehaviour
 
         playerGravity = gravity;
 
+        initalPos = transform.position;
         _beanBag.SetActive(false);
     }
 
     public void Update()
     {
+        frameNo++;
 
-        if (arrested)
-        {
-            Arrest();
-        }
         //Wall movement or regular movement 
-        if (wallRunning && !isGrappling)
+        if (wallRunning && !isGrappling && wallRunEnabled)
         {
-
             Wallrun();
             animator.SetInteger("Falling", 0);
         }
@@ -301,6 +317,18 @@ public class PlayerController : MonoBehaviour
         Animate();
 
         UpdateAbilitiesCooldowns();
+
+        if (seat != null)
+        {
+            velocity = Vector3.zero;
+            SetCameraOffset(Vector3.up * -0.4f);
+            transform.position = seat.position;
+            animator.SetTrigger("Sit");
+        }
+        if (arrested)
+        {
+            Arrest();
+        }
     }
 
     /// <summary> Update UI of ability with cooldown </summary>
@@ -372,7 +400,7 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if (!wallRunning)
+        if (!wallRunning && wallRunEnabled)
         {
             CheckForWall();
         }
@@ -920,7 +948,7 @@ public class PlayerController : MonoBehaviour
     private void Crouch()
     {
         isCrouchPressed = true;
-        cam.transform.localPosition = new Vector3(0, 1f, 0);
+        SetCameraOffset(Vector3.up * -0.25f);
         cc.height = 1.5f;
         cc.center = new Vector3(0, 0.75f, 0);
     }
@@ -931,9 +959,15 @@ public class PlayerController : MonoBehaviour
     private void Uncrouch()
     {
         isCrouchPressed = false;
-        cam.transform.localPosition = new Vector3(0, 1.25f, 0);
+        SetCameraOffset(Vector3.zero);
         cc.height = 2;
         cc.center = new Vector3(0, 1f, 0);
+    }
+
+    private void SetCameraOffset(Vector3 vector)
+    {
+        cam.transform.localPosition += vector - cameraOffset;
+        cameraOffset = vector;
     }
     #endregion
 
@@ -969,6 +1003,24 @@ public class PlayerController : MonoBehaviour
     #region gaurdInteraction
     private void Arrest()
     {
+        if(secondChance && arrestCount < 1)
+        {
+            Debug.Log("arrested");
+            arrestCount += 1;
+            transform.position = initalPos;
+            arrested = false;
+
+            while (guardsChasing.Count > 0)
+            {
+                guardsChasing[0].loseIntrest();
+            }
+            
+        }
+        else { ArrestMovement();
+               }
+    }
+    private void ArrestMovement()
+    {
         wasdInput = Vector2.zero;
         wallRunning = false;
         isGrappling = false;
@@ -980,6 +1032,32 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 direction = velocity.normalized;
         velocity -= direction * slowAmt;
+    }
+
+    public void addGuard(GaurdAI guard)
+    {
+        if (!guardsChasing.Contains(guard))
+        {
+            Debug.Log("added guard"+frameNo);
+            guardsChasing.Add(guard);
+            if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+            }
+        }
+    }
+
+    public void removeGuard(GaurdAI guard)
+    {
+        if (guardsChasing.Contains(guard))
+        {
+            Debug.Log("removed guard"+frameNo);
+            guardsChasing.Remove(guard);
+            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+            }
+        }
     }
 
     #endregion
@@ -1035,9 +1113,11 @@ public class PlayerController : MonoBehaviour
     {
         if (ctx.performed)
         {
+            seat = null;
             wishJump = true;
             jumpTimer = 0;
             animator.SetTrigger("Jump");
+            SetCameraOffset(Vector3.zero);
         }
     }
 
