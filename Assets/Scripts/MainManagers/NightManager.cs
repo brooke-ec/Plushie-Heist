@@ -65,6 +65,7 @@ public class NightManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         playerInput.SwitchCurrentActionMap("PlayerMovement");
+        GetComponent<GaurdSpawer>().startGuards();
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -85,6 +86,8 @@ public class NightManager : MonoBehaviour
     {
         print("night ENDED");
         playerInput.SwitchCurrentActionMap("MenuActions");
+        Cursor.lockState= CursorLockMode.None;
+        GetComponent<GaurdSpawer>().stopGuards();
         //Call end stuff
         escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
     }
