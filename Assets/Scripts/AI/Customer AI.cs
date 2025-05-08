@@ -155,7 +155,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void PathItem()
     {
-        if (NavMesh.SamplePosition( // Get closest position to item
+        if (currentItem != null && NavMesh.SamplePosition( // Get closest position to item
             currentItem.transform.position,
             out NavMeshHit hit, float.PositiveInfinity, NavMesh.AllAreas)
         ) {

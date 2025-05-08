@@ -11,7 +11,6 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private FurnitureItem[] allItemsInGame;
     [HideInInspector] [JsonProperty("pricing")] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
@@ -27,21 +26,20 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
-        SaveManager.onLoaded.AddListener(UpdatePricingTable);
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            if (allStocksInGame == null) CreateAllProductData();
+            UpdatePricingTable();
+        });
     }
 
-    private void Start()
-    {
-        allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.PATH);
-        CreateAllProductData(); // Only references should be set up in Awake()
-    }
-
-    public void CreateAllProductData()
+    private void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 
+        FurnitureItem[] allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.PATH);
         allStocksInGame = new List<ProductData>(allItemsInGame.Length);
-        foreach(FurnitureItem item in allItemsInGame)
+        foreach (FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -53,19 +51,15 @@ public class StocksController : MonoBehaviour
     #region Actions
     public void UpdatePricingTable()
     {
-        FurnitureItem[] all = GetAllItems();
+        FurnitureItem[] all = FindObjectsOfType<FurnitureController>().Select(c => c.item)
+            .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
+            .Distinct().ToArray();
+
         foreach (ProductData stock in allStocksInGame)
         {
             if (all.Contains(stock.itemRef)) pricingTableManager.TryAddNewProduct(stock);
             else pricingTableManager.TryRemoveProduct(stock);
         }
-    }
-
-    public FurnitureItem[] GetAllItems()
-    {
-        return FindObjectsOfType<FurnitureController>().Select(c => c.item)
-            .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
-            .Distinct().ToArray();
     }
 
     /// <summary>
@@ -136,7 +130,6 @@ public class StocksController : MonoBehaviour
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
-            print(product.price);
             return product.price;
         }
         else

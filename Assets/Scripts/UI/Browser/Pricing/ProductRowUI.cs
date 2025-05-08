@@ -51,8 +51,6 @@ public class ProductRowUI : MonoBehaviour
 
         margin.text = "£"+productDataRef.GetMarginAsString();
 
-        ProductData product = ShopManager.instance.stocksController.allStocksInGame.Find(s => s.itemRef.Equals(productDataRef.itemRef));
-        print(ReferenceEquals(productDataRef, product));
         ChangeMarginsColour();
     }
 
