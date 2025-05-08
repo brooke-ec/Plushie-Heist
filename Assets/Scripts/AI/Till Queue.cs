@@ -36,11 +36,13 @@ public class TillQueue : MonoBehaviour, IInteractable
         //Returns from function if queue is empty
         if (customerQueue.Count == 0) return;
 
-        CustomerAI customer = customerQueue.Dequeue();
+        CustomerAI customer = customerQueue.Peek();
         ShopManager.instance.CreateCustomerBuyingUI(customer.basket, () =>
         {
             customer.LeaveShop();
+
             //Next need to update positions of the customers in the queue
+            customerQueue.Dequeue();
             UpdateTillQueue();
         });
     }

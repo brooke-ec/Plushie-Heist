@@ -16,6 +16,7 @@ public class LevelTile : MonoBehaviour, ITileIdentity
     [HideInInspector] public LevelTile[] negativeZ => _negativeZ.SelectMany(l => l.Value.identity).ToArray();
 
     public LevelTile[] identity => new LevelTile[] { this };
+    [HideInInspector] public Vector2Int position;
 
     public static string TilesToString(LevelTile[] array)
     {

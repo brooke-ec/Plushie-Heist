@@ -57,6 +57,7 @@ public class NightManager : MonoBehaviour
     /// </summary>
     public void StartNight()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);

@@ -197,6 +197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rootCanvas: {fileID: 6804884047904300432}
   scaleFactor: 0
+  onMenuClose:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5453552016065165434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,8 +243,7 @@ MonoBehaviour:
   storageGrid: {fileID: 0}
   backpackGrid: {fileID: 1298857052918043814}
   selectedItem: {fileID: 0}
-  itemsToTest:
-  - {fileID: 11400000, guid: e4a7badcccbfcf34da34d30896f52435, type: 2}
+  itemsToTest: []
 --- !u!1 &2281116366056995160
 GameObject:
   m_ObjectHideFlags: 0

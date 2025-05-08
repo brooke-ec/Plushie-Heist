@@ -204,12 +204,10 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-
     }
 
     public void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         wishJump = false;
         maxSpeed = walkSpeed;
         curFriction = groundFriction;

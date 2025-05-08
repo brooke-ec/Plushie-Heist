@@ -16,7 +16,7 @@ public class SaveController : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] [JsonProperty("shop")] private ShopSpawner shop;
+    [SerializeField] [JsonProperty("shop")] private ShopManager shop;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
     public static string slot = "default";

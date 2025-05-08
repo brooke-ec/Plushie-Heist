@@ -5,9 +5,9 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private Vector2Int size = new(24, 24);
-    [SerializeField] private RoomGenerator roomGenerator;
-    [SerializeField] private PathGenerator pathGenerator;
-    [SerializeField] private TileGenerator tileGenerator;
+    [SerializeField] public RoomGenerator roomGenerator;
+    [SerializeField] public PathGenerator pathGenerator;
+    [SerializeField] public TileGenerator tileGenerator;
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -28,7 +28,12 @@ public class LevelGenerator : MonoBehaviour
         Region[] spaces = rooms.Where(r => r.pathDistance != -1).Cast<Region>()
             .Concat(edges.Where(e => e.connected).Cast<Region>()).ToArray();
 
-        tileGenerator.Generate(spaces, transform, size);
+        LevelTile[] tiles = tileGenerator.Generate(spaces, transform, size);
+        
+        bool[,] gaps = new bool[size.x, size.y];
+        tiles.ForEach(t => gaps[t.position.x, t.position.y] = true);
+        GetComponent<TileCuller>().Setup(gaps, tiles);
+
         GetComponent<NavMeshSurface>().BuildNavMesh();
         GetComponent<GaurdSpawer>().SpawnGaurds();
     }
