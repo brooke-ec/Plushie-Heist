@@ -21,10 +21,10 @@ public class AbilitySkill : Skill
     public override void Unlock()
     {
         bool isNight = NightManager.instance != null;
-
+        PlayerController controller = FindAnyObjectByType<PlayerController>();
         switch (abilityToUnlock)
         {
-            PlayerController controller = FindAnyObjectByType<PlayerController>();
+      
             case AbilityToUnlock.PlayerDash:
                 if (isNight) { MovementUIManager.instance.LearnAbility(Ability.Dash); }
                 break;
