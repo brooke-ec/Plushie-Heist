@@ -111,6 +111,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
+    /// <summary>The Strength that the player throws the beanbags at</summary>
+    [SerializeField] private float _throwStrength;
+    /// <summary>The beanBag that is attached to the player</summary>
+    [SerializeField] private GameObject _beanBag;
+    /// <summary>The BeanBag Prefab</summary>
+    [SerializeField] private GameObject _beanBagPrefab;
     #endregion
 
     #region private fields
@@ -196,6 +202,9 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>The direction that the bounce pad will launch the player in</summary>
     private Vector3 _BouncePadWishVel;
+
+    /// <summary>Wether the player is currently holding a beanbag</summary>
+    private bool _holdingBeanBag;
     #endregion
 
     #region Public Fields
@@ -225,6 +234,7 @@ public class PlayerController : MonoBehaviour
 
         playerGravity = gravity;
 
+        _beanBag.SetActive(false);
     }
 
     public void Update()
@@ -369,6 +379,26 @@ public class PlayerController : MonoBehaviour
         else
         {
             CheckStillWall();
+        }
+    }
+
+    public void PickupBean()
+    {
+        _beanBag.SetActive(true);
+        _holdingBeanBag = true;
+    }
+
+    public void ThrowBean()
+    {
+        if(_holdingBeanBag)
+        {
+            _beanBag.SetActive(false);
+            _holdingBeanBag = false;
+            Quaternion camRot = cam.gameObject.transform.rotation;
+            
+            BeanBag ben = Instantiate(_beanBagPrefab, (this.transform.position + new Vector3(0,1,0)), camRot).GetComponent<BeanBag>();
+
+            ben.Throw(_throwStrength + this.velocity.magnitude);
         }
     }
     #endregion
