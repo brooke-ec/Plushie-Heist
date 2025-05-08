@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
@@ -299,7 +300,7 @@ public class PlayerController : MonoBehaviour
         //Methods to be called every frame
         ApplyJumps();
         LookandRotate();
-        WallRotate();
+        //WallRotate();
         StaminaRecovery();
         GrappleCooldown();
         Boost();
@@ -760,6 +761,14 @@ public class PlayerController : MonoBehaviour
             curFriction = groundFriction;
             Uncrouch();
 
+            if (rayNo is 1 or 0)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, -20), 0.5f,RotateMode.LocalAxisAdd);
+            }
+            else if(rayNo is 3 or 4)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, 20), 0.5f,RotateMode.LocalAxisAdd);
+            }
         }
         else
         {
@@ -796,7 +805,9 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning = false;
             curFriction = groundFriction;
-            cam.transform.rotation = Quaternion.identity;
+            float rotValue = 0 - cam.transform.localEulerAngles.z;
+            rotValue = rotValue < -180 ? rotValue+360:rotValue;
+            cam.transform.DOLocalRotate(new(0, 0, rotValue), 0.5f, RotateMode.LocalAxisAdd);
             maxSpeed = walkSpeed;
             return;
         }
@@ -909,7 +920,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// rotates the camera when it conncts with the wall and rotates when it leaves; use tweening engine to animate it properly
     /// </summary>
-    private void WallRotate()
+    /*private void WallRotate()
     {
         if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0 && rayNumber is 1 or 0)
         {
@@ -923,13 +934,13 @@ public class PlayerController : MonoBehaviour
             rotAdjustVal = new Vector3(0, -5, 0);
             //Debug.Log("rotating");
         }
-        else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
+            else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
             float rot = 0 - cam.transform.localEulerAngles.z;
             cam.transform.Rotate(0, 0, rot);
         }
 
-    }
+    }*/
 
     /// <summary>
     /// Called every frame to update where the camera looks and to rotate the character
@@ -940,7 +951,7 @@ public class PlayerController : MonoBehaviour
 
         camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
 
-        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
+        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, cam.transform.localEulerAngles.z);
 
     }
 
