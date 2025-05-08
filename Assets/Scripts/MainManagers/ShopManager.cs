@@ -19,6 +19,7 @@ public class ShopManager : MonoBehaviour
     [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
     [JsonProperty("layout")] private ShopLayout layout;
     [JsonProperty("day")] public int day;
+    [JsonProperty("money")] private float money = 0;
     [JsonProperty("stock")] public StocksController stocksController;
 
     [SerializeField] private ShopLayout[] layouts;
@@ -126,7 +127,6 @@ public class ShopManager : MonoBehaviour
     #endregion
 
     #region Money
-    private float money = 0;
     public static event Action OnMoneyChanged;
 
     public float GetMoney()

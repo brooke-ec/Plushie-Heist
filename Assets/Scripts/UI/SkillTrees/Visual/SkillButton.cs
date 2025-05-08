@@ -208,7 +208,7 @@ public class SkillButton : MonoBehaviour
             }
             else
             {
-                plushieName = info.plushieName;
+                plushieName = info.name;
             }
         }
 

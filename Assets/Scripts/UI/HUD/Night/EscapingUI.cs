@@ -74,7 +74,7 @@ public class EscapingUI : MonoBehaviour
             escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
             {
                 Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
-                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.plushieNumber + 2);
+                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 2);
             });
         }
         escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));

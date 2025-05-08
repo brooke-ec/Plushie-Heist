@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
+[DefaultExecutionOrder(-60)]
 public class SaveManager : MonoBehaviour
 {
     #region Static
@@ -19,7 +20,7 @@ public class SaveManager : MonoBehaviour
     #endregion
 
     [SerializeField] [JsonProperty("shop")] internal ShopManager shop;
-    [JsonProperty("backpack")] internal InventoryGrid backpack => InventoryController.instance.backpackGrid;
+    [JsonProperty("player")] internal SharedUIManager player => SharedUIManager.instance;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
     public static string slot = "default";

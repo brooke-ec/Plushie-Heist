@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlushieManager : MonoBehaviour
 {
-    public List<PlushieInfo> plushies = new List<PlushieInfo>();
+    [HideInInspector] public PlushieInfo[] plushies;
 
     [SerializeField] private PlushieInfoUI plushieInfoUIPrefab;
 
@@ -16,6 +15,11 @@ public class PlushieManager : MonoBehaviour
 
     List<SkillTreeController> skillTreeControllers = new List<SkillTreeController>();
 
+    private void Awake()
+    {
+        plushies = Resources.LoadAll<PlushieInfo>(PlushieInfo.PATH).OrderBy(p => p.order).ToArray();
+    }
+
     private void Start()
     {
         skillTreeControllers = FindAnyObjectByType<SkillTreesManager>().GetSkillTreeControllers();
@@ -24,17 +28,10 @@ public class PlushieManager : MonoBehaviour
 
     private void CreateAllPlushieContainers()
     {
-        for (int i = 0; i < 6; i++)
+        foreach (PlushieInfo plushie in  plushies)
         {
-            plushies[i].plushieNumber = i+1;
-            if(i<3)
-            {
-                CreatePlushieInfoUI(leftPlushieContainer, plushies[i]);
-            }
-            else
-            {
-                CreatePlushieInfoUI(rightPlushieContainer, plushies[i]);
-            }
+            if(plushie.order % 2 == 1) CreatePlushieInfoUI(leftPlushieContainer, plushie);
+            else CreatePlushieInfoUI(rightPlushieContainer, plushie);
         }
     }
 
@@ -53,7 +50,7 @@ public class PlushieManager : MonoBehaviour
     public PlushieInfo GetPlushieForSkill(Skill skill)
     {
         //basically look for the unlockable lists in the plushies list, if this skill is here then return that plushie info
-        PlushieInfo plushieInfo = plushies.Find(p => p.unlockableSkills.Find(
+        PlushieInfo plushieInfo = plushies.FirstOrDefault(p => p.unlockedSkills.FirstOrDefault(
             unlockables => unlockables.skillsToEnable.Contains(skill)) != null);
         return plushieInfo;
     }

@@ -49,12 +49,14 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    private void Awake()
+    {
+        scaleFactor = SharedUIManager.instance.scaleFactor;
+        rectTransform = GetComponent<RectTransform>();
+    }
+
     public void StartInventory()
     {
-        rectTransform = GetComponent<RectTransform>();
-
-        scaleFactor = SharedUIManager.instance.scaleFactor;
-
         CreateInventoryGrid(inventoryWidth, inventoryHeight);
     }
 
@@ -62,6 +64,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <summary> Create inventory grid of width and height, such as 3x3  /// </summary>
     public void CreateInventoryGrid(int width, int height)
     {
+        Awake();
         inventoryWidth = width;
         inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];
@@ -343,29 +346,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ModifyInventorySize(int addedRowModifier)
     {
-        //copy inventory items to here
-        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
-        for(int x=0; x<inventoryWidth; x++)
-        {
-            for(int y=0; y<inventoryHeight; y++)
-            {
-                copyOfInventorySlots[x, y] = inventorySlots[x, y];
-            }
-        }
-
         CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
 
-        //now add those items properly to the new inventory slots
-        for (int x = 0; x < inventoryWidth; x++)
+        foreach (var item in items)
         {
-            for (int y = 0; y < inventoryHeight; y++)
-            {
-                InventoryItem item = copyOfInventorySlots[x, y];
-                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
-                {
-                    PlaceItem(item, x, y);
-                }
-            }
+            PlaceItem(item, item.position.x, item.position.y);
         }
 
         inventoryHeight += addedRowModifier;

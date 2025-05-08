@@ -109,7 +109,7 @@ public class NightManager : MonoBehaviour
     {
         //TO-DO-SAVING load what plushie needs to be rescued next (PlushieInfo)
 
-        if(plushieInfo!=null) { plushieIcon.sprite = plushieInfo.plushieIcon; }
+        if(plushieInfo!=null) { plushieIcon.sprite = plushieInfo.icon; }
         if (hasRescuedPlushie)
         {
             plushieIcon.color = Color.white;

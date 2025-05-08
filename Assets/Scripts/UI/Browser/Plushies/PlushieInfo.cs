@@ -1,15 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class PlushieInfo
+[CreateAssetMenu(fileName = "New Plushie", menuName = "Scriptable Objects/Plushie", order = 9999)]
+public class PlushieInfo : ResourcesAsset
 {
-    public string plushieName;
-    public Sprite plushieIcon;
-    public List<SkillTreeUnlockable> unlockableSkills;
+    public const string PATH = "Plushies/";
 
-    [HideInInspector] public bool unlocked = false;
-    [HideInInspector] public int plushieNumber = 0;
+    public new string name;
+    public int order = 0;
+    public Sprite icon;
+    public SkillTreeUnlockable[] unlockedSkills;
+
+    [HideInInspector] public bool unlocked => SharedUIManager.instance.plushie == null ? false : SharedUIManager.instance.plushie.order >= order;
 }

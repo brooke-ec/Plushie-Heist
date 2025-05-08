@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 public class DeserializationFactoryConverter : JsonConverter
 {
@@ -14,7 +15,7 @@ public class DeserializationFactoryConverter : JsonConverter
 
     public static bool TryGetFactory(Type type, out MethodInfo method)
     {
-        MethodInfo[] constructors = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+        MethodInfo[] constructors = GetMethods(type, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
             .Where(m => m.HasAttribute<DeserializationFactoryAttribute>()).ToArray();
 
         if (constructors.Length > 1) UnityEngine.Debug.LogWarning($"'{type.Name}' has defined multiple deserialization factories, picking arbitrarily");
@@ -25,7 +26,7 @@ public class DeserializationFactoryConverter : JsonConverter
         }
 
         method = constructors[0];
-        if (method.ReturnType == type) return true;
+        if (method.ReturnType.IsAssignableFrom(type)) return true;
         UnityEngine.Debug.LogWarning($"'{type.Name}' defines a deserialization factory that doesn't return itself, using default deserializer");
         return false;
     }
@@ -63,5 +64,12 @@ public class DeserializationFactoryConverter : JsonConverter
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
         throw new NotImplementedException();
+    }
+
+    public static MethodInfo[] GetMethods(Type type, BindingFlags flags)
+    {
+        List<MethodInfo> methods = new List<MethodInfo>();
+        for (; type != null; type = type.BaseType) methods.AddRange(type.GetMethods(flags));
+        return methods.ToArray();
     }
 }

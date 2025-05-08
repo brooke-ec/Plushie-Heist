@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -19,7 +18,7 @@ public class ItemHelper : AssetPostprocessor
             {
                 // If furniture prefab, defer processing until later
                 if (TryLoad(out GameObject prefab, path) && prefab.TryGetComponent(out FurnitureController source)) sources.Add(source);
-                else if (TryLoad(out FurnitureItem item, path)) ProcessFurnitureItem(item, path);
+                else if (TryLoad(out FurnitureItem item, path)) ProcessFurnitureItem(item);
             });
 
             sources.ForEach(ProcessFurnitureSource);
@@ -62,7 +61,7 @@ public class ItemHelper : AssetPostprocessor
         else if (source.item.prefab != source) Debug.LogError($"'Item controller {source.name}' references '{source.item.name}', but it references '{source.item.prefab.name}'", source);
     }
 
-    private static void ProcessFurnitureItem(FurnitureItem item, string path)
+    private static void ProcessFurnitureItem(FurnitureItem item)
     {
         if (item.prefab != null)
         {
@@ -76,20 +75,6 @@ public class ItemHelper : AssetPostprocessor
             else if (item.prefab.item != item) Debug.LogError($"Item '{item.name}' references '{item.prefab.name}', but it references '{item.prefab.item.name}'", item);
         }
         else Debug.LogError($"Item '{item.name}' has no referenced prefab", item);
-
-        if (path.StartsWith(FurnitureItem.FULL_PATH))
-        {
-            string filename = Path.GetFileNameWithoutExtension(Path.GetRelativePath(FurnitureItem.FULL_PATH, path));
-            
-            if (filename != item.filename)
-            {
-                item.filename = filename;
-                EditorUtility.SetDirty(item);
-                AssetDatabase.SaveAssetIfDirty(item);
-            }
-        }
-        else Debug.LogError($"'Item {path}' is not in the items directory", item);
-
     }
 
     private static bool TryLoad<T>(out T asset, string path) where T : Object

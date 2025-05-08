@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -12,6 +13,9 @@ public class SharedUIManager : MonoBehaviour
     [HideInInspector] public IUIMenu currentMenu = null;
     [HideInInspector] public bool isMenuOpen => currentMenu != null;
     [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
+    [JsonProperty("plushie")] public PlushieInfo plushie = null;
+    [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
+    public int plushieIndex => plushie == null ? 0 : plushie.order;
     
     private PlayerInput playerInput;
 
@@ -19,6 +23,7 @@ public class SharedUIManager : MonoBehaviour
 
     private void Awake()
     {
+        scaleFactor = rootCanvas.scaleFactor;
         if (instance != null)
         {
             Destroy(this);
@@ -32,7 +37,6 @@ public class SharedUIManager : MonoBehaviour
     private void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
-        scaleFactor = rootCanvas.scaleFactor;
 
         if (NightManager.instance != null)
         {
