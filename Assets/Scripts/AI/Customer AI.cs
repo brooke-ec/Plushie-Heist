@@ -128,7 +128,11 @@ public class CustomerAI : MonoBehaviour
         if (currentItem != null)
         {
             basket.Add(currentItem.item);
-            currentItem.Remove();
+
+            if (
+                !ShopManager.instance.autoRestocking ||
+                !InventoryController.instance.RemoveAnItemTypeFromInventory(currentItem.item, false)
+            ) currentItem.Remove();
         }
 
         NextItem();

@@ -44,12 +44,7 @@ public class AbilitySkill : Skill
                 controller.secondChance = true;
                 break;
             case AbilityToUnlock.ShopAutomaticItemRestocking:
-                if (!isNight) { }
-                //TO-DO AFTER PICKING UP ITEM, IF VARIABLE IS TRUE
-                //then checking
-                //basically IF VARIABLE IS TRUE
-                //bool removed = FindAnyObjectByType<InventoryController>().RemoveAnItemTypeFromInventory(itemClassPassed)
-                //place item again in the same place/shelf
+                if (!isNight) ShopManager.instance.autoRestocking = true;
                 break;
             default:
                 break;

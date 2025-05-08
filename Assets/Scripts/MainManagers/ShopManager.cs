@@ -139,6 +139,7 @@ public class ShopManager : MonoBehaviour
     #region Customers
     [HideInInspector] public float tipPercentage = 0;
     [HideInInspector] public float itemBuyingMultiplier = 1;
+    [HideInInspector] public bool autoRestocking = false;
 
     [HideInInspector] public int numOfCustomersServed = 0;
     [HideInInspector] public float tipsReceivedToday = 0;
