@@ -114,6 +114,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
+    /// <summary>The Strength that the player throws the beanbags at</summary>
+    [SerializeField] private float _throwStrength;
+    /// <summary>The beanBag that is attached to the player</summary>
+    [SerializeField] private GameObject _beanBag;
+    /// <summary>The BeanBag Prefab</summary>
+    [SerializeField] private GameObject _beanBagPrefab;
     #endregion
 
     #region private fields
@@ -203,6 +209,16 @@ public class PlayerController : MonoBehaviour
     /// <summary>The inital position of the player</summary>
     private Vector3 initalPos;
 
+    private bool inventoryOpen;
+
+    /// <summary>Has the player entered a bouncePad</summary>
+    private bool _isBouncing;
+
+    /// <summary>The direction that the bounce pad will launch the player in</summary>
+    private Vector3 _BouncePadWishVel;
+
+    /// <summary>Wether the player is currently holding a beanbag</summary>
+    private bool _holdingBeanBag;
     #endregion
 
     #region Public Fields
@@ -238,6 +254,7 @@ public class PlayerController : MonoBehaviour
         playerGravity = gravity;
 
         initalPos = transform.position;
+        _beanBag.SetActive(false);
     }
 
     public void Update()
@@ -285,6 +302,12 @@ public class PlayerController : MonoBehaviour
         GrappleCooldown();
         Boost();
         DashCooldowns();
+
+        if(_isBouncing)
+        {
+            _isBouncing = false;
+            velocity += _BouncePadWishVel;
+        }
 
         //actuall move the player
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
@@ -384,6 +407,26 @@ public class PlayerController : MonoBehaviour
         else
         {
             CheckStillWall();
+        }
+    }
+
+    public void PickupBean()
+    {
+        _beanBag.SetActive(true);
+        _holdingBeanBag = true;
+    }
+
+    public void ThrowBean()
+    {
+        if(_holdingBeanBag)
+        {
+            _beanBag.SetActive(false);
+            _holdingBeanBag = false;
+            Quaternion camRot = cam.gameObject.transform.rotation;
+            
+            BeanBag ben = Instantiate(_beanBagPrefab, (this.transform.position + new Vector3(0,1,0)), camRot).GetComponent<BeanBag>();
+
+            ben.Throw(_throwStrength + this.velocity.magnitude);
         }
     }
     #endregion
@@ -721,6 +764,7 @@ public class PlayerController : MonoBehaviour
             rayNumber = -1;
         }
     }
+    
     /// <summary>
     /// Checks if still on the wall if on the wall 
     /// </br>
@@ -755,6 +799,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
     }
+    
     /// <summary>
     /// function that allows the player to wall run called every frame your wall running
     /// </summary>
@@ -774,7 +819,6 @@ public class PlayerController : MonoBehaviour
         velocity.y += Time.deltaTime * -3;
         //Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
-
 
     /// <summary>
     /// The function will handle gliding
@@ -1019,6 +1063,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Hazards
+    /// <summary>
+    /// Called when the player collides with a Hazard and handles the correct follow up actions
+    /// </summary>
+    /// <param name="name"></param>
+    public void HitHazard(string name, GameObject theHazard)
+    {
+        //Debug.Log("In Function On Player");
+        switch(name)
+        {
+            case "Bounce Pad":
+                //Debug.Log("Calling Bounce Pad");
+                BouncePad(theHazard);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void BouncePad(GameObject theHazard)
+    {
+        _isBouncing = true;
+        
+        Vector3 BouncePadDirection = theHazard.GetComponent<BouncePads>().getDirection();
+        float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
+
+        _BouncePadWishVel = BouncePadDirection * BouncePadStrength;
+    }
     #endregion
 
     #region Input
