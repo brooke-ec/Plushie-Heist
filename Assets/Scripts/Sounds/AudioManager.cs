@@ -201,11 +201,18 @@ public class AudioManager : MonoBehaviour
     /// <summary>
     /// Play given MusicEnum with a given percentage of volume
     /// </summary>
-    public void PlayMusic(MusicEnum musicName)
+    public void PlayMusic(MusicEnum musicName, bool immediately = false)
     {
         if (currentMusicPlaying.musicName != MusicEnum.none)
         {
-            ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+            if (!immediately)
+            {
+                ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+            }
+            else
+            {
+                currentMusicPlaying.audioSource.Stop();
+            }
         }
 
         Music soundGiven = Array.Find(music, sound => sound.musicName == musicName);
