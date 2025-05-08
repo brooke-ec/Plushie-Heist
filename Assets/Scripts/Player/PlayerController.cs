@@ -203,7 +203,6 @@ public class PlayerController : MonoBehaviour
     /// <summary>The inital position of the player</summary>
     private Vector3 initalPos;
 
-    private bool sentBack;
     #endregion
 
     #region Public Fields
@@ -211,6 +210,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Transform seat = null;
     /// <summary>bool if second chance activated</summary>
     public bool secondChance;
+
+    public bool wallRunEnabled;
     #endregion
 
     #region core methods
@@ -242,11 +243,10 @@ public class PlayerController : MonoBehaviour
     public void Update()
     {
         frameNo++;
-        
-        //Wall movement or regular movement 
-        if (wallRunning && !isGrappling)
-        {
 
+        //Wall movement or regular movement 
+        if (wallRunning && !isGrappling && wallRunEnabled)
+        {
             Wallrun();
             animator.SetInteger("Falling", 0);
         }
@@ -377,7 +377,7 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if (!wallRunning)
+        if (!wallRunning && wallRunEnabled)
         {
             CheckForWall();
         }
