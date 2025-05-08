@@ -47,9 +47,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         {
             grid.StartInventory();
         }
-#if UNITY_EDITOR
-        PlaceTestItems();
-#endif
     }
 
     private void Update()
@@ -297,19 +294,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
     #endregion
-
-    #region Test
-#if UNITY_EDITOR
-    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
-    //
-    public void PlaceTestItems()
-    {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        
-        foreach (FurnitureItem item in itemsToTest) InsertItem(item);
-    }
-#endif
-#endregion
 
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)
