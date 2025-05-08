@@ -766,11 +766,11 @@ public class PlayerController : MonoBehaviour
 
             if (rayNo is 1 or 0)
             {
-                cam.transform.DOLocalRotate(new(0, 0, -20), 0.5f,RotateMode.LocalAxisAdd);
+                cam.transform.DOLocalRotate(new(0, 0, -20), 0.2f,RotateMode.LocalAxisAdd);
             }
             else if(rayNo is 3 or 4)
             {
-                cam.transform.DOLocalRotate(new(0, 0, 20), 0.5f,RotateMode.LocalAxisAdd);
+                cam.transform.DOLocalRotate(new(0, 0, 20), 0.2f,RotateMode.LocalAxisAdd);
             }
         }
         else
@@ -810,7 +810,7 @@ public class PlayerController : MonoBehaviour
             curFriction = groundFriction;
             float rotValue = 0 - cam.transform.localEulerAngles.z;
             rotValue = rotValue < -180 ? rotValue+360:rotValue;
-            cam.transform.DOLocalRotate(new(0, 0, rotValue), 0.5f, RotateMode.LocalAxisAdd);
+            cam.transform.DOLocalRotate(new(0, 0, rotValue), 0.2f, RotateMode.LocalAxisAdd);
             maxSpeed = walkSpeed;
             return;
         }
