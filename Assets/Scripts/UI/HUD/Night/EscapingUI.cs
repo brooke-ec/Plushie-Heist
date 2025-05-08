@@ -67,7 +67,7 @@ public class EscapingUI : MonoBehaviour
         }
 
         escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));
-        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => { SceneManager.LoadScene(1); });
+        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => { LoadingSceneController.instance.LoadSceneAsync(1); });
         //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
     }
 
