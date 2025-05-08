@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class NightManager : MonoBehaviour
@@ -19,6 +20,7 @@ public class NightManager : MonoBehaviour
         {
             instance = this;
         }
+        playerInput = FindAnyObjectByType<PlayerInput>();
     }
 
     private void Start()
@@ -37,11 +39,15 @@ public class NightManager : MonoBehaviour
 
     [SerializeField] private PlushieInfo defaultPlushieInfo;
 
+    private PlayerInput playerInput;
+
     public void LoadNight()
     {
         //TO-DO probably load ikea procedural stuff etc
 
         //load UI saying what the night is about, and the continue button calls StartNight()
+        playerInput.SwitchCurrentActionMap("MenuActions");
+        Cursor.lockState = CursorLockMode.None;
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
                 Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
@@ -57,6 +63,9 @@ public class NightManager : MonoBehaviour
     /// </summary>
     public void StartNight()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        playerInput.SwitchCurrentActionMap("PlayerMovement");
+        GetComponent<GaurdSpawer>().startGuards();
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -79,6 +88,9 @@ public class NightManager : MonoBehaviour
 
         //even if you rescue it, if caught then you lose it
         if(!successful) { hasRescuedPlushie = false; LoadPlushieIndicator(defaultPlushieInfo); }
+        playerInput.SwitchCurrentActionMap("MenuActions");
+        Cursor.lockState= CursorLockMode.None;
+        GetComponent<GaurdSpawer>().stopGuards();
         //Call end stuff
         if(!hasRescuedPlushie)
         {

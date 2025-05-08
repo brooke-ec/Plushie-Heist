@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GaurdSpawer : MonoBehaviour
 {
@@ -19,7 +20,10 @@ public class GaurdSpawer : MonoBehaviour
     /// <summary>actual number of gaurds to spawn</summary>
     private int spawnNumber;
     /// <summary>list of all patrol points</summary>
-    private List<PatrolPoint> points;  
+    private List<PatrolPoint> points;
+
+    private GaurdAI[] guards;
+
     private void Start()
     {
         //SpawnGaurds();
@@ -37,6 +41,7 @@ public class GaurdSpawer : MonoBehaviour
         //get number of gaurds to spawn
         spawnNumber = Random.Range(spawnMin, spawnMax);
 
+        guards = new GaurdAI[spawnNumber];
         // for each gaurd to spawn
         for (int i = 0; i < spawnNumber; i++)
         { 
@@ -86,6 +91,25 @@ public class GaurdSpawer : MonoBehaviour
             }
 
             guard.GetComponent<GaurdAI>().patrolPoints = guardPoints.ToArray();
+            guards[i] = guard.GetComponent<GaurdAI>();
+        }
+    }
+
+    public void startGuards()
+    {
+        foreach(GaurdAI g in guards)
+        {
+            g.GuardActive = true;
+            g.GetComponent<NavMeshAgent>().speed = 3.5f;
+        }
+    }
+
+    public void stopGuards()
+    {
+        foreach (GaurdAI g in guards)
+        {
+            g.GuardActive = false;
+            g.GetComponent<NavMeshAgent>().speed = 0;
         }
     }
 }

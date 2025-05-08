@@ -11,18 +11,23 @@ public class GaurdAI : MonoBehaviour
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
     public Transform[] patrolPoints;
+
+    public bool GuardActive;
+    
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
     protected NavMeshAgent agent;
     /// <summary>The animator component</summary>
-    protected Animator anim;
+    public Animator anim;
     /// <summary>NavMeshAgent component </summary>
     protected GameObject chasee;
     /// <summary>Time since last detected</summary>
     private float detectionTimer;
     /// <summary>The current destination to patrol to</summary>
     private int curPatrolIndex;
+
+
     #endregion
     #region core methods
     public virtual void Start()
@@ -35,31 +40,31 @@ public class GaurdAI : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        if (chasee != null && detectionTimer<=DetectionTime)
+        if (GuardActive)
         {
-            agent.destination = chasee.transform.position;
-            detectionTimer += Time.deltaTime;
-            agent.autoBraking = true;
-            anim.SetBool("Caught", false);
-            if (chasee != null && chasee.GetComponent<PlayerController>().arrested) 
+            if (chasee != null && detectionTimer <= DetectionTime)
             {
-                agent.speed = 0;
+                agent.destination = chasee.transform.position;
+                detectionTimer += Time.deltaTime;
+                agent.autoBraking = true;
+                anim.SetBool("Caught", false);
+                if (chasee != null && chasee.GetComponent<PlayerController>().arrested)
+                {
+                    agent.speed = 0;
+                }
+                else if (agent.remainingDistance <= 1.2 && !agent.pathPending)
+                {
+                    Arrest();
+                    anim.SetBool("Arrest", true);
+                    anim.SetBool("Caught", true);
+                }
             }
-            else if (agent.remainingDistance <= 1.2&&!agent.pathPending)
+            else
             {
-                Arrest();
-                anim.SetBool("Arrest", true);
-                anim.SetBool("Caught", true);
+                loseIntrest();
             }
         }
-        else
-        {
-            if (chasee != null)
-            {
-                chasee = null;
-            }
-            Patrol();
-        }
+        else { agent.speed = 0;}
     }
     #endregion
 
@@ -75,6 +80,7 @@ public class GaurdAI : MonoBehaviour
             detectionTimer = 0;
             agent.speed = 5;
             anim.SetBool("Chasing", true);
+            chasee.GetComponent<PlayerController>().addGuard(this);
         }
     }
 
@@ -87,6 +93,7 @@ public class GaurdAI : MonoBehaviour
             agent.destination = patrolPoints[curPatrolIndex].position;
             agent.speed = 3.5f;
             anim.SetBool("Chasing", false);
+            anim.SetBool("Arrest", false);
             //Debug.Log("Patrol");
         }
     }
@@ -98,6 +105,18 @@ public class GaurdAI : MonoBehaviour
         //Debug.Log(agent.remainingDistance+transform.position.ToString());
         //Debug.Break();
         
+    }
+
+    public void loseIntrest()
+    {
+        
+        if (chasee != null)
+        {
+            chasee.GetComponent<PlayerController>().removeGuard(this);
+            chasee = null;
+        }
+
+        Patrol();
     }
     #endregion
 }

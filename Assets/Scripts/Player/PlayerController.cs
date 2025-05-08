@@ -1,4 +1,8 @@
+using DG.Tweening;
 using System;
+using System.Collections.Generic;
+using System.Runtime.Versioning;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -111,6 +115,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldown;
     ///<summary>The rate at which grapple recovers from cooldown</summary>
     [SerializeField] private float grappleCooldownSpeed;
+    /// <summary>The Strength that the player throws the beanbags at</summary>
+    [SerializeField] private float _throwStrength;
+    /// <summary>The beanBag that is attached to the player</summary>
+    [SerializeField] private GameObject _beanBag;
+    /// <summary>The BeanBag Prefab</summary>
+    [SerializeField] private GameObject _beanBagPrefab;
     #endregion
 
     #region private fields
@@ -191,11 +201,36 @@ public class PlayerController : MonoBehaviour
     /// <summary>ther animator component </summary>
     private Animator animator;
 
+    /// <summary>the array of the guards that are chasing you </summary>
+    public List<GaurdAI> guardsChasing;
+    
+    /// <summary>number of times been arrested</summary>
+    private int arrestCount =0;
+
+    /// <summary>The inital position of the player</summary>
+    private Vector3 initalPos;
+
+    private bool nightEnded;
+
+    private bool inventoryOpen;
+
+    /// <summary>Has the player entered a bouncePad</summary>
+    private bool _isBouncing;
+
+    /// <summary>The direction that the bounce pad will launch the player in</summary>
+    private Vector3 _BouncePadWishVel;
+
+    /// <summary>Wether the player is currently holding a beanbag</summary>
+    private bool _holdingBeanBag;
     #endregion
 
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     [HideInInspector] public Transform seat = null;
+    /// <summary>bool if second chance activated</summary>
+    public bool secondChance;
+
+    public bool wallRunEnabled;
     #endregion
 
     #region core methods
@@ -204,12 +239,12 @@ public class PlayerController : MonoBehaviour
         cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-
+        guardsChasing = new List<GaurdAI>();
     }
 
+    private int frameNo;
     public void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         wishJump = false;
         maxSpeed = walkSpeed;
         curFriction = groundFriction;
@@ -221,18 +256,17 @@ public class PlayerController : MonoBehaviour
 
         playerGravity = gravity;
 
+        initalPos = transform.position;
+        _beanBag.SetActive(false);
     }
 
     public void Update()
     {
-        if (arrested)
-        {
-            Arrest();
-        }
-        //Wall movement or regular movement 
-        if (wallRunning && !isGrappling)
-        {
+        frameNo++;
 
+        //Wall movement or regular movement 
+        if (wallRunning && !isGrappling && wallRunEnabled)
+        {
             Wallrun();
             animator.SetInteger("Falling", 0);
         }
@@ -266,11 +300,17 @@ public class PlayerController : MonoBehaviour
         //Methods to be called every frame
         ApplyJumps();
         LookandRotate();
-        WallRotate();
+        //WallRotate();
         StaminaRecovery();
         GrappleCooldown();
         Boost();
         DashCooldowns();
+
+        if(_isBouncing)
+        {
+            _isBouncing = false;
+            velocity += _BouncePadWishVel;
+        }
 
         //actuall move the player
         cc.Move(velocity * Time.deltaTime); // this has to go after all the move logic
@@ -287,6 +327,10 @@ public class PlayerController : MonoBehaviour
             SetCameraOffset(Vector3.up * -0.4f);
             transform.position = seat.position;
             animator.SetTrigger("Sit");
+        }
+        if (arrested & !nightEnded)
+        {
+            Arrest();
         }
     }
 
@@ -359,13 +403,33 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if (!wallRunning)
+        if (!wallRunning && wallRunEnabled)
         {
             CheckForWall();
         }
         else
         {
             CheckStillWall();
+        }
+    }
+
+    public void PickupBean()
+    {
+        _beanBag.SetActive(true);
+        _holdingBeanBag = true;
+    }
+
+    public void ThrowBean()
+    {
+        if(_holdingBeanBag)
+        {
+            _beanBag.SetActive(false);
+            _holdingBeanBag = false;
+            Quaternion camRot = cam.gameObject.transform.rotation;
+            
+            BeanBag ben = Instantiate(_beanBagPrefab, (this.transform.position + new Vector3(0,1,0)), camRot).GetComponent<BeanBag>();
+
+            ben.Throw(_throwStrength + this.velocity.magnitude);
         }
     }
     #endregion
@@ -697,12 +761,21 @@ public class PlayerController : MonoBehaviour
             curFriction = groundFriction;
             Uncrouch();
 
+            if (rayNo is 1 or 0)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, -20), 0.5f,RotateMode.LocalAxisAdd);
+            }
+            else if(rayNo is 3 or 4)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, 20), 0.5f,RotateMode.LocalAxisAdd);
+            }
         }
         else
         {
             rayNumber = -1;
         }
     }
+    
     /// <summary>
     /// Checks if still on the wall if on the wall 
     /// </br>
@@ -732,11 +805,14 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning = false;
             curFriction = groundFriction;
-            cam.transform.rotation = Quaternion.identity;
+            float rotValue = 0 - cam.transform.localEulerAngles.z;
+            rotValue = rotValue < -180 ? rotValue+360:rotValue;
+            cam.transform.DOLocalRotate(new(0, 0, rotValue), 0.5f, RotateMode.LocalAxisAdd);
             maxSpeed = walkSpeed;
             return;
         }
     }
+    
     /// <summary>
     /// function that allows the player to wall run called every frame your wall running
     /// </summary>
@@ -756,7 +832,6 @@ public class PlayerController : MonoBehaviour
         velocity.y += Time.deltaTime * -3;
         //Debug.DrawRay(transform.position, wallRunDirection * 100);
     }
-
 
     /// <summary>
     /// The function will handle gliding
@@ -845,7 +920,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// rotates the camera when it conncts with the wall and rotates when it leaves; use tweening engine to animate it properly
     /// </summary>
-    private void WallRotate()
+    /*private void WallRotate()
     {
         if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0 && rayNumber is 1 or 0)
         {
@@ -859,13 +934,13 @@ public class PlayerController : MonoBehaviour
             rotAdjustVal = new Vector3(0, -5, 0);
             //Debug.Log("rotating");
         }
-        else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
+            else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
             float rot = 0 - cam.transform.localEulerAngles.z;
             cam.transform.Rotate(0, 0, rot);
         }
 
-    }
+    }*/
 
     /// <summary>
     /// Called every frame to update where the camera looks and to rotate the character
@@ -876,7 +951,7 @@ public class PlayerController : MonoBehaviour
 
         camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
 
-        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
+        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, cam.transform.localEulerAngles.z);
 
     }
 
@@ -941,6 +1016,28 @@ public class PlayerController : MonoBehaviour
     #region gaurdInteraction
     private void Arrest()
     {
+        if(secondChance && arrestCount < 1)
+        {
+            Debug.Log("arrested");
+            arrestCount += 1;
+            transform.position = initalPos;
+            arrested = false;
+
+            while (guardsChasing.Count > 0)
+            {
+                guardsChasing[0].loseIntrest();
+            }
+            
+        }
+        else 
+        {
+            nightEnded = true;
+            ArrestMovement();
+            NightManager.instance.OnEndNight(false);
+        }
+    }
+    private void ArrestMovement()
+    {
         wasdInput = Vector2.zero;
         wallRunning = false;
         isGrappling = false;
@@ -954,6 +1051,62 @@ public class PlayerController : MonoBehaviour
         velocity -= direction * slowAmt;
     }
 
+    public void addGuard(GaurdAI guard)
+    {
+        if (!guardsChasing.Contains(guard))
+        {
+            Debug.Log("added guard"+frameNo);
+            guardsChasing.Add(guard);
+            if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+            }
+        }
+    }
+
+    public void removeGuard(GaurdAI guard)
+    {
+        if (guardsChasing.Contains(guard))
+        {
+            Debug.Log("removed guard"+frameNo);
+            guardsChasing.Remove(guard);
+            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+            {
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+            }
+        }
+    }
+
+    #endregion
+
+    #region Hazards
+    /// <summary>
+    /// Called when the player collides with a Hazard and handles the correct follow up actions
+    /// </summary>
+    /// <param name="name"></param>
+    public void HitHazard(string name, GameObject theHazard)
+    {
+        //Debug.Log("In Function On Player");
+        switch(name)
+        {
+            case "Bounce Pad":
+                //Debug.Log("Calling Bounce Pad");
+                BouncePad(theHazard);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void BouncePad(GameObject theHazard)
+    {
+        _isBouncing = true;
+        
+        Vector3 BouncePadDirection = theHazard.GetComponent<BouncePads>().getDirection();
+        float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
+
+        _BouncePadWishVel = BouncePadDirection * BouncePadStrength;
+    }
     #endregion
 
     #region Input

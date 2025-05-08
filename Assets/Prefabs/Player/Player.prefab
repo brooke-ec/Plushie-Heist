@@ -430,7 +430,7 @@ MonoBehaviour:
   groundFriction: 10
   gravity: 15
   baseGroundAcceleration: 7
-  currentAbility: 2
+  currentAbility: 0
   sprintMaxSpeed: 10
   maxStamina: 20
   staminaDrain: 1
@@ -459,10 +459,17 @@ MonoBehaviour:
   grappleHook: {fileID: 2542746430392280090, guid: 624981e69544b204d8aa86d4e957a3db, type: 3}
   grappleSpeed: 12
   grappleAccel: 8
-  grappleCancelLength: 1
+  grappleCancelLength: 2
   grappleCooldown: 10
   grappleCooldownSpeed: 1
+  _throwStrength: 0
+  _beanBag: {fileID: 0}
+  _beanBagPrefab: {fileID: 0}
+  guardsChasing: []
   arrested: 0
+  seat: {fileID: 0}
+  secondChance: 0
+  wallRunEnabled: 0
 --- !u!114 &6666046485523007560
 MonoBehaviour:
   m_ObjectHideFlags: 0

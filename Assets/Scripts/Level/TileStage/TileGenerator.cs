@@ -30,8 +30,8 @@ public class TileGenerator
 
     private void PlaceTiles()
     {
-        PlaceTile(startTile, Vector2Int.one);
-        PlaceTile(endTile, size - Vector2Int.one);
+        PlaceTile(startTile, Vector2Int.one,(int)startTile.transform.rotation.eulerAngles.y);
+        PlaceTile(endTile, size - Vector2Int.one, (int)endTile.transform.rotation.eulerAngles.y);
 
         while (toPlace.Count > 0)
         {
@@ -55,10 +55,12 @@ public class TileGenerator
         }
     }
 
-    private void PlaceTile(LevelTile tile, Vector2Int position)
+    private void PlaceTile(LevelTile tile, Vector2Int position, int rotation)
     {
-        PlaceTile(new TilePlacement(tile, position, 0));
+        PlaceTile(new TilePlacement(tile, position, rotation));
     }
+    
+
 
     private void PlaceTile(TilePlacement placement)
     {

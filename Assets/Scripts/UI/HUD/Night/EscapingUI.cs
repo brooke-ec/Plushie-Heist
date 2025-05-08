@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EscapingUI : MonoBehaviour
@@ -77,11 +78,12 @@ public class EscapingUI : MonoBehaviour
                 dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 2);
             });
         }
-        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));
 
         //TO-DO-SAVING ADD ON-CLICK OF PASSING TO THE DAY SCENE
         //IF IT'S INSIDE THE PLUSHIEINFO != NULL, DO IT INSTEAD IN THE ONDIALOGUEEND
         // like dialogue.onDialogueEnd = pass to scene method
+        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => { LoadingSceneController.instance.LoadSceneAsync(1); });
+        //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
     }
 
     /// <summary>

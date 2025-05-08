@@ -12,7 +12,7 @@ public class ExitLevelInteraction : MonoBehaviour, IInteractable
 
     public void PrimaryInteract(Interactor interactor)
     {
-        SceneManager.LoadScene(sceneIndexToGoTo);
+        LoadingSceneController.instance.LoadSceneAsync(sceneIndexToGoTo);
     }
 
 

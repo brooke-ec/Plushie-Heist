@@ -89,7 +89,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <returns></returns>
     public bool CanInsert(FurnitureItem item)
     {
-        return storageGrid.FindSpaceForObject(item) != null;
+        return backpackGrid.FindSpaceForObject(item) != null;
     }
 
     /// <summary>
