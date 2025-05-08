@@ -425,7 +425,10 @@ public class PlayerController : MonoBehaviour
             _beanBag.SetActive(false);
             _holdingBeanBag = false;
             Quaternion camRot = cam.gameObject.transform.rotation;
-            
+
+            Debug.Log(camRot);
+            Debug.Log(camPitch);
+
             BeanBag ben = Instantiate(_beanBagPrefab, this.transform.position + new Vector3(0,1,0), camRot).GetComponent<BeanBag>();
 
             ben.Throw(_throwStrength + this.velocity.magnitude);
