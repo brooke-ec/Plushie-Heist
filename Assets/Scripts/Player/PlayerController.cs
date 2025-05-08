@@ -403,13 +403,16 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if (!wallRunning && wallRunEnabled)
+        if (wallRunEnabled)
         {
-            CheckForWall();
-        }
-        else
-        {
-            CheckStillWall();
+            if (!wallRunning)
+            {
+                CheckForWall();
+            }
+            else
+            {
+                CheckStillWall();
+            }
         }
     }
 
@@ -950,9 +953,9 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(new Vector3(0, lookInput.x, 0));
 
         camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
-
+        
         cam.transform.localEulerAngles = new Vector3(-camPitch, 0, cam.transform.localEulerAngles.z);
-
+ 
     }
 
     /// <summary>
