@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CloseGamePopup : MonoBehaviour
+public class CloseGamePopup : MonoBehaviour, IUIMenu
 {
     [SerializeField] private GameObject closingGamePopupPrefab;
-    public void SetUp()
+    private GameObject popup;
+
+    void IUIMenu.SetOpenState(bool open)
     {
-        GameObject popup = Instantiate(closingGamePopupPrefab, ShopManager.instance.mainCanvas.transform);
-        popup.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnCloseGame(popup));
-        popup.transform.GetChild(4).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnClosePopup(popup));
+        if (open)
+        {
+            if (popup != null) OnClosePopup(null);
+            popup = Instantiate(closingGamePopupPrefab, ShopManager.instance.mainCanvas.transform);
+            popup.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnCloseGame(popup));
+            popup.transform.GetChild(4).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnClosePopup(popup));
+        } else OnClosePopup(popup);
     }
 
     public void OnClosePopup(GameObject popup)
