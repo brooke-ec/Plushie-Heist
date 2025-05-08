@@ -17,33 +17,28 @@ public class ShopManager : MonoBehaviour
 {
     [SerializeField][JsonProperty("storage")] private InventoryGrid storage;
     [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
-    [JsonProperty("layout")] private GridSaver layout;
-    [JsonProperty("level")] private int level = 0;
+    [JsonProperty("layout")] private ShopLayout layout;
     [JsonProperty("day")] public int day;
 
-    [SerializeField] private GridSaver[] levels;
+    [SerializeField] private ShopLayout[] layouts;
 
     public Canvas mainCanvas;
     public bool isShopOpen = false;
     public static ShopManager instance { get; private set; }
     public StocksController stocksController;
 
-    [OnDeserializing]
-    internal void Factory(StreamingContext context)
-    {
-        instance.SetLevel(level);
-    }
-
-    private void SetLevel(int level)
+    public ShopLayout SetLayout(int level)
     {
         if (layout != null) Destroy(layout);
 
-        layout = Instantiate(levels[level]);
-        this.level = level;
+        layout = Instantiate(layouts[level]);
+        layout.level = level;
+        return layout;
     }
 
     private void Awake()
     {
+        SaveManager.onLoaded.AddListener(() => { if (layout == null) SetLayout(0); });
         if (instance != null)
         {
             Destroy(this);
@@ -54,18 +49,15 @@ public class ShopManager : MonoBehaviour
             instance = this;
         }
     }
+
     private void Start()
     {
         stocksController.CreateAllProductData();
-
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         shopTimer.SetupClock(true);
-
         StartNewDay();
     }
-
-
 
     #region Time
 

@@ -2,11 +2,13 @@
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SaveManager : MonoBehaviour
 {
     #region Static
     public static readonly JsonSerializer serializer = new JsonSerializer();
+    public static readonly UnityEvent onLoaded = new UnityEvent();
 
     static SaveManager()
     {
@@ -33,6 +35,7 @@ public class SaveManager : MonoBehaviour
         using JsonReader jr = new JsonTextReader(sr);
 
         serializer.Populate(jr, this);
+        onLoaded.Invoke();
     }
 
     public void Save()
