@@ -10,4 +10,5 @@ public class FurnitureSettings : ScriptableObject
     [field: SerializeField] public GameObject defaultSellingMarker { get; private set; }
     [field: Min(0.5f)] [field: SerializeField] public float cellSize { get; private set; } = 1;
     [field: Range(0, 1)] [field: SerializeField] public float spacing { get; private set; } = 0.25f;
+    [field: SerializeField] public GameObject effect { get; private set; }
 }

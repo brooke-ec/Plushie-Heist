@@ -82,6 +82,7 @@ public class FurniturePlacer : MonoBehaviour
 
         if (item != null && item.IsGridValid())
         {
+            Instantiate(FurnitureSettings.instance.effect, item.transform.position, Quaternion.identity);
             onPlaced.Invoke();
             item.grid.AddItem(item);
             item = null;

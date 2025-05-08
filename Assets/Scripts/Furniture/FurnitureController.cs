@@ -120,6 +120,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     public void Remove()
     {
         if (grid != null) grid.RemoveItem(this);
+        Instantiate(FurnitureSettings.instance.effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
