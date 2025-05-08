@@ -47,6 +47,7 @@ public class NightManager : MonoBehaviour
 
         //load UI saying what the night is about, and the continue button calls StartNight()
         playerInput.SwitchCurrentActionMap("MenuActions");
+        Cursor.lockState = CursorLockMode.None;
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
                 Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
@@ -83,7 +84,7 @@ public class NightManager : MonoBehaviour
     public void OnEndNight(bool successful)
     {
         print("night ENDED");
-
+        playerInput.SwitchCurrentActionMap("MenuActions");
         //Call end stuff
         escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
     }

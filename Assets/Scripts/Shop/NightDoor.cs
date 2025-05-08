@@ -10,6 +10,6 @@ public class NightDoor : MonoBehaviour, IInteractable
 
     void IInteractable.PrimaryInteract(Interactor interactor)
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 }

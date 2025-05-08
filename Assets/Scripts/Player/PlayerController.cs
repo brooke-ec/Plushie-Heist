@@ -972,8 +972,11 @@ public class PlayerController : MonoBehaviour
             }
             
         }
-        else { ArrestMovement();
-               }
+        else 
+        { 
+            ArrestMovement();
+            NightManager.instance.OnEndNight(false);
+        }
     }
     private void ArrestMovement()
     {
