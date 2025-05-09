@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Furniture Item", menuName ="Scriptable Objects/Furniture Item", order = 9999)]
-public class FurnitureItem : ScriptableObject
+public class FurnitureItem : ResourcesAsset
 {
-    public const string ASSET_PATH = "Assets/Resources/Items/";
+    public const string FULL_PATH = "Assets/Resources/Items/";
+    public const string PATH = "Items/";
 
     /// <summary> The name of this item displayed on the stock UI </summary>
     public string itemName;

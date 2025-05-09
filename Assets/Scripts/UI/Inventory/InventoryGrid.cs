@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 /// <summary> Controls a single inventory grid functionality </summary>
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -21,23 +23,50 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private int inventoryWidth;
     [SerializeField] private int inventoryHeight;
 
-    InventoryItem[,] inventorySlots;
+    [JsonProperty("size")] public Vector2Int size
+    {
+        get { return new Vector2Int(inventoryWidth, inventoryHeight); }
+        set { CreateInventoryGrid(value.x, value.y); }
+    }
+
+    InventoryItem[,] inventorySlots = new InventoryItem[0,0];
     private float scaleFactor;
 
-    public void StartInventory()
+    [JsonProperty("items")]
+    public InventoryItem[] items
     {
+        get
+        {
+            return (from InventoryItem item in inventorySlots
+                    where item != null select item).Distinct().ToArray();
+        }
+        set
+        {
+            foreach (InventoryItem item in value)
+            {
+                PlaceItem(item, item.position.x, item.position.y);
+            }
+        }
+    }
+
+    private void Awake()
+    {
+        scaleFactor = SharedUIManager.instance.scaleFactor;
         rectTransform = GetComponent<RectTransform>();
 
-        scaleFactor = SharedUIManager.instance.scaleFactor;
-
-        CreateInventoryGrid(inventoryWidth, inventoryHeight);
-        //PlaceTestItems();
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
+        });
     }
 
     #region Setup
     /// <summary> Create inventory grid of width and height, such as 3x3  /// </summary>
     public void CreateInventoryGrid(int width, int height)
     {
+        Awake();
+        inventoryWidth = width;
+        inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];
         rectTransform.sizeDelta = new Vector2((width * tileSize) - offsetFromImage, (height * tileSize) - offsetFromImage); //actual size of inventory
     }
@@ -107,6 +136,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         RectTransform itemRectTransform = item.GetComponent<RectTransform>();
         itemRectTransform.SetParent(rectTransform);
+        item.position = new Vector2Int(xPos, yPos);
 
         //telling the grid that this item is present on each of these tiles of the grid (if bigger than 1x1)
         for (int x = 0; x < item.Width; x++)
@@ -133,6 +163,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public InventoryItem PickUpItem(int xPos, int yPos)
     {
+        if (inventorySlots == null
+            || xPos >= inventoryWidth || yPos >= inventoryHeight
+            || xPos < 0 || yPos < 0
+        ) { return null; }
+
         InventoryItem item = inventorySlots[xPos, yPos];
 
         if (item == null) { return null; }
@@ -311,29 +346,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ModifyInventorySize(int addedRowModifier)
     {
-        //copy inventory items to here
-        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
-        for(int x=0; x<inventoryWidth; x++)
-        {
-            for(int y=0; y<inventoryHeight; y++)
-            {
-                copyOfInventorySlots[x, y] = inventorySlots[x, y];
-            }
-        }
+        InventoryItem[] original = items;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
 
-        //now add those items properly to the new inventory slots
-        for (int x = 0; x < inventoryWidth; x++)
+        foreach (var item in original)
         {
-            for (int y = 0; y < inventoryHeight; y++)
-            {
-                InventoryItem item = copyOfInventorySlots[x, y];
-                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
-                {
-                    PlaceItem(item, x, y);
-                }
-            }
+            PlaceItem(item, item.position.x, item.position.y);
         }
 
         inventoryHeight += addedRowModifier;
@@ -347,7 +366,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void CreateItemInteractionMenu(InventoryItem item)
     {
-        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
         Vector3 mousePos = Input.mousePosition;
 
         InventoryController controller = FindAnyObjectByType<InventoryController>();

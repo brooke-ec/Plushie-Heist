@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GaurdSpawer : MonoBehaviour
 {
@@ -19,7 +20,10 @@ public class GaurdSpawer : MonoBehaviour
     /// <summary>actual number of gaurds to spawn</summary>
     private int spawnNumber;
     /// <summary>list of all patrol points</summary>
-    private List<PatrolPoint> points;  
+    private List<PatrolPoint> points;
+
+    private GuardAI[] guards;
+
     private void Start()
     {
         //SpawnGaurds();
@@ -31,12 +35,13 @@ public class GaurdSpawer : MonoBehaviour
     public void SpawnGaurds()
     {
         //find all patrol point objects
-        points = FindObjectsOfType<PatrolPoint>().ToList<PatrolPoint>();
+        points = FindObjectsOfType<PatrolPoint>().ToList();
         //if the number of points in the level divded by 4(4 so that no gaurd shares the same patrol point) is less than the spawn max set it to be the spawn max
         spawnMax = points.Count / 4 < spawnMax ? points.Count : spawnMax + 1;
         //get number of gaurds to spawn
         spawnNumber = Random.Range(spawnMin, spawnMax);
 
+        guards = new GuardAI[spawnNumber];
         // for each gaurd to spawn
         for (int i = 0; i < spawnNumber; i++)
         { 
@@ -85,7 +90,26 @@ public class GaurdSpawer : MonoBehaviour
                 
             }
 
-            guard.GetComponent<GaurdAI>().patrolPoints = guardPoints.ToArray();
+            guard.GetComponent<GuardAI>().patrolPoints = guardPoints.ToArray();
+            guards[i] = guard.GetComponent<GuardAI>();
+        }
+    }
+
+    public void startGuards()
+    {
+        foreach(GuardAI g in guards)
+        {
+            g.GuardActive = true;
+            g.GetComponent<NavMeshAgent>().speed = 3.5f;
+        }
+    }
+
+    public void stopGuards()
+    {
+        foreach (GuardAI g in guards)
+        {
+            g.GuardActive = false;
+            g.GetComponent<NavMeshAgent>().speed = 0;
         }
     }
 }

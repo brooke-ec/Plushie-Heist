@@ -6,6 +6,7 @@ using UnityEngine;
 public class PricingTableManager : MonoBehaviour
 {
     public ProductRowUI rowPrefab;
+    [SerializeField] private GameObject nothingToSeeYetText;
     public Transform contentTransform;
     /// <summary> Logical storage of the product data. Data might be sorted </summary>
     private List<ProductData> products = new List<ProductData>();
@@ -94,6 +95,15 @@ public class PricingTableManager : MonoBehaviour
             ProductRowUI row = Instantiate(rowPrefab, contentTransform);
             row.Set(product);
             productRows.Add(row);
+        }
+
+        if(products.Count==0)
+        {
+            nothingToSeeYetText.SetActive(true);
+        }
+        else
+        {
+            nothingToSeeYetText.SetActive(false);
         }
     }
 

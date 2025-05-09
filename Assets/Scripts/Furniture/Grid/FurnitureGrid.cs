@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,23 +14,29 @@ public class FurnitureGrid : MonoBehaviour
     
     private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
-    private List<FurnitureController> items = new List<FurnitureController>();
+
+    [HideInInspector] [JsonProperty("items")] public List<FurnitureController> items = new List<FurnitureController>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;
+
+    private void Awake()
+    {
+        collider = GetComponent<BoxCollider>();
+        filter = GetComponent<MeshFilter>();
+    }
 
     private void Start()
     {
         if (ShopManager.instance == null) Destroy(gameObject);
         else
         {
-            collider = GetComponent<BoxCollider>();
-            filter = GetComponent<MeshFilter>();
-
             gameObject.layer = LayerMask.NameToLayer("Furniture Grid");
-
             GetComponent<MeshRenderer>().material = FurnitureSettings.instance.gridMaterial;
+            
+            foreach (FurnitureController item in items) item.GridPlace(this, item.gridPosition);
             filter.mesh = mesh.Build(size, cellSize, spacing);
+            Regenerate();
         }
     }
 
@@ -69,18 +76,16 @@ public class FurnitureGrid : MonoBehaviour
 
     public void AddItem(FurnitureController item)
     {
+        ShopManager.instance.stocksController.UpdatePricingTable();
         items.Add(item);
         Regenerate();
-        onChanged.Invoke();
-        ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(item.item);
     }
 
     public void RemoveItem(FurnitureController item)
     {
+        ShopManager.instance.stocksController.UpdatePricingTable();
         items.Remove(item);
         Regenerate();
-        onChanged.Invoke();
-        ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.item);
     }
 
     public void Regenerate()
@@ -89,6 +94,7 @@ public class FurnitureGrid : MonoBehaviour
         Vector2Int[] occupied = items.SelectMany(i => i.gridRegion.ToArray()).ToArray();
         mesh.SetColor(Color.green); // Reset grid mesh to green
         filter.mesh = mesh.SetColors(Color.red, occupied); // Rebuild grid mesh with new red positions
+        onChanged.Invoke();
     }
 
     public bool Intersects(int x, int y)

@@ -58,6 +58,8 @@ public class GridMesh
 
     public Mesh SetColors(Color color, Vector2Int[] positions)
     {
+        if (mesh == null) return null;
+
         Color[] colors = mesh.colors;
         positions.ForEach(position =>
         {
@@ -76,6 +78,8 @@ public class GridMesh
 
     public Mesh SetColor(Color color)
     {
+        if (mesh == null) return null;
+
         this.color = color;
         mesh.SetColors(mesh.vertices.Select(_ => color).ToArray());
         return mesh;

@@ -18,12 +18,7 @@ public class ItemHelper : AssetPostprocessor
             {
                 // If furniture prefab, defer processing until later
                 if (TryLoad(out GameObject prefab, path) && prefab.TryGetComponent(out FurnitureController source)) sources.Add(source);
-                else if (TryLoad(out FurnitureItem item, path))
-                {
-                    if (!path.StartsWith(FurnitureItem.ASSET_PATH)) Debug.LogError($"'Item {path}' is not in the items directory", item);
-                    ProcessFurnitureItem(item);
-                }
-
+                else if (TryLoad(out FurnitureItem item, path)) ProcessFurnitureItem(item);
             });
 
             sources.ForEach(ProcessFurnitureSource);
@@ -39,7 +34,7 @@ public class ItemHelper : AssetPostprocessor
         // Create or link item asset
         if (source.item == null)
         {
-            string path = FurnitureItem.ASSET_PATH + source.name + ".asset";
+            string path = FurnitureItem.FULL_PATH + source.name + ".asset";
             FurnitureItem asset = AssetDatabase.LoadAssetAtPath<FurnitureItem>(path);
 
             if (asset == null && !AssetDatabase.IsAssetImportWorkerProcess())

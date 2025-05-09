@@ -40,18 +40,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
 
-    private void Start()
-    {
-        InventoryGrid[] allGrids = FindObjectsByType<InventoryGrid>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (InventoryGrid grid in allGrids)
-        {
-            grid.StartInventory();
-        }
-#if UNITY_EDITOR
-        PlaceTestItems();
-#endif
-    }
-
     private void Update()
     {
         ItemIconDragEffect();
@@ -69,7 +57,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
 
     public void SetOpenState(bool open)
     {
-        //TO-DO NOT SURE IF USED, NEED TO CHECK OTHER BRANCH
         AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.backpackOpen : AudioManager.SoundEnum.backpackClose);
         Transform inventoryTopParent = backpackGrid.transform.parent.parent.parent.parent;
         inventoryTopParent.gameObject.SetActive(open);
@@ -101,7 +88,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <returns></returns>
     public bool CanInsert(FurnitureItem item)
     {
-        return storageGrid.FindSpaceForObject(item) != null;
+        return backpackGrid.FindSpaceForObject(item) != null;
     }
 
     /// <summary>
@@ -122,9 +109,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         bool gridWasOriginallyOff = !gridToUse.gameObject.activeSelf;
 
         //Instantiate the item
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemClassToInsert);
+        InventoryItem item = InventoryItem.Factory(itemClassToInsert);
 
         Vector2Int? posOnGrid = gridToUse.FindSpaceForObject(item);
         if (posOnGrid == null)
@@ -148,6 +133,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
             gridToUse.gameObject.SetActive(false);
         }
 
+        if (ShopManager.instance != null) ShopManager.instance.stocksController.UpdatePricingTable();
         return addedItemSuccessfully;
     }
 
@@ -164,14 +150,10 @@ public class InventoryController : MonoBehaviour, IUIMenu
         gridToUse.CleanGridReference(item);
         print("item removed from inventory");
 
-        //see if there is another of this in the inventory, if there isn't then call try remove
-        if(!gridToUse.IsThisItemTypeInTheInventory(item.itemClass) && ShopManager.instance!=null)
-        {
-            ShopManager.instance.stocksController.TryRemoveFurnitureFromPricingTable(item.itemClass);
-        }
-
         Destroy(item.gameObject);
         onChanged.Invoke();
+        
+        if (ShopManager.instance != null) ShopManager.instance.stocksController.UpdatePricingTable();
     }
 
     /// <summary>
@@ -238,6 +220,8 @@ public class InventoryController : MonoBehaviour, IUIMenu
                 AddItemFromBackpackToStorage(backpackItem);
             }
         }
+        
+        if(HoveringManager.currentTooltipOpen != null) { Destroy(HoveringManager.currentTooltipOpen); }
     }
 
     /// <summary>
@@ -253,11 +237,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
             //Then remove from the backpack grid
             RemoveItemFromInventory(backpackItem, true);
             //Call here because removing item might do the whole stock stuff
-
-            if (ShopManager.instance != null)
-            {
-                ShopManager.instance.stocksController.TryAddFurnitureToPricingTable(backpackItem.itemClass);
-            }
         }
         return insertedItem;
     }
@@ -299,19 +278,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
     #endregion
-
-    #region Test
-#if UNITY_EDITOR
-    public List<FurnitureItem> itemsToTest = new List<FurnitureItem>();
-    //
-    public void PlaceTestItems()
-    {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        
-        foreach (FurnitureItem item in itemsToTest) InsertItem(item);
-    }
-#endif
-#endregion
 
     #region input
     public void rotateItem(InputAction.CallbackContext ctx)

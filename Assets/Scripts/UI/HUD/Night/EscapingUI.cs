@@ -4,31 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EscapingUI : MonoBehaviour
 {
     [SerializeField] private GameObject successfulEscapingUIPrefab;
     [SerializeField] private GameObject caughtEscapingUIPrefab;
+    [SerializeField] private Dialogue dialoguePrefab;
 
     [SerializeField] private Color32 pinkColour;
     [SerializeField] private Color32 greenColour;
 
+    private PlushieInfo plushieInfo;
     public GameObject itemSlotPrefab;
     private bool successful = false;
 
-    public void CreateEscapingUI(bool successful, Transform canvasTransform)
+    public void CreateEscapingUI(bool successful, Transform canvasTransform, PlushieInfo plushieInfo)
     {
+        this.plushieInfo = plushieInfo;
         this.successful = successful;
         GameObject escapingUI;
 
         //create needed UI element
         if (successful)
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.successful);
             escapingUI = Instantiate(successfulEscapingUIPrefab, canvasTransform);
         }
         else
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.unsuccessful);
             escapingUI = Instantiate(caughtEscapingUIPrefab, canvasTransform);
         }
 
@@ -65,8 +71,23 @@ public class EscapingUI : MonoBehaviour
             }
         }
 
-        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => Destroy(escapingUI));
-        //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
+        //NOW ADD PLUSHIE DIALOGUE IF PLUSHIE WAS RESCUED (if it's not null)
+        if (plushieInfo != null)
+        {
+            escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
+                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 2);
+                dialogue.onDialogueEnd = EscapeScene;
+            });
+        } else escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(EscapeScene);
+    }
+
+    private void EscapeScene()
+    {
+        if (plushieInfo != null) SharedUIManager.instance.plushie = plushieInfo;
+        SaveManager.instance.Save();
+        LoadingSceneController.instance.LoadSceneAsync(1);
     }
 
     /// <summary>
@@ -123,6 +144,10 @@ public class EscapingUI : MonoBehaviour
                     //set it to 1
                     lostItems.Add(itemToLose, 1);
                 }
+
+                //Now remove from inventory
+                InventoryController controller = FindAnyObjectByType<InventoryController>();
+                controller.RemoveAnItemTypeFromInventory(itemToLose, true);
             }
         }
 

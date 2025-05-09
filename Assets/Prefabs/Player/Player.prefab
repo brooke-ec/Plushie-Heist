@@ -430,7 +430,7 @@ MonoBehaviour:
   groundFriction: 10
   gravity: 15
   baseGroundAcceleration: 7
-  currentAbility: 2
+  currentAbility: 0
   sprintMaxSpeed: 10
   maxStamina: 20
   staminaDrain: 1
@@ -448,7 +448,7 @@ MonoBehaviour:
   boostGroundAcceleration: 20
   maxBoostTime: 3
   boostRecoverSpeed: 1
-  dashSpeed: 15
+  dashSpeed: 10
   noDashes: 1
   dashRechargeTime: 10
   dashCooldownTime: 0.5
@@ -459,10 +459,17 @@ MonoBehaviour:
   grappleHook: {fileID: 2542746430392280090, guid: 624981e69544b204d8aa86d4e957a3db, type: 3}
   grappleSpeed: 12
   grappleAccel: 8
-  grappleCancelLength: 1
+  grappleCancelLength: 2
   grappleCooldown: 10
   grappleCooldownSpeed: 1
+  _throwStrength: 250
+  _beanBag: {fileID: 0}
+  _beanBagPrefab: {fileID: 3877215208423239879, guid: 5776c20d77bccfc47b983abb3e4bc1e9, type: 3}
+  guardsChasing: []
   arrested: 0
+  seat: {fileID: 0}
+  secondChance: 0
+  wallRunEnabled: 0
 --- !u!114 &6666046485523007560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -556,7 +563,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1527
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -616,7 +623,7 @@ MonoBehaviour:
   fillTextureScale: {x: 1, y: 1}
   useFillColor: 0
   fillColor: {r: 0, g: 0, b: 1, a: 1}
-  cornerOutlines: 0
+  cornerOutlines: 1
   addLinesBetweenColors: 0
   scaleWithScreenSize: 1
   alphaCutoff: 0.5

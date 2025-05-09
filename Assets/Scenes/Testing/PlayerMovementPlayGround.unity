@@ -1772,6 +1772,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2593150926430451965, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
+      propertyPath: wallRunEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3655126576856739276, guid: f555f5412f535eb4caeee3e648494baf, type: 3}
       propertyPath: m_ActionEvents.Array.size
       value: 8
@@ -10623,22 +10627,6 @@ Transform:
   - {fileID: 595808914}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &832926437 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 996472093015131153, guid: bd5a6df5f7bc81a4daa30f7e2771f1ce, type: 3}
-  m_PrefabInstance: {fileID: 5772324742821834576}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &832926438 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1786681617247270578, guid: bd5a6df5f7bc81a4daa30f7e2771f1ce, type: 3}
-  m_PrefabInstance: {fileID: 5772324742821834576}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &931947506
 GameObject:
   m_ObjectHideFlags: 0
@@ -11515,8 +11503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746c0f26eada566499b1511549bf13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  browser: {fileID: 832926438}
-  percentage: {fileID: 832926437}
+  browser: {fileID: 0}
+  percentage: {fileID: 0}
 --- !u!43 &999091677
 Mesh:
   m_ObjectHideFlags: 0
