@@ -8,7 +8,7 @@ public class GuardAI : MonoBehaviour
     /// <summary>Time The guard will search chase you after it stops detecting you until it stops</summary>
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
-    [SerializeField] public Transform[] patrolPoints;
+    public Transform[] patrolPoints;
 
     public bool GuardActive;
 
