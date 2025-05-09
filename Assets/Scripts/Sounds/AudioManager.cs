@@ -224,7 +224,8 @@ public class AudioManager : MonoBehaviour
         selling,
         dialogueBeep,
         jump,
-        ability
+        ability,
+        bossDefeat
     }
 
     #endregion
@@ -274,6 +275,7 @@ public class AudioManager : MonoBehaviour
         nightMusic,
         guardChasingMusic,
         bossFight,
+        respite,
         none
     }
 

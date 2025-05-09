@@ -695,7 +695,7 @@ public class PlayerController : MonoBehaviour
             Vector3 wishDashDir = cam.transform.forward;
             Vector3 wishDashVel = wishDashDir * dashSpeed;
             AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
-            velocity += wishDashVel;
+            velocity = wishDashVel;
             dashesUsed++;
             hasDashed = true;
         }

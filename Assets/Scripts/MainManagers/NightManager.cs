@@ -62,7 +62,7 @@ public class NightManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         playerInput.SwitchCurrentActionMap("PlayerMovement");
-        GetComponent<GaurdSpawer>().startGuards();
+        GetComponent<GaurdSpawer>()?.startGuards();
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -90,7 +90,7 @@ public class NightManager : MonoBehaviour
         SharedUIManager.instance.menusDisabled = true;
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
-        GetComponent<GaurdSpawer>().stopGuards();
+        GetComponent<GaurdSpawer>()?.stopGuards();
 
         //Call end stuff
         if(!hasRescuedPlushie)

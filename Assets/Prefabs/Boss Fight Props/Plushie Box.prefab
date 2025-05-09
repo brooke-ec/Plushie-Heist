@@ -67,7 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21c1fd122b1d59d4da28a3f9e1773eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
   <interactionPrompt>k__BackingField: Press F to Pick Up
 --- !u!1001 &2772230058493892774
 PrefabInstance:
@@ -137,13 +136,39 @@ PrefabInstance:
       propertyPath: m_Name
       value: crate
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a775a4fdb32e0eafe9e68fd85b500d52, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a775a4fdb32e0eafe9e68fd85b500d52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5607377607773279180}
   m_SourcePrefab: {fileID: 100100000, guid: a775a4fdb32e0eafe9e68fd85b500d52, type: 3}
 --- !u!4 &2446098849711603533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a775a4fdb32e0eafe9e68fd85b500d52, type: 3}
   m_PrefabInstance: {fileID: 2772230058493892774}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3078660445066585591 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a775a4fdb32e0eafe9e68fd85b500d52, type: 3}
+  m_PrefabInstance: {fileID: 2772230058493892774}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5607377607773279180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3078660445066585591}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0

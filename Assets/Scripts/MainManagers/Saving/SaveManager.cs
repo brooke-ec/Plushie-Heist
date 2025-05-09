@@ -58,7 +58,6 @@ public class SaveManager : MonoBehaviour
     private void Start()
     {
         if (loadOnStart) Load();
-        print(shop);
     }
 
     public void Load()

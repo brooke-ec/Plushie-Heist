@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Boss : MonoBehaviour, IInteractable
 {
     #region Private Fields
@@ -29,7 +30,13 @@ public class Boss : MonoBehaviour, IInteractable
     [SerializeField] private BossBehaviour _bossBehaviour;
 
     /// <summary>An Enum that references the bosses current stage</summary>
-    [SerializeField] private BossStage _bossStage;
+    [SerializeField] private int _bossHp;
+
+    [SerializeField] private Material[] _shatterMaterials;
+    [SerializeField] private MeshRenderer _shatterOverlay;
+    [SerializeField] private GameObject[] _deathPersistent;
+    [SerializeField] private AudioClip[] _hitSounds;
+    private AudioSource _audioSource;
 
     #region Boss Stage Base Stats
     [Header("Big Stage Stats")]
@@ -111,7 +118,8 @@ public class Boss : MonoBehaviour, IInteractable
         _flyDirection =RandomVector3(null, false);
         _flySpeed = _bigFlySpeed;
         _maxFlySpeed = _bigMaxFly;
-        Cursor.lockState = CursorLockMode.Locked;
+        _audioSource = GetComponent<AudioSource>();
+        _bossHp = _shatterMaterials.Length + 1;
     }
 
     // Update is called once per frame
@@ -288,30 +296,28 @@ public class Boss : MonoBehaviour, IInteractable
     public void HitByBean()
     {
         Debug.Log("Boss hit by beanbag");
-        switch(_bossStage)
-        {
-            case BossStage.Big:
-                //Big
-                _bossStage = BossStage.Medium;
-                //set the size to be medium
-                //set the speed to be med. speed
-                break;
-            case BossStage.Medium:
-                //Medium
-                _bossStage = BossStage.Small;
-                //set the size to be small
-                //set the speed to be sma. speed
-                break;
-            case BossStage.Small:
-                //Small
-                this.gameObject.layer = 8;
-                Debug.Log("Boss has been beaten");
-                _bossBehaviour = BossBehaviour.Dead;
-                _rb.useGravity = true;
-                bounceStrength = 0;
-                break;
+        _audioSource.clip = _hitSounds[Random.Range(0, _hitSounds.Length)];
+        _audioSource.Play();
+        _bossHp--;
 
+        if (_bossHp == 0)
+        {
+            this.gameObject.layer = 8;
+            Debug.Log("Boss has been beaten");
+
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.bossDefeat);
+            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.respite);
+            FindObjectsOfType<GuardAI>().ForEach(g => Destroy(g.gameObject));
+
+            foreach (var o in _deathPersistent)
+            {
+                o.transform.parent = null;
+                o.SetActive(true);
+            }
+
+            Destroy(this.gameObject);
         }
+        else _shatterOverlay.material = _shatterMaterials[_bossHp - 1];
     }
     
     public void StartFight()
@@ -337,13 +343,5 @@ enum BossBehaviour
     Flying,
     Circling,
     Ramming,
-    Dead
-}
-
-enum BossStage
-{
-    Big,
-    Medium,
-    Small,
     Dead
 }
