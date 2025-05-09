@@ -103,7 +103,6 @@ public class Clock : MonoBehaviour
     {
         if(!clockCurrentlyRunning) { return; }
 
-        //TO-DO play a sound
         StopCoroutine(StartClock());
         clockCurrentlyRunning = false;
 

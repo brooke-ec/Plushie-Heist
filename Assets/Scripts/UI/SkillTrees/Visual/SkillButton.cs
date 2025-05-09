@@ -109,7 +109,6 @@ public class SkillButton : MonoBehaviour
     {
         if (IsUnlocked()) { return false; }
 
-        //TO-DO properly
         if (ShopManager.instance.GetMoney() < skill.cost)
         {
             return false;
@@ -127,7 +126,6 @@ public class SkillButton : MonoBehaviour
 
     private bool IsBranchVisible()
     {
-        //TO-DO
         return branchIsEnabled;
     }
     private void UpdateColours()

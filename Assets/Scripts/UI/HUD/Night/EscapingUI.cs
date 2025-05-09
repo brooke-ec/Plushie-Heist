@@ -82,8 +82,10 @@ public class EscapingUI : MonoBehaviour
         //TO-DO-SAVING ADD ON-CLICK OF PASSING TO THE DAY SCENE
         //IF IT'S INSIDE THE PLUSHIEINFO != NULL, DO IT INSTEAD IN THE ONDIALOGUEEND
         // like dialogue.onDialogueEnd = pass to scene method
-        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => { LoadingSceneController.instance.LoadSceneAsync(1); });
-        //TO-DO ADD ON-CLICK OF PASSING TO THE DAY SCENE
+        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+        {
+            LoadingSceneController.instance.LoadSceneAsync(1);
+        });
     }
 
     /// <summary>

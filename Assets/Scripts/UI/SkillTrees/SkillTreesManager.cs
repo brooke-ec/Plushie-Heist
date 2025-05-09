@@ -98,7 +98,6 @@ public class SkillTreesManager : MonoBehaviour
 
     #region User control
 
-    //TO-DO-SAVING NEEDS TO BE SAVED
     private int nextPlushieToBeRescued = 0;
 
     /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>

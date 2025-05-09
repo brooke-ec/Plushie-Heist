@@ -366,7 +366,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void CreateItemInteractionMenu(InventoryItem item)
     {
-        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
         Vector3 mousePos = Input.mousePosition;
 
         InventoryController controller = FindAnyObjectByType<InventoryController>();
