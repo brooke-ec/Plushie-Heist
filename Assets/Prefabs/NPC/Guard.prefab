@@ -31,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 1075700027486635428}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.05, y: 0, z: 4.52}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.05, y: 0, z: 6.22}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6205725521625650210}
@@ -786,17 +786,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8138492032870576743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8ae6f2c33b45464e87f68d7b6b5e4b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 28b7b6e2bf597f74ea40ec42021f455d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DetectionTime: 5
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoints: []
   GuardActive: 0
-  anim: {fileID: 0}
 --- !u!195 &4367075118340567018
 NavMeshAgent:
   m_ObjectHideFlags: 0

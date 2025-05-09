@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     /// <summary>the array of the guards that are chasing you </summary>
-    public List<GaurdAI> guardsChasing;
+    public List<GuardAI> guardsChasing;
     
     /// <summary>number of times been arrested</summary>
     private int arrestCount =0;
@@ -227,6 +227,7 @@ public class PlayerController : MonoBehaviour
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     [HideInInspector] public Transform seat = null;
+    public static PlayerController instance { get; private set; }
     /// <summary>bool if second chance activated</summary>
     public bool secondChance;
 
@@ -236,10 +237,13 @@ public class PlayerController : MonoBehaviour
     #region core methods
     public void Awake()
     {
-        cc = GetComponent<CharacterController>();
+        if (instance == null) instance = this;
+        else Debug.LogError("Multiple active players");
+
+            cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-        guardsChasing = new List<GaurdAI>();
+        guardsChasing = new List<GuardAI>();
     }
 
     private int frameNo;
@@ -1054,7 +1058,7 @@ public class PlayerController : MonoBehaviour
         velocity -= direction * slowAmt;
     }
 
-    public void addGuard(GaurdAI guard)
+    public void addGuard(GuardAI guard)
     {
         if (!guardsChasing.Contains(guard))
         {
@@ -1062,12 +1066,12 @@ public class PlayerController : MonoBehaviour
             guardsChasing.Add(guard);
             if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
             {
-                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic, true);
             }
         }
     }
 
-    public void removeGuard(GaurdAI guard)
+    public void removeGuard(GuardAI guard)
     {
         if (guardsChasing.Contains(guard))
         {
@@ -1075,7 +1079,7 @@ public class PlayerController : MonoBehaviour
             guardsChasing.Remove(guard);
             if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
             {
-                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, true);
             }
         }
     }

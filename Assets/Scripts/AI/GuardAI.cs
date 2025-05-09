@@ -1,22 +1,22 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GaurdAI : MonoBehaviour
+public class GuardAI : MonoBehaviour
 {
     #region public & Serialised fields
     /// <summary>Time The guard will search chase you after it stops detecting you until it stops</summary>
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
-    public Transform[] patrolPoints;
+    [HideInInspector] public Transform[] patrolPoints;
 
     public bool GuardActive;
-    
+
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
-    protected NavMeshAgent agent;
+    private NavMeshAgent agent;
     /// <summary>The animator component</summary>
-    public Animator anim;
+    private Animator anim;
     /// <summary>NavMeshAgent component </summary>
     protected GameObject chasee;
     /// <summary>Time since last detected</summary>
@@ -45,7 +45,7 @@ public class GaurdAI : MonoBehaviour
                 detectionTimer += Time.deltaTime;
                 agent.autoBraking = true;
                 anim.SetBool("Caught", false);
-                if (chasee != null && chasee.GetComponent<PlayerController>().arrested)
+                if (chasee != null && PlayerController.instance.arrested)
                 {
                     agent.speed = 0;
                 }
@@ -66,7 +66,7 @@ public class GaurdAI : MonoBehaviour
     #endregion
 
     #region Player Interaction
-    public void detect(GameObject detectee)
+    public void Detect(GameObject detectee)
     {
         Ray LOSRay = new Ray(transform.position, detectee.transform.position - (transform.position+new Vector3(0,-1,0)));
         Debug.DrawRay(transform.position, detectee.transform.position - (transform.position + new Vector3(0, -1, 0)));
@@ -75,9 +75,9 @@ public class GaurdAI : MonoBehaviour
             chasee = detectee;
             //Debug.Log("Detected");
             detectionTimer = 0;
-            agent.speed = 5;
+            agent.speed = 10;
             anim.SetBool("Chasing", true);
-            chasee.GetComponent<PlayerController>().addGuard(this);
+            PlayerController.instance.addGuard(this);
         }
     }
 
@@ -97,7 +97,7 @@ public class GaurdAI : MonoBehaviour
 
     private void Arrest()
     {
-        chasee.GetComponent<PlayerController>().arrested = true;
+        PlayerController.instance.arrested = true;
         //Debug.Log("arrest"+transform.position);
         //Debug.Log(agent.remainingDistance+transform.position.ToString());
         //Debug.Break();
@@ -109,7 +109,7 @@ public class GaurdAI : MonoBehaviour
         
         if (chasee != null)
         {
-            chasee.GetComponent<PlayerController>().removeGuard(this);
+            PlayerController.instance.removeGuard(this);
             chasee = null;
         }
 

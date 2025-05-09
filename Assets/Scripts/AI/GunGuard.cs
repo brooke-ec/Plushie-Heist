@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GunGuard : GaurdAI
+public class GunGuard : GuardAI
 {
     [SerializeField] private GameObject proj;
     [SerializeField] private float firerate;
