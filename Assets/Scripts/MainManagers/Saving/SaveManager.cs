@@ -21,6 +21,7 @@ public class SaveManager : MonoBehaviour
     }
     #endregion
 
+    [SerializeField] private bool loadOnStart = true;
     [JsonProperty("player", Order = -1)] internal SharedUIManager player => SharedUIManager.instance;
     [JsonProperty("shop")] internal ShopManager shop => ShopManager.instance;
 
@@ -34,7 +35,8 @@ public class SaveManager : MonoBehaviour
 
     private void Start()
     {
-        Load();
+        if (loadOnStart) Load();
+        print(shop);
     }
 
     public void Load()

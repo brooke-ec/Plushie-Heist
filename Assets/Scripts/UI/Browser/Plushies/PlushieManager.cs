@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlushieManager : MonoBehaviour
 {
-    [HideInInspector] public PlushieInfo[] plushies;
+    [HideInInspector] public PlushieInfo[] plushies => PlushieInfo.plushies;
 
     [SerializeField] private PlushieInfoUI plushieInfoUIPrefab;
 
@@ -14,11 +14,6 @@ public class PlushieManager : MonoBehaviour
     //NEED TO LOAD SKILLS FIRST, THEN PLUSHIE MANAGER
 
     List<SkillTreeController> skillTreeControllers = new List<SkillTreeController>();
-
-    private void Awake()
-    {
-        plushies = Resources.LoadAll<PlushieInfo>(PlushieInfo.PATH).OrderBy(p => p.order).ToArray();
-    }
 
     private void Start()
     {

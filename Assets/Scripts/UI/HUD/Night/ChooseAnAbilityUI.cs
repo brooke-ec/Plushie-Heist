@@ -67,7 +67,9 @@ public class ChooseAnAbilityUI : MonoBehaviour
     private void CloseChooseAbilityUI()
     {
         MovementUIManager.instance.ChangeMovementUI(currentlySelectedAbility);
-
+        FindAnyObjectByType<PlayerController>().SwapActiveAbility(currentlySelectedAbility);
+        SharedUIManager.instance.menusDisabled = false;
+        Time.timeScale = 1f;
         NightManager.instance.StartNight();
         Destroy(this.gameObject);
     }

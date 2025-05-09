@@ -134,7 +134,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
             gridToUse.gameObject.SetActive(false);
         }
 
-        ShopManager.instance.stocksController.UpdatePricingTable();
+        if (ShopManager.instance != null) ShopManager.instance.stocksController.UpdatePricingTable();
         return addedItemSuccessfully;
     }
 
@@ -154,7 +154,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         Destroy(item.gameObject);
         onChanged.Invoke();
         
-        ShopManager.instance.stocksController.UpdatePricingTable();
+        if (ShopManager.instance != null) ShopManager.instance.stocksController.UpdatePricingTable();
     }
 
     /// <summary>

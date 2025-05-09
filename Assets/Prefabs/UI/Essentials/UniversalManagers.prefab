@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1335179437463642808}
   - component: {fileID: 7120802471527190179}
+  - component: {fileID: 8329643612810632649}
   m_Layer: 0
-  m_Name: AudioManager
+  m_Name: UniversalManagers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,3 +194,15 @@ MonoBehaviour:
     parameter: SoundEffectsVolume
   - group: {fileID: -4707534048135764498, guid: 7e1599f5fe0148f4d9379139c277eabd, type: 2}
     parameter: UIVolume
+--- !u!114 &8329643612810632649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020186885747667764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375a6ed18ea3dd047ba558b445308374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

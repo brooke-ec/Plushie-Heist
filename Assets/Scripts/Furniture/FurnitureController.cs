@@ -74,18 +74,21 @@ public class FurnitureController : MonoBehaviour, IInteractable
     private void Start()
     {
         GetComponentsInChildren<MeshRenderer>().ForEach(m => m.AddComponent<Outline>().enabled = false);
-        this.AddComponent<NavMeshObstacle>().carving = true;
-
         if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(item);
         });
 
-        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+        if (ShopManager.instance != null)
         {
-            empty = subgrids.All(s => s.IsEmpty());
-        });
+            gameObject.AddComponent<NavMeshObstacle>().carving = true;
 
-        PlaceSellingMarker();
+            foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+            {
+                empty = subgrids.All(s => s.IsEmpty());
+            });
+
+            PlaceSellingMarker();
+        }
     }
 
     /// <summary>

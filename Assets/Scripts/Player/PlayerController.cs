@@ -1223,7 +1223,7 @@ public class PlayerController : MonoBehaviour
 
     #region Ability Swapping
 
-    private void SwapActiveAbility(Ability newAbility)
+    public void SwapActiveAbility(Ability newAbility)
     {
         currentAbility = newAbility;
         MovementUIManager.instance.ChangeMovementUI(newAbility);
@@ -1255,7 +1255,7 @@ public class PlayerController : MonoBehaviour
 /// <summary>
 /// The Enum for the ability that the player currently has selected
 /// </summary>
-enum Ability
+public enum Ability
 {
     None,
     Dash,

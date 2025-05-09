@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Used ONLY for shared UI between shop and night (inventory)
+/// Used ONLY for shared between shop and night (inventory)
 /// </summary>
 public class SharedUIManager : MonoBehaviour
 {
@@ -18,9 +18,9 @@ public class SharedUIManager : MonoBehaviour
     [JsonProperty("plushie")] public PlushieInfo plushie = null;
     [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
     public int plushieIndex => plushie == null ? 0 : plushie.order;
-    
-    private PlayerInput playerInput;
 
+    public bool menusDisabled = false;
+    private PlayerInput playerInput;
     public static SharedUIManager instance { get; private set; }
 
     private void Awake()
@@ -44,6 +44,7 @@ public class SharedUIManager : MonoBehaviour
     private void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
+        CloseMenu();
 
         if (NightManager.instance != null)
         {
@@ -56,6 +57,8 @@ public class SharedUIManager : MonoBehaviour
 
     public void OpenMenu(IUIMenu menu)
     {
+        if (menusDisabled) return;
+
         print($"Opening Menu: {menu}");
         if (currentMenu != null) currentMenu.SetOpenState(false);
         
@@ -71,6 +74,8 @@ public class SharedUIManager : MonoBehaviour
 
     public void CloseMenu()
     {
+        if (menusDisabled) return;
+
         print("Closing all menus");
         onMenuClose.Invoke();
 
