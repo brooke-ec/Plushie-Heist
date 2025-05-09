@@ -815,6 +815,8 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
+  GuardActive: 0
+  anim: {fileID: 0}
   proj: {fileID: 9174508859471245120, guid: 77397f46d62e36e47a42dfb642873cce, type: 3}
   firerate: 1
 --- !u!1001 &5830279492040813188
@@ -827,7 +829,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e11e78ef2cdd2d4438f9ee562d120353, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e11e78ef2cdd2d4438f9ee562d120353, type: 3}
       propertyPath: m_LocalScale.y
@@ -835,7 +837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e11e78ef2cdd2d4438f9ee562d120353, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e11e78ef2cdd2d4438f9ee562d120353, type: 3}
       propertyPath: m_LocalPosition.x

@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndNightInteraction : MonoBehaviour, IInteractable
+public class EscapeNightInteractor : MonoBehaviour, IInteractable
 {
     [field:SerializeField] public string interactionPrompt { get; private set; }
 
 
     public void PrimaryInteract(Interactor interactor)
     {
-        FindAnyObjectByType<NightManager>().OnEndNight(true);
+        NightManager.instance.OnEndNight(true);
     }
 }

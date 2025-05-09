@@ -83,8 +83,10 @@ public class NightManager : MonoBehaviour
     {
         print("night ENDED");
 
+        nightTimer.StopAllCoroutines();
+
         //even if you rescue it, if caught then you lose it
-        if(!successful) { hasRescuedPlushie = false; }
+        if (!successful) { hasRescuedPlushie = false; }
         SharedUIManager.instance.menusDisabled = true;
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
