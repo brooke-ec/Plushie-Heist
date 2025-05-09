@@ -1105,6 +1105,9 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("Calling Bounce Pad");
                 BouncePad(theHazard);
                 break;
+            case "Boss":
+                BossHazard(theHazard);
+                break;
             default:
                 break;
         }
@@ -1118,6 +1121,13 @@ public class PlayerController : MonoBehaviour
         float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
 
         _BouncePadWishVel = BouncePadDirection * BouncePadStrength;
+    }
+    
+    private void BossHazard(GameObject theBoss)
+    {
+        Vector3 bouncedirection = this.transform.position - theBoss.transform.position;
+        bouncedirection.Normalize();
+        velocity = bouncedirection * theBoss.GetComponent<Boss>().bounceStrength;
     }
     #endregion
 

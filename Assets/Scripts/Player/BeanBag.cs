@@ -17,6 +17,7 @@ public class BeanBag : MonoBehaviour
             case 12:
                 //boss
                 collision.gameObject.GetComponent<Boss>().HitByBean();
+                Destroy(this.gameObject);
                 break;
             default:
                 break;
@@ -25,7 +26,10 @@ public class BeanBag : MonoBehaviour
 
     public void Throw(float throwStrength)
     {
+        this.gameObject.SetActive(true);
+
         _rb = GetComponent<Rigidbody>();
+
         _rb.AddForce(this.transform.forward * throwStrength);
 
         _rb.AddTorque(new Vector3(Random.Range(-1,1), Random.Range(-1,1), Random.Range(-1,1)));

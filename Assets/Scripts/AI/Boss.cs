@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Boss : MonoBehaviour
+public class Boss : MonoBehaviour, IInteractable
 {
     #region Private Fields
     /// <summary>The RigidBody of the Boss</summary>
@@ -13,6 +13,13 @@ public class Boss : MonoBehaviour
     private float _flySpeed;
 
     private float _maxFlySpeed;
+
+    /// <summary>The Max Speed that the boss will move at</summary>
+    private float _maxSpeed;
+
+    private float _ramtimer = 0;
+
+    private BossBehaviour previousBossBehaviour;
     #endregion
     
     #region Serialized Fields
@@ -34,47 +41,45 @@ public class Boss : MonoBehaviour
     /// <summary>The Max fly speed of the Boss in the Big Stage</summary>
     [SerializeField] private float _bigMaxFly;
 
-    [Header("Medium Stage Stats")]
+    //[Header("Medium Stage Stats")]
 
     /// <summary>The Scale of the Boss in the medium stage</summary>
-    [SerializeField] private float _medScale;
+    //[SerializeField] private float _medScale;
     /// <summary>The Fly speed of the Boss in the medium Stage</summary>
-    [SerializeField] private float _medFlySpeed;
+    //[SerializeField] private float _medFlySpeed;
     /// <summary>The Max fly speed of the Boss in the medium Stage</summary>
-    [SerializeField] private float _medMaxFly;
+    //[SerializeField] private float _medMaxFly;
 
-    [Header("Small Stage Stats")]
+    //[Header("Small Stage Stats")]
 
     /// <summary>The Scale of the Boss in the small stage</summary>
-    [SerializeField] private float _smallScale;
+    //[SerializeField] private float _smallScale;
     /// <summary>The Fly speed of the Boss in the small Stage</summary>
-    [SerializeField] private float _smallFlySpeed;
+    //[SerializeField] private float _smallFlySpeed;
     /// <summary>The Max fly speed of the Boss in the small Stage</summary>
-    [SerializeField] private float _smaMaxFly;
+    //[SerializeField] private float _smaMaxFly;
 
     #endregion
 
     [Header("Base Stats")]
 
-    /// <summary>The Move Speed of the Boss</summary>
-    [SerializeField] private float _moveSpeed;
-    /// <summary>The Max Speed that the boss will move at</summary>
-    [SerializeField] private float _maxSpeed;
+    [SerializeField] private float minRamTime;
+    [SerializeField] private float maxRamTime;
 
     #region Circle -> Not Working
-    [Header("Circle")]
+    //[Header("Circle")]
 
     /// <summary>The distance at which the boss should circle the player</summary>
-    [SerializeField] private float _circleCloseDistance;
+    private float _circleCloseDistance;
 
     /// <summary>The Size of the Band that the boss will circle around the player within</summary>
-    [SerializeField] private float _circleBandWidth;
+    private float _circleBandWidth;
 
     /// <summary>The Speed at which the Boss circles the player at</summary>
-    [SerializeField] private float _circleSpeed;
+    private float _circleSpeed;
 
     /// <summary>The Max Speed at which the Boss circles the player at</summary>
-    [SerializeField] private float _circleMaxSpeed;
+    private float _circleMaxSpeed;
     #endregion
 
     #region Idle
@@ -94,6 +99,11 @@ public class Boss : MonoBehaviour
     #endregion
     #endregion
 
+    [field: SerializeField] public string interactionPrompt { get; private set; } = "Press F to Pickup";
+
+    public bool outline => true;
+
+    public float bounceStrength;
     // Start is called before the first frame update
     void Start()
     {
@@ -113,6 +123,16 @@ public class Boss : MonoBehaviour
                 Idle();
                 break;
             case BossBehaviour.Flying:
+                if(_ramtimer > 0)
+                {
+                    _ramtimer -= Time.deltaTime;
+                }
+                else
+                {
+                    _ramtimer = Random.Range(minRamTime, maxRamTime);
+                    _bossBehaviour = BossBehaviour.Ramming;
+                }
+
                 Fly();
                 break;
             case BossBehaviour.Circling:
@@ -126,8 +146,15 @@ public class Boss : MonoBehaviour
                 break;
         }
 
+        
+        if(_ramtimer > 0)
+        {
+            _ramtimer -= Time.deltaTime;    
+        }
+        else
+        {
 
-
+        }
     }
 
     #region Main State functions
@@ -215,6 +242,9 @@ public class Boss : MonoBehaviour
             case 6:
                 _flyDirection = RandomVector3(collision, true);
                 break;
+            case 7:
+                PlayerController.instance.HitHazard("Boss", this.gameObject);
+                break;
             default:
                 break;
         }
@@ -274,16 +304,31 @@ public class Boss : MonoBehaviour
                 break;
             case BossStage.Small:
                 //Small
+                this.gameObject.layer = 8;
                 Debug.Log("Boss has been beaten");
-                _bossBehaviour = BossBehaviour.Idle;
-                //Stick the Finishing the end of the night here
-
-
-                //Stick the Finishing the end of the night here
+                _bossBehaviour = BossBehaviour.Dead;
+                _rb.useGravity = true;
+                bounceStrength = 0;
                 break;
+
         }
     }
+    
+    public void StartFight()
+    {
+        _bossBehaviour = BossBehaviour.Flying;
+    }
     #endregion
+    public void PrimaryInteract(Interactor interactor) 
+    { 
+        //todo
+        //Insert the pickup plushie stuff here
+
+        Debug.Log("Freed the plushie");
+
+
+        //Insert the pickup plushie stuff here
+    }
 }
 
 enum BossBehaviour
@@ -291,12 +336,14 @@ enum BossBehaviour
     Idle,
     Flying,
     Circling,
-    Ramming
+    Ramming,
+    Dead
 }
 
 enum BossStage
 {
     Big,
     Medium,
-    Small
+    Small,
+    Dead
 }
