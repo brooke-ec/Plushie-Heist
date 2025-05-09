@@ -1069,7 +1069,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("added guard"+frameNo);
             guardsChasing.Add(guard);
-            if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+            if (AudioManager.instance.currentMusicPlaying.musicName == AudioManager.MusicEnum.nightMusic)
             {
                 AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic, true);
             }
@@ -1082,7 +1082,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("removed guard"+frameNo);
             guardsChasing.Remove(guard);
-            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName == AudioManager.MusicEnum.guardChasingMusic)
             {
                 AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, false);
             }

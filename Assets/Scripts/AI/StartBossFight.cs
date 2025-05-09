@@ -15,7 +15,7 @@ public class StartBossFight : MonoBehaviour
         { 
             fightStarted = true;
 
-            //TODO add starting boss here
+            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.bossFight, true);
             boss.StartFight();
         }
     }
