@@ -71,9 +71,6 @@ public class StocksController : MonoBehaviour
         // go through all stocks and randomise a bit some items market price
         //and update last modified and last market price
 
-        /*int minNumOfChanges = 1;
-        int maxNumOfChanges = 3;*/
-
         int minNumOfChanges = (int) (allStocksInGame.Count * maxPercentOfItemsToChange);
         int maxNumOfChanges = (int) (allStocksInGame.Count * minPercentOfItemsToChange);
         int numOfChanges = UnityEngine.Random.Range(minNumOfChanges, maxNumOfChanges + 1);
@@ -87,7 +84,6 @@ public class StocksController : MonoBehaviour
             float lastMarketPrice = product.marketPrice;
 
             float fluctuation = UnityEngine.Random.Range(-0.2f, 0.2f);
-            float dwd = product.marketPrice * (1 + fluctuation);
 
             float newPrice = Mathf.Max(0f, product.marketPrice * (1 + fluctuation)); //to make sure it doesn't go below 0
             newPrice = (float)System.Math.Round(newPrice, 2);
