@@ -7,6 +7,7 @@ public class GunGuard : GuardAI
 {
     [SerializeField] private GameObject proj;
     [SerializeField] private float firerate;
+    [SerializeField] private AudioClip fireSound;
 
     private float fireTimer;
     // Start is called before the first frame update
@@ -31,9 +32,11 @@ public class GunGuard : GuardAI
     {
         if(chasee!=null && fireTimer>firerate)
         {
+            audio.PlayOneShot(fireSound);
+
             Vector3 direction = chasee.transform.position+chasee.GetComponentInChildren<CharacterController>().center - (transform.position+new Vector3(0.5f, 0, 0.5f));
             Instantiate(proj, transform.position+new Vector3(0.5f,0,0.5f), Quaternion.LookRotation(direction));
-            fireTimer = 0;
+            fireTimer = Random.Range(0, firerate / 2);
         }
     }
 }
