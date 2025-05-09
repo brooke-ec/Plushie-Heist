@@ -5,19 +5,22 @@ using UnityEngine;
 public class BeanBag : MonoBehaviour
 {
     private Rigidbody _rb;
+    private AudioSource _audio;
+
 
     private void OnCollisionEnter(Collision collision)
     {
+        _audio.Play();
         switch(collision.gameObject.layer)
         {
             case 6:
                 //Env
-                Destroy(this.gameObject);
+                Destroy(this.gameObject, 1f);
                 break;
             case 12:
                 //boss
                 collision.gameObject.GetComponent<Boss>().HitByBean();
-                Destroy(this.gameObject);
+                Destroy(this.gameObject, 0.2f);
                 break;
             default:
                 break;
@@ -26,9 +29,8 @@ public class BeanBag : MonoBehaviour
 
     public void Throw(float throwStrength)
     {
-        this.gameObject.SetActive(true);
-
         _rb = GetComponent<Rigidbody>();
+        _audio = GetComponent<AudioSource>();
 
         _rb.AddForce(this.transform.forward * throwStrength);
 
