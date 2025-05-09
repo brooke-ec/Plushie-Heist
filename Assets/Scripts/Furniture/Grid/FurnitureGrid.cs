@@ -15,7 +15,7 @@ public class FurnitureGrid : MonoBehaviour
     private Vector2 cellSize => FurnitureSettings.instance.cellSize * new Vector2(transform.lossyScale.x, transform.lossyScale.z).Reciprocal();
     private static float spacing => FurnitureSettings.instance.spacing;
 
-    [JsonProperty("items")] private List<FurnitureController> items = new List<FurnitureController>();
+    [HideInInspector] [JsonProperty("items")] public List<FurnitureController> items = new List<FurnitureController>();
     private GridMesh mesh = new GridMesh(Color.green);
     new private BoxCollider collider;
     private MeshFilter filter;

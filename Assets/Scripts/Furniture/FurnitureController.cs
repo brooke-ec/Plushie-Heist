@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.AI;
 using Newtonsoft.Json;
+using static UnityEngine.GraphicsBuffer;
 
 public class FurnitureController : MonoBehaviour, IInteractable
 {
@@ -44,6 +45,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     public bool canSell => empty && ShopManager.instance != null && placed;
     /// <summary> The world space bounding volume of this item </summary>
     public Bounds bounds => collider.bounds;
+    public Vector3 gridOffset => new Vector3(gridShape.x, 0, gridShape.y) / 2 * FurnitureSettings.instance.cellSize;
 
     public string key => throw new System.NotImplementedException();
 
@@ -148,6 +150,11 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         transform.Rotate(0, 90, 0);
         GridMove(gridPosition);
+    }
+
+    public void GridMoveWorld(Vector3 target)
+    {
+        GridMove(Vector2Int.RoundToInt(grid.FromWorldspace(target - gridOffset)));
     }
 
     /// <summary>

@@ -2,9 +2,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Manages the flow of things in the daytime.
@@ -28,12 +30,46 @@ public class ShopManager : MonoBehaviour
     public bool isShopOpen = false;
     public static ShopManager instance { get; private set; }
 
+    public ShopLayout UpgradeLayout()
+    {
+        return SetLayout(layout.level + 1);
+    }
+
     public ShopLayout SetLayout(int level)
     {
-        if (layout != null) Destroy(layout);
+        // Save placed furniture
+        FurnitureController[] items = new FurnitureController[0];
+        if (layout != null)
+        {
+            items = layout.grids.SelectMany(g => g.items).ToArray();
+            foreach (FurnitureController item in items) item.transform.parent = null;
+            Destroy(layout.gameObject);
+        }
 
+        // Switch Layout
         layout = Instantiate(layouts[level]);
         layout.level = level;
+
+        // Place on new grids
+        foreach (FurnitureController item in items)
+        {
+            // Try to keep in same place
+            Vector2Int postion = Vector2Int.zero;
+            FurnitureGrid grid = null;
+
+            for (int i = 0;  i < layout.grids.Length; i++)
+            {
+                grid = layout.grids[i];
+                postion = Vector2Int.RoundToInt(grid.FromWorldspace(item.transform.position - item.gridOffset));
+                Region region = new Region().FromSize(postion, item.gridShape);
+                if (region.Within(grid.size)) break;
+            }
+            
+            // Place regardless of a valid grid was found it will be impossible to intersect anyway
+            item.GridPlace(grid, postion);
+            grid.AddItem(item);
+        }
+        
         return layout;
     }
 

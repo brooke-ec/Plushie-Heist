@@ -77,7 +77,7 @@ public class BoostSkill : Skill
                 }
                 break;
             case SkillType.ShopExpansion:
-                if (!isNight) { } //TO-DO-SAVING
+                if (!isNight && !SaveManager.deserializing) ShopManager.instance.UpgradeLayout();
                 break;
             default:
                 Debug.Log("Error in boost skill type");
