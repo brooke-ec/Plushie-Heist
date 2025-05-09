@@ -789,35 +789,35 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2010029683}
+    m_TransformParent: {fileID: 591247271}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.500004
+      value: -0.087
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.124996185
+      value: 0.054
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.70710576
+      value: 0.0000031292432
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.000000015454292
+      value: -1.7763564e-15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071079
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000015454331
+      value: -0.000000043711392
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1240,35 +1240,35 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2010029683}
+    m_TransformParent: {fileID: 591247271}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -26.500004
+      value: -0.087
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.124996185
+      value: 0.054
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071057
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.000000015454292
+      value: 8.881782e-16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.70710796
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000015454335
+      value: -8.881782e-16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 563ec70fadb464f4394ff3c37c966a38, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1333,7 +1333,9 @@ Transform:
   m_LocalPosition: {x: -26.500004, y: 1, z: -0.124996185}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 819610896}
+  - {fileID: 1055610756}
   m_Father: {fileID: 2010029683}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &591247272
@@ -7331,8 +7333,6 @@ Transform:
   - {fileID: 1749440645}
   - {fileID: 1860535293}
   - {fileID: 591247271}
-  - {fileID: 819610896}
-  - {fileID: 1055610756}
   - {fileID: 37352841}
   - {fileID: 468779171}
   - {fileID: 1294496508}
