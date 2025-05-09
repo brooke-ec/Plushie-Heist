@@ -105,6 +105,7 @@ public class Boss : MonoBehaviour
         _flyDirection =RandomVector3(null, false);
         _flySpeed = _bigFlySpeed;
         _maxFlySpeed = _bigMaxFly;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
