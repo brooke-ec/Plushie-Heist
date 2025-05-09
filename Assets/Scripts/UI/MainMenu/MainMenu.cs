@@ -40,8 +40,8 @@ public class MainMenu : MonoBehaviour
         transform.GetChild(1).gameObject.SetActive(true);
         Dialogue dialogue = Instantiate(dialoguePrefab, transform.GetChild(1));
         
-        //TO-DO-SAVING dialogue.onDialogueEnd = (LOAD NIGHT SCENE METHOD)
         dialogue.SetUp(Dialogue.DialogueEnum.mainMenu);
+        dialogue.onDialogueEnd = () => LoadingSceneController.instance.LoadSceneAsync(1);
     }
 
     public void CloseGame()

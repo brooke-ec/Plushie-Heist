@@ -16,11 +16,13 @@ public class EscapingUI : MonoBehaviour
     [SerializeField] private Color32 pinkColour;
     [SerializeField] private Color32 greenColour;
 
+    private PlushieInfo plushieInfo;
     public GameObject itemSlotPrefab;
     private bool successful = false;
 
     public void CreateEscapingUI(bool successful, Transform canvasTransform, PlushieInfo plushieInfo)
     {
+        this.plushieInfo = plushieInfo;
         this.successful = successful;
         GameObject escapingUI;
 
@@ -76,17 +78,16 @@ public class EscapingUI : MonoBehaviour
             {
                 Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
                 dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 2);
+                dialogue.onDialogueEnd = EscapeScene;
             });
-        }
+        } else escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(EscapeScene);
+    }
 
-        //TO-DO-SAVING ADD ON-CLICK OF PASSING TO THE DAY SCENE
-        //IF IT'S INSIDE THE PLUSHIEINFO != NULL, DO IT INSTEAD IN THE ONDIALOGUEEND
-        // like dialogue.onDialogueEnd = pass to scene method
-        escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
-        {
-            SaveManager.instance.Save();
-            LoadingSceneController.instance.LoadSceneAsync(1);
-        });
+    private void EscapeScene()
+    {
+        if (plushieInfo != null) SharedUIManager.instance.plushie = plushieInfo;
+        SaveManager.instance.Save();
+        LoadingSceneController.instance.LoadSceneAsync(1);
     }
 
     /// <summary>
