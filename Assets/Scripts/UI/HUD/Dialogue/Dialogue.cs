@@ -59,19 +59,19 @@ public class Dialogue : MonoBehaviour
                 lines = new string[]
                 {
                     "You have a new message from NALLEBY:\n",
-                    "Thank you for saving me from the evil king, He is a truly terrible man",
+                    "Thank you for saving me from the evil king, He is a truly terrible man.",
                     "But it's not just me please save my friends as well!",
-                    "While I'm here though, I can help out a bit",
-                    "Check out your Skill trees and you should see some cool new stuff you can unlock you help you out, including a very cool double jump"
+                    "While I'm here though, I can help out a bit:",
+                    "Check out your Skill trees and you should see some cool new stuff you can unlock you help you out, including a very cool double jump."
                 };
                 break;
             case DialogueEnum.plushie2:
                 lines = new string[]
                 {
                     "You have a new message from SKÖLDIS:\n",
-                    "My friend, Thank you so much for helping me out of there, That evil king did some terrible things to me",
+                    "My friend, Thank you so much for helping me out of there, That evil king did some terrible things to me...",
                     "I'm afraid he may be doing similar things to my friends, please go and save them!!",
-                    "As a thank you for help I've added some new stuff to your skill tree including the very cool new Boost Skill"
+                    "As a thank you for help I've added some new stuff to your skill tree including the very cool new Boost Skill."
                 };
                 break;
             case DialogueEnum.plushie3:
@@ -88,18 +88,18 @@ public class Dialogue : MonoBehaviour
                 lines = new string[]
                 {
                     "You have a new message from GRODDAN:\n",
-                    "Hey, thanks for saving, I don't know what I would have done without you",
-                    "There's still a couple of my friends left in there and I was wondering if you could maybe help them out like you did with me",
-                    "I also added some cool new stuff on the skill tree for you as a thank you, that Automatic Restock is a real treat"
+                    "Hey, thanks for saving, I don't know what I would have done without you.",
+                    "There's still a couple of my friends left in there and I was wondering if you could maybe help them out like you did with me.",
+                    "I also added some cool new stuff on the skill tree for you as a thank you, that Automatic Restock is a real treat."
                 };
                 break;
             case DialogueEnum.plushie5:
                 lines = new string[]
                 {
                     "You have a new message from HUNDRA:\n",
-                    "Thanks so much for saving me you are the best!! That King is super evil and I don't know how much longer I would have lasted",
+                    "Thanks so much for saving me you are the best!! That King is super evil and I don't know how much longer I would have lasted.",
                     "My friend the BLÅHAJ is still in there, please go save them!",
-                    "Oh, you should also check out the skill tree, the new grapple and glide a well worth unlocking"
+                    "Oh, you should also check out the skill tree, the new grapple and glide a well worth unlocking."
 
                 };
                 break;
@@ -107,10 +107,13 @@ public class Dialogue : MonoBehaviour
                 lines = new string[]
                 {
                     "You have a new message from BLÅHAJ:\n",
-                    "My dearest thanks for saving me and my friends from that terrible King",
-                    "I don't know what we would have done without you, you truly are a real hero",
-                    "I have added the power to escape guards to your skill tree if you insist on going into that horrible place again",
-                    "but be careful with it it can only help so much"
+                    "My dearest thanks for saving me and my friends from that terrible King.",
+                    "I don't know what we would have done without you, you truly are a real hero.",
+                    "I have added the power to escape guards to your skill tree if you insist on going into that horrible place again, ",
+                    "but be careful with it, it can only help so much.",
+                    "From now on, you can keep building your furniture empire every day and every night, but there will be no more of us to rescue.",
+                    "Thank you for everything.",
+                    "You have now saved all plushies."
                 };
                 break;
             case DialogueEnum.boss:
