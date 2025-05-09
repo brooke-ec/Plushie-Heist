@@ -92,10 +92,6 @@ public class Boss : MonoBehaviour
     /// <summary>The delay before the boss rams and it deciding to ram</summary>
     [SerializeField] private float _ramDelay;
     #endregion
-
-    [Header("Other Serialized Fields")]
-    /// <summary>A reference to the Player</summary>
-    [SerializeField] private GameObject _player;
     #endregion
 
     // Start is called before the first frame update
@@ -205,7 +201,7 @@ public class Boss : MonoBehaviour
     /// <returns>a float value that is the remaining distnace to the player</returns>
     private Vector3 GetPlayerDirection()
     {
-        return _player.transform.position - this.transform.position;
+        return PlayerController.instance.transform.position - this.transform.position;
     }
 
     /// <summary>
