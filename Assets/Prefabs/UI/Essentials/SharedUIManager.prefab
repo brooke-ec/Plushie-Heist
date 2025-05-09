@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 7995331491046570677}
   - component: {fileID: 5453552016065165434}
   - component: {fileID: 6909618013825530658}
+  - component: {fileID: 395794479774506971}
   m_Layer: 0
   m_Name: SharedUIManager
   m_TagString: Untagged
@@ -246,6 +247,19 @@ MonoBehaviour:
   storageGrid: {fileID: 0}
   backpackGrid: {fileID: 1298857052918043814}
   selectedItem: {fileID: 0}
+--- !u!114 &395794479774506971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920492340713005555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375a6ed18ea3dd047ba558b445308374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadOnStart: 1
 --- !u!1 &2281116366056995160
 GameObject:
   m_ObjectHideFlags: 0

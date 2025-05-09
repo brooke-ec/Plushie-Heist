@@ -910,8 +910,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8759070038911207462}
-  - component: {fileID: 7242160890524171263}
   - component: {fileID: 5270551218934840170}
+  - component: {fileID: 5838107030855626359}
   m_Layer: 8
   m_Name: Doors
   m_TagString: Untagged
@@ -936,24 +936,6 @@ Transform:
   - {fileID: 6498201774683705032}
   m_Father: {fileID: 1873147247766349411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7242160890524171263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2212201661502171397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a7355f5547226e4d9c59367f0c8b138, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactorPoint: {fileID: 0}
-  interactorRadius: 0
-  interactorLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  interactionText: {fileID: 0}
 --- !u!65 &5270551218934840170
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -975,6 +957,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6393195, y: 2.7669868, z: 3.0774963}
   m_Center: {x: 0.18034029, y: 0.13448453, z: 0.024311483}
+--- !u!114 &5838107030855626359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212201661502171397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 602537cce4a834144a5f93d9f82378db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <interactionPrompt>k__BackingField: Press F to Enter the Boss Room
+  sceneIndexToGoTo: 3
 --- !u!1 &5589763463418829039
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,6 @@ public class NightDoor : MonoBehaviour, IInteractable
 
         ShopManager.instance.StartNewDay();
         SaveManager.instance.Save();
-        LoadingSceneController.instance.LoadSceneAsync(0);
+        LoadingSceneController.instance.LoadSceneAsync(2);
     }
 }
