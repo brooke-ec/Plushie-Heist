@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
-
+        
         //gravity logic
         if (!cc.isGrounded && !wallRunning)
         {
