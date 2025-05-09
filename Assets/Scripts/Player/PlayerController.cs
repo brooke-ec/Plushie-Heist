@@ -1069,7 +1069,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("added guard"+frameNo);
             guardsChasing.Add(guard);
-            if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
+            if (AudioManager.instance.currentMusicPlaying.musicName == AudioManager.MusicEnum.nightMusic)
             {
                 AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic, true);
             }
@@ -1082,7 +1082,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("removed guard"+frameNo);
             guardsChasing.Remove(guard);
-            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
+            if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName == AudioManager.MusicEnum.guardChasingMusic)
             {
                 AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, false);
             }
@@ -1105,6 +1105,9 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("Calling Bounce Pad");
                 BouncePad(theHazard);
                 break;
+            case "Boss":
+                BossHazard(theHazard);
+                break;
             default:
                 break;
         }
@@ -1118,6 +1121,13 @@ public class PlayerController : MonoBehaviour
         float BouncePadStrength = theHazard.GetComponent<BouncePads>().getStrength();
 
         _BouncePadWishVel = BouncePadDirection * BouncePadStrength;
+    }
+    
+    private void BossHazard(GameObject theBoss)
+    {
+        Vector3 bouncedirection = this.transform.position - theBoss.transform.position;
+        bouncedirection.Normalize();
+        velocity = bouncedirection * theBoss.GetComponent<Boss>().bounceStrength;
     }
     #endregion
 
