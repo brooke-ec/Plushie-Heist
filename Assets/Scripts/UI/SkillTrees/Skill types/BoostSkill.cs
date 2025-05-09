@@ -41,20 +41,19 @@ public class BoostSkill : Skill
                 if (isNight) { NightManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.PlayerExtraDash:
-                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("dash", modifier); }
+                if (isNight) { PlayerController.instance.ModifyAbilityValue("dash", modifier); }
                 break;
             case SkillType.PlayerExtraJump:
-                PlayerController playerController = FindAnyObjectByType<PlayerController>();
-                if (playerController != null) { playerController.ModifyAbilityValue("jump", modifier); }
+                PlayerController.instance.ModifyAbilityValue("jump", modifier);
                 break;
             case SkillType.PlayerExtraBoost:
-                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("boost", modifier); }
+                if (isNight) { PlayerController.instance.ModifyAbilityValue("boost", modifier); }
                 break;
             case SkillType.ShopExtraTime:
                 if (!isNight) { ShopManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.ShopInventorySize:
-                if (!isNight && !SaveManager.deserializing) { FindAnyObjectByType<InventoryController>().storageGrid.ModifyInventorySize((int)modifier);}
+                if (!isNight && !SaveManager.deserializing) { InventoryController.instance.storageGrid.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
                 if (!isNight) {

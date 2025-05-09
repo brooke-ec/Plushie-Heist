@@ -25,7 +25,7 @@ public class BouncePads : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             //Debug.Log("Calling function on Player");
-            other.GetComponent<PlayerController>().HitHazard("Bounce Pad", this.gameObject);
+            PlayerController.instance.HitHazard("Bounce Pad", this.gameObject);
         }
     }
 
