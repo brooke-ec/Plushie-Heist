@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CloseGamePopup : MonoBehaviour
+public class CloseGamePopup : MonoBehaviour, IUIMenu
 {
     [SerializeField] private GameObject closingGamePopupPrefab;
-    public void SetUp()
+    private GameObject popup;
+
+    void IUIMenu.SetOpenState(bool open)
     {
-        GameObject popup = Instantiate(closingGamePopupPrefab, ShopManager.instance.mainCanvas.transform);
-        popup.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnCloseGame(popup));
-        popup.transform.GetChild(4).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnClosePopup(popup));
+        if (popup != null) Destroy(popup);
+        else if (open)
+        {
+            popup = Instantiate(closingGamePopupPrefab, ShopManager.instance.mainCanvas.transform);
+            popup.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnCloseGame());
+            popup.transform.GetChild(4).GetChild(1).GetComponent<Button>().onClick.AddListener(() => OnClosePopup());
+        }
     }
 
-    public void OnClosePopup(GameObject popup)
+    public void OnClosePopup()
     {
-        Destroy(popup);
+        SharedUIManager.instance.CloseMenu();
     }
-    public void OnCloseGame(GameObject popup)
+
+    public void OnCloseGame()
     {
-        //TO-DO-SAVING?
-        Destroy(popup);
+        FindAnyObjectByType<SaveManager>().Save();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
@@ -201,7 +202,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     /// <summary>the array of the guards that are chasing you </summary>
-    public List<GaurdAI> guardsChasing;
+    public List<GuardAI> guardsChasing;
     
     /// <summary>number of times been arrested</summary>
     private int arrestCount =0;
@@ -226,6 +227,7 @@ public class PlayerController : MonoBehaviour
     #region Public Fields
     [HideInInspector]public bool arrested = false;
     [HideInInspector] public Transform seat = null;
+    public static PlayerController instance { get; private set; }
     /// <summary>bool if second chance activated</summary>
     public bool secondChance;
 
@@ -235,10 +237,13 @@ public class PlayerController : MonoBehaviour
     #region core methods
     public void Awake()
     {
-        cc = GetComponent<CharacterController>();
+        if (instance == null) instance = this;
+        else Debug.LogError("Multiple active players");
+
+            cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
         animator = GetComponentInChildren<Animator>();
-        guardsChasing = new List<GaurdAI>();
+        guardsChasing = new List<GuardAI>();
     }
 
     private int frameNo;
@@ -299,7 +304,7 @@ public class PlayerController : MonoBehaviour
         //Methods to be called every frame
         ApplyJumps();
         LookandRotate();
-        WallRotate();
+        //WallRotate();
         StaminaRecovery();
         GrappleCooldown();
         Boost();
@@ -402,13 +407,16 @@ public class PlayerController : MonoBehaviour
     public void FixedUpdate()
     {
         //Wall checking done here as is a physics method
-        if (!wallRunning && wallRunEnabled)
+        if (wallRunEnabled)
         {
-            CheckForWall();
-        }
-        else
-        {
-            CheckStillWall();
+            if (!wallRunning)
+            {
+                CheckForWall();
+            }
+            else
+            {
+                CheckStillWall();
+            }
         }
     }
 
@@ -569,12 +577,14 @@ public class PlayerController : MonoBehaviour
 
             wishJump = false;
             jumpsUsed++;
+            AudioManager.instance.RandomiseSoundFromType(AudioManager.SoundEnum.jump);
         }
         else if (wishJump && jumpsUsed < noJumps)
         {
             velocity.y = jumpSpeed;
             wishJump = false;
             jumpsUsed++;
+            AudioManager.instance.RandomiseSoundFromType(AudioManager.SoundEnum.jump);
         }
 
         if (wishJump && jumpTimer < jumpWindow) jumpTimer += Time.deltaTime;
@@ -687,6 +697,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 wishDashDir = cam.transform.forward;
             Vector3 wishDashVel = wishDashDir * dashSpeed;
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             velocity += wishDashVel;
             dashesUsed++;
             hasDashed = true;
@@ -763,6 +774,14 @@ public class PlayerController : MonoBehaviour
             curFriction = groundFriction;
             Uncrouch();
 
+            if (rayNo is 1 or 0)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, -20), 0.2f,RotateMode.LocalAxisAdd);
+            }
+            else if(rayNo is 3 or 4)
+            {
+                cam.transform.DOLocalRotate(new(0, 0, 20), 0.2f,RotateMode.LocalAxisAdd);
+            }
         }
         else
         {
@@ -799,7 +818,9 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning = false;
             curFriction = groundFriction;
-            cam.transform.rotation = Quaternion.identity;
+            float rotValue = 0 - cam.transform.localEulerAngles.z;
+            rotValue = rotValue < -180 ? rotValue+360:rotValue;
+            cam.transform.DOLocalRotate(new(cam.transform.localEulerAngles.x, 0, 0), 0.2f);
             maxSpeed = walkSpeed;
             return;
         }
@@ -838,6 +859,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             playerGravity = glideGravity;
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             isGliding = true;
             velocity.y = 0;
             //velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
@@ -866,6 +888,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
             //Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
             isGrappling = true;
         }
@@ -912,7 +935,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// rotates the camera when it conncts with the wall and rotates when it leaves; use tweening engine to animate it properly
     /// </summary>
-    private void WallRotate()
+    /*private void WallRotate()
     {
         if (!isGrappling && wallRunning && cam.transform.localEulerAngles.z == 0 && rayNumber is 1 or 0)
         {
@@ -926,13 +949,13 @@ public class PlayerController : MonoBehaviour
             rotAdjustVal = new Vector3(0, -5, 0);
             //Debug.Log("rotating");
         }
-        else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
+            else if (!wallRunning && cam.transform.localEulerAngles.z != 0)
         {
             float rot = 0 - cam.transform.localEulerAngles.z;
             cam.transform.Rotate(0, 0, rot);
         }
 
-    }
+    }*/
 
     /// <summary>
     /// Called every frame to update where the camera looks and to rotate the character
@@ -942,9 +965,9 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(new Vector3(0, lookInput.x, 0));
 
         camPitch = Mathf.Clamp(camPitch + lookInput.y, -MaxPitch, MaxPitch);
-
-        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, 0);
-
+        
+        cam.transform.localEulerAngles = new Vector3(-camPitch, 0, cam.transform.localEulerAngles.z);
+ 
     }
 
     /// <summary>
@@ -1043,7 +1066,7 @@ public class PlayerController : MonoBehaviour
         velocity -= direction * slowAmt;
     }
 
-    public void addGuard(GaurdAI guard)
+    public void addGuard(GuardAI guard)
     {
         if (!guardsChasing.Contains(guard))
         {
@@ -1051,12 +1074,12 @@ public class PlayerController : MonoBehaviour
             guardsChasing.Add(guard);
             if (AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.guardChasingMusic)
             {
-                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic);
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.guardChasingMusic, true);
             }
         }
     }
 
-    public void removeGuard(GaurdAI guard)
+    public void removeGuard(GuardAI guard)
     {
         if (guardsChasing.Contains(guard))
         {
@@ -1064,7 +1087,7 @@ public class PlayerController : MonoBehaviour
             guardsChasing.Remove(guard);
             if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
             {
-                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic);
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, false);
             }
         }
     }
@@ -1175,6 +1198,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Boosting");
                     if (!boostSpent)
                     {
+                        AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
                         isBoosting = true;
                     }
                     break;
@@ -1212,7 +1236,7 @@ public class PlayerController : MonoBehaviour
 
     #region Ability Swapping
 
-    private void SwapActiveAbility(Ability newAbility)
+    public void SwapActiveAbility(Ability newAbility)
     {
         currentAbility = newAbility;
         MovementUIManager.instance.ChangeMovementUI(newAbility);
@@ -1244,7 +1268,7 @@ public class PlayerController : MonoBehaviour
 /// <summary>
 /// The Enum for the ability that the player currently has selected
 /// </summary>
-enum Ability
+public enum Ability
 {
     None,
     Dash,

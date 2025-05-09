@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -49,6 +50,7 @@ public class ProductRowUI : MonoBehaviour
         price.text = productDataRef.price.ToString();
 
         margin.text = "£"+productDataRef.GetMarginAsString();
+
         ChangeMarginsColour();
     }
 

@@ -24,6 +24,8 @@ public class SkillTreesManager : MonoBehaviour
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
 
+        for (int i = 0; i < SharedUIManager.instance.plushieIndex; i++) EnableNextBranch();
+
         //EnableNextBranch();
     }
 
@@ -96,18 +98,14 @@ public class SkillTreesManager : MonoBehaviour
 
     #region User control
 
-    //TO-DO-SAVING NEEDS TO BE SAVED
     private int nextPlushieToBeRescued = 0;
 
     /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>
     /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
     public void EnableNextBranch()
     {
-        for (int skillTreeNum = 0; skillTreeNum < skillTrees.Count; skillTreeNum++)
-        {
-            skillTrees[skillTreeNum].EnableBranch(nextPlushieToBeRescued);
-            nextPlushieToBeRescued++;
-        }
+        foreach (var tree in skillTrees) tree.EnableBranch(nextPlushieToBeRescued);
+        nextPlushieToBeRescued++;
     }
 
     public List<SkillTreeController> GetSkillTreeControllers()

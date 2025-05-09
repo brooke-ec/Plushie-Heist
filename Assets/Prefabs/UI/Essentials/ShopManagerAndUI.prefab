@@ -6738,7 +6738,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00048828125, y: 354.50122}
+  m_AnchoredPosition: {x: 0.0004272461, y: 354.50122}
   m_SizeDelta: {x: 1628.1138, y: 709}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3477509494547937845
@@ -11383,14 +11383,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storage: {fileID: 5686518253683028208}
   day: 0
-  levels:
+  stocksController: {fileID: 6170634860539538375}
+  layouts:
   - {fileID: -2094486795351671689, guid: 3ac7bba01cca2414aa8c04a6775e982d, type: 3}
   mainCanvas: {fileID: 4121967851801147313}
   isShopOpen: 0
-  stocksController: {fileID: 6170634860539538375}
   shopTimerPrefab: {fileID: 7074723770633863849, guid: 685b72897690c064c8e1e47b5e90088f, type: 3}
   openOrCloseShopButton: {fileID: 0}
-  tipPercentage: 1
+  tipPercentage: 0
   itemBuyingMultiplier: 1
   numOfCustomersServed: 0
   tipsReceivedToday: 0
@@ -11411,6 +11411,7 @@ MonoBehaviour:
   allItemsInGame: []
   allStocksInGame: []
   setPricingUIPrefab: {fileID: 2970004202803248526, guid: 8cb4514f78eaf2d4d9fcbca6616eb89c, type: 3}
+  purchaseRange: {x: 0.65, y: 0.75}
   maxPercentOfItemsToChange: 0.5
   minPercentOfItemsToChange: 0.2
 --- !u!114 &3498377954648177128
@@ -16024,7 +16025,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: fc06ef63e49931b4282b0128e936a3fb, type: 3}
     - target: {fileID: 2014771383954596639, guid: fb18a7ce72c9df347a92f7159ce7c1b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2014771383954596639, guid: fb18a7ce72c9df347a92f7159ce7c1b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

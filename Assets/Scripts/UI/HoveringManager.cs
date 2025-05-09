@@ -13,7 +13,6 @@ public class HoveringManager : MonoBehaviour
     public GameObject inventoryTooltipInteractionPrefab;
 
     public static GameObject currentTooltipOpen;
-    public static GameObject currentInventoryTooltipOpen;
 
     public Vector3 offset = Vector3.one;
 

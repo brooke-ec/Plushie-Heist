@@ -46,7 +46,7 @@ public class Clock : MonoBehaviour
         this.isShopClock = isShopClock;
         if (isShopClock)
         {
-            lengthOfDayInRealMins = 5;
+            lengthOfDayInRealMins = 3f;
 
             GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
             dayStartHour = 9;
@@ -54,7 +54,7 @@ public class Clock : MonoBehaviour
         }
         else
         {
-            lengthOfDayInRealMins = 2.5f;
+            lengthOfDayInRealMins = 2f;
             dayStartHour = 21;
             dayEndHour = 5;
         }
@@ -103,7 +103,6 @@ public class Clock : MonoBehaviour
     {
         if(!clockCurrentlyRunning) { return; }
 
-        //TO-DO play a sound
         StopCoroutine(StartClock());
         clockCurrentlyRunning = false;
 

@@ -1,5 +1,5 @@
+using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,10 +11,11 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private FurnitureItem[] allItemsInGame;
-    [HideInInspector] public List<ProductData> allStocksInGame;
+    [HideInInspector] [JsonProperty("pricing")] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
+
+    public Vector2 purchaseRange = new Vector2(0.65f, 0.75f);
 
     [Range(0, 1)]
     public float maxPercentOfItemsToChange = 0.5f;
@@ -25,20 +26,20 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            if (allStocksInGame == null) CreateAllProductData();
+            UpdatePricingTable();
+        });
     }
 
-    private void Start()
-    {
-        allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.RESOURCES_PATH);
-        CreateAllProductData(); // Only references should be set up in Awake()
-    }
-
-    public void CreateAllProductData()
+    private void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 
+        FurnitureItem[] allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.PATH);
         allStocksInGame = new List<ProductData>(allItemsInGame.Length);
-        foreach(FurnitureItem item in allItemsInGame)
+        foreach (FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -48,28 +49,16 @@ public class StocksController : MonoBehaviour
     #endregion
 
     #region Actions
-    /// <summary>
-    /// TO-DO Call when furniture is placed OR new item added to inventory
-    /// Essentially, we check if the passed furniture is already part
-    /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
-    /// </summary>
-    public void TryAddFurnitureToPricingTable(FurnitureItem item)
+    public void UpdatePricingTable()
     {
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
-        {
-            print("Adding");
-            pricingTableManager.TryAddNewProduct(product);
-        }
-    }
+        FurnitureItem[] all = FindObjectsOfType<FurnitureController>().Select(c => c.item)
+            .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
+            .Distinct().ToArray();
 
-    public void TryRemoveFurnitureFromPricingTable(FurnitureItem item)
-    {
-        print("Removing");
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
+        foreach (ProductData stock in allStocksInGame)
         {
-            pricingTableManager.TryRemoveProduct(product);
+            if (all.Contains(stock.itemRef)) pricingTableManager.TryAddNewProduct(stock);
+            else pricingTableManager.TryRemoveProduct(stock);
         }
     }
 
@@ -137,6 +126,7 @@ public class StocksController : MonoBehaviour
     /// </summary>
     public float GetSellingPriceOfItem(FurnitureItem item)
     {
+
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
@@ -144,8 +134,8 @@ public class StocksController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Selling price of item is wrong. Giving 0");
-            return 0;
+            Debug.LogError("Selling price of item is wrong. Giving max value");
+            return int.MaxValue;
         }
     }
     #endregion

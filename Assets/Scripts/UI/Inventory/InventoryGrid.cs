@@ -29,10 +29,10 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         set { CreateInventoryGrid(value.x, value.y); }
     }
 
-    InventoryItem[,] inventorySlots;
+    InventoryItem[,] inventorySlots = new InventoryItem[0,0];
     private float scaleFactor;
 
-    [JsonProperty("items", Order = 999)]
+    [JsonProperty("items")]
     public InventoryItem[] items
     {
         get
@@ -49,19 +49,22 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    public void StartInventory()
+    private void Awake()
     {
+        scaleFactor = SharedUIManager.instance.scaleFactor;
         rectTransform = GetComponent<RectTransform>();
 
-        scaleFactor = SharedUIManager.instance.scaleFactor;
-
-        CreateInventoryGrid(inventoryWidth, inventoryHeight);
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
+        });
     }
 
     #region Setup
     /// <summary> Create inventory grid of width and height, such as 3x3  /// </summary>
     public void CreateInventoryGrid(int width, int height)
     {
+        Awake();
         inventoryWidth = width;
         inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];
@@ -160,7 +163,10 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public InventoryItem PickUpItem(int xPos, int yPos)
     {
-        if (xPos >= inventoryWidth || yPos >= inventoryHeight) { return null; }
+        if (inventorySlots == null
+            || xPos >= inventoryWidth || yPos >= inventoryHeight
+            || xPos < 0 || yPos < 0
+        ) { return null; }
 
         InventoryItem item = inventorySlots[xPos, yPos];
 
@@ -340,29 +346,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ModifyInventorySize(int addedRowModifier)
     {
-        //copy inventory items to here
-        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
-        for(int x=0; x<inventoryWidth; x++)
-        {
-            for(int y=0; y<inventoryHeight; y++)
-            {
-                copyOfInventorySlots[x, y] = inventorySlots[x, y];
-            }
-        }
+        InventoryItem[] original = items;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
 
-        //now add those items properly to the new inventory slots
-        for (int x = 0; x < inventoryWidth; x++)
+        foreach (var item in original)
         {
-            for (int y = 0; y < inventoryHeight; y++)
-            {
-                InventoryItem item = copyOfInventorySlots[x, y];
-                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
-                {
-                    PlaceItem(item, x, y);
-                }
-            }
+            PlaceItem(item, item.position.x, item.position.y);
         }
 
         inventoryHeight += addedRowModifier;
@@ -376,7 +366,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void CreateItemInteractionMenu(InventoryItem item)
     {
-        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
         Vector3 mousePos = Input.mousePosition;
 
         InventoryController controller = FindAnyObjectByType<InventoryController>();

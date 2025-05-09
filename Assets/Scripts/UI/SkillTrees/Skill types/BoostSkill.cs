@@ -32,7 +32,7 @@ public class BoostSkill : Skill
         switch (skillType)
         {
             case SkillType.PlayerBackpackSize:
-                FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);
+                if (!SaveManager.deserializing) FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);
                 break;
             case SkillType.PlayerItemLostPercent:
                 if (isNight) { NightManager.instance.itemLosePercentage -= (int)modifier; }
@@ -41,35 +41,34 @@ public class BoostSkill : Skill
                 if (isNight) { NightManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.PlayerExtraDash:
-                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("dash", modifier); }
+                if (isNight) { PlayerController.instance.ModifyAbilityValue("dash", modifier); }
                 break;
             case SkillType.PlayerExtraJump:
-                PlayerController playerController = FindAnyObjectByType<PlayerController>();
-                if (playerController != null) { playerController.ModifyAbilityValue("jump", modifier); }
+                PlayerController.instance.ModifyAbilityValue("jump", modifier);
                 break;
             case SkillType.PlayerExtraBoost:
-                if (isNight) { FindAnyObjectByType<PlayerController>().ModifyAbilityValue("boost", modifier); }
+                if (isNight) { PlayerController.instance.ModifyAbilityValue("boost", modifier); }
                 break;
             case SkillType.ShopExtraTime:
                 if (!isNight) { ShopManager.instance.UpdateClockTime(modifier); }
                 break;
             case SkillType.ShopInventorySize:
-                if (!isNight) { FindAnyObjectByType<InventoryController>().backpackGrid.ModifyInventorySize((int)modifier);}
+                if (!isNight && !SaveManager.deserializing) { InventoryController.instance.storageGrid.ModifyInventorySize((int)modifier);}
                 break;
             case SkillType.ShopCustomerSpawnRate:
                 if (!isNight) {
-                    CustomerController customerController = FindAnyObjectByType<CustomerController>();
-                    if(customerController!=null) { customerController.IncreaseCustomerSpawnRate(modifier); }
+                        CustomerController customerController = FindAnyObjectByType<CustomerController>();
+                        if(customerController!=null) { customerController.IncreaseCustomerSpawnRate(modifier); }
                     }
                 break;
             case SkillType.ShopCustomerTips:
-                if (!isNight) { ShopManager.instance.tipPercentage += modifier; } //TO-DO * AVERAGE TIPS (have a tips variable set to 1)
+                if (!isNight) { Debug.Log("Unlock"); ShopManager.instance.tipPercentage += modifier; }
                 break;
             case SkillType.ShopHigherPrices:
-                if (!isNight) { } //TO-DO * AVERAGE PRICE RANGE THAT CUSTOMERS WILL BUY
+                if (!isNight) ShopManager.instance.stocksController.purchaseRange += Vector2.one * 0.05f;
                 break;
             case SkillType.ShopImpulseBuyers:
-                if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; } //TO-DO * AVERAGE NUM OF ITEMS THAT CUSTOMERS BUY
+                if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; }
                 break;
             case SkillType.ShopMarketStability:
                 if (!isNight) {
@@ -78,7 +77,7 @@ public class BoostSkill : Skill
                 }
                 break;
             case SkillType.ShopExpansion:
-                if (!isNight) { } //TO-DO-SAVING
+                if (!isNight && !SaveManager.deserializing) ShopManager.instance.UpgradeLayout();
                 break;
             default:
                 Debug.Log("Error in boost skill type");

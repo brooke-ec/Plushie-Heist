@@ -7,18 +7,16 @@ public class TileCuller : MonoBehaviour
     private LevelTile[] tiles;
 
     private TileGenerator tileGenerator;
-    private Transform player;
     private Vector2Int previous;
 
     void Start()
     {
-        player = FindAnyObjectByType<PlayerController>().transform;
         tileGenerator = GetComponent<LevelGenerator>().tileGenerator;
     }
 
     void Update()
     {
-        Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(player.position));
+        Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(PlayerController.instance.transform.position));
         if (previous != position)
         {
             tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));

@@ -1,24 +1,31 @@
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Used ONLY for shared UI between shop and night (inventory)
+/// Used ONLY for shared between shop and night (inventory)
 /// </summary>
 public class SharedUIManager : MonoBehaviour
 {
     public Canvas rootCanvas;
+    [JsonProperty("skills", Order = -1)] public List<Skill> unlockedSkills = new List<Skill>();
     [HideInInspector] public float scaleFactor;
     [HideInInspector] public IUIMenu currentMenu = null;
     [HideInInspector] public bool isMenuOpen => currentMenu != null;
     [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
-    
-    private PlayerInput playerInput;
+    [JsonProperty("plushie")] public PlushieInfo plushie = null;
+    [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
+    public int plushieIndex => plushie == null ? 0 : plushie.order;
 
+    public bool menusDisabled = false;
+    private PlayerInput playerInput;
     public static SharedUIManager instance { get; private set; }
 
     private void Awake()
     {
+        scaleFactor = rootCanvas.scaleFactor;
         if (instance != null)
         {
             Destroy(this);
@@ -27,12 +34,17 @@ public class SharedUIManager : MonoBehaviour
         {
             instance = this;
         }
+
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            foreach (var item in unlockedSkills) item.Unlock();
+        });
     }
 
     private void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
-        scaleFactor = rootCanvas.scaleFactor;
+        CloseMenu();
 
         if (NightManager.instance != null)
         {
@@ -45,6 +57,8 @@ public class SharedUIManager : MonoBehaviour
 
     public void OpenMenu(IUIMenu menu)
     {
+        if (menusDisabled) return;
+
         print($"Opening Menu: {menu}");
         if (currentMenu != null) currentMenu.SetOpenState(false);
         
@@ -60,6 +74,8 @@ public class SharedUIManager : MonoBehaviour
 
     public void CloseMenu()
     {
+        if (menusDisabled) return;
+
         print("Closing all menus");
         onMenuClose.Invoke();
 

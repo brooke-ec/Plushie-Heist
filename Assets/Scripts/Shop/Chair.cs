@@ -10,7 +10,7 @@ public class Chair : MonoBehaviour, IInteractable
 
     void IInteractable.PrimaryInteract(Interactor interactor)
     {
-        interactor.GetComponent<PlayerController>().seat = anchor;
+       PlayerController.instance.seat = anchor;
     }
 
 #if UNITY_EDITOR

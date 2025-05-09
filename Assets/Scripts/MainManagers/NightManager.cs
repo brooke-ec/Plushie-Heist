@@ -37,16 +37,13 @@ public class NightManager : MonoBehaviour
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
-    [SerializeField] private PlushieInfo defaultPlushieInfo;
-
     private PlayerInput playerInput;
 
     public void LoadNight()
     {
-        //TO-DO probably load ikea procedural stuff etc
-
         //load UI saying what the night is about, and the continue button calls StartNight()
         playerInput.SwitchCurrentActionMap("MenuActions");
+        SharedUIManager.instance.menusDisabled = true;
         Cursor.lockState = CursorLockMode.None;
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
@@ -55,7 +52,7 @@ public class NightManager : MonoBehaviour
             }
         );
 
-        LoadPlushieIndicator(defaultPlushieInfo);
+        LoadPlushieIndicator(SharedUIManager.instance.plushie.next);
     }
 
     /// <summary>
@@ -85,11 +82,25 @@ public class NightManager : MonoBehaviour
     public void OnEndNight(bool successful)
     {
         print("night ENDED");
+
+        nightTimer.StopAllCoroutines();
+
+        //even if you rescue it, if caught then you lose it
+        if (!successful) { hasRescuedPlushie = false; }
+        SharedUIManager.instance.menusDisabled = true;
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
         GetComponent<GaurdSpawer>().stopGuards();
+
         //Call end stuff
-        escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
+        if(!hasRescuedPlushie)
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, null);
+        }
+        else
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, SharedUIManager.instance.plushie.next);
+        }
     }
 
     public void UpdateClockTime(float extraTimeInMins)
@@ -109,9 +120,7 @@ public class NightManager : MonoBehaviour
 
     private void LoadPlushieIndicator(PlushieInfo plushieInfo=null)
     {
-        //TO-DO-SAVING load what plushie needs to be rescued next (PlushieInfo)
-
-        if(plushieInfo!=null) { plushieIcon.sprite = plushieInfo.plushieIcon; }
+        if(plushieInfo != null) { plushieIcon.sprite = plushieInfo.icon; }
         if (hasRescuedPlushie)
         {
             plushieIcon.color = Color.white;

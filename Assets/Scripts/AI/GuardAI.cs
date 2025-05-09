@@ -1,31 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Apple;
 
-public class GaurdAI : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+public class GuardAI : MonoBehaviour
 {
     #region public & Serialised fields
     /// <summary>Time The guard will search chase you after it stops detecting you until it stops</summary>
     [SerializeField] private float DetectionTime;
     /// <summary>The points the guard patrols between</summary>
-    public Transform[] patrolPoints;
+    [HideInInspector] public Transform[] patrolPoints;
 
     public bool GuardActive;
-    
+
     #endregion
     #region private fields
     /// <summary>NavMeshAgent component </summary>
-    protected NavMeshAgent agent;
+    private NavMeshAgent agent;
     /// <summary>The animator component</summary>
-    public Animator anim;
+    protected Animator anim;
     /// <summary>NavMeshAgent component </summary>
     protected GameObject chasee;
     /// <summary>Time since last detected</summary>
     private float detectionTimer;
     /// <summary>The current destination to patrol to</summary>
     private int curPatrolIndex;
+    protected new AudioSource audio;
 
 
     #endregion
@@ -35,6 +34,7 @@ public class GaurdAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.destination = patrolPoints[0].position;
         anim = GetComponentInChildren<Animator>();
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -45,10 +45,11 @@ public class GaurdAI : MonoBehaviour
             if (chasee != null && detectionTimer <= DetectionTime)
             {
                 agent.destination = chasee.transform.position;
+
                 detectionTimer += Time.deltaTime;
                 agent.autoBraking = true;
                 anim.SetBool("Caught", false);
-                if (chasee != null && chasee.GetComponent<PlayerController>().arrested)
+                if (chasee != null && PlayerController.instance.arrested)
                 {
                     agent.speed = 0;
                 }
@@ -69,18 +70,19 @@ public class GaurdAI : MonoBehaviour
     #endregion
 
     #region Player Interaction
-    public void detect(GameObject detectee)
+    public void Detect(GameObject detectee)
     {
         Ray LOSRay = new Ray(transform.position, detectee.transform.position - (transform.position+new Vector3(0,-1,0)));
         Debug.DrawRay(transform.position, detectee.transform.position - (transform.position + new Vector3(0, -1, 0)));
         RaycastHit hitinfo = new RaycastHit();
         if (Physics.Raycast(LOSRay, out hitinfo) && hitinfo.collider.gameObject.tag == "Player"){
+            if (chasee == null) audio.Play();
             chasee = detectee;
             //Debug.Log("Detected");
             detectionTimer = 0;
-            agent.speed = 5;
+            agent.speed = 10;
             anim.SetBool("Chasing", true);
-            chasee.GetComponent<PlayerController>().addGuard(this);
+            PlayerController.instance.addGuard(this);
         }
     }
 
@@ -92,6 +94,7 @@ public class GaurdAI : MonoBehaviour
             curPatrolIndex = (curPatrolIndex + 1) % patrolPoints.Length;
             agent.destination = patrolPoints[curPatrolIndex].position;
             agent.speed = 3.5f;
+            chasee = null;
             anim.SetBool("Chasing", false);
             anim.SetBool("Arrest", false);
             //Debug.Log("Patrol");
@@ -100,7 +103,7 @@ public class GaurdAI : MonoBehaviour
 
     private void Arrest()
     {
-        chasee.GetComponent<PlayerController>().arrested = true;
+        PlayerController.instance.arrested = true;
         //Debug.Log("arrest"+transform.position);
         //Debug.Log(agent.remainingDistance+transform.position.ToString());
         //Debug.Break();
@@ -112,7 +115,7 @@ public class GaurdAI : MonoBehaviour
         
         if (chasee != null)
         {
-            chasee.GetComponent<PlayerController>().removeGuard(this);
+            PlayerController.instance.removeGuard(this);
             chasee = null;
         }
 

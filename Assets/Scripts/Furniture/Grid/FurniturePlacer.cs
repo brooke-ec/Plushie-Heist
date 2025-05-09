@@ -58,8 +58,7 @@ public class FurniturePlacer : MonoBehaviour
     private void Move(Vector3 target)
     {
         if (item == null || item.grid == null) return;
-        target -= new Vector3(item.gridShape.x, 0, item.gridShape.y) / 2 * FurnitureSettings.instance.cellSize;
-        item.GridMove(Vector2Int.RoundToInt(item.grid.FromWorldspace(target)));
+        item.GridMoveWorld(target);
     }
 
     /// <summary>
@@ -82,6 +81,7 @@ public class FurniturePlacer : MonoBehaviour
 
         if (item != null && item.IsGridValid())
         {
+            Instantiate(FurnitureSettings.instance.effect, item.transform.position, Quaternion.identity);
             onPlaced.Invoke();
             item.grid.AddItem(item);
             item = null;

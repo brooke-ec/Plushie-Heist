@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -58,7 +60,6 @@ public class CustomerAI : MonoBehaviour
 
     void Update()
     {
-        animator.SetBool("shopping", state == State.Shopping);
         animator.SetBool("walking", !finishedWalking);
 
         if (finishedWalking)
@@ -85,7 +86,7 @@ public class CustomerAI : MonoBehaviour
                         NextAction();
                         break;
                     case State.Shopping:
-                        this.RunAfter(pickupTime, PickedUp);
+                        PickUp();
                         break;
                     case State.Leaving:
                         Destroy(gameObject);
@@ -96,14 +97,49 @@ public class CustomerAI : MonoBehaviour
         else navAgent.updateRotation = true;
     }
 
+    private void PickUp()
+    {
+        if (currentItem != null)
+        {
+            float price = ShopManager.instance.stocksController.GetSellingPriceOfItem(currentItem.item);
+            float max = currentItem.item.marketPrice * Random.Range(
+                ShopManager.instance.stocksController.purchaseRange.x,
+                ShopManager.instance.stocksController.purchaseRange.y
+            );
+
+            if (price > max)
+            {
+                animator.SetTrigger("shake");
+                this.RunAfter(pickupTime, NextItem);
+            } else
+            {
+                animator.SetTrigger("pickup");
+                this.RunAfter(pickupTime, PickedUp);
+            }
+        } else NextItem();
+    }
+
     /// <summary>
     /// Handles the customer Searching the Shelf by giving it a timer to be searching for.
     /// Then it assigns the next destination for the player to move to
     /// </summary>
     private void PickedUp()
     {
-        basket.Add(currentItem.item);
+        if (currentItem != null)
+        {
+            basket.Add(currentItem.item);
 
+            if (
+                !ShopManager.instance.autoRestocking ||
+                !InventoryController.instance.RemoveAnItemTypeFromInventory(currentItem.item, false)
+            ) currentItem.Remove();
+        }
+
+        NextItem();
+    }
+
+    private void NextItem()
+    {
         shoppingList.Dequeue();
         NextAction();
     }
@@ -113,17 +149,18 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void NextAction()
     {
-        if (shoppingList.Count > 0) NextItem();
+        if (shoppingList.Count > 0) PathItem();
         else if (basket.Count > 0) StartQueuing();
+        else if (shoppingList.Count == 0 && state == State.Uninitialized) CheckShop(5);
         else LeaveShop();
     }
 
     /// <summary>
     /// Tells the <see cref="navAgent"/> to path to the next item on the shopping list
     /// </summary>
-    private void NextItem()
+    private void PathItem()
     {
-        if (NavMesh.SamplePosition( // Get closest position to item
+        if (!currentItem.IsDestroyed() && NavMesh.SamplePosition( // Get closest position to item
             currentItem.transform.position,
             out NavMeshHit hit, float.PositiveInfinity, NavMesh.AllAreas)
         ) {
@@ -131,7 +168,7 @@ public class CustomerAI : MonoBehaviour
             state = State.Shopping;
         } else {
             shoppingList.Dequeue();
-            NextItem();
+            PathItem();
         }
     }
 
@@ -142,6 +179,21 @@ public class CustomerAI : MonoBehaviour
     {
         state = State.Queueing;
         till.AddToQueue(this);
+    }
+
+    public void CheckShop(float radius)
+    {
+        if (Random.Range(0, 3) == 0) LeaveShop();
+        else
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * radius;
+            randomDirection += till.transform.position;
+            Vector3 finalPosition = till.transform.position;
+            if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, radius, 1))
+                finalPosition = hit.position;
+
+            SetDestination(finalPosition);
+        }
     }
 
     /// <summary>

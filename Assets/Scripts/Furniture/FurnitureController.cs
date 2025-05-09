@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine.AI;
 using Newtonsoft.Json;
+using static UnityEngine.GraphicsBuffer;
 
 public class FurnitureController : MonoBehaviour, IInteractable
 {
@@ -44,6 +45,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     public bool canSell => empty && ShopManager.instance != null && placed;
     /// <summary> The world space bounding volume of this item </summary>
     public Bounds bounds => collider.bounds;
+    public Vector3 gridOffset => new Vector3(gridShape.x, 0, gridShape.y) / 2 * FurnitureSettings.instance.cellSize;
 
     public string key => throw new System.NotImplementedException();
 
@@ -74,18 +76,21 @@ public class FurnitureController : MonoBehaviour, IInteractable
     private void Start()
     {
         GetComponentsInChildren<MeshRenderer>().ForEach(m => m.AddComponent<Outline>().enabled = false);
-        this.AddComponent<NavMeshObstacle>().carving = true;
-
         if (inventoryController != null) inventoryController.onChanged.AddListener(() => {
             hasSpace = inventoryController.CanInsert(item);
         });
 
-        foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+        if (ShopManager.instance != null)
         {
-            empty = subgrids.All(s => s.IsEmpty());
-        });
+            gameObject.AddComponent<NavMeshObstacle>().carving = true;
 
-        PlaceSellingMarker();
+            foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
+            {
+                empty = subgrids.All(s => s.IsEmpty());
+            });
+
+            PlaceSellingMarker();
+        }
     }
 
     /// <summary>
@@ -110,13 +115,18 @@ public class FurnitureController : MonoBehaviour, IInteractable
 
         if (inventoryController.InsertItem(item))
         {
-            if (grid != null) grid.RemoveItem(this);
-
-            Destroy(gameObject);
+            Remove();
             Debug.Log("Picked Up" + gameObject.name);
         }
         else Debug.Log("Can't Pick up" + gameObject.name);
 
+    }
+
+    public void Remove()
+    {
+        if (grid != null) grid.RemoveItem(this);
+        Instantiate(FurnitureSettings.instance.effect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -140,6 +150,11 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         transform.Rotate(0, 90, 0);
         GridMove(gridPosition);
+    }
+
+    public void GridMoveWorld(Vector3 target)
+    {
+        GridMove(Vector2Int.RoundToInt(grid.FromWorldspace(target - gridOffset)));
     }
 
     /// <summary>

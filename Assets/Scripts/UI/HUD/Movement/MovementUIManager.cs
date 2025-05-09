@@ -132,8 +132,6 @@ public class MovementUIManager : MonoBehaviour
     /// <returns></returns>
     internal List<(Ability, string, Sprite)> GetAllAbilitiesInfo()
     {
-        //TO-DO-SAVING SAVE CURRENTLYLEARNEDABILITIES IN BETWEEN SCENES
-
         List<(Ability, string, Sprite)> abilitiesInfo = new List<(Ability, string, Sprite)>();
         foreach(Ability ability in abilities.Keys)
         {

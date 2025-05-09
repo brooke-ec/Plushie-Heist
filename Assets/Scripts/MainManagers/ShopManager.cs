@@ -2,9 +2,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Manages the flow of things in the daytime.
@@ -15,35 +17,65 @@ using UnityEngine.Events;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField][JsonProperty("storage")] private InventoryGrid storage;
+    [JsonProperty("storage")] public InventoryGrid storage => InventoryController.instance.storageGrid;
     [JsonProperty("hasShopBeenOpenToday")] private bool hasShopBeenOpenToday = false;
-    [JsonProperty("layout")] private GridSaver layout;
-    [JsonProperty("level")] private int level = 0;
+    [JsonProperty("stock")] public StocksController stocksController;
+    [JsonProperty("layout")] private ShopLayout layout;
+    [JsonProperty("money")] private float money = 0;
     [JsonProperty("day")] public int day;
 
-    [SerializeField] private GridSaver[] levels;
+    [SerializeField] private ShopLayout[] layouts;
 
     public Canvas mainCanvas;
     public bool isShopOpen = false;
     public static ShopManager instance { get; private set; }
-    public StocksController stocksController;
 
-    [OnDeserializing]
-    internal void Factory(StreamingContext context)
+    public ShopLayout UpgradeLayout()
     {
-        instance.SetLevel(level);
+        return SetLayout(layout.level + 1);
     }
 
-    private void SetLevel(int level)
+    public ShopLayout SetLayout(int level)
     {
-        if (layout != null) Destroy(layout);
+        // Save placed furniture
+        FurnitureController[] items = new FurnitureController[0];
+        if (layout != null)
+        {
+            items = layout.grids.SelectMany(g => g.items).ToArray();
+            foreach (FurnitureController item in items) item.transform.parent = null;
+            Destroy(layout.gameObject);
+        }
 
-        layout = Instantiate(levels[level]);
-        this.level = level;
+        // Switch Layout
+        layout = Instantiate(layouts[level]);
+        layout.level = level;
+
+        // Place on new grids
+        foreach (FurnitureController item in items)
+        {
+            // Try to keep in same place
+            Vector2Int postion = Vector2Int.zero;
+            FurnitureGrid grid = null;
+
+            for (int i = 0;  i < layout.grids.Length; i++)
+            {
+                grid = layout.grids[i];
+                postion = Vector2Int.RoundToInt(grid.FromWorldspace(item.transform.position - item.gridOffset));
+                Region region = new Region().FromSize(postion, item.gridShape);
+                if (region.Within(grid.size)) break;
+            }
+            
+            // Place regardless of a valid grid was found it will be impossible to intersect anyway
+            item.GridPlace(grid, postion);
+            grid.AddItem(item);
+        }
+        
+        return layout;
     }
 
     private void Awake()
     {
+        SaveManager.onLoaded.AddListener(() => { if (layout == null) SetLayout(0); });
         if (instance != null)
         {
             Destroy(this);
@@ -53,26 +85,19 @@ public class ShopManager : MonoBehaviour
         {
             instance = this;
         }
-    }
-    private void Start()
-    {
-        stocksController.CreateAllProductData();
 
+        // Not good practice
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         shopTimer.SetupClock(true);
-
-        StartNewDay();
     }
-
-
 
     #region Time
 
     [SerializeField] private Clock shopTimerPrefab;
     private Clock shopTimer;
     [HideInInspector] public OpenOrCloseShopButton openOrCloseShopButton;
-    private void StartNewDay()
+    public void StartNewDay()
     {
         day++;
         hasShopBeenOpenToday = false;
@@ -92,7 +117,6 @@ public class ShopManager : MonoBehaviour
         isShopOpen = true;
         hasShopBeenOpenToday = true;
         shopTimer.StartCoroutine(shopTimer.StartClock());
-        //TO-DO Make clients come
     }
 
     /// <summary>
@@ -105,12 +129,6 @@ public class ShopManager : MonoBehaviour
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.lowPitchBell);
         isShopOpen = false;
         shopTimer.OnTimeEnded(); //make sure it's ended
-        
-        //TO-DO MAKE CLIENTS STOP COMING
-
-        //Won't be here, as this will actually be triggered once the LAST customer is done
-        //AND THEN the night is over, that's when it will be called
-        //StartNewDay();
     }
     #endregion
 
@@ -134,7 +152,6 @@ public class ShopManager : MonoBehaviour
     #endregion
 
     #region Money
-    private float money = 0;
     public static event Action OnMoneyChanged;
 
     public float GetMoney()
@@ -151,8 +168,9 @@ public class ShopManager : MonoBehaviour
     #endregion
 
     #region Customers
-    [HideInInspector] public float tipPercentage = 1;
+    [HideInInspector] public float tipPercentage = 0;
     [HideInInspector] public float itemBuyingMultiplier = 1;
+    [HideInInspector] public bool autoRestocking = false;
 
     [HideInInspector] public int numOfCustomersServed = 0;
     [HideInInspector] public float tipsReceivedToday = 0;

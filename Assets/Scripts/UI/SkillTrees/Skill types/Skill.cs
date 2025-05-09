@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New skill", menuName = "Scriptable Objects/Skill tree/Skills/New skill")]
-public class Skill : ScriptableObject
+public class Skill : ResourcesAsset
 {
     public string skillName;
     public List<Skill> requirements;

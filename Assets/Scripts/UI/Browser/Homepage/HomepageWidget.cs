@@ -36,7 +36,7 @@ public class HomepageWidget : MonoBehaviour
                 }
                 break;
             case BrowserPageType.leaveGame:
-                button.onClick.AddListener(() => GetComponent<CloseGamePopup>().SetUp());
+                button.onClick.AddListener(() => SharedUIManager.instance.OpenMenu(GetComponent<CloseGamePopup>()));
                 break;
             case BrowserPageType.gossipOfTheDay:
                 MakeGossipOfTheDay();

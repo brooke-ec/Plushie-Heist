@@ -11,6 +11,8 @@ public class ProductData
     [HideInInspector] public float lastMarketPrice;
     public float price;
 
+    public ProductData() { }
+
     public ProductData(FurnitureItem item, int todaysDay)
     {
         itemRef = item;

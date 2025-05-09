@@ -32,7 +32,7 @@ public class PlushieInfoUI : MonoBehaviour
         topContainer.GetChild(3).GetComponent<Button>().onClick.AddListener(() => OpenOrCloseInfo());
 
         //Now setup plushie bottom
-        foreach (SkillTreeUnlockable unlockables in plushieInfo.unlockableSkills)
+        foreach (SkillTreeUnlockable unlockables in plushieInfo.unlockedSkills)
         {
             //for each skill tree
             foreach (Skill skill in unlockables.skillsToEnable)
@@ -53,8 +53,8 @@ public class PlushieInfoUI : MonoBehaviour
 
     private void SetUpPlushieTop()
     {
-        topContainer.GetChild(0).GetComponent<Image>().sprite = plushieInfo.plushieIcon;
-        topContainer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Plushie Number "+plushieInfo.plushieNumber + "\n"+plushieInfo.plushieName;
+        topContainer.GetChild(0).GetComponent<Image>().sprite = plushieInfo.icon;
+        topContainer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Plushie Number "+plushieInfo.order + "\n"+plushieInfo.name;
 
         if (plushieInfo.unlocked)
         {
