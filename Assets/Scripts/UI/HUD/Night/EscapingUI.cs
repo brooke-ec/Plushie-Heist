@@ -84,6 +84,7 @@ public class EscapingUI : MonoBehaviour
         // like dialogue.onDialogueEnd = pass to scene method
         escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
         {
+            SaveManager.instance.Save();
             LoadingSceneController.instance.LoadSceneAsync(1);
         });
     }

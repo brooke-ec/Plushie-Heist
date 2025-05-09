@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,6 +27,7 @@ public class SaveManager : MonoBehaviour
     [JsonProperty("shop")] internal ShopManager shop => ShopManager.instance;
 
     private string path => Application.persistentDataPath + "/" + slot + ".json";
+    private JObject deserialized;
 
     private void Awake()
     {
@@ -45,7 +47,9 @@ public class SaveManager : MonoBehaviour
         using StreamReader sr = new StreamReader(path);
         using JsonReader jr = new JsonTextReader(sr);
 
-        serializer.Populate(jr, this);
+        deserialized = JObject.Load(jr); // Deserialize for merging later
+        serializer.Populate(deserialized.CreateReader(), this); // Deserialize into level
+        
         onLoaded.Invoke();
         deserializing = false;
     }
@@ -55,7 +59,9 @@ public class SaveManager : MonoBehaviour
         using StreamWriter sw = new StreamWriter(path);
         using JsonWriter jw = new JsonTextWriter(sw);
 
-        serializer.Serialize(jw, this);
+        JObject serialized = JObject.FromObject(this, serializer);
+        if (shop == null) serialized["shop"] = deserialized["shop"];
+        serialized.WriteTo(jw);
 
         Debug.Log($"Data succesfully saved to '{path}'");
     }
