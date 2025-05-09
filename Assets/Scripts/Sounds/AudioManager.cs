@@ -77,7 +77,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void RandomiseMusicFromType(MusicEnum musicType)
+    public void RandomiseMusicFromType(MusicEnum musicType)
     {
         List<Music> musicToChoose = new List<Music>();
 
@@ -99,6 +99,30 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogWarning("No music found for " + musicType);
             PlayMusic(music[0].musicName);
+        }
+    }
+
+    public void RandomiseSoundFromType(SoundEnum soundType)
+    {
+        List<Sound> soundToChoose = new List<Sound>();
+
+        //find all of that type
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            if (sounds[i] != null && sounds[i].soundName.Equals(soundType))
+            {
+                soundToChoose.Add(sounds[i]);
+            }
+        }
+
+        if (soundToChoose.Count > 0)
+        {
+            int num = UnityEngine.Random.Range(0, soundToChoose.Count);
+            PlaySpecificSound(soundToChoose[num]);
+        }
+        else
+        {
+            Debug.LogWarning("No sound found for " + soundType);
         }
     }
 
@@ -174,6 +198,12 @@ public class AudioManager : MonoBehaviour
         soundGiven?.audioSource.Play();
     }
 
+    public void PlaySpecificSound(Sound soundGiven, int percentageOfVolume = 100)
+    {
+        soundGiven.volume = soundGiven.volume * (percentageOfVolume / 100f);
+        soundGiven?.audioSource.Play();
+    }
+
     public enum SoundEnum
     {
         UIhover,
@@ -192,7 +222,9 @@ public class AudioManager : MonoBehaviour
         backpackOpen,
         backpackClose,
         selling,
-        dialogueBeep
+        dialogueBeep,
+        jump,
+        ability
     }
 
     #endregion

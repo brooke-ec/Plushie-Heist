@@ -574,12 +574,14 @@ public class PlayerController : MonoBehaviour
 
             wishJump = false;
             jumpsUsed++;
+            AudioManager.instance.RandomiseSoundFromType(AudioManager.SoundEnum.jump);
         }
         else if (wishJump && jumpsUsed < noJumps)
         {
             velocity.y = jumpSpeed;
             wishJump = false;
             jumpsUsed++;
+            AudioManager.instance.RandomiseSoundFromType(AudioManager.SoundEnum.jump);
         }
 
         if (wishJump && jumpTimer < jumpWindow) jumpTimer += Time.deltaTime;
@@ -692,6 +694,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 wishDashDir = cam.transform.forward;
             Vector3 wishDashVel = wishDashDir * dashSpeed;
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             velocity += wishDashVel;
             dashesUsed++;
             hasDashed = true;
@@ -853,6 +856,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             playerGravity = glideGravity;
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             isGliding = true;
             velocity.y = 0;
             //velocity.y = Mathf.SmoothStep(velocity.y, 0, timeToReachZero);
@@ -881,6 +885,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out HitInfo, grappleLength))
         {
             //Debug.DrawRay(cam.transform.position, cam.transform.forward*100, Color.yellow, 10f);
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
             Hook = Instantiate(grappleHook, HitInfo.point, Quaternion.identity);            
             isGrappling = true;
         }
@@ -1079,7 +1084,7 @@ public class PlayerController : MonoBehaviour
             guardsChasing.Remove(guard);
             if (guardsChasing.Count == 0 && AudioManager.instance.currentMusicPlaying.musicName != AudioManager.MusicEnum.nightMusic)
             {
-                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, true);
+                AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, false);
             }
         }
     }
@@ -1190,6 +1195,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Boosting");
                     if (!boostSpent)
                     {
+                        AudioManager.instance.PlaySound(AudioManager.SoundEnum.ability);
                         isBoosting = true;
                     }
                     break;
