@@ -16,6 +16,7 @@ public class StartBossFight : MonoBehaviour
             fightStarted = true;
 
             //TODO add starting boss here
+            boss.StartFight();
         }
     }
 }

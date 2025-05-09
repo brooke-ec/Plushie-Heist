@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Boss : MonoBehaviour
+public class Boss : MonoBehaviour, IInteractable
 {
     #region Private Fields
     /// <summary>The RigidBody of the Boss</summary>
@@ -98,6 +98,10 @@ public class Boss : MonoBehaviour
     [SerializeField] private float _ramDelay;
     #endregion
     #endregion
+
+    [field: SerializeField] public string interactionPrompt { get; private set; } = "Press F to Pickup";
+
+    public bool outline => true;
 
     public float bounceStrength;
     // Start is called before the first frame update
@@ -300,16 +304,31 @@ public class Boss : MonoBehaviour
                 break;
             case BossStage.Small:
                 //Small
+                this.gameObject.layer = 8;
                 Debug.Log("Boss has been beaten");
-                _bossBehaviour = BossBehaviour.Idle;
-                //Stick the Finishing the end of the night here
-
-
-                //Stick the Finishing the end of the night here
+                _bossBehaviour = BossBehaviour.Dead;
+                _rb.useGravity = true;
+                bounceStrength = 0;
                 break;
+
         }
     }
+    
+    public void StartFight()
+    {
+        _bossBehaviour = BossBehaviour.Flying;
+    }
     #endregion
+    public void PrimaryInteract(Interactor interactor) 
+    { 
+        //todo
+        //Insert the pickup plushie stuff here
+
+        Debug.Log("Freed the plushie");
+
+
+        //Insert the pickup plushie stuff here
+    }
 }
 
 enum BossBehaviour
@@ -317,12 +336,14 @@ enum BossBehaviour
     Idle,
     Flying,
     Circling,
-    Ramming
+    Ramming,
+    Dead
 }
 
 enum BossStage
 {
     Big,
     Medium,
-    Small
+    Small,
+    Dead
 }
