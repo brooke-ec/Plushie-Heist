@@ -30,7 +30,7 @@ public class GunGuard : GuardAI
 
     private void Shoot()
     {
-        if(chasee!=null && fireTimer>firerate)
+        if(chasee != null && fireTimer > firerate && GuardActive)
         {
             audio.PlayOneShot(fireSound);
 
