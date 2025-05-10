@@ -226,7 +226,8 @@ public class AudioManager : MonoBehaviour
         jump,
         ability,
         defeatBoss,
-        squeak
+        squeak,
+        goop,
     }
 
     #endregion

@@ -1254,6 +1254,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Proj Hit");
             applySlow(other.GetComponent<Projectilescript>().SlowAmount/100*velocity.magnitude);
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.goop);
             Destroy(other.gameObject);
         }
     }
