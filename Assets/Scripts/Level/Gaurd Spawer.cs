@@ -43,7 +43,9 @@ public class GaurdSpawer : MonoBehaviour
         guards = new GuardAI[spawnNumber];
         // for each gaurd to spawn
         for (int i = 0; i < spawnNumber; i++)
-        { 
+        {
+            if (points.Count <= 0) break;
+
             // get its spawn point 
             PatrolPoint p = points[Random.Range(0, points.Count)];
             points.Remove(p);
