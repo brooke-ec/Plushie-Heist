@@ -24,15 +24,18 @@ public class SaveManager : MonoBehaviour
 
     public static SaveFile[] GetSaveList()
     {
+        Debug.Log($"Getting save slot list '{Application.persistentDataPath}'");
         return new DirectoryInfo(Application.persistentDataPath).GetFiles("*.json")
             .OrderByDescending(f => f.LastWriteTime).Select(file =>
             {
                 using StreamReader sr = new StreamReader(file.OpenRead());
                 using JsonReader jr = new JsonTextReader(sr);
                 SaveFile sf = serializer.Deserialize<SaveFile>(jr);
+                if (sf == null) return null; // Unsuccessful deserialization
+
                 sf.slot = Path.GetFileNameWithoutExtension(file.Name);
                 return sf;
-            }).ToArray();
+            }).Where(s => s != null).ToArray();
     }
     #endregion
 

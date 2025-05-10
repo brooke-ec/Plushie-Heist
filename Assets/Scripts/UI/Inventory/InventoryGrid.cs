@@ -37,7 +37,8 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         get
         {
-            return (from InventoryItem item in inventorySlots
+            return inventorySlots == null ? new InventoryItem[0] : 
+                (from InventoryItem item in inventorySlots
                     where item != null select item).Distinct().ToArray();
         }
         set
