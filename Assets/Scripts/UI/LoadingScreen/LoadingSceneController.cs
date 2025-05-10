@@ -46,6 +46,8 @@ public class LoadingSceneController : MonoBehaviour
 
     public void LoadSceneAsync(int sceneId)
     {
+        if (loadingScreenCanvas != null) return;
+
         loadingScreenCanvas = Instantiate(loadingScreenCanvasPrefab);
         progressBar = loadingScreenCanvas.transform.GetChild(1).GetComponent<Slider>();
         loadingText = loadingScreenCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
