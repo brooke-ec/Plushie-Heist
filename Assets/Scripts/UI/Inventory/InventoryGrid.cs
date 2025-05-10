@@ -29,7 +29,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         set { CreateInventoryGrid(value.x, value.y); }
     }
 
-    InventoryItem[,] inventorySlots = new InventoryItem[0,0];
+    InventoryItem[,] inventorySlots = null;
     private float scaleFactor;
 
     [JsonProperty("items")]
@@ -53,11 +53,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         scaleFactor = SharedUIManager.instance.scaleFactor;
         rectTransform = GetComponent<RectTransform>();
+    }
 
-        SaveManager.onLoaded.AddListener(() =>
-        {
-            if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
-        });
+    private void Start()
+    {
+        if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
     }
 
     #region Setup
@@ -65,6 +65,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void CreateInventoryGrid(int width, int height)
     {
         Awake();
+        print($"{width} {height}");
         inventoryWidth = width;
         inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];

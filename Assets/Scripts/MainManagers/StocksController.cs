@@ -27,11 +27,12 @@ public class StocksController : MonoBehaviour
     private void Awake()
     {
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
-        SaveManager.onLoaded.AddListener(() =>
-        {
-            if (allStocksInGame == null || allStocksInGame.Count == 0) CreateAllProductData();
-            UpdatePricingTable();
-        });
+    }
+
+    private void Start()
+    {
+        if (allStocksInGame == null || allStocksInGame.Count == 0) CreateAllProductData();
+        UpdatePricingTable();
     }
 
     private void CreateAllProductData()

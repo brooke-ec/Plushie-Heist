@@ -75,7 +75,6 @@ public class ShopManager : MonoBehaviour
 
     private void Awake()
     {
-        SaveManager.onLoaded.AddListener(() => { if (layout == null) SetLayout(0); });
         if (instance != null)
         {
             Destroy(this);
@@ -90,6 +89,11 @@ public class ShopManager : MonoBehaviour
         shopTimer = Instantiate(shopTimerPrefab, mainCanvas.transform);
         shopTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
         shopTimer.SetupClock(true);
+    }
+
+    private void Start()
+    {
+        if (layout == null) SetLayout(0);
     }
 
     #region Time
