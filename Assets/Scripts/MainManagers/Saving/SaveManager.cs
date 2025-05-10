@@ -13,7 +13,7 @@ public class SaveManager : MonoBehaviour
     public static readonly UnityEvent onLoaded = new UnityEvent();
     public static SaveManager instance { get; private set; }
     public static bool deserializing { get; private set; }
-    public static string slot = "default";
+    public static string slot;
 
     static SaveManager()
     {
@@ -63,6 +63,7 @@ public class SaveManager : MonoBehaviour
     public void Load()
     {
         deserializing = true;
+        print(path);
 
         if (File.Exists(path))
         {

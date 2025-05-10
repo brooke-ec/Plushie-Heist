@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +42,11 @@ public class MainMenu : MonoBehaviour
         Dialogue dialogue = Instantiate(dialoguePrefab, transform.GetChild(1));
         
         dialogue.SetUp(Dialogue.DialogueEnum.mainMenu);
-        dialogue.onDialogueEnd = () => LoadingSceneController.instance.LoadSceneAsync(1);
+        dialogue.onDialogueEnd = () =>
+        {
+            SaveManager.slot = GUID.Generate().ToString();
+            LoadingSceneController.instance.LoadSceneAsync(1);
+        };
     }
 
     public void CloseGame()
