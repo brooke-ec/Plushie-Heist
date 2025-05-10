@@ -1560,6 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &230169788
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2517,6 +2518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &484805671
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3953,6 +3955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &922646056
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6062,6 +6065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &1542856557
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7349,6 +7353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &1771478778
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7632,6 +7637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &1799498911
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8787,6 +8793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!23 &2070870426
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9125,6 +9132,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[0]
+      value: 
+      objectReference: {fileID: 2070870425}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[1]
+      value: 
+      objectReference: {fileID: 922646055}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[2]
+      value: 
+      objectReference: {fileID: 1799498910}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[3]
+      value: 
+      objectReference: {fileID: 1542856556}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[4]
+      value: 
+      objectReference: {fileID: 230169787}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[5]
+      value: 
+      objectReference: {fileID: 1771478777}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[6]
+      value: 
+      objectReference: {fileID: 484805670}
+    - target: {fileID: 190612415754663188, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+      propertyPath: grids.Array.data[7]
+      value: 
+      objectReference: {fileID: 186663369843241719}
     - target: {fileID: 941056358069204813, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -9366,6 +9409,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6241484710245789619, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
   m_PrefabInstance: {fileID: 186663369843241716}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &186663369843241719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1159264879276194420, guid: 2f1d77bf4d4df0f43be4bc639f926e56, type: 3}
+  m_PrefabInstance: {fileID: 186663369843241716}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cc0700153a335546b20c68e77140a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
