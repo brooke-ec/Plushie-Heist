@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -28,7 +29,7 @@ public class StocksController : MonoBehaviour
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
         SaveManager.onLoaded.AddListener(() =>
         {
-            if (allStocksInGame == null) CreateAllProductData();
+            if (allStocksInGame == null || allStocksInGame.Count == 0) CreateAllProductData();
             UpdatePricingTable();
         });
     }
