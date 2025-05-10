@@ -25,7 +25,7 @@ public class SaveManager : MonoBehaviour
     public static SaveFile[] GetSaveList()
     {
         return new DirectoryInfo(Application.persistentDataPath).GetFiles("*.json")
-            .OrderBy(f => f.LastWriteTime).Select(file =>
+            .OrderByDescending(f => f.LastWriteTime).Select(file =>
             {
                 using StreamReader sr = new StreamReader(file.OpenRead());
                 using JsonReader jr = new JsonTextReader(sr);
@@ -63,7 +63,7 @@ public class SaveManager : MonoBehaviour
     public void Load()
     {
         deserializing = true;
-        print(path);
+        Debug.Log($"Data loading from '{path}'");
 
         if (File.Exists(path))
         {

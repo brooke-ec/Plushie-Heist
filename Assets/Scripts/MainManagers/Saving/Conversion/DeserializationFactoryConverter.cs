@@ -41,24 +41,28 @@ public class DeserializationFactoryConverter : JsonConverter
         object instance;
         if (!TryGetFactory(objectType, out MethodInfo method)) throw new UnreachableException();
         // Create JObject for manual manipulation
-        JObject jo = JObject.Load(reader);
+        JToken jt = JToken.Load(reader);
 
-        // Match function parameters
-        object[] parameters = method.GetParameters().Select(p =>
+        if (jt.Type == JTokenType.Null) return null;
+        else if (jt is JObject jo)
         {
-            if (jo.TryGetValue(p.Name, out JToken t))
-            {
-                object value = t.ToObject(p.ParameterType, serializer);
-                if (value != null) return value;
-            }
+            // Match function parameters
+            object[] parameters = method.GetParameters().Select(p =>
+                {
+                    if (jo.TryGetValue(p.Name, out JToken t))
+                    {
+                        object value = t.ToObject(p.ParameterType, serializer);
+                        if (value != null) return value;
+                    }
 
-            throw new ArgumentException($"Could deserialize parameter '{p.Name}' in '{objectType.Name}' deserialization factory");
-        }).ToArray();
+                    throw new ArgumentException($"Could deserialize parameter '{p.Name}' in '{objectType.Name}' deserialization factory");
+                }).ToArray();
 
-        // Run factory and populate fields
-        instance = method.Invoke(null, parameters);
-        serializer.Populate(jo.CreateReader(), instance);
-        return instance;
+            // Run factory and populate fields
+            instance = method.Invoke(null, parameters);
+            serializer.Populate(jo.CreateReader(), instance);
+            return instance;
+        } else throw new JsonReaderException("Current JsonReader item is not an object: " + jt.GetType().Name);
     }
 
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
