@@ -377,13 +377,16 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         List<UnityAction> actions = new List<UnityAction>();
 
 
-        actionTitles.Add("Place item");
-        actions.Add(() =>
+        if (ShopManager.instance != null)
         {
-            SharedUIManager.instance.CloseMenu();
-            FurniturePlacer.instance.Place(item.itemClass)
-                .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
-        });
+            actionTitles.Add("Place item");
+            actions.Add(() =>
+            {
+                SharedUIManager.instance.CloseMenu();
+                FurniturePlacer.instance.Place(item.itemClass)
+                    .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
+            });
+        }
 
         actionTitles.Add("Discard item");
         actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
