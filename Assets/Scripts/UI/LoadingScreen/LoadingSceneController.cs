@@ -6,9 +6,29 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class LoadingSceneController : MonoBehaviour
 {
+    private static List<GameObject> survivngObjects = new List<GameObject>();
+
+    static LoadingSceneController()
+    {
+        SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
+    }
+
+
+    private static void SceneManager_activeSceneChanged(Scene before, Scene after)
+    {
+        foreach (var o in survivngObjects) SceneManager.MoveGameObjectToScene(o, after);
+    }
+
+    public static void SurviveNextLoad(GameObject unityObject)
+    {
+        survivngObjects.Add(unityObject);
+        DontDestroyOnLoad(unityObject);
+    }
+
     public static LoadingSceneController instance;
     [SerializeField] private GameObject loadingScreenCanvasPrefab;
     private GameObject loadingScreenCanvas;

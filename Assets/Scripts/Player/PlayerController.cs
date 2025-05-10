@@ -222,8 +222,6 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>Wether the player is currently holding a beanbag</summary>
     private bool _holdingBeanBag;
-
-    private Vector3? warp;
     #endregion
 
     #region Public Fields
@@ -337,12 +335,6 @@ public class PlayerController : MonoBehaviour
         if (arrested & !nightEnded)
         {
             Arrest();
-        }
-
-        if (warp.HasValue)
-        {
-            transform.position = warp.Value;
-            warp = null;
         }
     }
 
@@ -1100,8 +1092,10 @@ public class PlayerController : MonoBehaviour
     public void MoveSpawnpoint(Vector3 point)
     {
         Debug.Log("Setting player spawnpoint");
+        cc.enabled = false;
+        transform.position = point;
+        cc.enabled = true;
         initalPos = point;
-        warp = initalPos;
     }
 
     #endregion

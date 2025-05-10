@@ -91,7 +91,7 @@ public class NightManager : MonoBehaviour
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
         AudioManager.instance.PlayMusic(AudioManager.MusicEnum.endOfNight);
-        FindAnyObjectByType<GaurdSpawer>().stopGuards();
+        FindAnyObjectByType<GaurdSpawer>()?.stopGuards();
 
         //Call end stuff
         if(!hasRescuedPlushie)
