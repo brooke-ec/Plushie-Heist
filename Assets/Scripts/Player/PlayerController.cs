@@ -262,6 +262,7 @@ public class PlayerController : MonoBehaviour
         rayNumber = -1;
 
         playerGravity = gravity;
+        stamina = maxStamina;
 
         initalPos = transform.position;
         _beanBag.SetActive(false);
