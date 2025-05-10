@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlushieEnable : MonoBehaviour, IInteractable
 {
     [SerializeField] PlushieInfo plushie;
+    [SerializeField] bool inverted = false;
 
     string IInteractable.interactionPrompt => "Press F to Squish " + plushie.name;
 
@@ -12,7 +13,7 @@ public class PlushieEnable : MonoBehaviour, IInteractable
     {
         GetComponentsInChildren<Renderer>().ForEach(r => r.AddComponent<Outline>().enabled = false);
         GetComponentsInChildren<Collider>().ForEach(c => c.gameObject.layer = LayerMask.NameToLayer("Interactable"));
-        gameObject.SetActive(plushie.unlocked);
+        gameObject.SetActive(plushie.unlocked == !inverted);
     }
 
     void IInteractable.PrimaryInteract(Interactor interactor)
