@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5413104321427954123}
   - component: {fileID: 7190026419063906433}
   - component: {fileID: 5975609087740167189}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: shatter overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,9 +155,9 @@ GameObject:
   - component: {fileID: 6770154917213223165}
   - component: {fileID: 8770644684915726025}
   - component: {fileID: 2135682603089511777}
-  m_Layer: 12
+  m_Layer: 3
   m_Name: Boss Body
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -268,10 +268,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
@@ -423,7 +423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6891376161108682171}
   - component: {fileID: 7732687851892797752}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plushie Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -9095955516504073534, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_LocalScale.x
@@ -528,131 +528,135 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8421033217739148184, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8070200205324214932, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7940358528515466988, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7938093550800844352, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7834347888407616310, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7160572910868373705, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7025337365270737407, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -6470627961770811279, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -6309086641165023242, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -6243531082254384549, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -5839157620431914512, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -5740184317129754688, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -5386534331723369661, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -5346151300056825915, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -5208689112834044816, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -4161276859579560314, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -3003491872076128501, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2864487841650511395, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2772862975084477800, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2487911537177124966, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2458001274783822406, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2174260200344950590, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -2078785783051293924, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -1829148317565139546, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -1547062719865823054, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -1029230730919153603, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -856436630082280586, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -517898740003952580, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -269670068902362833, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 12040670849687530, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 198686791025059738, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Name
       value: broken
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_IsActive
@@ -660,79 +664,79 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209848237135257588, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2245593051152724699, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2273505107601583849, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2585570468146431219, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2916390347625508669, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3381663243554826436, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5228621720496196897, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5355586542593904620, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6132753380475228473, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6178945500317832059, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6240687602765068719, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6299288102339618871, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6355619382544824771, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6441156315791420892, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6649383089684275159, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6742658710844085825, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7093934563054787176, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8056593580315088808, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9051251669961025551, guid: 8995bc2d23bcbf0429a6d0077f984ccf, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1066,10 +1070,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1119,10 +1123,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1172,10 +1176,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1225,10 +1229,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1278,10 +1282,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1331,10 +1335,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1384,10 +1388,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1437,10 +1441,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1490,10 +1494,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1543,10 +1547,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1596,10 +1600,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1649,10 +1653,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1702,10 +1706,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1755,10 +1759,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1808,10 +1812,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1861,10 +1865,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1914,10 +1918,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -1967,10 +1971,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2020,10 +2024,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2073,10 +2077,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2126,10 +2130,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2179,10 +2183,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2232,10 +2236,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2285,10 +2289,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2338,10 +2342,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2391,10 +2395,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2444,10 +2448,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2497,10 +2501,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2550,10 +2554,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2603,10 +2607,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2656,10 +2660,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2709,10 +2713,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2762,10 +2766,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2815,10 +2819,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2868,10 +2872,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2921,10 +2925,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -2974,10 +2978,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3027,10 +3031,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3080,10 +3084,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3133,10 +3137,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3186,10 +3190,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3239,10 +3243,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3292,10 +3296,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3345,10 +3349,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3398,10 +3402,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3451,10 +3455,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3504,10 +3508,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3557,10 +3561,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3610,10 +3614,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3663,10 +3667,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -3721,10 +3725,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

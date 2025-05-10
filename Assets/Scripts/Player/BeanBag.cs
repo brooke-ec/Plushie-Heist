@@ -11,20 +11,12 @@ public class BeanBag : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         _audio.Play();
-        switch(collision.gameObject.layer)
+
+        if (collision.gameObject.tag == "Boss")
         {
-            case 6:
-                //Env
-                Destroy(this.gameObject, 1f);
-                break;
-            case 12:
-                //boss
-                collision.gameObject.GetComponent<Boss>().HitByBean();
-                Destroy(this.gameObject, 0.2f);
-                break;
-            default:
-                break;
-        }
+            collision.gameObject.GetComponent<Boss>().HitByBean();
+            Destroy(gameObject);
+        } else Destroy(gameObject, 1f);
     }
 
     public void Throw(float throwStrength)
@@ -32,7 +24,7 @@ public class BeanBag : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _audio = GetComponent<AudioSource>();
 
-        _rb.AddForce(this.transform.forward * throwStrength);
+        _rb.AddForce(transform.forward * throwStrength);
 
         _rb.AddTorque(new Vector3(Random.Range(-1,1), Random.Range(-1,1), Random.Range(-1,1)));
     }
