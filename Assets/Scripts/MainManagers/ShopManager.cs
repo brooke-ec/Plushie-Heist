@@ -153,7 +153,7 @@ public class ShopManager : MonoBehaviour
     #endregion
 
     #region Money
-    public static event Action OnMoneyChanged;
+    public static UnityEvent onMoneyChanged = new UnityEvent();
 
     public float GetMoney()
     {
@@ -164,7 +164,7 @@ public class ShopManager : MonoBehaviour
     public void ModifyMoney(float modification)
     {
         money += modification;
-        OnMoneyChanged?.Invoke();
+        onMoneyChanged.Invoke();
     }
     #endregion
 
