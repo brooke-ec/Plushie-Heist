@@ -6,9 +6,10 @@ public class PlushieModel : MonoBehaviour
 
     void Start()
     {
-        PlushieInfo prefab = SharedUIManager.instance.plushie;
-        if (nextPlushie) prefab = prefab.next;
-        Instantiate(prefab.prefab, transform);
+        PlushieInfo plushie = SharedUIManager.instance.plushie;
+        if (nextPlushie) plushie = PlushieInfo.Next(plushie);
+        if (plushie == null) Destroy(gameObject);
+        else Instantiate(plushie.prefab, transform);
     }
 
 #if UNITY_EDITOR

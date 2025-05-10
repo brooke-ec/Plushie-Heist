@@ -1779,6 +1779,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 862064ae10005ab49b2c29aa126b63f7, type: 3}
+--- !u!1 &788919879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 788919880}
+  - component: {fileID: 788919881}
+  m_Layer: 0
+  m_Name: Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &788919880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788919879}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.0076017, z: -25.625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &788919881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788919879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18ab177f843aa0409d2211d9163a496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &791886489
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1831,11 +1875,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightManagerAndUI
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 33175395587017804, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
-    - {fileID: 1145446017712033554, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
-    - {fileID: 6160330232528540257, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
-    - {fileID: 7379667266893301749, guid: 0c52359e1f98e7d44ab26576d199a99b, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2295,10 +2335,6 @@ PrefabInstance:
     - target: {fileID: 4929817669399889518, guid: bd5a6df5f7bc81a4daa30f7e2771f1ce, type: 3}
       propertyPath: m_Name
       value: MovementUICanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 7034691930414748477, guid: bd5a6df5f7bc81a4daa30f7e2771f1ce, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5585,7 +5621,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 27dd1754d4ca8634aab4b97576340bed, type: 2}
+  m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
 --- !u!64 &2010029678
 MeshCollider:
@@ -7382,4 +7418,5 @@ SceneRoots:
   - {fileID: 2010029683}
   - {fileID: 517184540}
   - {fileID: 2002972713}
+  - {fileID: 788919880}
   - {fileID: 960897597}

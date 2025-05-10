@@ -167,7 +167,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 037cbff6a0ede464397fc1a168479312, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 94e702f87033bd343a11708f2613928b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -188,10 +188,6 @@ GameObject:
   - component: {fileID: 6264950661441890616}
   - component: {fileID: 4225953784484866183}
   - component: {fileID: 7764407123375885581}
-  - component: {fileID: 7379667266893301749}
-  - component: {fileID: 6160330232528540257}
-  - component: {fileID: 33175395587017804}
-  - component: {fileID: 1145446017712033554}
   m_Layer: 0
   m_Name: NightManager
   m_TagString: Untagged
@@ -229,14 +225,6 @@ MonoBehaviour:
   itemLosePercentage: 90
   nightIntroUIPrefab: {fileID: 2822706550559000758, guid: e5865590d471fd3448d5f56a570bc2b8, type: 3}
   chooseAbilityUIPrefab: {fileID: 8180539613505879959, guid: 8b9d79d25908ef74c83695d79b097cc4, type: 3}
-  defaultPlushieInfo:
-    plushieName: NALLEBY
-    plushieIcon: {fileID: 21300000, guid: 7d27e54dc25d12a4baba7316bd499e43, type: 3}
-    unlockableSkills:
-    - {fileID: 11400000, guid: 2c1f75c3cc4149b41ba5d169f8800e5f, type: 2}
-    - {fileID: 11400000, guid: 2115bc2d14d969240a64c25af46ea2c0, type: 2}
-    unlocked: 0
-    plushieNumber: 0
   nightTimerPrefab: {fileID: 7074723770633863849, guid: 685b72897690c064c8e1e47b5e90088f, type: 3}
   nightUICanvas: {fileID: 2366746433102227669}
   escapingUI: {fileID: 7764407123375885581}
@@ -264,92 +252,6 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4288792199
   itemSlotPrefab: {fileID: 3001563620447134554, guid: 247c3fc84e0e207429f8a9bb6d8f0fa3, type: 3}
---- !u!114 &7379667266893301749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5828647111444640683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6a0483b0c7c7e4c871d867a9a6b4c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: {x: 20, y: 20}
-  roomGenerator:
-    seedDistance: 2
-    growAmount: 4
-    minRoom: 3
-    maxRoom: 6
-  pathGenerator:
-    sideRoomChance: 0.5
-    collapseChance: 0.5
-    corridorWidth: 1
-  tileGenerator:
-    <tileSize>k__BackingField: 10
-    startTile: {fileID: 3604193119225322630, guid: 31bc1e64bfef63749946090663b41aba, type: 3}
-    endTile: {fileID: 4139153317009491841, guid: 3b8e8f7c7b03fff408df1611f6ba610c, type: 3}
---- !u!114 &6160330232528540257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5828647111444640683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: -1372625422
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 65
-  m_UseGeometry: 1
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 0}
-  m_BuildHeightMesh: 0
---- !u!114 &33175395587017804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5828647111444640683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dd2daef8a7ed8d4f866e9fa2ec547b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnMin: 5
-  spawnMax: 10
-  GunGaurdRatio: 0.5
-  Guard: {fileID: 8138492032870576743, guid: b7c26b3b5cb5f624d83d729900d52f95, type: 3}
-  GunGuard: {fileID: 4629906238832381574, guid: 947f3a9e528505f4981e15ba516cca32, type: 3}
---- !u!114 &1145446017712033554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5828647111444640683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6c634e0e75f3c498a8ec4091833e16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7449689605716480821
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class PlushiePickup : MonoBehaviour, IInteractable
 {
-    string IInteractable.interactionPrompt => "Press F to Pickup " + SharedUIManager.instance.plushie.next.name;
+    string IInteractable.interactionPrompt => "Press F to Pickup " + SharedUIManager.instance.nextPlushie.name;
 
     private void Start()
     {

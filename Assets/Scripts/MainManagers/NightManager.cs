@@ -52,7 +52,7 @@ public class NightManager : MonoBehaviour
             }
         );
 
-        LoadPlushieIndicator(SharedUIManager.instance.plushie.next);
+        LoadPlushieIndicator(SharedUIManager.instance.nextPlushie);
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class NightManager : MonoBehaviour
         }
         else
         {
-            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, SharedUIManager.instance.plushie.next);
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, SharedUIManager.instance.nextPlushie);
         }
     }
 

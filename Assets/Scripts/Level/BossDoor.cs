@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ExitLevelInteraction : MonoBehaviour, IInteractable
+public class BossDoor : MonoBehaviour, IInteractable
 {
     [field:SerializeField] public String interactionPrompt{get; private set;}
 
@@ -14,6 +14,4 @@ public class ExitLevelInteraction : MonoBehaviour, IInteractable
     {
         LoadingSceneController.instance.LoadSceneAsync(sceneIndexToGoTo);
     }
-
-
 }

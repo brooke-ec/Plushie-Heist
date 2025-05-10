@@ -16,6 +16,7 @@ public class PlushieInfo : ResourcesAsset
     public GameObject prefab;
 
     [HideInInspector] public bool unlocked => SharedUIManager.instance.plushie == null ? false : SharedUIManager.instance.plushie.order >= order;
-    [HideInInspector] public PlushieInfo next => order < plushies.Length ? plushies[order] : null;
     [HideInInspector] public PlushieInfo previous => order > 0 ? plushies[order] : null;
+    
+    public static PlushieInfo Next(PlushieInfo plushie) => plushie == null ? plushies[0] : plushie.order < plushies.Length ? plushies[plushie.order] : null;
 }

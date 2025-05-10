@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviour
     public void Awake()
     {
         if (instance == null) instance = this;
-        else Debug.LogError("Multiple active players");
+        else Destroy(this);
 
             cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();

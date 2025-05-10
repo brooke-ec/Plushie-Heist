@@ -17,7 +17,8 @@ public class SharedUIManager : MonoBehaviour
     [HideInInspector] public UnityEvent onMenuClose = new UnityEvent();
     [JsonProperty("plushie")] public PlushieInfo plushie = null;
     [JsonProperty("backpack")] public InventoryGrid backpack => InventoryController.instance.backpackGrid;
-    public int plushieIndex => plushie == null ? 0 : plushie.order;
+    [HideInInspector] public int plushieIndex => plushie == null ? 0 : plushie.order;
+    [HideInInspector] public PlushieInfo nextPlushie => PlushieInfo.Next(plushie);
 
     public bool menusDisabled = false;
     private PlayerInput playerInput;
