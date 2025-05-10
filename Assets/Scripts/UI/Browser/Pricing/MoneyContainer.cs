@@ -5,7 +5,7 @@ public class MoneyContainer : MonoBehaviour
 {
     private void Start()
     {
-        ShopManager.OnMoneyChanged += UpdateCoins;
+        ShopManager.onMoneyChanged.AddListener(UpdateCoins);
         UpdateCoins();
     }
     private void UpdateCoins()

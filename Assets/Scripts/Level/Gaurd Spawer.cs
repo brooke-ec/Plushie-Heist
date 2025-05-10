@@ -13,8 +13,8 @@ public class GaurdSpawer : MonoBehaviour
     public float GunGaurdRatio;
 
     //Object refereces for the guards
-    [SerializeField] private GameObject Guard;
-    [SerializeField] private GameObject GunGuard;
+    [SerializeField] private GuardAI Guard;
+    [SerializeField] private GunGuard GunGuard;
 
     /// <summary>actual number of gaurds to spawn</summary>
     private int spawnNumber;
@@ -44,12 +44,16 @@ public class GaurdSpawer : MonoBehaviour
         // for each gaurd to spawn
         for (int i = 0; i < spawnNumber; i++)
         {
-            if (points.Count <= 0) break;
+            if (points.Count <= 0)
+            {
+                System.Array.Resize(ref guards, i + 1);
+                break;
+            }
 
             // get its spawn point 
             PatrolPoint p = points[Random.Range(0, points.Count)];
             points.Remove(p);
-            GameObject guard;
+            GuardAI guard;
             // decide which type of guard it is
             if (Random.Range(0f, 1f) <= GunGaurdRatio)
             {
@@ -91,8 +95,8 @@ public class GaurdSpawer : MonoBehaviour
                 
             }
 
-            guard.GetComponent<GuardAI>().patrolPoints = guardPoints.ToArray();
-            guards[i] = guard.GetComponent<GuardAI>();
+            guard.patrolPoints = guardPoints.ToArray();
+            guards[i] = guard;
         }
     }
 

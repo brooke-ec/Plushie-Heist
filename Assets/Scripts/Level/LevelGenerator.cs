@@ -32,6 +32,9 @@ public class LevelGenerator : MonoBehaviour
         
         bool[,] gaps = new bool[size.x, size.y];
         tiles.ForEach(t => gaps[t.position.x, t.position.y] = true);
+        StaticBatchingUtility.Combine(gameObject);
+        FindObjectsOfType<ObjectSpawner>().ForEach(s => s.Spawn());
+
         GetComponent<TileCuller>().Setup(gaps, tiles);
 
         GetComponent<NavMeshSurface>().BuildNavMesh();

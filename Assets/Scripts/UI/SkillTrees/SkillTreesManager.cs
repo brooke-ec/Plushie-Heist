@@ -21,7 +21,7 @@ public class SkillTreesManager : MonoBehaviour
         CreateAllSkillTrees();
         skillTrees[currentlyActiveSkillTree].gameObject.SetActive(true);
         ChangeSkillButtonLook();
-        ShopManager.OnMoneyChanged += UpdateCoins;
+        ShopManager.onMoneyChanged.AddListener(UpdateCoins);
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
 

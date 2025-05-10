@@ -3,8 +3,8 @@ import sys
 import bpy
 
 FILEPATH = sys.argv[-1]
-MINIMUM = 0.2
-LEVELS = 2
+MINIMUM = 0.3
+LEVELS = 4
 
 STEP = (1 - MINIMUM) / LEVELS
 
