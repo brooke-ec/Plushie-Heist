@@ -12,6 +12,10 @@ public class BossDoor : MonoBehaviour, IInteractable
 
     public void PrimaryInteract(Interactor interactor)
     {
+        DontDestroyOnLoad(PlayerController.instance.gameObject);
+        DontDestroyOnLoad(SharedUIManager.instance.transform.parent.gameObject);
+        DontDestroyOnLoad(MovementUIManager.instance.gameObject);
+        DontDestroyOnLoad(NightManager.instance.transform.parent.gameObject);
         LoadingSceneController.instance.LoadSceneAsync(sceneIndexToGoTo);
     }
 }

@@ -4,7 +4,7 @@ public class PlayerSpawn : MonoBehaviour
 {
     void Start()
     {
-        PlayerController.instance.transform.position = transform.position;
+        PlayerController.instance.MoveSpawnpoint(transform.position);
     }
 
 #if UNITY_EDITOR

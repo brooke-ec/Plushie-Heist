@@ -13,7 +13,7 @@ public class NightManager : MonoBehaviour
     {
         if(instance!=null)
         {
-            Destroy(this);
+            Destroy(transform.parent.gameObject);
             print("Night manager already in scene");
         }
         else
@@ -62,7 +62,7 @@ public class NightManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         playerInput.SwitchCurrentActionMap("PlayerMovement");
-        GetComponent<GaurdSpawer>()?.startGuards();
+        FindAnyObjectByType<GaurdSpawer>().startGuards();
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -91,7 +91,7 @@ public class NightManager : MonoBehaviour
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
         AudioManager.instance.PlayMusic(AudioManager.MusicEnum.endOfNight);
-        GetComponent<GaurdSpawer>()?.stopGuards();
+        FindAnyObjectByType<GaurdSpawer>().stopGuards();
 
         //Call end stuff
         if(!hasRescuedPlushie)

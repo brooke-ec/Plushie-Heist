@@ -17,7 +17,7 @@ public class TileCuller : MonoBehaviour
     void Update()
     {
         Vector2Int position = Vector2Int.FloorToInt(FromWorldspace(PlayerController.instance.transform.position));
-        if (previous != position)
+        if (previous != position && position.x < visionMatrix.GetLength(0) && position.x >= 0 && position.y < visionMatrix.GetLength(1) && position.y >= 0)
         {
             tiles.ForEach(t => t.gameObject.SetActive(visionMatrix[position.x, position.y, t.position.x, t.position.y]));
             previous = position;

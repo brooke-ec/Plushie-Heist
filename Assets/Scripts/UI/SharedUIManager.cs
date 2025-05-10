@@ -29,7 +29,7 @@ public class SharedUIManager : MonoBehaviour
         scaleFactor = rootCanvas.scaleFactor;
         if (instance != null)
         {
-            Destroy(this);
+            Destroy(transform.parent.gameObject);
         }
         else
         {

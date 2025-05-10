@@ -222,6 +222,8 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>Wether the player is currently holding a beanbag</summary>
     private bool _holdingBeanBag;
+
+    private Vector3? warp;
     #endregion
 
     #region Public Fields
@@ -238,7 +240,7 @@ public class PlayerController : MonoBehaviour
     public void Awake()
     {
         if (instance == null) instance = this;
-        else Destroy(this);
+        else Destroy(gameObject);
 
             cc = GetComponent<CharacterController>();
         cam = GetComponentInChildren<Camera>();
@@ -335,6 +337,12 @@ public class PlayerController : MonoBehaviour
         if (arrested & !nightEnded)
         {
             Arrest();
+        }
+
+        if (warp.HasValue)
+        {
+            transform.position = warp.Value;
+            warp = null;
         }
     }
 
@@ -1087,6 +1095,13 @@ public class PlayerController : MonoBehaviour
                 AudioManager.instance.PlayMusic(AudioManager.MusicEnum.nightMusic, false);
             }
         }
+    }
+
+    public void MoveSpawnpoint(Vector3 point)
+    {
+        Debug.Log("Setting player spawnpoint");
+        initalPos = point;
+        warp = initalPos;
     }
 
     #endregion

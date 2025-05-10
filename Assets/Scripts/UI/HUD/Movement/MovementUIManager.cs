@@ -30,6 +30,7 @@ public class MovementUIManager : MonoBehaviour
     {
         if (instance != null)
         {
+            Destroy(gameObject);
             Debug.LogWarning("Movement UI instance already exists");
         }
         else
