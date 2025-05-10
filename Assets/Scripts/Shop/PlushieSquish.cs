@@ -6,10 +6,11 @@ public class PlushieSquish: PlushieEnable, IInteractable
 {
     string IInteractable.interactionPrompt => "Press F to Squish " + plushie.name;
 
-    private void Start()
+    protected override void Start()
     {
         GetComponentsInChildren<Renderer>().ForEach(r => r.AddComponent<Outline>().enabled = false);
         GetComponentsInChildren<Collider>().ForEach(c => c.gameObject.layer = LayerMask.NameToLayer("Interactable"));
+        base.Start();
     }
 
     void IInteractable.PrimaryInteract(Interactor interactor)
