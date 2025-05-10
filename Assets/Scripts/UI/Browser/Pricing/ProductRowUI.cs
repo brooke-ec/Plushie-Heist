@@ -52,7 +52,7 @@ public class ProductRowUI : MonoBehaviour
 
     private void ChangeMarginsColour()
     {
-        if (productDataRef.GetMargin() >= 0) { margin.color = greenColour; }
-        else { margin.color = pinkColour; }
+        if (productDataRef.GetMargin() > 0) { margin.color = pinkColour; }
+        else { margin.color = greenColour; }
     }
 }
