@@ -104,13 +104,14 @@ public class StocksController : MonoBehaviour
         pricingTableManager.ResetTableToOriginalOrder();
     }
 
-    public void CreateSetPricingUI(FurnitureController item)
+    public void CreateSetPricingUI(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
             SetPricingUIFunctionality pricingUI = Instantiate(setPricingUIPrefab, ShopManager.instance.mainCanvas.transform);
             pricingUI.SetUI(product);
+            SharedUIManager.instance.OpenMenu(pricingUI);
         }
     }
 

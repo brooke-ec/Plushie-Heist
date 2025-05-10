@@ -12,7 +12,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     [JsonProperty("item"), Unwitable] public FurnitureItem item = null;
     /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
     string IInteractable.interactionPrompt => empty 
-        ? (hasSpace ? "Press F to Pick Up" : "Inventory Full")
+        ? (selling ? "Press F to set Price" : (hasSpace ? "Press F to Pick Up" : "Inventory Full"))
         + (canSell ? "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "")
         : "Item Contains Sub-Items";
     bool IInteractable.outline => canPickup || canSell;
@@ -38,7 +38,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <summary> The region representing this item's current placement on <see cref="grid"/> </summary>
     public Region gridRegion => new Region().FromSize(gridPosition, gridShape);
     /// <summary> Whether this item is marked as sellable or not </summary>
-    [JsonProperty("selling")] public bool selling { get; private set; }
+    [JsonProperty("selling")] public bool selling { get; private set; } = false;
     /// <summary> The shape of this furniture item </summary>
     public Vector2Int gridShape => gridRotation % 180 < 90 ? item.gridSize.Rotate() : item.gridSize;
     /// <summary Whether this item can be marked as sellable </summary>
@@ -115,14 +115,20 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <param name="interactor">Interactor this was called from</param>
     public void PrimaryInteract(Interactor interactor)
     {
-        if (!canPickup) return;
-
-        if (inventoryController.InsertItem(item))
+        if (selling)
         {
-            Remove();
-            Debug.Log("Picked Up" + gameObject.name);
+            ShopManager.instance.stocksController.CreateSetPricingUI(item);
+        } else
+        {
+            if (!canPickup) return;
+
+            if (inventoryController.InsertItem(item))
+            {
+                Remove();
+                Debug.Log("Picked Up" + gameObject.name);
+            }
+            else Debug.Log("Can't Pick up" + gameObject.name);
         }
-        else Debug.Log("Can't Pick up" + gameObject.name);
 
     }
 
