@@ -225,7 +225,8 @@ public class AudioManager : MonoBehaviour
         dialogueBeep,
         jump,
         ability,
-        defeatBoss
+        defeatBoss,
+        squeak
     }
 
     #endregion

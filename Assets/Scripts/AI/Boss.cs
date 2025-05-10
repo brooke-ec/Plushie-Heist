@@ -175,6 +175,7 @@ public class Boss : MonoBehaviour
         // _rb.AddForce(floatfloat);
 
         _rb.velocity = Vector3.up * Mathf.Cos(Time.time * frequency) * intensity;
+        transform.Rotate(0, 0.5f, 0);
     }   
 
     /// <summary>

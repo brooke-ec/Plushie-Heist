@@ -77,7 +77,7 @@ public class EscapingUI : MonoBehaviour
             escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
             {
                 Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
-                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 2);
+                dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 1);
                 dialogue.onDialogueEnd = EscapeScene;
             });
         } else escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(EscapeScene);
