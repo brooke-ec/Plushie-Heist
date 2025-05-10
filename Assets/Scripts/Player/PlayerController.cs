@@ -1240,6 +1240,13 @@ public class PlayerController : MonoBehaviour
         else SharedUIManager.instance.OpenMenu(InventoryController.instance);
     }
 
+    public void togglePause(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+
+        if (!SharedUIManager.instance.isMenuOpen) SharedUIManager.instance.OpenMenu(FindAnyObjectByType<PauseMenu>(FindObjectsInactive.Include));
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //If a projectile hits the player
