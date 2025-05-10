@@ -165,10 +165,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5b4759e29f331c4db7378b3acace630, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6727179963394390447}
+      addedObject: {fileID: 1956941730708782645}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5b4759e29f331c4db7378b3acace630, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1956941730708782645}
+      addedObject: {fileID: 2437475116269879034}
   m_SourcePrefab: {fileID: 100100000, guid: d5b4759e29f331c4db7378b3acace630, type: 3}
 --- !u!4 &1350079362788058973 stripped
 Transform:
@@ -180,8 +180,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d5b4759e29f331c4db7378b3acace630, type: 3}
   m_PrefabInstance: {fileID: 1528632850451792054}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &6727179963394390447
-MeshCollider:
+--- !u!114 &1956941730708782645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871143028188593639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 22a643f5e6282384982958600697884c, type: 2}
+--- !u!65 &2437475116269879034
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -198,20 +211,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7918189355986859829, guid: d5b4759e29f331c4db7378b3acace630, type: 3}
---- !u!114 &1956941730708782645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1871143028188593639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 22a643f5e6282384982958600697884c, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.2116461, z: 0.30733863}
+  m_Center: {x: -3.395771e-17, y: 0.000000029802322, z: 0.115441725}

@@ -78,18 +78,31 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e25b6ac9ab1d72a46ab42bdb1632a31a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 181753769056158928}
+      addedObject: {fileID: 4338762313821582465}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e25b6ac9ab1d72a46ab42bdb1632a31a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4338762313821582465}
+      addedObject: {fileID: 7355566064744364795}
   m_SourcePrefab: {fileID: 100100000, guid: e25b6ac9ab1d72a46ab42bdb1632a31a, type: 3}
 --- !u!1 &3315179847583432269 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e25b6ac9ab1d72a46ab42bdb1632a31a, type: 3}
   m_PrefabInstance: {fileID: 2504154570036560668}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &181753769056158928
-MeshCollider:
+--- !u!114 &4338762313821582465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315179847583432269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 23dac62b02d542346829d3b6ca3c7708, type: 2}
+--- !u!65 &7355566064744364795
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,20 +119,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -304567005737157293, guid: e25b6ac9ab1d72a46ab42bdb1632a31a, type: 3}
---- !u!114 &4338762313821582465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3315179847583432269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 23dac62b02d542346829d3b6ca3c7708, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.7258323, y: 1.1903952, z: 0.7334481}
+  m_Center: {x: -0.00000013659397, y: 0.5902221, z: -0.003807793}
