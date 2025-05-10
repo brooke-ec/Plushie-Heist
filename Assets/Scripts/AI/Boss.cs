@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class Boss : MonoBehaviour, IInteractable
+public class Boss : MonoBehaviour
 {
     #region Private Fields
     /// <summary>The RigidBody of the Boss</summary>
@@ -105,8 +105,6 @@ public class Boss : MonoBehaviour, IInteractable
     [SerializeField] private float _ramDelay;
     #endregion
     #endregion
-
-    [field: SerializeField] public string interactionPrompt { get; private set; } = "Press F to Pickup";
 
     public bool outline => true;
 
@@ -305,8 +303,8 @@ public class Boss : MonoBehaviour, IInteractable
             this.gameObject.layer = 8;
             Debug.Log("Boss has been beaten");
 
-            AudioManager.instance.PlaySound(AudioManager.SoundEnum.bossDefeat);
-            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.respite);
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.defeatBoss);
+            AudioManager.instance.PlayMusic(AudioManager.MusicEnum.defeatBoss);
             FindObjectsOfType<GuardAI>().ForEach(g => Destroy(g.gameObject));
 
             foreach (var o in _deathPersistent)
@@ -325,16 +323,6 @@ public class Boss : MonoBehaviour, IInteractable
         _bossBehaviour = BossBehaviour.Flying;
     }
     #endregion
-    public void PrimaryInteract(Interactor interactor) 
-    { 
-        //todo
-        //Insert the pickup plushie stuff here
-
-        Debug.Log("Freed the plushie");
-
-
-        //Insert the pickup plushie stuff here
-    }
 }
 
 enum BossBehaviour

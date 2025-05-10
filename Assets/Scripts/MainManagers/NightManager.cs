@@ -90,6 +90,7 @@ public class NightManager : MonoBehaviour
         SharedUIManager.instance.menusDisabled = true;
         playerInput.SwitchCurrentActionMap("MenuActions");
         Cursor.lockState= CursorLockMode.None;
+        AudioManager.instance.PlayMusic(AudioManager.MusicEnum.endOfNight);
         GetComponent<GaurdSpawer>()?.stopGuards();
 
         //Call end stuff

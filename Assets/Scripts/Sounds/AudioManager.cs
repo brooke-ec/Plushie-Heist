@@ -225,7 +225,7 @@ public class AudioManager : MonoBehaviour
         dialogueBeep,
         jump,
         ability,
-        bossDefeat
+        defeatBoss
     }
 
     #endregion
@@ -236,6 +236,7 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayMusic(MusicEnum musicName, bool immediately = false)
     {
+        if (currentMusicPlaying.musicName == musicName) return;
         if (currentMusicPlaying.musicName != MusicEnum.none)
         {
             if (!immediately)
@@ -275,7 +276,8 @@ public class AudioManager : MonoBehaviour
         nightMusic,
         guardChasingMusic,
         bossFight,
-        respite,
+        endOfNight,
+        defeatBoss,
         none
     }
 
