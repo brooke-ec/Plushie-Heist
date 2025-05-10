@@ -283,7 +283,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 594284680598497189}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnRotate
         m_Mode: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 594284680598497189}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnPlace
         m_Mode: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Place[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 594284680598497189}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnCancel
         m_Mode: 0
@@ -543,7 +543,6 @@ GameObject:
   - component: {fileID: 5249751877190587910}
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
-  - component: {fileID: 594284680598497189}
   - component: {fileID: 7934438741709096596}
   m_Layer: 7
   m_Name: Player Camera
@@ -628,22 +627,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8461329353988155359}
   m_Enabled: 1
---- !u!114 &594284680598497189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8461329353988155359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20b90c5da8185ac4fa31860aaf7bfe4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 10
-  controller: {fileID: 2651383046741006912}
-  camera: {fileID: 499776393120379558}
-  interactor: {fileID: 6666046485523007560}
 --- !u!114 &7934438741709096596
 MonoBehaviour:
   m_ObjectHideFlags: 0

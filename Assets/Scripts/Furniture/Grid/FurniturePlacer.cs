@@ -9,6 +9,7 @@ public class FurniturePlacer : MonoBehaviour
     [SerializeField] CharacterController controller;
     [SerializeField] new private Camera camera;
     [SerializeField] private Interactor interactor;
+    [SerializeField] private GameObject prompt;
 
     public static FurniturePlacer instance;
 
@@ -32,6 +33,7 @@ public class FurniturePlacer : MonoBehaviour
 
     private void Update()
     {
+        prompt.SetActive(item != null);
         if (item != null)
         {
             camera.cullingMask |= gridLayer;

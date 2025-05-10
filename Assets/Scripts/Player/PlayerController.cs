@@ -117,10 +117,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float grappleCooldownSpeed;
     /// <summary>The Strength that the player throws the beanbags at</summary>
     [SerializeField] private float _throwStrength;
+
+    [Header("Bean Bag Values")]
     /// <summary>The beanBag that is attached to the player</summary>
     [SerializeField] private GameObject _beanBag;
     /// <summary>The BeanBag Prefab</summary>
     [SerializeField] private GameObject _beanBagPrefab;
+    [SerializeField] private GameObject _beanBagPrompt;
     #endregion
 
     #region private fields
@@ -423,6 +426,7 @@ public class PlayerController : MonoBehaviour
     public void PickupBean()
     {
         _beanBag.SetActive(true);
+        _beanBagPrompt.SetActive(true);
         _holdingBeanBag = true;
     }
 
@@ -431,6 +435,7 @@ public class PlayerController : MonoBehaviour
         if(_holdingBeanBag)
         {
             _beanBag.SetActive(false);
+            _beanBagPrompt.SetActive(false);
             _holdingBeanBag = false;
             Quaternion camRot = cam.gameObject.transform.rotation;
 
