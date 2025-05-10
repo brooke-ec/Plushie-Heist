@@ -702,6 +702,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7318455383341453705}
+  - component: {fileID: 6058123252151860077}
   m_Layer: 5
   m_Name: UnsuccessfulEscapeUI
   m_TagString: Untagged
@@ -732,6 +733,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -4.8506}
   m_SizeDelta: {x: 437.9723, y: 497.5574}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6058123252151860077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830865292708182983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57fadbeb7214bf4eb519cd2610f0ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endScale: 1.05
 --- !u!1 &2068511675146601663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,7 +1652,7 @@ MonoBehaviour:
   m_Elasticity: 0.2
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 20
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4783052315194872526}
   m_HorizontalScrollbar: {fileID: 3360752608423432825}
   m_VerticalScrollbar: {fileID: 0}
@@ -2171,7 +2185,7 @@ MonoBehaviour:
   m_Elasticity: 0.2
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 20
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 3892006933676813533}
   m_HorizontalScrollbar: {fileID: 2331808285769328816}
   m_VerticalScrollbar: {fileID: 0}

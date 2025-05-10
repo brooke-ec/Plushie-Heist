@@ -1,7 +1,8 @@
+using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -11,10 +12,11 @@ public class StocksController : MonoBehaviour
 {
     private PricingTableManager pricingTableManager;
 
-    [SerializeField] private List<ItemClass> allItemsInGame = new List<ItemClass>();
-    [HideInInspector] public List<ProductData> allStocksInGame;
+    [HideInInspector] [JsonProperty("pricing")] public List<ProductData> allStocksInGame;
 
     public SetPricingUIFunctionality setPricingUIPrefab;
+
+    public Vector2 purchaseRange = new Vector2(0.65f, 0.75f);
 
     [Range(0, 1)]
     public float maxPercentOfItemsToChange = 0.5f;
@@ -27,12 +29,19 @@ public class StocksController : MonoBehaviour
         pricingTableManager = FindAnyObjectByType<PricingTableManager>(FindObjectsInactive.Include);
     }
 
-    public void CreateAllProductData()
+    private void Start()
+    {
+        if (allStocksInGame == null || allStocksInGame.Count == 0) CreateAllProductData();
+        UpdatePricingTable();
+    }
+
+    private void CreateAllProductData()
     {
         int todaysDate = ShopManager.instance.day;
 
-        allStocksInGame = new List<ProductData>(allItemsInGame.Count);
-        foreach(ItemClass item in allItemsInGame)
+        FurnitureItem[] allItemsInGame = Resources.LoadAll<FurnitureItem>(FurnitureItem.PATH);
+        allStocksInGame = new List<ProductData>(allItemsInGame.Length);
+        foreach (FurnitureItem item in allItemsInGame)
         {
             ProductData product = new ProductData(item, todaysDate);
             allStocksInGame.Add(product);
@@ -42,26 +51,16 @@ public class StocksController : MonoBehaviour
     #endregion
 
     #region Actions
-    /// <summary>
-    /// TO-DO Call when furniture is placed OR new item added to inventory
-    /// Essentially, we check if the passed furniture is already part
-    /// of the pricing table. If it isn't, it's added. Otherwise nothing happens
-    /// </summary>
-    public void TryAddFurnitureToPricingTable(ItemClass item)
+    public void UpdatePricingTable()
     {
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
-        {
-            pricingTableManager.TryAddNewProduct(product);
-        }
-    }
+        FurnitureItem[] all = FindObjectsOfType<FurnitureController>().Select(c => c.item)
+            .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
+            .Distinct().ToArray();
 
-    public void TryRemoveFurnitureFromPricingTable(ItemClass item)
-    {
-        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
-        if (product != null)
+        foreach (ProductData stock in allStocksInGame)
         {
-            pricingTableManager.TryRemoveProduct(product);
+            if (all.Contains(stock.itemRef)) pricingTableManager.TryAddNewProduct(stock);
+            else pricingTableManager.TryRemoveProduct(stock);
         }
     }
 
@@ -73,9 +72,6 @@ public class StocksController : MonoBehaviour
     {
         // go through all stocks and randomise a bit some items market price
         //and update last modified and last market price
-
-        /*int minNumOfChanges = 1;
-        int maxNumOfChanges = 3;*/
 
         int minNumOfChanges = (int) (allStocksInGame.Count * maxPercentOfItemsToChange);
         int maxNumOfChanges = (int) (allStocksInGame.Count * minPercentOfItemsToChange);
@@ -90,7 +86,6 @@ public class StocksController : MonoBehaviour
             float lastMarketPrice = product.marketPrice;
 
             float fluctuation = UnityEngine.Random.Range(-0.2f, 0.2f);
-            float dwd = product.marketPrice * (1 + fluctuation);
 
             float newPrice = Mathf.Max(0f, product.marketPrice * (1 + fluctuation)); //to make sure it doesn't go below 0
             newPrice = (float)System.Math.Round(newPrice, 2);
@@ -109,13 +104,14 @@ public class StocksController : MonoBehaviour
         pricingTableManager.ResetTableToOriginalOrder();
     }
 
-    public void CreateSetPricingUI(ItemClass item)
+    public void CreateSetPricingUI(FurnitureItem item)
     {
         ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
         if (product != null)
         {
             SetPricingUIFunctionality pricingUI = Instantiate(setPricingUIPrefab, ShopManager.instance.mainCanvas.transform);
             pricingUI.SetUI(product);
+            SharedUIManager.instance.OpenMenu(pricingUI);
         }
     }
 
@@ -124,19 +120,51 @@ public class StocksController : MonoBehaviour
         pricingTableManager.UpdateThisProductInfo(product);
     }
 
+    /// <summary>
+    /// Call to get the selling price of a given item
+    /// </summary>
+    public float GetSellingPriceOfItem(FurnitureItem item)
+    {
+
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            return product.price;
+        }
+        else
+        {
+            Debug.LogError("Selling price of item is wrong. Giving max value");
+            return int.MaxValue;
+        }
+    }
+
+    public float GetMarketPriceOfItem(FurnitureItem item)
+    {
+
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            return product.marketPrice;
+        }
+        else
+        {
+            Debug.LogError("Market price of item is wrong. Giving max value");
+            return int.MaxValue;
+        }
+    }
     #endregion
 
     #region Extras
     private float RoundToRetailPrice(float price)
-    {
-        float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
+            {
+                float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
 
-        float basePart = Mathf.Floor(price);
-        float decimalPart = price - basePart;
+                float basePart = Mathf.Floor(price);
+                float decimalPart = price - basePart;
 
-        float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
+                float closestEnding = allowedEndings.OrderBy(ending => Mathf.Abs(decimalPart - ending)).First();
 
-        return basePart + closestEnding;
-    }
+                return basePart + closestEnding;
+            }
     #endregion
 }

@@ -1246,6 +1246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 930055218725356288}
+  - component: {fileID: 2160725569284549346}
   m_Layer: 5
   m_Name: EscapingUI
   m_TagString: Untagged
@@ -1276,6 +1277,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -16.8748}
   m_SizeDelta: {x: 437.9723, y: 313.5898}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2160725569284549346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831409885569816419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57fadbeb7214bf4eb519cd2610f0ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endScale: 1.05
 --- !u!1 &7117151511182650060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1537,7 +1551,7 @@ MonoBehaviour:
   m_Elasticity: 0.2
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 20
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 3918843407636433888}
   m_HorizontalScrollbar: {fileID: 2731043479455890531}
   m_VerticalScrollbar: {fileID: 0}

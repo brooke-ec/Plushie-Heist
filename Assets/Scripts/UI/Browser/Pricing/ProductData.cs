@@ -1,17 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class ProductData
 {
-    public ItemClass itemRef;
+    public FurnitureItem itemRef;
     public int lastDayChanged;
     [HideInInspector] public float marketPrice;
     [HideInInspector] public float lastMarketPrice;
     public float price;
 
-    public ProductData(ItemClass item, int todaysDay)
+    public ProductData() { }
+
+    public ProductData(FurnitureItem item, int todaysDay)
     {
         itemRef = item;
         lastMarketPrice = item.marketPrice;

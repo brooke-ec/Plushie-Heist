@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using cakeslice;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,57 +14,88 @@ public class Interactor : MonoBehaviour
     /// <summary>The radius of the interactor from the point</summary>
     [SerializeField] private float interactorRadius;
     /// <summary>Layer to interact with should be Interactable add others if needed(shouldnt be) </summary>
-    [SerializeField] private LayerMask interactorLayerMask;
+    [SerializeField] public LayerMask interactorLayerMask;
     /// <summary>The UI element to show the Interaction Text </summary>
     [SerializeField] private TextMeshProUGUI interactionText;
 
-    /// <summary>number of colliders currently interactable with</summary>
-    private int numColliders;
+    /// <summary>number of colliders currently in range</summary>
+    private int count;
     /// <summary>array to hold colliders that are currently in range</summary>
-    private readonly Collider[] colliders = new Collider[1];
-    /// <summary>is Ui Text displayed </summary>
-    private bool textDisplayed = false;
+    private readonly Collider[] colliders = new Collider[8];
+    /// <summary> The closest interactables in range </summary>
+    private IInteractable interactable = null;
+    /// <summary> The closest collider in range </summary>
+    private new Collider collider;
+    /// <summary> The closest collider in range last frame </summary>
+    private Collider previous;
+    /// <summary> The outlines of the interactable collider in range </summary>
+    private Outline[] outlines = new Outline[0];
+
+
+    private void Start()
+    {
+        if (interactionText == null) enabled = false;
+    }
 
     private void Update()
     {
-        //get interactables in range
-        numColliders = Physics.OverlapSphereNonAlloc(interactorPoint.position, interactorRadius, colliders, interactorLayerMask);
+        // Get closest interactable in range
+        count = Physics.OverlapSphereNonAlloc(interactorPoint.position, interactorRadius, colliders, interactorLayerMask);
+        collider = colliders.Take(count).OrderBy(c => Vector3.Distance(interactorPoint.position, c.transform.position)).FirstOrDefault();
 
-        if (numColliders > 0 && !textDisplayed) // show relevant text 
+        if (!ReferenceEquals(previous, collider))
         {
-            if (colliders[0] != null) 
+            previous = collider;
+
+            // Clean up the previous outline, check not destroyed
+            outlines.Where(o => o != null).ForEach(o => o.enabled = false);
+
+            // Get new interactable
+            if (collider == null)
             {
-                interactionText.text = colliders[0].GetComponent<IInteractable>() != null ? colliders[0].GetComponent<IInteractable>().interactionPrompt : "Not interactable";
+                outlines = new Outline[0];
+                interactable = null;
             }
-            interactionText.gameObject.SetActive(true);
-            textDisplayed = true;
+            else
+            {
+                interactable = collider.GetComponentInParent<IInteractable>();
+                
+                // Activate Outline
+                outlines = collider.GetComponentsInChildren<Outline>();
+                outlines.ForEach(o => o.enabled = true);
+            }
         }
-        else if(numColliders ==0 && textDisplayed) // hide text
+
+        if (interactable == null) interactionText.text = "";
+        else
         {
-            interactionText.gameObject.SetActive(false);
-            textDisplayed = false;
+            interactionText.text = interactable.interactionPrompt;
+            outlines.ForEach((o) => o.color = interactable.outline ? 0 : 1);
         }
     }
 
-    // For Debugging
+#if UNITY_EDITOR // For Debugging
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(interactorPoint.position, interactorRadius);
+        if (interactorPoint == null) Debug.LogError("Interactor.interactorPoint not set");
+        else Gizmos.DrawWireSphere(interactorPoint.position, interactorRadius);
     }
+#endif
+
     /// <summary>
     /// If Interactor is close enough to interact call the interactables interact Method when interact button pressed
     /// </summary>
-    /// <param name="ctx"></param>
-    public void pressInteract(InputAction.CallbackContext ctx)
+    public void pressPrimaryInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
-        {
-            if (numColliders > 0)
-            {
-                IInteractable interactable = colliders[0].GetComponent<IInteractable>();
-                if (interactable != null) { interactable.interact(this); }
-            }
-        }
+        if (ctx.performed && interactable != null) interactable.PrimaryInteract(this);
+    }
+
+    /// <summary>
+    /// If Interactor is close enough to interact call the interactables secondary interact method when secondary interact button pressed
+    /// </summary>
+    public void pressSecondaryInteract(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && interactable != null) interactable.SecondaryInteract(this);
     }
 }

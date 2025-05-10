@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SetPricingUIFunctionality : MonoBehaviour
+public class SetPricingUIFunctionality : MonoBehaviour, IUIMenu
 {
     [SerializeField] private Color32 green;
     [SerializeField] private Color32 pink;
@@ -20,7 +18,7 @@ public class SetPricingUIFunctionality : MonoBehaviour
     public void SetUI(ProductData product)
     {
         this.product = product;
-        itemIcon.sprite = product.itemRef.itemIcon;
+        itemIcon.sprite = product.itemRef.inventoryIcon;
         itemName.text = product.itemRef.itemName;
         itemMarketPrice.text = product.marketPrice.ToString();
         priceInputField.text = product.price.ToString();
@@ -49,8 +47,9 @@ public class SetPricingUIFunctionality : MonoBehaviour
     public void OnSetPricing()
     {
         //not updating price because that is done when text is edited
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
         ShopManager.instance.stocksController.UpdateProduct(product);
-        Destroy(this.gameObject);
+        SharedUIManager.instance.CloseMenu();
     }
 
     private void SetMarginColour()
@@ -65,5 +64,10 @@ public class SetPricingUIFunctionality : MonoBehaviour
             margin.color = pink;
             marginPoundText.color = pink;
         }
+    }
+
+    void IUIMenu.SetOpenState(bool open)
+    {
+        if (!open) Destroy(this.gameObject);
     }
 }

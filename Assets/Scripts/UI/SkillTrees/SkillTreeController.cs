@@ -7,7 +7,7 @@ public class SkillTreeController : MonoBehaviour
 {
     [Header("References")]
     public SkillTree skillTree;
-    public List<Skill> unlockedSkills = new List<Skill>();
+    public List<Skill> unlockedSkills => SharedUIManager.instance.unlockedSkills;
 
     public void CreateSkillTree(SkillTree skillTree)
     {
@@ -20,6 +20,7 @@ public class SkillTreeController : MonoBehaviour
     {
         return unlockedSkills.Contains(skill);
     }
+
     /// <summary> Does not check if previous branches are unlocked </summary>
     public void EnableBranch(int plushieNumber)
     {
@@ -27,12 +28,12 @@ public class SkillTreeController : MonoBehaviour
         else
         {
             List<Skill> skillsToEnable = skillTree.unlockables[plushieNumber].skillsToEnable;
-            List<SkillButton> allSkillsInTree = canvasTransform.GetComponentsInChildren<SkillButton>().ToList();
 
-            foreach (SkillButton skillInTree in allSkillsInTree)
+            foreach (SkillButton skillInTree in GetComponentsInChildren<SkillButton>())
             {
                 //If you find the same skill in the tree
                 Skill skillToEnable = skillsToEnable.Find(s => s.Equals(skillInTree.skill));
+
                 if (skillToEnable != null)
                 {
                     //Update it so it's enabled

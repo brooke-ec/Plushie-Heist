@@ -1,13 +1,31 @@
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InventoryItem : MonoBehaviour, IPointerClickHandler
 {
-    public ItemClass itemClass;
+    [JsonProperty("item"), Unwitable] public FurnitureItem itemClass;
+    [JsonProperty("position")] public Vector2Int position;
+    [JsonProperty("rotated")] public bool rotated = false;
     private Image icon;
     private RectTransform shadowRectTransform;
     private RectTransform backgroundRectTransform;
+
+    [DeserializationFactory]
+    public static InventoryItem Factory(FurnitureItem item, bool rotated)
+    {
+        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
+        InventoryItem ii = Instantiate(InventoryController.instance.itemPrefab, rootCanvas).GetComponent<InventoryItem>();
+        ii.Set(item);
+        if (rotated) ii.Rotate();
+        return ii;
+    }
+
+    public static InventoryItem Factory(FurnitureItem item)
+    {
+        return Factory(item, false);
+    }
 
     private float scaleFactor;
 
@@ -26,9 +44,9 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             if (!rotated)
             {
-                return itemClass.sizeHeight;
+                return itemClass.inventorySize.y;
             }
-            return itemClass.sizeWidth;
+            return itemClass.inventorySize.x;
         }
     }
 
@@ -38,21 +56,19 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             if (!rotated)
             {
-                return itemClass.sizeWidth;
+                return itemClass.inventorySize.x;
             }
-            return itemClass.sizeHeight;
+            return itemClass.inventorySize.y;
         }
     }
 
     /// <summary> Mostly used to pick up an item. Gets the INDEXES of the main position on grid, x and y </summary>
     public Vector2Int mainPositionOnGrid = new Vector2Int();
 
-    public bool rotated = false;
-
-    public void Set(ItemClass itemClass)
+    public void Set(FurnitureItem itemClass)
     {
         this.itemClass = itemClass;
-        icon.sprite = itemClass.itemIcon;
+        icon.sprite = itemClass.inventoryIcon;
 
         Vector2 size = new Vector2();
         size.x = Width * InventoryGrid.usableTileSize;
@@ -74,7 +90,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public void Rotate()
     {
-        if (itemClass.sizeWidth == itemClass.sizeHeight) { return; }
+        if (itemClass.inventorySize.x == itemClass.inventorySize.y) { return; }
 
         rotated = !rotated;
         RectTransform itemRectTransform = GetComponent<RectTransform>();
@@ -92,9 +108,8 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         {
             print("use");
 
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
             GetComponentInParent<InventoryGrid>().CreateItemInteractionMenu(this);
-            //TO-DO
-            //there is a prefab with a button component for the tooltip
         }
     }
 }

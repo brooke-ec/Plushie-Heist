@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 public class Projectilescript : MonoBehaviour
@@ -29,6 +25,7 @@ public class Projectilescript : MonoBehaviour
     {
         transform.position += transform.forward * speed * Time.deltaTime;
         lifeTimer += Time.deltaTime;
+
         if (Vector3.Distance(originalPos,transform.position)>hit.distance)
         {
             Destroy(this.gameObject);

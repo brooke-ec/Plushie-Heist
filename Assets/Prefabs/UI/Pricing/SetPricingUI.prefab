@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 136635906320228058}
   - component: {fileID: 2970004202803248526}
+  - component: {fileID: 1817103329431303995}
   m_Layer: 5
   m_Name: SetPricingUI
   m_TagString: Untagged
@@ -64,6 +65,19 @@ MonoBehaviour:
   priceInputField: {fileID: 1214193754149842376}
   margin: {fileID: 7307734733441373482}
   marginPoundText: {fileID: 7455258293894346873}
+--- !u!114 &1817103329431303995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 764140857412326423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57fadbeb7214bf4eb519cd2610f0ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endScale: 1.05
 --- !u!1 &810549389064698925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,14 +1121,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.91372555, g: 0.49803925, b: 0.56078434, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f002d8f9a70945f49a1e6f494718f293, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 043ed354cfaa3294db18f39ef517f11d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

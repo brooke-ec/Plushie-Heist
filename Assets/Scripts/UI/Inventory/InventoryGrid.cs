@@ -1,6 +1,6 @@
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     #region References
-    private InventoryController inventoryController;
     private RectTransform rectTransform;
     #endregion
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
@@ -22,24 +21,52 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private int inventoryWidth;
     [SerializeField] private int inventoryHeight;
 
-    InventoryItem[,] inventorySlots;
+    [JsonProperty("size")] public Vector2Int size
+    {
+        get { return new Vector2Int(inventoryWidth, inventoryHeight); }
+        set { CreateInventoryGrid(value.x, value.y); }
+    }
+
+    InventoryItem[,] inventorySlots = null;
     private float scaleFactor;
 
-    public void StartInventory()
+    [JsonProperty("items")]
+    public InventoryItem[] items
     {
-        inventoryController = FindAnyObjectByType<InventoryController>();
-        rectTransform = GetComponent<RectTransform>();
+        get
+        {
+            return inventorySlots == null ? new InventoryItem[0] : 
+                (from InventoryItem item in inventorySlots
+                    where item != null select item).Distinct().ToArray();
+        }
+        set
+        {
+            foreach (InventoryItem item in value)
+            {
+                PlaceItem(item, item.position.x, item.position.y);
+            }
+        }
+    }
 
+    private void Awake()
+    {
         scaleFactor = SharedUIManager.instance.scaleFactor;
+        rectTransform = GetComponent<RectTransform>();
+    }
 
-        CreateInventoryGrid(inventoryWidth, inventoryHeight);
-        //PlaceTestItems();
+    private void Start()
+    {
+        if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
     }
 
     #region Setup
     /// <summary> Create inventory grid of width and height, such as 3x3  /// </summary>
     public void CreateInventoryGrid(int width, int height)
     {
+        Awake();
+        print($"{width} {height}");
+        inventoryWidth = width;
+        inventoryHeight = height;
         inventorySlots = new InventoryItem[width, height];
         rectTransform.sizeDelta = new Vector2((width * tileSize) - offsetFromImage, (height * tileSize) - offsetFromImage); //actual size of inventory
     }
@@ -64,13 +91,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #region Set a grid as interactable or not
     public void OnPointerEnter(PointerEventData eventData)
     {
-        inventoryController.selectedInventoryGrid = this;
+        InventoryController.instance.selectedInventoryGrid = this;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //maybe it's better if it's only re-set to a new selected Inventory Grid if that one calls it, not sure
-        inventoryController.selectedInventoryGrid = null;
+        InventoryController.instance.selectedInventoryGrid = null;
     }
     #endregion
 
@@ -78,10 +105,12 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public Vector2Int? FindSpaceForObject(InventoryItem itemToInsert)
     {
-        int width = tileSize - itemToInsert.Width + 1;
-        int height = tileSize - itemToInsert.Height + 1;
-
         return GetSpaceAvailable(new Vector2Int(itemToInsert.Width, itemToInsert.Height));
+    }
+
+    public Vector2Int? FindSpaceForObject(FurnitureItem itemToInsert)
+    {
+        return GetSpaceAvailable(new Vector2Int(itemToInsert.inventorySize.x, itemToInsert.inventorySize.y));
     }
 
     /// <summary> Place item in inventory in tile units. Eg: [2, 5] INCLUDES OVERLAP ITEM </summary>
@@ -107,6 +136,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         RectTransform itemRectTransform = item.GetComponent<RectTransform>();
         itemRectTransform.SetParent(rectTransform);
+        item.position = new Vector2Int(xPos, yPos);
 
         //telling the grid that this item is present on each of these tiles of the grid (if bigger than 1x1)
         for (int x = 0; x < item.Width; x++)
@@ -133,6 +163,11 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public InventoryItem PickUpItem(int xPos, int yPos)
     {
+        if (inventorySlots == null
+            || xPos >= inventoryWidth || yPos >= inventoryHeight
+            || xPos < 0 || yPos < 0
+        ) { return null; }
+
         InventoryItem item = inventorySlots[xPos, yPos];
 
         if (item == null) { return null; }
@@ -141,7 +176,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         return item;
     }
 
-    public bool IsThisItemTypeInTheInventory(ItemClass itemClass)
+    public bool IsThisItemTypeInTheInventory(FurnitureItem itemClass)
     {
         for(int x=0;x<inventoryWidth; x++)
         {
@@ -159,7 +194,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <summary>
     /// Gets the first instance of this item type in the inventory if exists, null otherwise
     /// </summary>
-    public InventoryItem GetFirstItemType(ItemClass itemClass)
+    public InventoryItem GetFirstItemType(FurnitureItem itemClass)
     {
         for (int x = 0; x < inventoryWidth; x++)
         {
@@ -280,9 +315,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// Call to get the dictionary form of the current inventory
     /// </summary>
     /// <returns>A dictionary with each itemclass in the inventory, and the number of times it appears</returns>
-    public Dictionary<ItemClass, int> GetDictionaryOfCurrentItems()
+    public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
     {
-        Dictionary<ItemClass, int> dictionary = new Dictionary<ItemClass, int>();
+        Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
 
         for (int x = 0; x < inventoryWidth; x++)
         {
@@ -311,29 +346,13 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ModifyInventorySize(int addedRowModifier)
     {
-        //copy inventory items to here
-        InventoryItem[,] copyOfInventorySlots = new InventoryItem[inventoryWidth, inventoryHeight];
-        for(int x=0; x<inventoryWidth; x++)
-        {
-            for(int y=0; y<inventoryHeight; y++)
-            {
-                copyOfInventorySlots[x, y] = inventorySlots[x, y];
-            }
-        }
+        InventoryItem[] original = items;
 
         CreateInventoryGrid(inventoryWidth, inventoryHeight+addedRowModifier);
 
-        //now add those items properly to the new inventory slots
-        for (int x = 0; x < inventoryWidth; x++)
+        foreach (var item in original)
         {
-            for (int y = 0; y < inventoryHeight; y++)
-            {
-                InventoryItem item = copyOfInventorySlots[x, y];
-                if (item != null && item.mainPositionOnGrid == new Vector2Int(x, y))
-                {
-                    PlaceItem(item, x, y);
-                }
-            }
+            PlaceItem(item, item.position.x, item.position.y);
         }
 
         inventoryHeight += addedRowModifier;
@@ -347,7 +366,6 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void CreateItemInteractionMenu(InventoryItem item)
     {
-        //TO-DO CHANGE TO ACTUAL INPUT SYSTEM
         Vector3 mousePos = Input.mousePosition;
 
         InventoryController controller = FindAnyObjectByType<InventoryController>();
@@ -356,15 +374,23 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         List<string> actionTitles = new List<string>();
         List<UnityAction> actions = new List<UnityAction>();
 
-        actionTitles.Add("Place item");
-        actionTitles.Add("Discard item");
 
-        //TO-DO whatever is called to place an item
-        //actions.Add(METHOD) but temporarily:
-        actions.Add(() => print("missing placing item method"));
+        if (ShopManager.instance != null)
+        {
+            actionTitles.Add("Place item");
+            actions.Add(() =>
+            {
+                SharedUIManager.instance.CloseMenu();
+                FurniturePlacer.instance.Place(item.itemClass)
+                    .AddListener(() => controller.RemoveItemFromInventory(item, isBackpack));
+            });
+        }
+
+        actionTitles.Add("Discard item");
         actions.Add(() => controller.RemoveItemFromInventory(item, isBackpack));
 
-        if (isBackpack)
+        //if backpack and it's daytime
+        if (isBackpack && NightManager.instance==null)
         {
             actionTitles.Add("Try add to storage");
             actions.Add(() => controller.AddItemFromBackpackToStorage(item));
@@ -373,26 +399,5 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         FindAnyObjectByType<HoveringManager>().CreateInventoryTooltip(actionTitles, actions, mousePos);
     }
 
-    #endregion
-
-    #region Test
-    public List<ItemClass> itemsToTest = new List<ItemClass>();
-    public GameObject itemPrefab;
-    //
-    public void PlaceTestItems()
-    {
-        Transform rootCanvas = SharedUIManager.instance.rootCanvas.transform;
-        InventoryItem item = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item.Set(itemsToTest[0]);
-        PlaceItem(item, 0, 0);
-
-        InventoryItem item2 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item2.Set(itemsToTest[1]);
-        PlaceItem(item2, 0, 1);
-
-        InventoryItem item3 = Instantiate(itemPrefab, rootCanvas).GetComponent<InventoryItem>();
-        item3.Set(itemsToTest[0]);
-        PlaceItem(item3, 2, 1);
-    }
     #endregion
 }

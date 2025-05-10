@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -67,7 +66,9 @@ public class ChooseAnAbilityUI : MonoBehaviour
     private void CloseChooseAbilityUI()
     {
         MovementUIManager.instance.ChangeMovementUI(currentlySelectedAbility);
-
+        PlayerController.instance.SwapActiveAbility(currentlySelectedAbility);
+        SharedUIManager.instance.menusDisabled = false;
+        Time.timeScale = 1f;
         NightManager.instance.StartNight();
         Destroy(this.gameObject);
     }

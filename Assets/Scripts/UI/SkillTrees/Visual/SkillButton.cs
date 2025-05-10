@@ -10,6 +10,11 @@ public class SkillButton : MonoBehaviour
     private SkillTreeController skillTreeController;
 
     public bool branchIsEnabled = true;
+    /// <summary>
+    /// by default this is a skill tree button so you interact, but in the case of the plushies I want this false
+    /// </summary>
+    [HideInInspector] public bool interactableSkill = true;
+    private string plushieName = "plushie";
 
     private void Start()
     {
@@ -19,6 +24,9 @@ public class SkillButton : MonoBehaviour
     {
         HoveringManager.TooltipBackgroundColor tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.noChanges;
         Color32 textColour;
+
+        GetPlushieInfo();
+        string lockedString = "Locked until "+plushieName;
         if ((CanBeUnlocked() && IsBranchVisible()) | IsUnlocked())
         {
             tooltipBackgroundColor = skillTreeController.skillTree.palette.tooltipBackgroundColor;
@@ -29,7 +37,14 @@ public class SkillButton : MonoBehaviour
             tooltipBackgroundColor = HoveringManager.TooltipBackgroundColor.grey;
             textColour = skillTreeController.skillTree.palette.notUpgradedTextColour;
         }
-        tooltip.SetInfo(skill.skillName, textColour, skill.description, HoveringManager.TooltipCost.coins, skill.cost.ToString(), tooltipBackgroundColor);
+
+        if (IsBranchVisible())
+        {
+            lockedString = "Unlocked by " + plushieName;
+        }
+
+
+        tooltip.SetInfo(skill.skillName, textColour, skill.description, HoveringManager.TooltipCost.coins, skill.cost.ToString(), lockedString, tooltipBackgroundColor);
     }
 
     public void SetUI(SkillTreeController skillTreeController)
@@ -39,10 +54,19 @@ public class SkillButton : MonoBehaviour
         UpdateUI();
     }
 
+    public void SetUI(Skill skill, SkillTreeController skillTreeController)
+    {
+        this.skill = skill;
+        SetUI(skillTreeController);
+    }
+
     private void UpdateUI()
     {
         UpdateColours();
-        UpdateParentEdges();
+        if (interactableSkill)
+        {
+            UpdateParentEdges();
+        }
     }
 
     public void TryGetSkill()
@@ -65,10 +89,12 @@ public class SkillButton : MonoBehaviour
                     childNode.UpdateUI();
                 }
             }
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.coins);
             skill.Unlock();
         }
         else
         {
+            AudioManager.instance.PlaySound(AudioManager.SoundEnum.error);
             Debug.Log("Cannot get skill " + skill.skillName);
         }
     }
@@ -82,7 +108,6 @@ public class SkillButton : MonoBehaviour
     {
         if (IsUnlocked()) { return false; }
 
-        //TO-DO properly
         if (ShopManager.instance.GetMoney() < skill.cost)
         {
             return false;
@@ -100,7 +125,6 @@ public class SkillButton : MonoBehaviour
 
     private bool IsBranchVisible()
     {
-        //TO-DO
         return branchIsEnabled;
     }
     private void UpdateColours()
@@ -163,6 +187,28 @@ public class SkillButton : MonoBehaviour
                 Debug.LogWarning("No edge found from " + requirement.name + " to " + skill.name);
             }
         }
+    }
+
+    private void GetPlushieInfo()
+    {
+        PlushieManager plushieManager = FindAnyObjectByType<PlushieManager>(FindObjectsInactive.Include);
+        if(plushieManager==null) { Debug.LogError("Plushie manager is null when trying to get plushie info for a skill"); return; }
+
+        if (plushieName == "plushie") {
+            //NEED TO FIX NULL REF ERROR HERE
+            PlushieInfo info = plushieManager.GetPlushieForSkill(skill);
+
+            //if null it means it's one of the default skills with no plushie associated
+            if(info==null)
+            {
+                plushieName = "default";
+            }
+            else
+            {
+                plushieName = info.name;
+            }
+        }
+
     }
 
 }

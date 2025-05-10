@@ -15,6 +15,7 @@ public class SkillTreesManager : MonoBehaviour
     [SerializeField] private List<SkillTreeController> skillTrees = new List<SkillTreeController>();
     [SerializeField] private List<SkillTree> skillTreesReferences = new List<SkillTree>();
 
+
     private void Start()
     {
         CreateAllSkillTrees();
@@ -23,6 +24,10 @@ public class SkillTreesManager : MonoBehaviour
         ShopManager.OnMoneyChanged += UpdateCoins;
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
+
+        for (int i = 0; i < SharedUIManager.instance.plushieIndex; i++) EnableNextBranch();
+
+        //EnableNextBranch();
     }
 
     public void CreateAllSkillTrees()
@@ -87,31 +92,26 @@ public class SkillTreesManager : MonoBehaviour
         Sprite newButtonBackground = skillTrees[currentlyActiveSkillTree].skillTree.palette.canBeUpgradedSprite;
         coinsContainer.GetChild(1).GetComponent<Image>().sprite = newButtonBackground;
 
-        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString();
+        coinsContainer.GetChild(3).GetComponent<TextMeshProUGUI>().text = ShopManager.instance.GetMoney().ToString("n2");
     }
 
     #endregion
 
     #region User control
+
+    private int nextPlushieToBeRescued = 0;
+
     /// <summary> Enables skills from rescuing plushieNumber. Also enables any parent skills so pay attention </summary>
     /// <param name="plushieNumber">Number of plushie to rescue: pay attention to order in list</param>
-    public void EnableBranch(int plushieNumber, int skillTreeNumber)
+    public void EnableNextBranch()
     {
-        if (skillTreeNumber < 0 || skillTreeNumber >= skillTrees.Count)
-        {
-            Debug.Log("Error enabling branch. Skill tree number too high");
-        }
-        else
-        {
-            skillTrees[skillTreeNumber].EnableBranch(plushieNumber);
-        }
+        foreach (var tree in skillTrees) tree.EnableBranch(nextPlushieToBeRescued);
+        nextPlushieToBeRescued++;
     }
 
-    int nextPlushie = 0;
-    public void EnableNextBranch(int skillTreeNumber)
+    public List<SkillTreeController> GetSkillTreeControllers()
     {
-        EnableBranch(nextPlushie, skillTreeNumber);
-        nextPlushie++;
+        return skillTrees;
     }
     #endregion
 }

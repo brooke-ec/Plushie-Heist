@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class NightManager : MonoBehaviour
@@ -11,13 +10,14 @@ public class NightManager : MonoBehaviour
     {
         if(instance!=null)
         {
-            Destroy(this);
+            Destroy(transform.parent.gameObject);
             print("Night manager already in scene");
         }
         else
         {
             instance = this;
         }
+        playerInput = FindAnyObjectByType<PlayerInput>();
     }
 
     private void Start()
@@ -34,17 +34,22 @@ public class NightManager : MonoBehaviour
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
 
+    private PlayerInput playerInput;
+
     public void LoadNight()
     {
-        //TO-DO probably load ikea procedural stuff etc
-
         //load UI saying what the night is about, and the continue button calls StartNight()
+        playerInput.SwitchCurrentActionMap("MenuActions");
+        SharedUIManager.instance.menusDisabled = true;
+        Cursor.lockState = CursorLockMode.None;
         GameObject nightIntroUI = Instantiate(nightIntroUIPrefab, nightUICanvas.transform);
         nightIntroUI.transform.GetChild(3).GetComponentInChildren<Button>().onClick.AddListener(() => {
                 Instantiate(chooseAbilityUIPrefab, nightUICanvas.transform);
                 Destroy(nightIntroUI);
             }
         );
+
+        LoadPlushieIndicator(SharedUIManager.instance.nextPlushie);
     }
 
     /// <summary>
@@ -52,6 +57,9 @@ public class NightManager : MonoBehaviour
     /// </summary>
     public void StartNight()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        playerInput.SwitchCurrentActionMap("PlayerMovement");
+        FindAnyObjectByType<GaurdSpawer>().startGuards();
         print("night started");
 
         nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
@@ -72,8 +80,25 @@ public class NightManager : MonoBehaviour
     {
         print("night ENDED");
 
+        nightTimer.StopAllCoroutines();
+
+        //even if you rescue it, if caught then you lose it
+        if (!successful) { hasRescuedPlushie = false; }
+        SharedUIManager.instance.menusDisabled = true;
+        playerInput.SwitchCurrentActionMap("MenuActions");
+        Cursor.lockState= CursorLockMode.None;
+        AudioManager.instance.PlayMusic(AudioManager.MusicEnum.endOfNight);
+        FindAnyObjectByType<GaurdSpawer>()?.stopGuards();
+
         //Call end stuff
-        escapingUI.CreateEscapingUI(successful, nightUICanvas.transform);
+        if(!hasRescuedPlushie)
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, null);
+        }
+        else
+        {
+            escapingUI.CreateEscapingUI(successful, nightUICanvas.transform, SharedUIManager.instance.nextPlushie);
+        }
     }
 
     public void UpdateClockTime(float extraTimeInMins)
@@ -87,5 +112,29 @@ public class NightManager : MonoBehaviour
     public Canvas nightUICanvas;
 
     [SerializeField] private EscapingUI escapingUI;
+
+    [SerializeField] private Image plushieIcon;
+    [HideInInspector] public bool hasRescuedPlushie = false;
+
+    private void LoadPlushieIndicator(PlushieInfo plushieInfo=null)
+    {
+        if(plushieInfo != null) { plushieIcon.sprite = plushieInfo.icon; }
+        if (hasRescuedPlushie)
+        {
+            plushieIcon.color = Color.white;
+        }
+        else {
+            plushieIcon.color = new Color(1, 1, 1, 0.5f);
+        }
+    }
+
+    /// <summary>
+    /// Call when plushie is rescued
+    /// </summary>
+    public void OnRescuePlushie()
+    {
+        hasRescuedPlushie = true;
+        LoadPlushieIndicator();
+    }
     #endregion
 }

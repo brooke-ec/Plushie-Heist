@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BrowserManager : MonoBehaviour
+public class BrowserManager : MonoBehaviour, IUIMenu
 {
     #region Internal references
     [SerializeField] private Transform listButtonTransform;
@@ -38,14 +38,27 @@ public class BrowserManager : MonoBehaviour
         return -1;
     }
 
+    public void SetOpenState(bool open)
+    {
+        transform.gameObject.SetActive(open);
+        AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.UIbrowserOpen : AudioManager.SoundEnum.UIbrowserClose);
+    }
+
     #region Button functionality
     public void CloseBrowser()
     {
-        transform.gameObject.SetActive(false);
+        SharedUIManager.instance.CloseMenu();
     }
+
     public void OpenBrowser()
     {
-        transform.gameObject.SetActive(true);
+        SharedUIManager.instance.OpenMenu(this);
+    }
+
+    public void HomeButtonClick()
+    {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
+        GoToPage(0);
     }
 
     public void GoToPage(int index)
@@ -92,6 +105,7 @@ public class BrowserManager : MonoBehaviour
 
     public void BackButtonClick()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (historyStackIndex > 1)
         {
             historyStackIndex--;
@@ -103,6 +117,7 @@ public class BrowserManager : MonoBehaviour
 
     public void ForwardButtonClick()
     {
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
         if (historyStackIndex < historyStack.Count)
         {
             historyStackIndex++;
@@ -127,7 +142,12 @@ public class BrowserManager : MonoBehaviour
         {
             Transform page = Instantiate(listPagePrefab, listButtonTransform).transform;
             int index = i;
-            page.GetComponent<Button>().onClick.AddListener(() => GoToPage(index));
+            page.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                GoToPage(index);
+                AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIhover);
+            }
+            );
             page.GetChild(0).GetComponent<Image>().sprite = pages[i].icon;
             page.GetChild(1).GetComponent<TextMeshProUGUI>().text = pages[i].pageName;
         }
@@ -137,6 +157,7 @@ public class BrowserManager : MonoBehaviour
     public void OnClickPageList()
     {
         listButtonTransform.gameObject.SetActive(!listButtonTransform.gameObject.activeSelf);
+        AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick);
     }
     #endregion
 
