@@ -11,7 +11,8 @@ public class NightManager : MonoBehaviour
         if(instance!=null)
         {
             Destroy(transform.parent.gameObject);
-            print("Night manager already in scene");
+            print("Night manager already in scene, starting guards");
+            FindAnyObjectByType<GaurdSpawer>().startGuards();
         }
         else
         {
@@ -33,6 +34,8 @@ public class NightManager : MonoBehaviour
 
     [SerializeField] private GameObject nightIntroUIPrefab;
     [SerializeField] private ChooseAnAbilityUI chooseAbilityUIPrefab;
+
+    public int levelProgress = 0;
 
     private PlayerInput playerInput;
 

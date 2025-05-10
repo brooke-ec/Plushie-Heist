@@ -21,6 +21,8 @@ public class GaurdSpawer : MonoBehaviour
     /// <summary>list of all patrol points</summary>
     private List<PatrolPoint> points;
 
+    private bool guardsActive = false;
+
     private GuardAI[] guards;
 
     private void Start()
@@ -96,13 +98,15 @@ public class GaurdSpawer : MonoBehaviour
             }
 
             guard.patrolPoints = guardPoints.ToArray();
+            guard.GuardActive = guardsActive;
             guards[i] = guard;
         }
     }
 
     public void startGuards()
     {
-        foreach(GuardAI g in guards)
+        guardsActive = true;
+        if (guards != null) foreach(GuardAI g in guards)
         {
             g.GuardActive = true;
             g.GetComponent<NavMeshAgent>().speed = 3.5f;

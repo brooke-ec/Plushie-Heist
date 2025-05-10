@@ -31,7 +31,6 @@ public class InventoryController : MonoBehaviour, IUIMenu
         if (instance != null)
         {
             Destroy(this);
-            Debug.LogError("Inventory controller instance already in scene");
         }
         else
         {

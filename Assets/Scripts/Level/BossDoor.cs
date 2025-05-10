@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class BossDoor : MonoBehaviour, IInteractable
 {
-    [field:SerializeField] public String interactionPrompt{get; private set;}
-
-    [SerializeField] private int sceneIndexToGoTo;
+    string IInteractable.interactionPrompt => "Press F to " + (lastLevel ? "Fight the Next Boss!!!" : "Progress to the Next Floor...");
+    public bool lastLevel => NightManager.instance.levelProgress >= SharedUIManager.instance.plushieIndex;
 
     public void PrimaryInteract(Interactor interactor)
     {
@@ -13,6 +12,9 @@ public class BossDoor : MonoBehaviour, IInteractable
         LoadingSceneController.SurviveNextLoad(SharedUIManager.instance.transform.parent.gameObject);
         LoadingSceneController.SurviveNextLoad(MovementUIManager.instance.gameObject);
         LoadingSceneController.SurviveNextLoad(NightManager.instance.transform.parent.gameObject);
-        LoadingSceneController.instance.LoadSceneAsync(sceneIndexToGoTo);
+
+        bool boss = lastLevel;
+        NightManager.instance.levelProgress++;
+        LoadingSceneController.instance.LoadSceneAsync(boss ? 3 : 2);
     }
 }
