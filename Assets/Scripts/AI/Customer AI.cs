@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -99,10 +97,10 @@ public class CustomerAI : MonoBehaviour
 
     private void PickUp()
     {
-        if (currentItem != null)
+        if (currentItem != null && currentItem.selling)
         {
             float price = ShopManager.instance.stocksController.GetSellingPriceOfItem(currentItem.item);
-            float max = currentItem.item.marketPrice * Random.Range(
+            float max = ShopManager.instance.stocksController.GetMarketPriceOfItem(currentItem.item) * Random.Range(
                 ShopManager.instance.stocksController.purchaseRange.x,
                 ShopManager.instance.stocksController.purchaseRange.y
             );
@@ -160,7 +158,7 @@ public class CustomerAI : MonoBehaviour
     /// </summary>
     private void PathItem()
     {
-        if (!currentItem.IsDestroyed() && NavMesh.SamplePosition( // Get closest position to item
+        if (currentItem != null && NavMesh.SamplePosition( // Get closest position to item
             currentItem.transform.position,
             out NavMeshHit hit, float.PositiveInfinity, NavMesh.AllAreas)
         ) {

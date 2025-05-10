@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using System;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +43,7 @@ public class MainMenu : MonoBehaviour
         dialogue.SetUp(Dialogue.DialogueEnum.mainMenu);
         dialogue.onDialogueEnd = () =>
         {
-            SaveManager.slot = GUID.Generate().ToString();
+            SaveManager.slot = Guid.NewGuid().ToString();
             LoadingSceneController.instance.LoadSceneAsync(1);
         };
     }

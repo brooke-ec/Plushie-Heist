@@ -2,15 +2,13 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class LoadingSceneController : MonoBehaviour
 {
-    private static List<GameObject> survivngObjects = new List<GameObject>();
+    private static Queue<GameObject> survivngObjects = new Queue<GameObject>();
 
     static LoadingSceneController()
     {
@@ -20,12 +18,12 @@ public class LoadingSceneController : MonoBehaviour
 
     private static void SceneManager_activeSceneChanged(Scene before, Scene after)
     {
-        foreach (var o in survivngObjects) SceneManager.MoveGameObjectToScene(o, after);
+        while (survivngObjects.TryDequeue(out GameObject go)) SceneManager.MoveGameObjectToScene(go, after);
     }
 
     public static void SurviveNextLoad(GameObject unityObject)
     {
-        survivngObjects.Add(unityObject);
+        survivngObjects.Enqueue(unityObject);
         DontDestroyOnLoad(unityObject);
     }
 

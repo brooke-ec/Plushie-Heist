@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(-10)]
 public class PlushieModel : MonoBehaviour
 {
     [SerializeField] private bool nextPlushie = true;

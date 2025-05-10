@@ -1,10 +1,9 @@
 using cakeslice;
-using UnityEngine;
+using Newtonsoft.Json;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.AI;
-using Newtonsoft.Json;
-using static UnityEngine.GraphicsBuffer;
 
 public class FurnitureController : MonoBehaviour, IInteractable
 {

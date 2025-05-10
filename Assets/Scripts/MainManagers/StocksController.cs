@@ -137,10 +137,25 @@ public class StocksController : MonoBehaviour
             return int.MaxValue;
         }
     }
+
+    public float GetMarketPriceOfItem(FurnitureItem item)
+    {
+
+        ProductData product = allStocksInGame.Find(s => s.itemRef.Equals(item));
+        if (product != null)
+        {
+            return product.marketPrice;
+        }
+        else
+        {
+            Debug.LogError("Market price of item is wrong. Giving max value");
+            return int.MaxValue;
+        }
+    }
     #endregion
 
     #region Extras
-            private float RoundToRetailPrice(float price)
+    private float RoundToRetailPrice(float price)
             {
                 float[] allowedEndings = { 0.00f, 0.50f, 0.75f, 0.95f };
 

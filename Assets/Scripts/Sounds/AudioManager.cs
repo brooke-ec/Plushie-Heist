@@ -237,6 +237,8 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayMusic(MusicEnum musicName, bool immediately = false)
     {
+        StopAllCoroutines();
+
         if (currentMusicPlaying != null)
         {
             if (currentMusicPlaying.musicName == musicName) return;

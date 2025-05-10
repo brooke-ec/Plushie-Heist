@@ -1,11 +1,8 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Versioning;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 
 [SelectionBase]
@@ -442,7 +439,7 @@ public class PlayerController : MonoBehaviour
 
             BeanBag ben = Instantiate(_beanBagPrefab, this.transform.position + new Vector3(0,1,0), camRot).GetComponent<BeanBag>();
 
-            ben.Throw(_throwStrength + this.velocity.magnitude);
+            ben.Throw(new Vector3(velocity.x, 0, velocity.y) + (cam.transform.forward * _throwStrength));
         }
     }
     #endregion

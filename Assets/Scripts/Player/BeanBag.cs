@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BeanBag : MonoBehaviour
@@ -19,12 +17,12 @@ public class BeanBag : MonoBehaviour
         } else Destroy(gameObject, 1f);
     }
 
-    public void Throw(float throwStrength)
+    public void Throw(Vector3 direction)
     {
         _rb = GetComponent<Rigidbody>();
         _audio = GetComponent<AudioSource>();
 
-        _rb.AddForce(transform.forward * throwStrength);
+        _rb.AddForce(direction);
 
         _rb.AddTorque(new Vector3(Random.Range(-1,1), Random.Range(-1,1), Random.Range(-1,1)));
     }

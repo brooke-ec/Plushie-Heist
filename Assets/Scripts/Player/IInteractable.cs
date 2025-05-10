@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public interface IInteractable 
 {
     /// <summary> Prompt Shown by the interactor's UI element </summary>

@@ -1,12 +1,9 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Manages the flow of things in the daytime.
@@ -206,4 +203,9 @@ public class ShopManager : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDestroy()
+    {
+        if (instance == this) instance = null;
+    }
 }

@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Furniture Item", menuName ="Scriptable Objects/Furniture Item", order = 9999)]
