@@ -2033,46 +2033,6 @@ Mesh:
     localAABB:
       m_Center: {x: 2.489697, y: -183.14148, z: -0.0000009536743}
       m_Extent: {x: 16.585096, y: 0, z: 18.56652}
-  - serializedVersion: 2
-    firstByte: 42
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  - serializedVersion: 2
-    firstByte: 42
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  - serializedVersion: 2
-    firstByte: 42
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  - serializedVersion: 2
-    firstByte: 42
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
   m_Shapes:
     vertices: []
     shapes: []
@@ -2301,7 +2261,7 @@ GameObject:
   - component: {fileID: 991399369}
   - component: {fileID: 991399368}
   m_Layer: 3
-  m_Name: Bottomless Pit (1)
+  m_Name: Bottomless Pit Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2386,7 +2346,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b8821fb47ec68c488588a9eac1675c8, type: 2}
+  - {fileID: 2100000, guid: 4bfb32005278a5a49b684bc6b86684d3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2522,7 +2482,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 797888440}
-  m_VersionIndex: 10052
+  m_VersionIndex: 10080
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4349,8 +4309,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1504075410}
   - component: {fileID: 1504075411}
+  - component: {fileID: 1504075412}
   m_Layer: 12
-  m_Name: GameObject
+  m_Name: Boss Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4393,6 +4354,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8598314946826219203, guid: dfd92e9a973ae2443a3560c11cf03660, type: 3}
+--- !u!114 &1504075412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504075409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af4cec612d3e5d3459792ed93adb2378, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plushie: {fileID: 11400000, guid: e518c228163fc714599c1c56d4802cd0, type: 2}
+  inverted: 0
 --- !u!1 &1517274239
 GameObject:
   m_ObjectHideFlags: 0
