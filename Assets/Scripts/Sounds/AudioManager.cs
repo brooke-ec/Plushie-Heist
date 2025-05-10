@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
             sound.audioSource.outputAudioMixerGroup = sound.mixerGroup;
         }
 
-        currentMusicPlaying = music[0];
+        //currentMusicPlaying = music[0];
     }
 
     private void Start()
@@ -57,7 +57,7 @@ public class AudioManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (currentMusicPlaying != null && currentMusicPlaying.audioSource != null && !currentMusicPlaying.audioSource.isPlaying)
+        if (currentMusicPlaying == null || currentMusicPlaying.audioSource != null && !currentMusicPlaying.audioSource.isPlaying)
         {
             //IF SHOP FIND MUSIC FOR THAT
             if (ShopManager.instance != null)
@@ -237,16 +237,19 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void PlayMusic(MusicEnum musicName, bool immediately = false)
     {
-        if (currentMusicPlaying.musicName == musicName) return;
-        if (currentMusicPlaying.musicName != MusicEnum.none)
+        if (currentMusicPlaying != null)
         {
-            if (!immediately)
+            if (currentMusicPlaying.musicName == musicName) return;
+            if (currentMusicPlaying.musicName != MusicEnum.none)
             {
-                ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
-            }
-            else
-            {
-                currentMusicPlaying.audioSource.Stop();
+                if (!immediately)
+                {
+                    ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+                }
+                else
+                {
+                    currentMusicPlaying.audioSource.Stop();
+                }
             }
         }
 
@@ -260,9 +263,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySpecificMusic(Music musicGiven)
     {
-        if (currentMusicPlaying.musicName != MusicEnum.none)
+        if (currentMusicPlaying != null)
         {
-            ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+            if (currentMusicPlaying.musicName != MusicEnum.none)
+            {
+                ChangeVolumeGradually(currentMusicPlaying.volume, 0, -0.001f, currentMusicPlaying.audioSource);
+            }
         }
         ChangeVolumeGradually(0.05f, musicGiven.volume, 0.001f, musicGiven.audioSource);
         musicGiven.audioSource.Play();

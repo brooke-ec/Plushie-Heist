@@ -15,6 +15,7 @@ public class SkillTreesManager : MonoBehaviour
     [SerializeField] private List<SkillTreeController> skillTrees = new List<SkillTreeController>();
     [SerializeField] private List<SkillTree> skillTreesReferences = new List<SkillTree>();
 
+
     private void Start()
     {
         CreateAllSkillTrees();

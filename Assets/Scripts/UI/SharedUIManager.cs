@@ -35,14 +35,17 @@ public class SharedUIManager : MonoBehaviour
         {
             instance = this;
         }
+
+        SaveManager.onLoaded.AddListener(() =>
+        {
+            foreach (var item in unlockedSkills) item.Unlock();
+        });
         
         CloseMenu();
     }
 
     private void Start()
     {
-        foreach (var item in unlockedSkills) item.Unlock();
-
         playerInput = FindAnyObjectByType<PlayerInput>();
 
         if (NightManager.instance != null)
