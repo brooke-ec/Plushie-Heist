@@ -189,7 +189,7 @@ public class CustomerAI : MonoBehaviour
             state = State.Shopping;
         } else {
             shoppingList.TryDequeue(out FurnitureController _);
-            PathItem();
+            NextAction();
         }
     }
 
