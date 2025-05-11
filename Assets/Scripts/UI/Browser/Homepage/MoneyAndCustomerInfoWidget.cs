@@ -20,7 +20,7 @@ public class MoneyAndCustomerInfoWidget : MonoBehaviour
         ShopManager shopManager = ShopManager.instance;
 
         salesToday.text = "£"+shopManager.salesMadeToday.ToString("n2");
-        tipsToday.text = "£" + shopManager.salesMadeToday.ToString("n2");
+        tipsToday.text = "£" + shopManager.tipsReceivedToday.ToString("n2");
         customersServed.text = shopManager.numOfCustomersServed.ToString();
         earnedToday.text = "£" + shopManager.GetTotalMoneyEarnedToday().ToString("n2");
     }
