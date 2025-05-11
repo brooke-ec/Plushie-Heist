@@ -1,12 +1,11 @@
 using cakeslice;
 using UnityEngine;
 
-[RequireComponent(typeof(Outline))]
 public class Chair : MonoBehaviour, IInteractable
 {
     [SerializeField] Transform anchor;
 
-    string IInteractable.interactionPrompt => "Press F to Sit";
+    string IInteractable.interactionPrompt => "Press E to Sit";
 
     void IInteractable.PrimaryInteract(Interactor interactor)
     {

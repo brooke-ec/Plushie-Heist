@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EscapeDoor : MonoBehaviour, IInteractable
 {
-    [field:SerializeField] public string interactionPrompt { get; private set; }
+    public string interactionPrompt => "Press E to Escape";
 
 
     public void PrimaryInteract(Interactor interactor)

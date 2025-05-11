@@ -28,6 +28,7 @@ public class FurniturePlacer : MonoBehaviour
         gridLayer = LayerMask.GetMask("Furniture Grid");
         itemLayer = LayerMask.GetMask("Furniture Item");
         controller.excludeLayers |= gridLayer;
+        if (ShopManager.instance == null) Destroy(this);
     }
 
     private void Update()
@@ -78,7 +79,7 @@ public class FurniturePlacer : MonoBehaviour
 
     public void OnPlace(InputAction.CallbackContext ctx)
     {
-        if (ctx.ReadValueAsButton()) return;
+        if (!ctx.performed) return;
 
         if (item != null && item.IsGridValid())
         {

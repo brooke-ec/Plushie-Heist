@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class NightDoor : MonoBehaviour, IInteractable
 {
-    string IInteractable.interactionPrompt => ShopManager.instance.isShopOpen ? "Close the Shop First" : "Press F to Collect Supplies";
+    string IInteractable.interactionPrompt => ShopManager.instance.isShopOpen ? "Close the Shop First" : "Press E to Collect Supplies";
     bool IInteractable.outline => !ShopManager.instance.isShopOpen;
 
     void IInteractable.PrimaryInteract(Interactor interactor)

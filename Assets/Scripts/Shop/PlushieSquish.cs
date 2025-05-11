@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlushieSquish: PlushieEnable, IInteractable
 {
-    string IInteractable.interactionPrompt => "Press F to Squish " + plushie.name;
+    string IInteractable.interactionPrompt => "Press E to Squish " + plushie.name;
 
     protected override void Start()
     {

@@ -19,4 +19,6 @@ public interface IInteractable
     /// </summary>
     /// <param name="interactor"> Interactor object that called the interaction </param>
     public void SecondaryInteract(Interactor interactor) { }
+
+    public void TertiaryInteract(Interactor interactor) { }
 }

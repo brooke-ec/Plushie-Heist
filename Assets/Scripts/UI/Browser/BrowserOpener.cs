@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Outline))]
 public class BrowserOpener : MonoBehaviour, IInteractable
 {
-    public string interactionPrompt => "Press F for Shop Management";
+    public string interactionPrompt => "Press E for Shop Management";
 
     private BrowserManager browser;
 

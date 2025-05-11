@@ -11,8 +11,9 @@ public class FurnitureController : MonoBehaviour, IInteractable
     [JsonProperty("item"), Unwitable] public FurnitureItem item = null;
     /// <summary> Prompt Shown by the UI to let the player know they can interact with it </summary>
     string IInteractable.interactionPrompt => empty 
-        ? (selling ? "Press F to set Price" : (hasSpace ? "Press F to Pick Up" : "Inventory Full"))
+        ? (hasSpace ? "Press E to Pick Up" : "Inventory Full")
         + (canSell ? "\nPress R to " + (selling ? "Unmark" : "Mark") + " as Selling" : "")
+        + (selling ? "\n Press F to set Price" : "")
         : "Item Contains Sub-Items";
     bool IInteractable.outline => canPickup || canSell;
     /// <summary> Whether this item can be picked up or not </summary>
@@ -114,21 +115,14 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <param name="interactor">Interactor this was called from</param>
     public void PrimaryInteract(Interactor interactor)
     {
-        if (selling)
-        {
-            ShopManager.instance.stocksController.CreateSetPricingUI(item);
-        } else
-        {
-            if (!canPickup) return;
+        if (!canPickup) return;
 
-            if (inventoryController.InsertItem(item))
-            {
-                Remove();
-                Debug.Log("Picked Up" + gameObject.name);
-            }
-            else Debug.Log("Can't Pick up" + gameObject.name);
+        if (inventoryController.InsertItem(item))
+        {
+            Remove();
+            Debug.Log("Picked Up" + gameObject.name);
         }
-
+        else Debug.Log("Can't Pick up" + gameObject.name);
     }
 
     public void Remove()
@@ -150,6 +144,14 @@ public class FurnitureController : MonoBehaviour, IInteractable
         subgrids.ForEach(s => s.gameObject.SetActive(selling));
         selling = !selling;
         sellingMarker.SetActive(selling);
+    }
+
+    void IInteractable.TertiaryInteract(Interactor interactor)
+    {
+        if (selling)
+        {
+            ShopManager.instance.stocksController.CreateSetPricingUI(item);
+        }
     }
 
     /// <summary>

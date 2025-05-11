@@ -283,7 +283,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 757465197394079983}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnRotate
         m_Mode: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Inventory[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 757465197394079983}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnPlace
         m_Mode: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Place[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 757465197394079983}
         m_TargetAssemblyTypeName: FurniturePlacer, Assembly-CSharp
         m_MethodName: OnCancel
         m_Mode: 0
@@ -437,6 +437,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1cc6a7b2-3fc3-4b93-b630-477054c5889b
     m_ActionName: MenuActions/Close[/Keyboard/e,/Keyboard/escape,/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6666046485523007560}
+        m_TargetAssemblyTypeName: Interactor, Assembly-CSharp
+        m_MethodName: pressTertiaryInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d265295d-d242-447e-8e89-36174f145b5a
+    m_ActionName: PlayerMovement/Tertiary Interact[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
@@ -488,7 +504,7 @@ MonoBehaviour:
   baseGroundAcceleration: 7
   currentAbility: 0
   sprintMaxSpeed: 10
-  maxStamina: 3
+  maxStamina: 20
   staminaDrain: 1
   staminaRecover: 1
   lookSensitivity: 0.15
@@ -557,6 +573,7 @@ GameObject:
   - component: {fileID: 499776393120379558}
   - component: {fileID: 6176740478712077994}
   - component: {fileID: 7934438741709096596}
+  - component: {fileID: 757465197394079983}
   m_Layer: 7
   m_Name: Player Camera
   m_TagString: MainCamera
@@ -675,6 +692,23 @@ MonoBehaviour:
   outlineShaderMaterial: {fileID: 0}
   renderTexture: {fileID: 0}
   extraRenderTexture: {fileID: 0}
+--- !u!114 &757465197394079983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461329353988155359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b90c5da8185ac4fa31860aaf7bfe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 10
+  controller: {fileID: 2651383046741006912}
+  camera: {fileID: 499776393120379558}
+  interactor: {fileID: 6666046485523007560}
+  prompt: {fileID: 0}
 --- !u!1001 &2875075736329073249
 PrefabInstance:
   m_ObjectHideFlags: 0

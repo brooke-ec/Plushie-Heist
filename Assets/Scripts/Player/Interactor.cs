@@ -98,4 +98,9 @@ public class Interactor : MonoBehaviour
     {
         if (ctx.performed && interactable != null) interactable.SecondaryInteract(this);
     }
+
+    public void pressTertiaryInteract(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && interactable != null) interactable.TertiaryInteract(this);
+    }
 }
