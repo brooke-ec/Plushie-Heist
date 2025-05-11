@@ -306,6 +306,7 @@ public class Boss : MonoBehaviour
 
             AudioManager.instance.PlaySound(AudioManager.SoundEnum.defeatBoss);
             AudioManager.instance.PlayMusic(AudioManager.MusicEnum.defeatBoss);
+            NightManager.instance.nightTimer.StopAllCoroutines();
             FindObjectsOfType<GuardAI>().ForEach(g => Destroy(g.gameObject));
 
             foreach (var o in _deathPersistent)

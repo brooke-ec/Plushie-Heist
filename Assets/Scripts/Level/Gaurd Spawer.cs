@@ -46,7 +46,7 @@ public class GaurdSpawer : MonoBehaviour
         // for each gaurd to spawn
         for (int i = 0; i < spawnNumber; i++)
         {
-            if (points.Count <= 0)
+            if (points.Count < 2)
             {
                 System.Array.Resize(ref guards, i + 1);
                 break;

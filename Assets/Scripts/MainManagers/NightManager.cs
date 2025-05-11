@@ -111,7 +111,7 @@ public class NightManager : MonoBehaviour
 
     #region UI
     [SerializeField] private Clock nightTimerPrefab;
-    private Clock nightTimer;
+    public Clock nightTimer;
     public Canvas nightUICanvas;
 
     [SerializeField] private EscapingUI escapingUI;
