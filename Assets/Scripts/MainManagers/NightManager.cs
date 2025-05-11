@@ -18,7 +18,12 @@ public class NightManager : MonoBehaviour
         {
             instance = this;
         }
+
         playerInput = FindAnyObjectByType<PlayerInput>();
+
+        nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
+        nightTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
+        nightTimer.enabled = false;
     }
 
     private void Start()
@@ -65,14 +70,11 @@ public class NightManager : MonoBehaviour
         FindAnyObjectByType<GaurdSpawer>().startGuards();
         print("night started");
 
-        nightTimer = Instantiate(nightTimerPrefab, nightUICanvas.transform);
-        nightTimer.transform.SetAsFirstSibling(); //so it's not in front of any UI
+        nightTimer.enabled = true;
         nightTimer.SetupClock(false);
 
         //start clock
         nightTimer.StartCoroutine(nightTimer.StartClock());
-
-        //Start movement of guards?
     }
 
     /// <summary>
