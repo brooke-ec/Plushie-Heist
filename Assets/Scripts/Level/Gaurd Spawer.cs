@@ -23,7 +23,7 @@ public class GaurdSpawer : MonoBehaviour
 
     private bool guardsActive = false;
 
-    private GuardAI[] guards;
+    private GuardAI[] guards = new GuardAI[0];
 
     private void Start()
     {
@@ -106,10 +106,11 @@ public class GaurdSpawer : MonoBehaviour
     public void startGuards()
     {
         guardsActive = true;
-        if (guards != null) foreach(GuardAI g in guards)
+        foreach(GuardAI g in guards)
         {
-            g.GuardActive = true;
-            g.GetComponent<NavMeshAgent>().speed = 3.5f;
+                if (g == null) continue;
+                g.GuardActive = true;
+                g.GetComponent<NavMeshAgent>().speed = 3.5f;
         }
     }
 
