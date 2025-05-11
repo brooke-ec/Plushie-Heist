@@ -100,7 +100,6 @@ public class FurniturePlacer : MonoBehaviour
     {
         if (ctx.ReadValueAsButton() || item == null) return;
         Destroy(item.gameObject);
-        item = null;
     }
 
 }
