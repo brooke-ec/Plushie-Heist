@@ -188,7 +188,7 @@ public class CustomerAI : MonoBehaviour
             SetDestination(hit.position);
             state = State.Shopping;
         } else {
-            shoppingList.Dequeue();
+            shoppingList.TryDequeue(out FurnitureController _);
             PathItem();
         }
     }
