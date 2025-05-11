@@ -112,6 +112,7 @@ public class Boss : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        NightManager.instance.nightTimer.StopAllCoroutines();
         _rb = this.GetComponent<Rigidbody>();
         _flyDirection =RandomVector3(null, false);
         _flySpeed = _bigFlySpeed;
@@ -306,7 +307,6 @@ public class Boss : MonoBehaviour
 
             AudioManager.instance.PlaySound(AudioManager.SoundEnum.defeatBoss);
             AudioManager.instance.PlayMusic(AudioManager.MusicEnum.defeatBoss);
-            NightManager.instance.nightTimer.StopAllCoroutines();
             FindObjectsOfType<GuardAI>().ForEach(g => Destroy(g.gameObject));
 
             foreach (var o in _deathPersistent)
