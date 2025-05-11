@@ -49,6 +49,6 @@ public class ProductData
     /// <returns>Profit as a 2 decimal number as a string</returns>
     public string GetMarginAsString()
     {
-        return GetMargin().ToString("n2");
+        return (-GetMargin()).ToString("n2");
     }
 }
