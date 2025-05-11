@@ -22,6 +22,11 @@ public class CloseGamePopup : MonoBehaviour, IUIMenu
         SharedUIManager.instance.CloseMenu();
     }
 
+    public void OpenMenu()
+    {
+        SharedUIManager.instance.OpenMenu(this);
+    }
+
     public void OnCloseGame()
     {
         FindAnyObjectByType<SaveManager>().Save();
