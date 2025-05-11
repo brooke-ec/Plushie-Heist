@@ -50,7 +50,7 @@ public class SaveManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null) instance = this;
-        else Destroy(instance);
+        else Destroy(this);
     }
 
     private void Update()
