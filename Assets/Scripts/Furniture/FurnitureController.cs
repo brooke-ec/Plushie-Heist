@@ -47,8 +47,6 @@ public class FurnitureController : MonoBehaviour, IInteractable
     public Bounds bounds => collider.bounds;
     public Vector3 gridOffset => new Vector3(gridShape.x, 0, gridShape.y) / 2 * FurnitureSettings.instance.cellSize;
 
-    public string key => throw new System.NotImplementedException();
-
     /// <summary> The current <see cref="InventoryController"/> instance </summary>
     private InventoryController inventoryController;
     /// <summary> A <see cref="MaterialSwitcher"/> instance for swapping the material of this item </summary>
@@ -82,7 +80,10 @@ public class FurnitureController : MonoBehaviour, IInteractable
 
         if (ShopManager.instance != null)
         {
-            gameObject.AddComponent<NavMeshObstacle>().carving = true;
+            NavMeshObstacle obstacle = gameObject.AddComponent<NavMeshObstacle>();
+            obstacle.size = Util.Abs(transform.rotation * bounds.size);
+            obstacle.center = bounds.center;
+            obstacle.carving = true;
 
             foreach (FurnitureGrid grid in subgrids) grid.onChanged.AddListener(() =>
             {
@@ -100,9 +101,10 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
         sellingMarker.SetActive(selling);
+        sellingMarker.transform.position /= transform.lossyScale.y;
         sellingMarker.transform.localPosition += new Vector3(
             item.gridOffset.x,
-            bounds.max.y - transform.position.y,
+            bounds.max.y / transform.lossyScale.y + transform.position.y,
             item.gridOffset.z
         );
     }

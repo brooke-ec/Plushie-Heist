@@ -57,6 +57,15 @@ public static class Util
     {
         return new Vector2Int(vector.y, vector.x);
     }
+
+    public static Vector3 Abs(Vector3 vector)
+    {
+        return new Vector3(
+            Mathf.Abs(vector.x),
+            Mathf.Abs(vector.y),
+            Mathf.Abs(vector.z)
+        );
+    }
 }
 
 // Fix https://stackoverflow.com/a/64749403
