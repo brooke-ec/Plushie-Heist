@@ -40,7 +40,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             timeSinceMouseOver += 1 * Time.deltaTime;
             //if enough time has passed and there isn't already another tooltip open
-            if ((timeSinceMouseOver / 40f) >= 0.8f && HoveringManager.currentTooltipOpen == null)
+            if ((timeSinceMouseOver / 40f) >= 0.5f && HoveringManager.currentTooltipOpen == null)
             {
                 //you could check here for type of tooltip to create another tooltip type
                 FindAnyObjectByType<HoveringManager>().CreateBaseTooltip(title, titleColour, description, transform.position, tooltipCostType, tooltipCostText, tooltipLockedText, tooltipBackgroundColor);
