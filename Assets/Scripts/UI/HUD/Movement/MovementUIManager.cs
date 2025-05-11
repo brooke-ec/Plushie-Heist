@@ -38,9 +38,13 @@ public class MovementUIManager : MonoBehaviour
             instance = this;
         }
 
-        crosshairTransform.SetActive(false);
         SetupAllAbilities();
         ChangeMovementUI(Ability.None);
+    }
+
+    private void Update()
+    {
+        crosshairTransform.SetActive(PlayerController.instance.currentAbility == Ability.Grapple || PlayerController.instance._holdingBeanBag);
     }
 
     private void SetupAllAbilities()
@@ -82,27 +86,6 @@ public class MovementUIManager : MonoBehaviour
 
     internal void ChangeMovementUI(Ability currentAbility)
     {
-        switch (currentAbility)
-        {
-            case Ability.None:
-                crosshairTransform.SetActive(false);
-                break;
-            case Ability.Dash:
-                crosshairTransform.SetActive(false);
-                break;
-            case Ability.Boost:
-                crosshairTransform.SetActive(false);
-                break;
-            case Ability.Grapple:
-                crosshairTransform.SetActive(true);
-                break;
-            case Ability.Glide:
-                crosshairTransform.SetActive(false);
-                break;
-            default:
-                break;
-        }
-
         foreach (KeyValuePair<Ability, AbilityCooldown> ability in abilities)
         {
             if (ability.Key.Equals(currentAbility))

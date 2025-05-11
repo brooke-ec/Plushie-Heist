@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     ///<summary>The base Ground Acceleration</summary>
     [SerializeField] private float baseGroundAcceleration;
     /// <summary>The Ability that the Player currently has equiped</summary>
-    [SerializeField] private Ability currentAbility;
+    [SerializeField] public Ability currentAbility;
 
 
 
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _BouncePadWishVel;
 
     /// <summary>Wether the player is currently holding a beanbag</summary>
-    private bool _holdingBeanBag;
+    [HideInInspector] public bool _holdingBeanBag;
     #endregion
 
     #region Public Fields
