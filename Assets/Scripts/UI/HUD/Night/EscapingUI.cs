@@ -73,6 +73,7 @@ public class EscapingUI : MonoBehaviour
         {
             escapingUI.transform.GetChild(3).GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
             {
+                Destroy(escapingUI.gameObject);
                 Dialogue dialogue = Instantiate(dialoguePrefab, canvasTransform);
                 dialogue.SetUp((Dialogue.DialogueEnum)plushieInfo.order + 1);
                 dialogue.onDialogueEnd = EscapeScene;

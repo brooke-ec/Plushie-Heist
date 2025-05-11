@@ -99,20 +99,44 @@ public class CustomerAI : MonoBehaviour
     {
         if (currentItem != null && currentItem.selling)
         {
+            float marketPrice = ShopManager.instance.stocksController.GetMarketPriceOfItem(currentItem.item);
             float price = ShopManager.instance.stocksController.GetSellingPriceOfItem(currentItem.item);
-            float max = ShopManager.instance.stocksController.GetMarketPriceOfItem(currentItem.item) * Random.Range(
-                ShopManager.instance.stocksController.purchaseRange.x,
-                ShopManager.instance.stocksController.purchaseRange.y
-            );
 
-            if (price > max)
+            Vector2 acceptablePurchaseRange = ShopManager.instance.stocksController.purchaseRange;
+            float currentPriceRatio = price / marketPrice; //So 1 is full market price, 0.5 half price for example
+            float chance;
+
+            //prices below purchaseRange.x are guaranteed to sell
+            //prices between purchaseRange.x and purchaseRange.y high probability of sale
+            //above purchaseRange.y very unlikely to sell
+
+            if (currentPriceRatio <= acceptablePurchaseRange.x)
+            {
+                //Price is a bargain so always buy
+                chance = 1f;
+            }
+            else if (currentPriceRatio <= acceptablePurchaseRange.y)
+            {
+                //Within sweet spot so very high probability
+                chance = Mathf.Lerp(1f, 0.9f, (currentPriceRatio - acceptablePurchaseRange.x) / (acceptablePurchaseRange.y - acceptablePurchaseRange.x));
+            }
+            else
+            {
+                //Above preferred range so sharply decreasing chance
+                //The further above maxRange, the worse the chance
+                float overRatio = (currentPriceRatio - acceptablePurchaseRange.y) / ((acceptablePurchaseRange.y*2f) - acceptablePurchaseRange.y); // Normalise up to twice the upper acceptable purchase range price
+                chance = Mathf.Clamp01(Mathf.Lerp(0.2f, 0.005f, Mathf.Pow(overRatio, 2f))); //Quadratic falloff
+            }
+
+            if(Random.value < chance)
+            {
+                //buy
+                animator.SetTrigger("pickup");
+                this.RunAfter(pickupTime, PickedUp);
+            } else
             {
                 animator.SetTrigger("shake");
                 this.RunAfter(pickupTime, NextItem);
-            } else
-            {
-                animator.SetTrigger("pickup");
-                this.RunAfter(pickupTime, PickedUp);
             }
         } else NextItem();
     }

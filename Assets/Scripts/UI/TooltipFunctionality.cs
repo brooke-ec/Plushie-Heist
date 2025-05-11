@@ -8,7 +8,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
 {
     public event Action<TooltipFunctionality> GetTooltipInfo;
 
-    float framesPassedSinceOver = 0;
+    float timeSinceMouseOver = 0;
     private bool mouseOver = false;
 
     [Header("Extra info")]
@@ -38,18 +38,18 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         while (mouseOver)
         {
-            framesPassedSinceOver += 1 * Time.deltaTime;
+            timeSinceMouseOver += 1 * Time.deltaTime;
             //if enough time has passed and there isn't already another tooltip open
-            if ((framesPassedSinceOver / 40f) >= 2 && HoveringManager.currentTooltipOpen == null)
+            if ((timeSinceMouseOver / 40f) >= 2 && HoveringManager.currentTooltipOpen == null)
             {
                 //you could check here for type of tooltip to create another tooltip type
                 FindAnyObjectByType<HoveringManager>().CreateBaseTooltip(title, titleColour, description, transform.position, tooltipCostType, tooltipCostText, tooltipLockedText, tooltipBackgroundColor);
             }
             else
             {
-                framesPassedSinceOver++;
+                timeSinceMouseOver++;
             }
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -57,7 +57,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         AudioManager.instance.PlaySound(AudioManager.SoundEnum.UIclick2);
         mouseOver = true;
-        framesPassedSinceOver = 0;
+        timeSinceMouseOver = 0;
         GetTooltipInfo?.Invoke(this);
         StartCoroutine(CheckIfMouseStillOver());
     }
@@ -65,7 +65,7 @@ public class TooltipFunctionality : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerExit(PointerEventData eventData)
     {
         mouseOver = false;
-        framesPassedSinceOver = 0;
+        timeSinceMouseOver = 0;
         StopCoroutine(CheckIfMouseStillOver());
         Destroy(HoveringManager.currentTooltipOpen);
     }
