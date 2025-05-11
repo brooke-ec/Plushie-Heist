@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour
         dialogue.onDialogueEnd = () =>
         {
             SaveManager.slot = Guid.NewGuid().ToString();
-            LoadingSceneController.instance.LoadSceneAsync(1);
+            LoadingSceneController.instance.LoadSceneAsync(2);
         };
     }
 

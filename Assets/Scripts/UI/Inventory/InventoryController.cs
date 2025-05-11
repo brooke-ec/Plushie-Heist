@@ -38,6 +38,11 @@ public class InventoryController : MonoBehaviour, IUIMenu
         }
     }
 
+    private void Start()
+    {
+        FindObjectsOfType<InventoryGrid>(true).ForEach(g => g.SetupGrid());
+    }
+
     private void Update()
     {
         ItemIconDragEffect();

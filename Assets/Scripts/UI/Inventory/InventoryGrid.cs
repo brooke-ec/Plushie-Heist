@@ -11,6 +11,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     #region References
     private RectTransform rectTransform;
     #endregion
+
     /// <summary> Used both for width and height of ENTIRE tile (including shadow and offsets) </summary>
     public const int tileSize = 130;
     /// <summary> Used both for width and height of USABLE tile (white, not shadow) </summary>
@@ -54,8 +55,9 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         rectTransform = GetComponent<RectTransform>();
     }
 
-    private void Start()
+    public void SetupGrid()
     {
+        Awake();
         if (inventorySlots == null) CreateInventoryGrid(inventoryWidth, inventoryHeight);
     }
 
