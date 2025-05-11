@@ -263,6 +263,8 @@ public class PlayerController : MonoBehaviour
 
         initalPos = transform.position;
         _beanBag.SetActive(false);
+
+        boostTime = maxBoostTime;
     }
 
     public void Update()
