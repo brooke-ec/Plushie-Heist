@@ -54,15 +54,35 @@ public class SetPricingUIFunctionality : MonoBehaviour, IUIMenu
 
     private void SetMarginColour()
     {
-        if(product.GetMargin()>=0)
+        if (ShopManager.instance != null && ShopManager.instance.stocksController != null)
         {
-            margin.color = green;
-            marginPoundText.color = green;
+            Vector2 purchaseRange = ShopManager.instance.stocksController.purchaseRange;
+            print("purchase range " + purchaseRange.y);
+            if (product.price <= purchaseRange.y)
+            {
+                margin.color = green;
+                marginPoundText.color = green;
+            }
+            else
+            {
+                float priceRatio = product.price / product.marketPrice;
+
+                float overRatio = Mathf.InverseLerp(purchaseRange.y, purchaseRange.y * 1.1f, priceRatio);
+                margin.color = Color.Lerp(green, pink, overRatio);
+                marginPoundText.color = Color.Lerp(green, pink, overRatio);
+            }
         }
         else
         {
-            margin.color = pink;
-            marginPoundText.color = pink;
+            //if it hasn't loaded or something then just do our usual
+            if (product.price < product.marketPrice) {
+                margin.color = green;
+                marginPoundText.color = green;
+            }
+            else {
+                margin.color = pink;
+                marginPoundText.color = pink;
+            }
         }
     }
 
