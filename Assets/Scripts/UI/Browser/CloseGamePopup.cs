@@ -30,11 +30,6 @@ public class CloseGamePopup : MonoBehaviour, IUIMenu
     public void OnCloseGame()
     {
         FindAnyObjectByType<SaveManager>().Save();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        LoadingSceneController.instance.LoadSceneAsync(0);
     }
 }
