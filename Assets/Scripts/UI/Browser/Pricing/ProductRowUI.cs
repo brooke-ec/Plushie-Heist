@@ -55,7 +55,7 @@ public class ProductRowUI : MonoBehaviour
         if (ShopManager.instance != null && ShopManager.instance.stocksController != null)
         {
             Vector2 purchaseRange = ShopManager.instance.stocksController.purchaseRange;
-            print("purchase range " + purchaseRange.y);
+
             if (productDataRef.price <= purchaseRange.y)
             {
                 margin.color = greenColour;

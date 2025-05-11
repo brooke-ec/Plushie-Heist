@@ -211,17 +211,22 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <summary>
     /// Adds as many items from the backpack as there is space in the storage grid
     /// </summary>
-    public void AddItemsFromBackpackToStorage()
+    /// <param name="fromBackpack">If false, it does from storage to backpack. If true, it does from backpack to storage</param>
+    public void AddItemsFromBackpackToStorage(bool fromBackpack=true)
     {
         if(backpackGrid==null) { print("backpack grid is null"); return; }
+        if(storageGrid==null) { print("storage grid is null"); return; }
         if(backpackGrid.Equals(storageGrid)) { print("Backpack and storage are the same?? Error"); return; }
 
-        InventoryItem[,] backpackItems = backpackGrid.GetInventorySlots();
-        foreach(InventoryItem backpackItem in backpackItems)
+        InventoryItem[,] originalItems;
+        if(fromBackpack) { originalItems = backpackGrid.GetInventorySlots(); }
+        else { originalItems = storageGrid.GetInventorySlots(); }
+
+        foreach(InventoryItem originalItem in originalItems)
         {
-            if (backpackItem != null)
+            if (originalItem != null)
             {
-                AddItemFromBackpackToStorage(backpackItem);
+                AddItemFromBackpackToStorage(originalItem, fromBackpack);
             }
         }
         
@@ -231,15 +236,16 @@ public class InventoryController : MonoBehaviour, IUIMenu
     /// <summary>
     /// Call to try to add an item from backpack to storage
     /// </summary>
+    /// <param name="fromBackpack">If false, it does from storage to backpack. If true, it does from backpack to storage</param>
     /// <returns>True if added, false otherwise</returns>
-    public bool AddItemFromBackpackToStorage(InventoryItem backpackItem)
+    public bool AddItemFromBackpackToStorage(InventoryItem backpackItem, bool fromBackpack = true)
     {
         //insert in gridToAddItems
-        bool insertedItem = InsertItem(backpackItem.itemClass, false);
+        bool insertedItem = InsertItem(backpackItem.itemClass, !fromBackpack);
         if (insertedItem)
         {
             //Then remove from the backpack grid
-            RemoveItemFromInventory(backpackItem, true);
+            RemoveItemFromInventory(backpackItem, fromBackpack);
             //Call here because removing item might do the whole stock stuff
         }
         return insertedItem;
