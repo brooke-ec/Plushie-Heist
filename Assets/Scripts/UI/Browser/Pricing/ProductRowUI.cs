@@ -52,7 +52,27 @@ public class ProductRowUI : MonoBehaviour
 
     private void ChangeMarginsColour()
     {
-        if (productDataRef.GetMargin() > 0) { margin.color = pinkColour; }
-        else { margin.color = greenColour; }
+        if (ShopManager.instance != null && ShopManager.instance.stocksController != null)
+        {
+            Vector2 purchaseRange = ShopManager.instance.stocksController.purchaseRange;
+            print("purchase range " + purchaseRange.y);
+            if (productDataRef.price <= purchaseRange.y)
+            {
+                margin.color = greenColour;
+            }
+            else
+            {
+                float priceRatio = productDataRef.price / productDataRef.marketPrice;
+
+                float overRatio = Mathf.InverseLerp(purchaseRange.y, purchaseRange.y * 1.1f, priceRatio);
+                margin.color = Color.Lerp(greenColour, pinkColour, overRatio);
+            }
+        }
+        else
+        {
+            //if it hasn't loaded or something then just do our usual
+            if (productDataRef.price < productDataRef.marketPrice) { margin.color = greenColour; }
+            else { margin.color = pinkColour; }
+        }
     }
 }

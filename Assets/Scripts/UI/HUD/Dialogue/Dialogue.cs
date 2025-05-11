@@ -49,7 +49,7 @@ public class Dialogue : MonoBehaviour
                     "You, an ex- employee, having seen the horrors of what they are doing to the Plushies so have decided to save them from this.",
                     "To help you achieve this goal you’ve decided to create a competitor to BKEA that sells stolen BKEA products.",
                     "Therefore, every night you go into different BKEAs and take some of their furniture. However, be careful of guards or they might take all your findings.",
-                    "In the daytime, you sell this furniture you bought at cheaper prices than original, to attract customers.",
+                    "In the daytime, you sell this furniture you stole at cheaper prices than original, to attract customers.",
                     "But most importantly: do not forget to try to rescue each Plushie from the madness of the King of BKEA.",
                     "Their fate is in your hands."
                 };

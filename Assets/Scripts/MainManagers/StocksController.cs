@@ -53,6 +53,8 @@ public class StocksController : MonoBehaviour
     #region Actions
     public void UpdatePricingTable()
     {
+        if(pricingTableManager==null) { return; }
+
         FurnitureItem[] all = FindObjectsOfType<FurnitureController>().Select(c => c.item)
             .Concat(FindObjectsOfType<InventoryItem>(true).Select(i => i.itemClass))
             .Distinct().ToArray();

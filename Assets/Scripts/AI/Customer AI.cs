@@ -118,14 +118,14 @@ public class CustomerAI : MonoBehaviour
             else if (currentPriceRatio <= acceptablePurchaseRange.y)
             {
                 //Within sweet spot so very high probability
-                chance = Mathf.Lerp(1f, 0.9f, (currentPriceRatio - acceptablePurchaseRange.x) / (acceptablePurchaseRange.y - acceptablePurchaseRange.x));
+                chance = Mathf.Lerp(1f, 0.6f, (currentPriceRatio - acceptablePurchaseRange.x) / (acceptablePurchaseRange.y - acceptablePurchaseRange.x));
             }
             else
             {
                 //Above preferred range so sharply decreasing chance
                 //The further above maxRange, the worse the chance
                 float overRatio = (currentPriceRatio - acceptablePurchaseRange.y) / ((acceptablePurchaseRange.y*2f) - acceptablePurchaseRange.y); // Normalise up to twice the upper acceptable purchase range price
-                chance = Mathf.Clamp01(Mathf.Lerp(0.2f, 0.005f, Mathf.Pow(overRatio, 2f))); //Quadratic falloff
+                chance = Mathf.Clamp01(Mathf.Lerp(0.1f, 0.0001f, Mathf.Pow(overRatio, 2f))); //Quadratic falloff
             }
 
             if(Random.value < chance)
