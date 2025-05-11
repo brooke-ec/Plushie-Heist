@@ -44,6 +44,14 @@ public class SkillTreeController : MonoBehaviour
         }
     }
 
+    public void UpdateUIOfSkills()
+    {
+        foreach (SkillButton skillInTree in GetComponentsInChildren<SkillButton>())
+        {
+            skillInTree.UpdateUI();
+        }
+    }
+
     #region Building tree
     [Header("Building tree references")]
     private Dictionary<Skill, Vector2> nodePositions = new Dictionary<Skill, Vector2>();

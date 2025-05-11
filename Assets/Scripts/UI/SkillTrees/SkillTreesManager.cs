@@ -22,6 +22,7 @@ public class SkillTreesManager : MonoBehaviour
         skillTrees[currentlyActiveSkillTree].gameObject.SetActive(true);
         ChangeSkillButtonLook();
         ShopManager.onMoneyChanged.AddListener(UpdateCoins);
+        ShopManager.onMoneyChanged.AddListener(UpdateSkillsUI);
 
         skillTreeButtonSwitch.onClick.AddListener(() => SwitchSkillTree());
 
@@ -46,6 +47,14 @@ public class SkillTreesManager : MonoBehaviour
     {
         isSkillTreeViewOpen = !isSkillTreeViewOpen;
         skillTreeViewTransform.gameObject.SetActive(isSkillTreeViewOpen);
+    }
+
+    public void UpdateSkillsUI()
+    {
+        foreach (SkillTreeController skillTree in skillTrees)
+        {
+            skillTree.UpdateUIOfSkills();
+        }
     }
 
     #region Switching between skill trees

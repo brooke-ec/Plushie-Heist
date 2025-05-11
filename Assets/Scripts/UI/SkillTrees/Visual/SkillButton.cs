@@ -60,7 +60,7 @@ public class SkillButton : MonoBehaviour
         SetUI(skillTreeController);
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         UpdateColours();
         if (interactableSkill)
