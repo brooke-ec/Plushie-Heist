@@ -318,6 +318,7 @@ public class InventoryGrid : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Dictionary<FurnitureItem, int> GetDictionaryOfCurrentItems()
     {
         Dictionary<FurnitureItem, int> dictionary = new Dictionary<FurnitureItem, int>();
+        if (inventorySlots == null) return dictionary;
 
         for (int x = 0; x < inventoryWidth; x++)
         {
