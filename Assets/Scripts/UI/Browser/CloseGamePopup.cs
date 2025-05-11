@@ -22,14 +22,14 @@ public class CloseGamePopup : MonoBehaviour, IUIMenu
         SharedUIManager.instance.CloseMenu();
     }
 
+    public void OpenMenu()
+    {
+        SharedUIManager.instance.OpenMenu(this);
+    }
+
     public void OnCloseGame()
     {
         FindAnyObjectByType<SaveManager>().Save();
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        LoadingSceneController.instance.LoadSceneAsync(0);
     }
 }

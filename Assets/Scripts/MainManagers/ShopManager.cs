@@ -180,7 +180,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private CustomerBuyingUI customerBuyingUIPrefab;
 
     public static event Action OnCustomerServed;
-    public void CreateCustomerBuyingUI(List<FurnitureItem> basket, UnityAction actionForButton)
+    public void CreateCustomerBuyingUI(List<CustomerAI.BasketEntry> basket, UnityAction actionForButton)
     {
         CustomerBuyingUI customerBuyingUI = Instantiate(customerBuyingUIPrefab, mainCanvas.transform);
         customerBuyingUI.SetUp(basket, actionForButton);
