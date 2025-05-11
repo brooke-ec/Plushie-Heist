@@ -15,7 +15,7 @@ public class Clock : MonoBehaviour
     /// <summary> The duration of the "activity" day (dayEndHour - dayStartHour), in real-life minutes
     /// If dayStartHour is 9, and dayEndHour is 17, and this value is 2, then it will take 2 real minutes to go from 9am until 5pm
     /// </summary>
-    private float lengthOfDayInRealMins;
+    private float lengthOfDayInRealMins = 0;
     /// <summary> at what time to start the day, 9 means 9am </summary>
     private int dayStartHour;
     /// <summary> at what time to end the day (close the shop), 17 means 5pm </summary>
@@ -44,7 +44,7 @@ public class Clock : MonoBehaviour
         this.isShopClock = isShopClock;
         if (isShopClock)
         {
-            lengthOfDayInRealMins = 3f;
+            lengthOfDayInRealMins += 3f;
 
             GetComponent<Button>().onClick.AddListener(() => TryCloseEarly());
             dayStartHour = 9;
@@ -52,7 +52,7 @@ public class Clock : MonoBehaviour
         }
         else
         {
-            lengthOfDayInRealMins = 2f;
+            lengthOfDayInRealMins += 2f;
             dayStartHour = 21;
             dayEndHour = 5;
         }
