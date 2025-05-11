@@ -15,17 +15,17 @@ public class CustomerBuyingUI : MonoBehaviour, IUIMenu
 
     UnityAction closeAction;
 
-    public void SetUp(List<FurnitureItem> basket, UnityAction actionForButton)
+    public void SetUp(List<CustomerAI.BasketEntry> basket, UnityAction actionForButton)
     {
         float totalMoney = 0;
 
-        foreach(FurnitureItem item in basket)
+        foreach(CustomerAI.BasketEntry item in basket)
         {
-            float price = ShopManager.instance.stocksController.GetSellingPriceOfItem(item);
+            float price = item.price;
             totalMoney += price;
 
             GameObject itemContainer = Instantiate(itemPrefab, itemsBuyingContainer);
-            itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = item.inventoryIcon;
+            itemContainer.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = item.item.inventoryIcon;
             itemContainer.transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = "£" + price.ToString("n2");
         }
 

@@ -21,7 +21,7 @@ public class CustomerAI : MonoBehaviour
     private Queue<FurnitureController> shoppingList;
 
     /// <summary> List of items this customer has in their basket </summary>
-    public List<FurnitureItem> basket = new List<FurnitureItem>();
+    public List<BasketEntry> basket = new List<BasketEntry>();
 
     /// <summary>A refernece to the Till object<summary>
     private TillQueue till;
@@ -131,6 +131,7 @@ public class CustomerAI : MonoBehaviour
             if(Random.value < chance)
             {
                 //buy
+                basket.Add(new BasketEntry(currentItem.item, price));
                 animator.SetTrigger("pickup");
                 this.RunAfter(pickupTime, PickedUp);
             } else
@@ -149,8 +150,6 @@ public class CustomerAI : MonoBehaviour
     {
         if (currentItem != null)
         {
-            basket.Add(currentItem.item);
-
             if (
                 !ShopManager.instance.autoRestocking ||
                 !InventoryController.instance.RemoveAnItemTypeFromInventory(currentItem.item, false)
@@ -162,7 +161,7 @@ public class CustomerAI : MonoBehaviour
 
     private void NextItem()
     {
-        shoppingList.Dequeue();
+        shoppingList.TryDequeue(out FurnitureController _);
         NextAction();
     }
 
@@ -252,4 +251,6 @@ public class CustomerAI : MonoBehaviour
         Queueing,
         Leaving
     }
+
+    public record BasketEntry(FurnitureItem item, float price) { }
 }
