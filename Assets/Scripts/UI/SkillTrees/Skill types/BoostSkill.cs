@@ -65,7 +65,11 @@ public class BoostSkill : Skill
                 if (!isNight) { Debug.Log("Unlock"); ShopManager.instance.tipPercentage += modifier; }
                 break;
             case SkillType.ShopHigherPrices:
-                if (!isNight) ShopManager.instance.stocksController.purchaseRange += Vector2.one * 0.05f;
+                if (!isNight)
+                {
+                    ShopManager.instance.stocksController.purchaseRange += Vector2.one * 0.05f;
+                    ShopManager.instance.stocksController.UpdatePricingTable();
+                }
                 break;
             case SkillType.ShopImpulseBuyers:
                 if (!isNight) { ShopManager.instance.itemBuyingMultiplier += modifier; }
