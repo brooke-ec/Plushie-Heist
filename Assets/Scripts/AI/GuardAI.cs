@@ -53,7 +53,7 @@ public class GuardAI : MonoBehaviour
                 {
                     agent.speed = 0;
                 }
-                else if (agent.remainingDistance <= 1.2 && !agent.pathPending)
+                else if (agent.remainingDistance <= 1.2 && !agent.pathPending && Vector3.Distance(transform.position, PlayerController.instance.transform.position) <= 4)
                 {
                     Arrest();
                     anim.SetBool("Arrest", true);
