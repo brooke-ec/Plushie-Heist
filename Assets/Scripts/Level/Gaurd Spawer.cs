@@ -53,7 +53,7 @@ public class GaurdSpawer : MonoBehaviour
             }
 
             // get its spawn point 
-            PatrolPoint p = points[Random.Range(0, points.Count)];
+            PatrolPoint p = points[Random.Range(2, points.Count)];
             points.Remove(p);
             GuardAI guard;
             // decide which type of guard it is
@@ -118,6 +118,7 @@ public class GaurdSpawer : MonoBehaviour
     {
         foreach (GuardAI g in guards)
         {
+            if (g == null) continue;
             g.GuardActive = false;
             g.GetComponent<NavMeshAgent>().speed = 0;
         }
