@@ -8,7 +8,7 @@ public class ExpandAndBackMovement : MonoBehaviour
     void Start()
     {
         startScale = transform.localScale;
-        transform.DOScale(startScale * endScale, 0.4f).SetEase(Ease.InOutSine).SetLoops(2, LoopType.Yoyo);
+        transform.DOScale(startScale * endScale, 0.4f).SetEase(Ease.InOutSine).SetLoops(2, LoopType.Yoyo).SetUpdate(true);
     }
 
     private void OnDestroy()

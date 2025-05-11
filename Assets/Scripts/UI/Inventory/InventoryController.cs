@@ -58,6 +58,7 @@ public class InventoryController : MonoBehaviour, IUIMenu
         AudioManager.instance.PlaySound(open ? AudioManager.SoundEnum.backpackOpen : AudioManager.SoundEnum.backpackClose);
         Transform inventoryTopParent = backpackGrid.transform.parent.parent.parent.parent;
         inventoryTopParent.gameObject.SetActive(open);
+        if (NightManager.instance != null) Time.timeScale = open ? 0 : 1;
     }
 
     #region Inventory controls
