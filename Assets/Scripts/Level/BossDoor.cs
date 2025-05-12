@@ -4,7 +4,7 @@ using UnityEngine;
 public class BossDoor : MonoBehaviour, IInteractable
 {
     string IInteractable.interactionPrompt => "Press E to " + (lastLevel ? "Fight the Next Boss!!!" : "Progress to the Next Floor...");
-    public bool lastLevel => NightManager.instance.levelProgress >= Mathf.FloorToInt((SharedUIManager.instance.plushieIndex + 1) / 2);
+    public bool lastLevel => NightManager.instance.levelProgress >= (SharedUIManager.instance.plushieIndex / 2) + 1;
 
     public void PrimaryInteract(Interactor interactor)
     {
