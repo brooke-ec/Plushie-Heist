@@ -60,6 +60,8 @@ public class CustomerAI : MonoBehaviour
     {
         animator.SetBool("walking", !finishedWalking);
 
+        if (state == State.Queueing && till == null) LeaveShop();
+
         if (finishedWalking)
         {
             // Rotate customer
