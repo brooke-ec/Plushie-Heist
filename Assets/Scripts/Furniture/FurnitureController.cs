@@ -101,10 +101,9 @@ public class FurnitureController : MonoBehaviour, IInteractable
     {
         sellingMarker = Instantiate(FurnitureSettings.instance.defaultSellingMarker, transform);
         sellingMarker.SetActive(selling);
-        sellingMarker.transform.position /= transform.lossyScale.y;
-        sellingMarker.transform.localPosition += new Vector3(
+        sellingMarker.transform.localPosition = new Vector3(
             item.gridOffset.x,
-            bounds.max.y / transform.lossyScale.y + transform.position.y,
+            bounds.max.y / transform.localScale.y + sellingMarker.transform.localPosition.y,
             item.gridOffset.z
         );
     }
