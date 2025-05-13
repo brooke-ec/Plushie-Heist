@@ -194,7 +194,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <returns>True if this item is currently in a valid grid position</returns>
     public bool IsGridValid()
     {
-        return grid != null && gridPosition != null && gridRegion.Within(grid.shape) && !grid.Intersects(gridRegion);
+        return grid != null && gridPosition != null && gridRegion.Within(grid.size) && !grid.Intersects(gridRegion);
     }
 
 #if UNITY_EDITOR
