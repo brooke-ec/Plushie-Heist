@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7000290753436544400}
   - component: {fileID: 89862424940255868}
   - component: {fileID: 4477108522379866496}
-  - component: {fileID: 188073379478780520}
   - component: {fileID: -494702361504739822}
+  - component: {fileID: 7528035690657064522}
   m_Layer: 10
   m_Name: Wardrobe
   m_TagString: Untagged
@@ -85,8 +85,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5514138811806394875}
   m_Mesh: {fileID: -7401835733204412108, guid: ad99824a4041e4a4f97d210455b5264d, type: 3}
---- !u!64 &188073379478780520
-MeshCollider:
+--- !u!114 &-494702361504739822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5514138811806394875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: d3412f68180435647ac91a5f530c8bd7, type: 2}
+--- !u!65 &7528035690657064522
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,20 +116,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
---- !u!114 &-494702361504739822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5514138811806394875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36a0d64ed63746545801e14d270ec93a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: d3412f68180435647ac91a5f530c8bd7, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 4, y: 3.735385, z: 2.1962867}
+  m_Center: {x: 0, y: 0.0000009536745, z: -0.0000010132792}
