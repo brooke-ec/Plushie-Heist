@@ -28,7 +28,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     [JsonProperty("position")] public Vector2Int gridPosition { get; private set; }
     /// <summary> The current Y euler rotation of this object </summary>
     [JsonProperty("rotation")] public int gridRotation { 
-        get { return Mathf.RoundToInt(transform.rotation.eulerAngles.y); } 
+        get { return Mathf.Abs(Mathf.RoundToInt(transform.rotation.eulerAngles.y)); } 
         set { transform.rotation = Quaternion.Euler(transform.eulerAngles.x, value, transform.eulerAngles.z); }
     }
     /// <summary> The <see cref="FurnitureGrid"/> this item is currently attached to</summary>
@@ -194,7 +194,7 @@ public class FurnitureController : MonoBehaviour, IInteractable
     /// <returns>True if this item is currently in a valid grid position</returns>
     public bool IsGridValid()
     {
-        return grid != null && gridPosition != null && gridRegion.Within(grid.size) && !grid.Intersects(gridRegion);
+        return grid != null && gridPosition != null && gridRegion.Within(grid.shape) && !grid.Intersects(gridRegion);
     }
 
 #if UNITY_EDITOR
