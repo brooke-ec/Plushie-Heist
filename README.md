@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-    <a href="releases/latest">Play The Game</a>
+    <a href="https://github.com/brooke-ec/plushie-heist/releases/latest">Play The Game</a>
 </h3>
 
 <h3 align="center">
